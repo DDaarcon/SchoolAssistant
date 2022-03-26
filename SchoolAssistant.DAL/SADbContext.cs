@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SchoolAssistantWeb.Data
+namespace SchoolAssistant.DAL
 {
     public class SADbContext : IdentityDbContext
     {
