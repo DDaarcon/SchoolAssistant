@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SchoolAssistant.DAL\SchoolAssistant.DAL.csproj" />
+    <ProjectReference Include="..\SchoolAssistant.Infrastructure\SchoolAssistant.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
