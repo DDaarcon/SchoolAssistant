@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolAssistant.DAL.Models.StudentsOrganisation
+namespace SchoolAssistant.DAL.Models.Semesters
 {
-    public abstract class SchoolClass : SemesterDbEntity
+    public class Semester : DbEntity
     {
+        public short Year { get; set; }
 
     }
 }

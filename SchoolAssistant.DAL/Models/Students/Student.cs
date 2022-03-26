@@ -2,7 +2,7 @@
 
 namespace SchoolAssistant.DAL.Models
 {
-    public class Student : DbEntity
+    public class Student : SemesterDbEntity
     {
     }
 }
