@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolAssistant.DAL;
+using SchoolAssistant.Infrastructure.InjectablePattern;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<SADbContext>();
 builder.Services.AddRazorPages();
+
+builder.Services.AddAllInjectable();
 
 var app = builder.Build();
 
