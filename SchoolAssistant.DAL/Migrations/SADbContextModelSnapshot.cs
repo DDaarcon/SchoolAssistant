@@ -236,7 +236,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherToAdditionalSubject");
+                    b.ToTable("TeacherToAdditionalSubject", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToMainSubject", b =>
@@ -251,7 +251,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherToMainSubject");
+                    b.ToTable("TeacherToMainSubject", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Marks.Mark", b =>
@@ -296,7 +296,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Mark");
+                    b.ToTable("Mark", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Semesters.Semester", b =>
@@ -315,7 +315,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Semesters");
+                    b.ToTable("Semesters", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Staff.Teacher", b =>
@@ -339,7 +339,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("Teachers", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Students.Student", b =>
@@ -370,7 +370,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("SemesterId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
@@ -394,7 +394,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.HasIndex("SupervisorId")
                         .IsUnique();
 
-                    b.ToTable("OrganizationalClass");
+                    b.ToTable("OrganizationalClass", (string)null);
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Subjects.Subject", b =>
@@ -411,7 +411,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subject");
+                    b.ToTable("Subject", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
