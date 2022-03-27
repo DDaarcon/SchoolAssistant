@@ -11,5 +11,7 @@ namespace SchoolAssistant.DAL.Models.Semesters
     {
         public short Year { get; set; }
 
+        public bool Current { get; set; }
+
     }
 }

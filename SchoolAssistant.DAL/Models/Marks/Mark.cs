@@ -10,15 +10,15 @@ namespace SchoolAssistant.DAL.Models.Marks
     public class Mark : SemesterDbEntity
     {
         public long StudentId { get; set; }
-        [ForeignKey("StudentId")]
+        [ForeignKey(nameof(StudentId))]
         public virtual Student Student { get; set; } = null!;
 
         public long SubjectId { get; set; }
-        [ForeignKey("SubjectId")]
+        [ForeignKey(nameof(SubjectId))]
         public virtual Subject Subject { get; set; } = null!;
 
         public long IssuerId { get; set; }
-        [ForeignKey("IssuerId")]
+        [ForeignKey(nameof(IssuerId))]
         public virtual Teacher Issuer { get; set; } = null!;
 
         public DateTime IssueDate { get; set; }
