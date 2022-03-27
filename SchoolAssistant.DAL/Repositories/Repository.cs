@@ -37,13 +37,13 @@ namespace SchoolAssistant.DAL.Repositories
     public class Repository<TDbEntity> : IRepository<TDbEntity>
         where TDbEntity : DbEntity
     {
-        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IServiceScopeFactory? _scopeFactory;
         protected SADbContext _context;
         protected DbSet<TDbEntity> _Repo => _context.Set<TDbEntity>();
 
         public Repository(
             SADbContext context,
-            IServiceScopeFactory scopeFactory)
+            IServiceScopeFactory? scopeFactory)
         {
             _context = context;
             _scopeFactory = scopeFactory;
@@ -157,7 +157,7 @@ namespace SchoolAssistant.DAL.Repositories
 
         public void UseIndependentDbContext()
         {
-            _context = _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<SADbContext>();
+            _context = _scopeFactory?.CreateScope().ServiceProvider.GetRequiredService<SADbContext>() ?? _context;
         }
 
         #endregion
