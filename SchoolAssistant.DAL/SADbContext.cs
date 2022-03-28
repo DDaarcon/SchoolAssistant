@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolAssistant.DAL.ConfigurationSchemas;
+using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Semesters;
@@ -10,7 +12,7 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 
 namespace SchoolAssistant.DAL
 {
-    public class SADbContext : IdentityDbContext
+    public class SADbContext : IdentityDbContext<User, Role, long>
     {
         public SADbContext(DbContextOptions<SADbContext> options)
             : base(options)
