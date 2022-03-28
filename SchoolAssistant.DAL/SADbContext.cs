@@ -6,6 +6,7 @@ using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Semesters;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Students;
+using SchoolAssistant.DAL.Models.StudentsOrganization;
 
 namespace SchoolAssistant.DAL
 {
@@ -32,6 +33,10 @@ namespace SchoolAssistant.DAL
             teacherToSubject.Configure(builder.Entity<TeacherToAdditionalSubject>());
 
             new MarkConfiguration().Configure(builder.Entity<Mark>());
+            new OrganizationalClassConfiguration().Configure(builder.Entity<OrganizationalClass>());
+            new SubjectClassConfiguration().Configure(builder.Entity<SubjectClass>());
+            new StudentConfiguration().Configure(builder.Entity<Student>());
+
         }
     }
 }
