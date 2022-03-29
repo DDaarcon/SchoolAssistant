@@ -9,7 +9,9 @@ namespace SchoolAssistant.DAL.Models.Lessons
 {
     public class Lesson : SemesterDbEntity
     {
-        public string CronPeriodicity { get; set; }
+        public string CronPeriodicity { get; set; } = null!;
+
+        public int? CustomDuration { get; set; }
 
         public long SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
