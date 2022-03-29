@@ -2,11 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL.Models.Semesters;
 using SchoolAssistant.DAL.Models.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.DAL.Repositories
 {
@@ -50,7 +45,7 @@ namespace SchoolAssistant.DAL.Repositories
         }
 
 
-        public async  Task<List<TSemesterDbEntity>> AsListByCurrentSemesterAsync()
+        public async Task<List<TSemesterDbEntity>> AsListByCurrentSemesterAsync()
         {
             var curSemester = await _semesterRepo.AsQueryable().FirstAsync(x => x.Current);
             return await AsListBySemesterAsync(curSemester);

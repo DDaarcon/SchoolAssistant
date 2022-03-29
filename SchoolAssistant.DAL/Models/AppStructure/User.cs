@@ -2,12 +2,7 @@
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Students;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.DAL.Models.AppStructure
 {

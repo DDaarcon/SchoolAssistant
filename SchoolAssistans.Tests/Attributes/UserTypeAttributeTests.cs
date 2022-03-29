@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using SchoolAssistant.DAL.Enums;
+﻿using NUnit.Framework;
 using SchoolAssistant.DAL.Attributes;
+using SchoolAssistant.DAL.Enums;
+using System;
+using System.Linq;
 
 namespace SchoolAssistans.Tests.Attributes
 {
@@ -32,7 +29,8 @@ namespace SchoolAssistans.Tests.Attributes
             Assert.IsNotNull(attributes);
             if (enums.Any())
                 Assert.IsNotEmpty(attributes);
-            else {
+            else
+            {
                 Assert.Pass();
                 return;
             }

@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using SchoolAssistant.DAL.Attributes;
-using Moq;
-using Microsoft.Extensions.Logging;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
