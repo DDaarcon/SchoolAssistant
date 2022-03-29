@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
-using SchoolAssistant.DAL.Models;
 using SchoolAssistant.DAL.Models.AppStructure;
 
 namespace SchoolAssistant.DAL

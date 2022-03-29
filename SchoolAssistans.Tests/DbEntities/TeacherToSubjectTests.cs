@@ -1,10 +1,7 @@
 using NUnit.Framework;
-using SchoolAssistant.DAL;
-using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SchoolAssistans.Tests.DbEntities
@@ -17,7 +14,7 @@ namespace SchoolAssistans.Tests.DbEntities
         [OneTimeSetUp]
         public void Setup()
         {
-            _teacherRepo = new Repository<Teacher>(TestDatabase.Context, null);
+            _teacherRepo = new Repository<Teacher>(TestDatabase.CreateContext(TestServices.Collection), null);
 
             SetUpRecords();
         }
@@ -66,7 +63,7 @@ namespace SchoolAssistans.Tests.DbEntities
         public void MainSubjectIsPresent()
         {
             var teacher = _teacherRepo.AsList()[0];
-            
+
             Assert.True(teacher.MainSubjects is not null);
             Assert.True(teacher.MainSubjects!.Count == 1);
             Assert.True(teacher.MainSubjects.First().Name == "Modeling");
@@ -76,7 +73,7 @@ namespace SchoolAssistans.Tests.DbEntities
         public void AdditionalSubjectIsPresent()
         {
             var teacher = _teacherRepo.AsList()[0];
-            
+
             Assert.True(teacher.AdditionalSubjects is not null);
             Assert.True(teacher.AdditionalSubjects!.Count == 1);
             Assert.True(teacher.AdditionalSubjects.First().Name == "Being a bitch");
@@ -91,7 +88,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
             _teacherRepo.Save();
             teacher = _teacherRepo.GetById(teacher.Id);
-            
+
             Assert.True(teacher.MainSubjects is not null);
             Assert.True(teacher.MainSubjects!.Count == 2);
 

@@ -1,19 +1,14 @@
 ﻿using SchoolAssistant.DAL.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.DAL.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    internal class UserTypeAttribute : Attribute
+    public class UserTypeAttribute : Attribute
     {
         public string? RoleName { get; init; }
     }
 
-    internal static class UserTypeHelper
+    public static class UserTypeHelper
     {
         public static UserTypeAttribute? GetUserTypeAttribute(string name)
         {
@@ -35,7 +30,12 @@ namespace SchoolAssistant.DAL.Attributes
             var enumType = typeof(UserType);
             var members = enumType.GetMembers();
 
-            return members.Select(member => member.GetCustomAttributes(typeof(UserTypeAttribute), true).OfType<UserTypeAttribute>().First());
+            var attributes = members
+                .Select(member => member
+                    .GetCustomAttributes(typeof(UserTypeAttribute), false)
+                    .OfType<UserTypeAttribute?>()
+                    .FirstOrDefault());
+            return attributes.Where(x => x is not null)!;
         }
     }
 }
