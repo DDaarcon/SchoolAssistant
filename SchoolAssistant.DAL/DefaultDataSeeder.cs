@@ -12,7 +12,7 @@ namespace SchoolAssistant.DAL
         Task SeedSystemAdminAsync();
     }
 
-    [Injectable(ServiceLifetime.Transcient)]
+    [Injectable(ServiceLifetime.Scoped)]
     public class DefaultDataSeeder : IDefaultDataSeeder
     {
         private readonly RoleManager<Role> _roleManager;

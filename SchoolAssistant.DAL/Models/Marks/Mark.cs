@@ -21,6 +21,12 @@ namespace SchoolAssistant.DAL.Models.Marks
         [ForeignKey(nameof(IssuerId))]
         public virtual Teacher Issuer { get; set; } = null!;
 
+        public long? CollectionId { get; set; }
+        [ForeignKey(nameof(CollectionId))]
+        public virtual MarksOfClass? Collection { get; set; }
+
+        public string? Description { get; set; }
+
         public DateTime IssueDate { get; set; }
 
         public MainMark Main { get; set; }
