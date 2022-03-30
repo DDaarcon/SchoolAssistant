@@ -29,6 +29,7 @@ namespace SchoolAssistant.DAL
         {
             base.OnModelCreating(builder);
 
+            // TODO: Use Attribute to register and call configurations
             new TeacherConfiguration().Configure(builder.Entity<Teacher>());
 
             var teacherToSubject = new TeacherToSubjectConfiguration();

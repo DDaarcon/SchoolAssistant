@@ -5,24 +5,46 @@ using SchoolAssistant.Infrastructure.InjectablePattern;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Database
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SADbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+#endregion
+
+#region Identity & Razor pages
 
 builder.Services.AddIdentity<User, Role>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
 })
     .AddEntityFrameworkStores<SADbContext>();
-builder.Services.AddRazorPages();
+
+builder.Services.AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
+        options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+    });
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+#endregion
 
 builder.Services.AddAllInjectable();
 
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -44,9 +66,12 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+#region Seeding default data
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 var seeder = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDefaultDataSeeder>();
 await seeder.SeedAllAsync();
+
+#endregion
 
 app.Run();
