@@ -40,7 +40,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddAllInjectable();
 
-
+// TODO: EntityFramework might be unnecessarily referenced
 
 var app = builder.Build();
 
