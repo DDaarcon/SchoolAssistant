@@ -1,11 +1,26 @@
 ﻿using SchoolAssistant.DAL.Enums;
+using SchoolAssistant.Infrastructure.Interfaces.Permissions;
+using System.Reflection;
 
 namespace SchoolAssistant.DAL.Attributes
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    public class UserTypeAttribute : Attribute
+    public class UserTypeAttribute : Attribute, IPermissions
     {
         public string? RoleName { get; init; }
+        public bool CanAccessConfiguration { get; set; }
+        public bool CanViewAllClassesData { get; set; } = false;
+
+        public void CopyPermissionsTo(IPermissions dest)
+        {
+            Type sourceType = typeof(IPermissions);
+
+            var properties = sourceType.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                property.SetValue(dest, property.GetValue(this));
+            }
+        }
     }
 
     public static class UserTypeHelper

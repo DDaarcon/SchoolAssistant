@@ -4,7 +4,7 @@ using SchoolAssistant.DAL.Enums;
 using System;
 using System.Linq;
 
-namespace SchoolAssistans.Tests.Attributes
+namespace SchoolAssistans.Tests.Attributes.UserTypeAttr
 {
     public class UserTypeAttributeTests
     {

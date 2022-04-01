@@ -62,12 +62,14 @@ namespace SchoolAssistant.DAL
                         Name = description.RoleName,
                         NormalizedName = description.RoleName?.ToUpper()
                     };
+
+                    description.CopyPermissionsTo(role);
                     await _roleManager.CreateAsync(role);
                 }
                 else
                 {
-
-                    //await _roleManager.UpdateAsync(role);
+                    description.CopyPermissionsTo(role);
+                    await _roleManager.UpdateAsync(role);
                 }
             }
         }

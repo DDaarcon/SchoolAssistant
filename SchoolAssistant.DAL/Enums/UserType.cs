@@ -6,13 +6,21 @@ namespace SchoolAssistant.DAL.Enums
     {
         [UserType(RoleName = "Student")]
         Student,
+
         [UserType(RoleName = "Teacher")]
         Teacher,
+
         [UserType(RoleName = "Administration")]
         Administration,
+
         [UserType(RoleName = "Headmaster")]
         Headmaster,
-        [UserType(RoleName = "SystemAdmin")]
+
+        [UserType(
+            RoleName = "SystemAdmin",
+            CanAccessConfiguration = true,
+            CanViewAllClassesData = true
+            )]
         SystemAdmin
     }
 }
