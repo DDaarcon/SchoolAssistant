@@ -15,6 +15,8 @@ namespace SchoolAssistant.DAL.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CanAccessConfiguration = table.Column<bool>(type: "bit", nullable: false),
+                    CanViewAllClassesData = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -54,6 +56,37 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StudentRegisterRecord",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PlaceOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PersonalID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstParent_FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstParent_SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstParent_LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstParent_PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstParent_Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstParent_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SecondParent_FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondParent_SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondParent_LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondParent_PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondParent_Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondParent_Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentRegisterRecord", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subject",
                 columns: table => new
                 {
@@ -74,6 +107,7 @@ namespace SchoolAssistant.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PupilsId = table.Column<long>(type: "bigint", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SecondName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -120,6 +154,32 @@ namespace SchoolAssistant.DAL.Migrations
                         column: x => x.SemesterId,
                         principalTable: "Semesters",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Parents",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsSecondParent = table.Column<bool>(type: "bit", nullable: false),
+                    ChildInfoId = table.Column<long>(type: "bigint", nullable: false),
+                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parents_Semesters_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Parents_StudentRegisterRecord_ChildInfoId",
+                        column: x => x.ChildInfoId,
+                        principalTable: "StudentRegisterRecord",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -309,8 +369,8 @@ namespace SchoolAssistant.DAL.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumerInJurnal = table.Column<int>(type: "int", nullable: false),
+                    InfoId = table.Column<long>(type: "bigint", nullable: false),
                     OrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
                     SemesterId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -327,6 +387,12 @@ namespace SchoolAssistant.DAL.Migrations
                         column: x => x.SemesterId,
                         principalTable: "Semesters",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Students_StudentRegisterRecord_InfoId",
+                        column: x => x.InfoId,
+                        principalTable: "StudentRegisterRecord",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -681,6 +747,16 @@ namespace SchoolAssistant.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Parents_ChildInfoId",
+                table: "Parents",
+                column: "ChildInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parents_SemesterId",
+                table: "Parents",
+                column: "SemesterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PeriodicLesson_LecturerId",
                 table: "PeriodicLesson",
                 column: "LecturerId");
@@ -709,6 +785,11 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "IX_PeriodicLesson_SubjectId",
                 table: "PeriodicLesson",
                 column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_InfoId",
+                table: "Students",
+                column: "InfoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_OrganizationalClassId",
@@ -780,6 +861,9 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "Mark");
 
             migrationBuilder.DropTable(
+                name: "Parents");
+
+            migrationBuilder.DropTable(
                 name: "PeriodicLesson");
 
             migrationBuilder.DropTable(
@@ -814,6 +898,9 @@ namespace SchoolAssistant.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrganizationalClass");
+
+            migrationBuilder.DropTable(
+                name: "StudentRegisterRecord");
 
             migrationBuilder.DropTable(
                 name: "Subject");

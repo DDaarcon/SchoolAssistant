@@ -1,7 +1,7 @@
 ﻿using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.Shared;
 using SchoolAssistant.DAL.Models.Staff;
-using SchoolAssistant.DAL.Models.Students;
+using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
 using System.ComponentModel.DataAnnotations.Schema;
 

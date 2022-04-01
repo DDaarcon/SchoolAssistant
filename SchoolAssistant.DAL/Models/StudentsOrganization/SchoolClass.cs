@@ -1,5 +1,5 @@
 ﻿using SchoolAssistant.DAL.Models.Shared;
-using SchoolAssistant.DAL.Models.Students;
+using SchoolAssistant.DAL.Models.StudentsParents;
 
 namespace SchoolAssistant.DAL.Models.StudentsOrganization
 {

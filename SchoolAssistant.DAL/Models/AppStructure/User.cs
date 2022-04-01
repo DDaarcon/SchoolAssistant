@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.Staff;
-using SchoolAssistant.DAL.Models.Students;
+using SchoolAssistant.DAL.Models.StudentsParents;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.AppStructure

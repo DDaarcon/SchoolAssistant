@@ -8,8 +8,8 @@ using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Semesters;
 using SchoolAssistant.DAL.Models.Staff;
-using SchoolAssistant.DAL.Models.Students;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
+using SchoolAssistant.DAL.Models.StudentsParents;
 
 namespace SchoolAssistant.DAL
 {
@@ -23,6 +23,7 @@ namespace SchoolAssistant.DAL
         public DbSet<Semester> Semesters { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Student> Students { get; set; } = null!;
+        public DbSet<Parent> Parents { get; set; } = null!;
         public DbSet<Presence> Attendance { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -41,13 +42,14 @@ namespace SchoolAssistant.DAL
 
             new OrganizationalClassConfiguration().Configure(builder.Entity<OrganizationalClass>());
             new SubjectClassConfiguration().Configure(builder.Entity<SubjectClass>());
-            new StudentConfiguration().Configure(builder.Entity<Student>());
 
             new PresenceConfiguration().Configure(builder.Entity<Presence>());
 
             new PeriodicLessonConfiguration().Configure(builder.Entity<PeriodicLesson>());
             new LessonConfiguration().Configure(builder.Entity<Lesson>());
 
+            new StudentConfiguration().Configure(builder.Entity<Student>());
+            new ParentConfiguration().Configure(builder.Entity<Parent>());
         }
     }
 }

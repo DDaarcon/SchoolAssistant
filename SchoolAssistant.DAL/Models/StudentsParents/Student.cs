@@ -1,15 +1,17 @@
-﻿using SchoolAssistant.DAL.Interfaces;
-using SchoolAssistant.DAL.Models.Marks;
+﻿using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Shared;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SchoolAssistant.DAL.Models.Students
+namespace SchoolAssistant.DAL.Models.StudentsParents
 {
-    public class Student : SemesterDbEntity, IPerson
+    public class Student : SemesterDbEntity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int NumerInJurnal { get; set; }
+
+        public long InfoId { get; set; }
+        [ForeignKey(nameof(InfoId))]
+        public virtual StudentRegisterRecord Info { get; set; } = null!;
 
         public ICollection<Mark> Marks { get; set; } = new List<Mark>();
 

@@ -21,6 +21,9 @@ namespace SchoolAssistant.DAL.Enums
             CanAccessConfiguration = true,
             CanViewAllClassesData = true
             )]
-        SystemAdmin
+        SystemAdmin,
+
+        [UserType(RoleName = "Parent")]
+        Parent
     }
 }

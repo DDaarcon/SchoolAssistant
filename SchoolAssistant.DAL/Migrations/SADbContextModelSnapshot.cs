@@ -526,40 +526,13 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<long>("PupilsId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("SecondName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Teachers");
-                });
-
-            modelBuilder.Entity("SchoolAssistant.DAL.Models.Students.Student", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("OrganizationalClassId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SemesterId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationalClassId");
-
-                    b.HasIndex("SemesterId");
-
-                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
@@ -607,6 +580,102 @@ namespace SchoolAssistant.DAL.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("SubjectClass");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Parent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("ChildInfoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsSecondParent")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("SemesterId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildInfoId");
+
+                    b.HasIndex("SemesterId");
+
+                    b.ToTable("Parents");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Student", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("InfoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("NumerInJurnal")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("OrganizationalClassId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SemesterId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InfoId");
+
+                    b.HasIndex("OrganizationalClassId");
+
+                    b.HasIndex("SemesterId");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.StudentRegisterRecord", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfBirth")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecondName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudentRegisterRecord");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Subjects.Subject", b =>
@@ -694,7 +763,7 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.AppStructure.User", b =>
                 {
-                    b.HasOne("SchoolAssistant.DAL.Models.Students.Student", "Student")
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsParents.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
 
@@ -721,7 +790,7 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Students.Student", "Student")
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsParents.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -848,7 +917,7 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Students.Student", "Student")
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsParents.Student", "Student")
                         .WithMany("Marks")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -894,23 +963,6 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Navigation("SubjectClass");
                 });
 
-            modelBuilder.Entity("SchoolAssistant.DAL.Models.Students.Student", b =>
-                {
-                    b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "OrganizationalClass")
-                        .WithMany("Students")
-                        .HasForeignKey("OrganizationalClassId");
-
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
-                        .WithMany()
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("OrganizationalClass");
-
-                    b.Navigation("Semester");
-                });
-
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
@@ -949,9 +1001,131 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Parent", b =>
+                {
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsParents.StudentRegisterRecord", "ChildInfo")
+                        .WithMany()
+                        .HasForeignKey("ChildInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ChildInfo");
+
+                    b.Navigation("Semester");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Student", b =>
+                {
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsParents.StudentRegisterRecord", "Info")
+                        .WithMany()
+                        .HasForeignKey("InfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "OrganizationalClass")
+                        .WithMany("Students")
+                        .HasForeignKey("OrganizationalClassId");
+
+                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Info");
+
+                    b.Navigation("OrganizationalClass");
+
+                    b.Navigation("Semester");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.StudentRegisterRecord", b =>
+                {
+                    b.OwnsOne("SchoolAssistant.DAL.Models.StudentsParents.ParentRegisterSubrecord", "FirstParent", b1 =>
+                        {
+                            b1.Property<long>("StudentRegisterRecordId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("SecondName")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("StudentRegisterRecordId");
+
+                            b1.ToTable("StudentRegisterRecord");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StudentRegisterRecordId");
+                        });
+
+                    b.OwnsOne("SchoolAssistant.DAL.Models.StudentsParents.ParentRegisterSubrecord", "SecondParent", b1 =>
+                        {
+                            b1.Property<long>("StudentRegisterRecordId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("SecondName")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("StudentRegisterRecordId");
+
+                            b1.ToTable("StudentRegisterRecord");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StudentRegisterRecordId");
+                        });
+
+                    b.Navigation("FirstParent")
+                        .IsRequired();
+
+                    b.Navigation("SecondParent");
+                });
+
             modelBuilder.Entity("StudentSubjectClass", b =>
                 {
-                    b.HasOne("SchoolAssistant.DAL.Models.Students.Student", null)
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsParents.Student", null)
                         .WithMany()
                         .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -980,14 +1154,14 @@ namespace SchoolAssistant.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolAssistant.DAL.Models.Students.Student", b =>
-                {
-                    b.Navigation("Marks");
-                });
-
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Student", b =>
+                {
+                    b.Navigation("Marks");
                 });
 #pragma warning restore 612, 618
         }
