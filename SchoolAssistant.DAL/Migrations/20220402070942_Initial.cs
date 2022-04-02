@@ -137,26 +137,6 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lesson",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Lesson", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Lesson_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Parents",
                 columns: table => new
                 {
@@ -396,6 +376,33 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Lesson",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FromScheduleId = table.Column<long>(type: "bigint", nullable: false),
+                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lesson", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lesson_PeriodicLesson_FromScheduleId",
+                        column: x => x.FromScheduleId,
+                        principalTable: "PeriodicLesson",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Lesson_Semesters_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -432,39 +439,6 @@ namespace SchoolAssistant.DAL.Migrations
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Attendance",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LessonId = table.Column<long>(type: "bigint", nullable: false),
-                    StudentId = table.Column<long>(type: "bigint", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Attendance_Lesson_LessonId",
-                        column: x => x.LessonId,
-                        principalTable: "Lesson",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Attendance_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Attendance_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -537,6 +511,39 @@ namespace SchoolAssistant.DAL.Migrations
                         name: "FK_StudentSubjectClass_SubjectClass_SubjectClassesId",
                         column: x => x.SubjectClassesId,
                         principalTable: "SubjectClass",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attendance",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LessonId = table.Column<long>(type: "bigint", nullable: false),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendance", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Lesson_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lesson",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Semesters_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Attendance_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -689,6 +696,11 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "IX_Attendance_StudentId",
                 table: "Attendance",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lesson_FromScheduleId",
+                table: "Lesson",
+                column: "FromScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lesson_SemesterId",
@@ -864,9 +876,6 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "Parents");
 
             migrationBuilder.DropTable(
-                name: "PeriodicLesson");
-
-            migrationBuilder.DropTable(
                 name: "StudentSubjectClass");
 
             migrationBuilder.DropTable(
@@ -888,28 +897,31 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "MarksOfClass");
 
             migrationBuilder.DropTable(
-                name: "Room");
-
-            migrationBuilder.DropTable(
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "SubjectClass");
-
-            migrationBuilder.DropTable(
-                name: "OrganizationalClass");
+                name: "PeriodicLesson");
 
             migrationBuilder.DropTable(
                 name: "StudentRegisterRecord");
 
             migrationBuilder.DropTable(
-                name: "Subject");
+                name: "OrganizationalClass");
+
+            migrationBuilder.DropTable(
+                name: "Room");
+
+            migrationBuilder.DropTable(
+                name: "SubjectClass");
+
+            migrationBuilder.DropTable(
+                name: "Teachers");
 
             migrationBuilder.DropTable(
                 name: "Semesters");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "Subject");
         }
     }
 }

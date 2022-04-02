@@ -31,5 +31,7 @@ namespace SchoolAssistant.DAL.Models.Lessons
         public long RoomId { get; set; }
         [ForeignKey(nameof(RoomId))]
         public virtual Room Room { get; set; } = null!;
+
+        public virtual ICollection<Lesson> TakenLessons { get; set; } = new List<Lesson>();
     }
 }

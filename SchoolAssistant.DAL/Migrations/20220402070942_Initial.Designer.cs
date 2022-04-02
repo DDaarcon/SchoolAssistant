@@ -12,7 +12,7 @@ using SchoolAssistant.DAL;
 namespace SchoolAssistant.DAL.Migrations
 {
     [DbContext(typeof(SADbContext))]
-    [Migration("20220401193311_Initial")]
+    [Migration("20220402070942_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -286,6 +286,9 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("FromScheduleId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("SemesterId")
                         .HasColumnType("bigint");
 
@@ -294,6 +297,8 @@ namespace SchoolAssistant.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FromScheduleId");
 
                     b.HasIndex("SemesterId");
 
@@ -807,11 +812,19 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Lessons.Lesson", b =>
                 {
+                    b.HasOne("SchoolAssistant.DAL.Models.Lessons.PeriodicLesson", "FromSchedule")
+                        .WithMany("TakenLessons")
+                        .HasForeignKey("FromScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
                         .WithMany()
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("FromSchedule");
 
                     b.Navigation("Semester");
                 });
@@ -825,11 +838,11 @@ namespace SchoolAssistant.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "ParticipatingOrganizationalClass")
-                        .WithMany()
+                        .WithMany("Schedule")
                         .HasForeignKey("ParticipatingOrganizationalClassId");
 
                     b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.SubjectClass", "ParticipatingSubjectClass")
-                        .WithMany()
+                        .WithMany("Schedule")
                         .HasForeignKey("ParticipatingSubjectClassId");
 
                     b.HasOne("SchoolAssistant.DAL.Models.Rooms.Room", "Room")
@@ -945,7 +958,7 @@ namespace SchoolAssistant.DAL.Migrations
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Marks.MarksOfClass", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "OrganizationalClass")
-                        .WithMany()
+                        .WithMany("Marks")
                         .HasForeignKey("OrganizationalClassId");
 
                     b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
@@ -955,7 +968,7 @@ namespace SchoolAssistant.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.SubjectClass", "SubjectClass")
-                        .WithMany()
+                        .WithMany("Marks")
                         .HasForeignKey("SubjectClassId");
 
                     b.Navigation("OrganizationalClass");
@@ -1145,6 +1158,11 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Navigation("PresenceOfStudents");
                 });
 
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.Lessons.PeriodicLesson", b =>
+                {
+                    b.Navigation("TakenLessons");
+                });
+
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Marks.MarksOfClass", b =>
                 {
                     b.Navigation("Marks");
@@ -1158,7 +1176,18 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
                 {
+                    b.Navigation("Marks");
+
+                    b.Navigation("Schedule");
+
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.SubjectClass", b =>
+                {
+                    b.Navigation("Marks");
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Student", b =>
