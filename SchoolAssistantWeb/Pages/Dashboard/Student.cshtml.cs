@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.Infrastructure.Models.Schedule;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
@@ -9,6 +10,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         private readonly UserManager<User> _userManager;
 
         private User _user = null!;
+
+        public ScheduleModel Schedule { get; set; }
 
         public StudentModel(
             UserManager<User> userManager)
