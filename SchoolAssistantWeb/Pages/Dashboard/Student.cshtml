@@ -5,11 +5,29 @@
 
 @section Head{
     <partial name="Components/_ScheduleStyles" />
+
+    <style>
+
+    </style>
 }
 
 
 Student dashboard
-<div id="schedule"></div>
+
+<div class="dashboard">
+    <div class="dashboard-item dashboard-item-green">
+        <div id="schedule"></div>
+    </div>
+    <div class="dashboard-item dashboard-item-cyan">
+        <partial name="Components/_MarksOverview" for="MarksOverview" />
+    </div>
+    <div class="dashboard-item dashboard-item-cyan">
+        <partial name="Components/_MarksOverview" for="MarksOverview" />
+    </div>
+    <div class="dashboard-item dashboard-item-cyan">
+        <partial name="Components/_MarksOverview" for="MarksOverview" />
+    </div>
+</div>
 
 @section Scripts{
     <partial name="Components/_ScheduleScripts" for="Schedule" />

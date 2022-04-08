@@ -1,0 +1,49 @@
+﻿@model SchoolAssistant.Infrastructure.Models.MarksOverview.MarksOverviewModel
+
+<style>
+    .mo-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mo-title-panel {
+        height: 30px;
+    }
+
+    .mo-marks-container {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .mo-mark-container {
+        width: 90px;
+        height: 90px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mo-mark-value {
+
+    }
+</style>
+
+
+<div class="whole-area mo-container">
+    <div class="mo-title-panel">
+
+    </div>
+    <div class="mo-marks-container">
+        @foreach (var mark in Model.Marks)
+        {
+            <div class="mo-mark-container">
+                <span class="mo-mark-value">@mark.Mark</span>
+            </div>
+        }
+    </div>
+</div>

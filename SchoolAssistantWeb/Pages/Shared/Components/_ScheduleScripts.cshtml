@@ -4,9 +4,6 @@
     
 }
 
-
-@using (Html.ScriptResource("aaa"))
-{<text>
 <script src="~/lib/fullcalendar/main.min.js"></script>
 
 
@@ -31,5 +28,3 @@
 
     var events = '@Html.Raw(JsonSerializer.Serialize(Model))';
 </script>
-
-</text>}
