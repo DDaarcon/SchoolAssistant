@@ -11,7 +11,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
 
         private User _user = null!;
 
-        public ScheduleModel Schedule { get; set; }
+        public ScheduleModel Schedule { get; set; } = new ScheduleModel();
 
         public StudentModel(
             UserManager<User> userManager)
@@ -22,6 +22,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         public async Task OnGetAsync()
         {
             _user = await _userManager.GetUserAsync(User);
+
+            var page = Page();
         }
     }
 }

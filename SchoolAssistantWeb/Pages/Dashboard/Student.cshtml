@@ -3,8 +3,14 @@
 @{
 }
 
-Student dashboard
-@Html.React("Schedule", new { model = Model.Schedule })
+@section Head{
+    <partial name="Components/_ScheduleStyles" />
+}
 
-<script src="~/js/schedule/schedule.jsx"></script>
-@Html.ReactInitJavaScript()
+
+Student dashboard
+<div id="schedule"></div>
+
+@section Scripts{
+    <partial name="Components/_ScheduleScripts" for="Schedule" />
+}

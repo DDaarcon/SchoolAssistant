@@ -37,6 +37,7 @@ builder.Services.AddIdentity<User, Role>(options =>
     .AddEntityFrameworkStores<SADbContext>();
 
 builder.Services.AddRazorPages()
+    .AddRazorRuntimeCompilation()
     .AddRazorPagesOptions(options =>
     {
         options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");

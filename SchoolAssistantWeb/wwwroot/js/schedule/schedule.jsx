@@ -1,8 +1,10 @@
 ﻿class Schedule extends React.Component {
 
     constructor() {
+        super();
+
         this.weekDays = {
-            ''
+            
         }
     }
 
