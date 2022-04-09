@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cronos" Version="0.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SchoolAssistant.DAL\SchoolAssistant.DAL.csproj" />
     <ProjectReference Include="..\SchoolAssistant.Infrastructure\SchoolAssistant.Infrastructure.csproj" />
   </ItemGroup>

@@ -1,10 +1,20 @@
 ﻿@model SchoolAssistant.Infrastructure.Models.Schedule.ScheduleModel
 
 @{
-    
+    var hiddenDays = new List<string>();
+    if (!Model.AnyInSaturday) hiddenDays.Add("6");
+    if (!Model.AnyInSunday) hiddenDays.Add("0");
+
+    var locale = Model.Locale.ToLower();
+    string[] allowedLocales = new[] { "pl", "en" };
+    bool validLocale = allowedLocales.Contains(locale);
 }
 
 <script src="~/lib/fullcalendar/main.min.js"></script>
+if (validLocale) 
+{
+<script src="~/lib/fullcalendar/locales/@(locale).js"></script>
+}
 
 
 <script>
@@ -12,19 +22,23 @@
         var calendarEl = document.getElementById('schedule');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: '@locale',
             headerToolbar: false,
             initialView: 'timeGridWeek',
             dayHeaderFormat: {
                 weekday: 'short'
             },
-            hiddenDays: [0,6], // hide Saturday and Sunday
-            weekNumbers:  false, // don't show week numbers
-            slotMinTime: '08:00:00'
+            hiddenDays: [@string.Join(", ", hiddenDays)],
+            weekNumbers:  false,
+            slotMinTime: '@Model.Earliest.ToString(@"hh\:mm\:ss")',
+            slotMaxTime: '@Model.Latest.ToString(@"hh\:mm\:ss")',
+            slotLabelFormat: {
+                hour: 'numeric',
+                omitZeroMinute: true
+            }
         });
         calendar.render();
     });
-
-    '@("use strict")';
 
     var events = '@Html.Raw(JsonSerializer.Serialize(Model))';
 </script>

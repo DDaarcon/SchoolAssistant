@@ -25,6 +25,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         {
             _user = await _userManager.GetUserAsync(User);
 
+            Schedule.Locale = "pl";
+
             MarksOverview.Marks = new List<MarkForOverviewModel>()
             {
                 new()
