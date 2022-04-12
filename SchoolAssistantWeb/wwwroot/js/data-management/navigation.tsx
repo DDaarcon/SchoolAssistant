@@ -37,7 +37,16 @@ class DMNavigationBar extends React.Component<BarProps, BarState> {
     }
 }
 
-class DMNavigationItem extends React.Component {
+type BarItemProps = {
+    label: string;
+    isActive: boolean;
+    onClick: () => void;
+}
+type BarItemState = {
+
+}
+
+class DMNavigationItem extends React.Component<BarItemProps, BarItemState> {
     render() {
         return (
             <div className={`dm-navigation-item ${this.props.isActive ? "dm-navigation-item-active" : ""}`}
