@@ -1,0 +1,22 @@
+﻿@page
+@model SchoolAssistant.Web.Pages.DataManagement.DataManagementModel
+@{
+}
+
+@section Head {
+    <link rel="stylesheet" href="~/css/data-management.css" asp-append-version="true"/>
+}
+
+@Html.React("DataManagementMainScreen", new {})
+
+@section Scripts {
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
+    <script src="~/js/data-management/enums.tsx"></script>
+    <script src="~/js/data-management/components.tsx"></script>
+    <script src="~/js/data-management/navigation.tsx"></script>
+    <script src="~/js/data-management/subjects.tsx"></script>
+    <script src="~/js/data-management/classes.tsx"></script>
+    <script src="~/js/data-management/main.tsx"></script>
+    @Html.ReactInitJavaScript()
+}

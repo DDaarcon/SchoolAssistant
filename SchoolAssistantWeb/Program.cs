@@ -81,7 +81,12 @@ app.UseReact(config =>
     // your components as well as all of their dependencies.
     // See http://reactjs.net/ for more information. Example:
     config
-      .AddScript("~/js/Schedule/schedule.jsx");
+      .AddScript("~/js/data-management/main.tsx")
+      .AddScript("~/js/data-management/components.tsx")
+      .AddScript("~/js/data-management/navigation.tsx")
+      .AddScript("~/js/data-management/subjects.tsx")
+      .AddScript("~/js/data-management/classes.tsx")
+      .AddScriptWithoutTransform("~/js/data-management/enums.tsx");
     //  .AddScript("~/js/Second.jsx");
 
     // If you use an external build too (for example, Babel, Webpack,

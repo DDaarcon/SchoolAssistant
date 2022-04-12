@@ -9,6 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\data-management\classes.tsx" />
+    <Content Remove="wwwroot\js\data-management\components.tsx" />
+    <Content Remove="wwwroot\js\data-management\enums.tsx" />
+    <Content Remove="wwwroot\js\data-management\main.tsx" />
+    <Content Remove="wwwroot\js\data-management\navigation.tsx" />
+    <Content Remove="wwwroot\js\data-management\subjects.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="types\index.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.17.4" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.17.4" />
@@ -31,4 +44,17 @@
     <ProjectReference Include="..\SchoolAssistant.Logic\SchoolAssistant.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Include="types\index.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\components.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\enums.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\main.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\navigation.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\subjects.tsx" />
+  </ItemGroup>
+
+	<Target Name="Typecheck" AfterTargets="AfterBuild">
+		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Command="node_modules/.bin/tsc" />
+	</Target>
 </Project>
