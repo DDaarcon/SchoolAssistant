@@ -1,4 +1,5 @@
 ﻿interface TableData {
+    [index: string]: string | number;
     id: number;
 }
 
