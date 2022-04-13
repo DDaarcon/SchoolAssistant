@@ -38,3 +38,12 @@
 .dm-table {
     width: 100%;
 }
+
+.dm-table tbody tr {
+    background-color: transparent;
+}
+
+.dm-table tbody tr:nth-child(4n+1),
+.dm-table tbody tr:nth-child(4n+2) {
+    background-color: #ebebeb;
+}

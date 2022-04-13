@@ -1,4 +1,10 @@
-﻿type PageProps = {
+﻿interface SubjectData extends TableData {
+    id: number;
+    name: string;
+    sampleData: string;
+}
+
+type PageProps = {
 
 };
 type PageState = {
@@ -6,9 +12,11 @@ type PageState = {
 }
 
 class SubjectsPage extends React.Component<PageProps, PageState> {
+    private _tableData?: SubjectData[];
+
 
     fetchTableData() {
-        this.tableData = [
+        this._tableData = [
             {
                 id: 1,
                 name: "Język polski",
@@ -18,7 +26,27 @@ class SubjectsPage extends React.Component<PageProps, PageState> {
                 id: 2,
                 name: "Język angielski",
                 sampleData: "Some sample data for eng"
-            }
+            },
+            {
+                id: 3,
+                name: "Język polski",
+                sampleData: "Some sample data"
+            },
+            {
+                id: 4,
+                name: "Język angielski",
+                sampleData: "Some sample data for eng"
+            },
+            {
+                id: 5,
+                name: "Język polski",
+                sampleData: "Some sample data"
+            },
+            {
+                id: 6,
+                name: "Język angielski",
+                sampleData: "Some sample data for eng"
+            },
         ]
     }
 
@@ -27,18 +55,23 @@ class SubjectsPage extends React.Component<PageProps, PageState> {
 
         return (
             <div className="dm-subjects-page">
-                <SubjectTable data={this.tableData} />
+                <SubjectTable data={this._tableData} />
             </div>
         )
     }
 }
 
-function SubjectTable(props) {
+type SubjectTableProps = {
+    data: SubjectData[];
+
+}
+
+const SubjectTable = (props: SubjectTableProps) => {
     const headers = [
         "Nazwa",
         "Przykładowe dane"
     ];
-    const properties = [
+    const properties: (keyof SubjectData)[] = [
         "name",
         "sampleData"
     ];
@@ -48,30 +81,36 @@ function SubjectTable(props) {
             headers={headers}
             data={props.data}
             displayProperties={properties}
-            tableRecordComponent={SubjectTableRecord}
-            modificationComponent={undefined}
+            modificationComponent={SubjectModificationComponent}
         />
     );
 }
 
-function SubjectTableRecord(props) {
-    return (
-        <TableRecord
-            recordId={props.recordId}
-            recordData={props.recordData}
-
-            displayProperties={props.displayProperties}
-            onOpenEdit={props.onOpenEdit}
-            modifying={props.modifying}
-
-            modificationComponent={props.modificationComponent}
-
-        />
-    )
+type SubjectModificationComponentProps = ModificationComponentProps;
+type SubjectModificationComponentState = {
+    data: SubjectData;
 }
 
-class SubjectModificationRow extends React.Component {
+class SubjectModificationComponent extends React.Component<SubjectModificationComponentProps, SubjectModificationComponentState> {
     constructor(props) {
-        super()
+        super(props);
+    }
+
+    componentWillMount() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', `/DataManagement/DataManagement?handler=SubjectData&id=${this.props.recordId}`, true);
+        xhr.onload = () => {
+            const data = JSON.parse(xhr.responseText);
+            this.setState({ data: data });
+        };
+        xhr.send();
+    }
+
+    render() {
+        return (
+            <div>
+                {this.state?.data.id},{this.state?.data.name},{this.state?.data.sampleData}
+            </div>
+        )
     }
 }

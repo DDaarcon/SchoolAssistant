@@ -86,7 +86,7 @@ app.UseReact(config =>
       .AddScript("~/js/data-management/navigation.tsx")
       .AddScript("~/js/data-management/subjects.tsx")
       .AddScript("~/js/data-management/classes.tsx")
-      .AddScriptWithoutTransform("~/js/data-management/enums.tsx");
+      .AddScript("~/js/data-management/enums.tsx");
     //  .AddScript("~/js/Second.jsx");
 
     // If you use an external build too (for example, Babel, Webpack,
