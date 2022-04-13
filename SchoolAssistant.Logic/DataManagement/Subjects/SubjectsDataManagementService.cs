@@ -5,17 +5,18 @@ using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
 
 namespace SchoolAssistant.Logic.DataManagement.Subjects
 {
-    public interface ISubjectsListService
+    public interface ISubjectsDataManagementService
     {
+        Task<SubjectDetailsJsonModel?> GetDetailsJsonAsync(long id);
         Task<SubjectListEntryJsonModel[]> GetEntriesJsonAsync();
     }
 
-    [Injectable(ServiceLifetime.Scoped)]
-    public class SubjectsListService : ISubjectsListService
+    [Injectable]
+    public class SubjectsDataManagementService : ISubjectsDataManagementService
     {
         private readonly IRepository<Subject> _subjectRepo;
 
-        public SubjectsListService(
+        public SubjectsDataManagementService(
             IRepository<Subject> subjectRepo)
         {
             _subjectRepo = subjectRepo;
@@ -31,6 +32,19 @@ namespace SchoolAssistant.Logic.DataManagement.Subjects
                 });
 
             return query.ToArrayAsync();
+        }
+
+        public async Task<SubjectDetailsJsonModel?> GetDetailsJsonAsync(long id)
+        {
+            var subject = await _subjectRepo.GetByIdAsync(id);
+
+            if (subject == null) return null;
+
+            return new SubjectDetailsJsonModel
+            {
+                id = subject.Id,
+                name = subject.Name
+            };
         }
     }
 }

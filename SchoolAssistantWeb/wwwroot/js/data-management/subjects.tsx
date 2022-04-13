@@ -1,5 +1,5 @@
 ﻿interface SubjectData extends TableData {
-    id: number;
+    id?: number;
     name: string;
     sampleData: string;
 }
@@ -68,8 +68,8 @@ const SubjectTable = (props: SubjectTableProps) => {
 }
 
 type SubjectModificationComponentProps = ModificationComponentProps;
-type SubjectModificationComponentState = {
-    data: SubjectData;
+type SubjectModificationComponentState = SubjectData & {
+
 }
 
 class SubjectModificationComponent extends React.Component<SubjectModificationComponentProps, SubjectModificationComponentState> {
@@ -77,18 +77,36 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
         super(props);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('get', `${baseUrl}?handler=SubjectData&id=${this.props.recordId}`, true);
+        xhr.open('get', `${baseUrl}?handler=SubjectDetails&id=${this.props.recordId}`, true);
         xhr.onload = () => {
             const data = JSON.parse(xhr.responseText);
-            this.setState({ data: data });
+            this.setState(data);
         };
         xhr.send();
+
+        this.state = {
+            name: '',
+            sampleData: ''
+        }
+    }
+
+    onNameChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        this.setState({ name: event.target.value });
+    }
+
+    onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+
     }
 
     render() {
         return (
             <div>
-                {this.state?.data.id},{this.state?.data.name},{this.state?.data.sampleData}
+                <form onSubmit={this.onSubmit}>
+                    <label>
+                        Nazwa:
+                        <input type="text" value={this.state.name} onChange={this.onNameChange} />
+                    </label>
+                </form>
             </div>
         )
     }

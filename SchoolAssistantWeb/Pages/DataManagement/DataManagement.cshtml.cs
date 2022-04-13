@@ -6,12 +6,12 @@ namespace SchoolAssistant.Web.Pages.DataManagement
 {
     public class DataManagementModel : PageModel
     {
-        private readonly ISubjectsListService _listService;
+        private readonly ISubjectsDataManagementService _subjectsService;
 
         public DataManagementModel(
-            ISubjectsListService listService)
+            ISubjectsDataManagementService subjectsService)
         {
-            _listService = listService;
+            _subjectsService = subjectsService;
         }
 
         public void OnGet()
@@ -20,13 +20,14 @@ namespace SchoolAssistant.Web.Pages.DataManagement
 
         public async Task<JsonResult> OnGetSubjectEntriesAsync()
         {
-            var entries = await _listService.GetEntriesJsonAsync();
+            var entries = await _subjectsService.GetEntriesJsonAsync();
             return new JsonResult(entries);
         }
 
-        public JsonResult OnGetSubjectData(long id)
+        public async Task<JsonResult> OnGetSubjectDetailsAsync(long id)
         {
-            return new JsonResult(new { id = id, name = "dasdasd", sampleData = "balblabala" });
+            var details = await _subjectsService.GetDetailsJsonAsync(id);
+            return new JsonResult(details);
         }
 
         public JsonResult OnPostSubjectData()

@@ -1,11 +1,16 @@
 ﻿interface TableData {
     [index: string]: string | number;
-    id: number;
+    id?: number;
 }
 
 type ModificationComponentProps = {
     recordId?: number;
 }
+
+
+
+
+
 
 type TableProps<TData extends TableData> = {
     headers: string[];
@@ -78,8 +83,13 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
     }
 }
 
+
+
+
+
+
 type TableRecordProps<TData extends TableData> = {
-    recordId: number;
+    recordId?: number;
     recordData: TData;
     onOpenEdit?: (id: number) => void;
     displayProperties: (keyof TData)[];
