@@ -5,6 +5,8 @@ type MainScreenState = {
     active: Category;
 }
 
+const baseUrl = "/DataManagement/DataManagement";
+
 class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
     state = {
         active: Category.Subjects
