@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace SchoolAssistant.Infrastructure.InjectablePattern
 {
@@ -6,14 +7,22 @@ namespace SchoolAssistant.Infrastructure.InjectablePattern
     {
         public static void AddAllInjectable(this IServiceCollection services)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var injectablesToRegister = assemblies
-                .SelectMany(x => x.GetTypes())
-                .Select(x => new
-                {
-                    InjectableAttribute = x.GetCustomAttributes(typeof(InjectableAttribute), false).OfType<InjectableAttribute>().FirstOrDefault(),
-                    Type = x
-                }).Where(x => x.InjectableAttribute is not null)
+            var assemblies = Assembly.GetEntryAssembly()?.GetReferencedAssemblies()
+                .Where(x => x.Name?.StartsWith("SchoolAssistant") ?? false)
+                .Select(x => Assembly.Load(x.FullName))
+                .ToList();
+
+            if (assemblies is null) return;
+
+            assemblies.Add(Assembly.GetEntryAssembly()!);
+
+            var types = assemblies.SelectMany(x => x.GetTypes());
+
+            var injectablesToRegister = types.Select(x => new
+            {
+                InjectableAttribute = x.GetCustomAttributes(typeof(InjectableAttribute), false).OfType<InjectableAttribute>().FirstOrDefault(),
+                Type = x
+            }).Where(x => x.InjectableAttribute is not null)
                 .Select(x => new
                 {
                     x.InjectableAttribute!.Lifetime,
