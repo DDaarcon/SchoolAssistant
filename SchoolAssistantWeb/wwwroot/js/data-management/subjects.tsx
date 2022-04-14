@@ -1,8 +1,12 @@
 ﻿interface SubjectData extends TableData {
     id?: number;
     name: string;
-    sampleData: string;
 }
+
+
+
+
+
 
 type PageProps = {
 
@@ -12,8 +16,6 @@ type PageState = {
 }
 
 class SubjectsPage extends React.Component<PageProps, PageState> {
-    private readonly _fetchUrl = `${baseUrl}?handler=SubjectEntries`;
-
     state: PageState = {
         tableData: []
     }
@@ -23,14 +25,11 @@ class SubjectsPage extends React.Component<PageProps, PageState> {
 
     }
 
-    componentDidMount() {
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', this._fetchUrl, true);
-        xhr.onload = () => {
-            const res = JSON.parse(xhr.responseText);
-            this.setState({ tableData: res });
-        };
-        xhr.send();
+    async componentDidMount() {
+        let response = await server.getAsync<SubjectData[]>("SubjectEntries");
+        this.setState({
+            tableData: response
+        });
     }
 
     render() {
@@ -42,6 +41,11 @@ class SubjectsPage extends React.Component<PageProps, PageState> {
     }
 }
 
+
+
+
+
+
 type SubjectTableProps = {
     data: SubjectData[];
 
@@ -50,11 +54,9 @@ type SubjectTableProps = {
 const SubjectTable = (props: SubjectTableProps) => {
     const headers = [
         "Nazwa",
-        "Przykładowe dane"
     ];
     const properties: (keyof SubjectData)[] = [
         "name",
-        "sampleData"
     ];
 
     return (
@@ -67,6 +69,11 @@ const SubjectTable = (props: SubjectTableProps) => {
     );
 }
 
+
+
+
+
+
 type SubjectModificationComponentProps = ModificationComponentProps;
 type SubjectModificationComponentState = SubjectData & {
 
@@ -76,26 +83,37 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
     constructor(props) {
         super(props);
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', `${baseUrl}?handler=SubjectDetails&id=${this.props.recordId}`, true);
-        xhr.onload = () => {
-            const data = JSON.parse(xhr.responseText);
-            this.setState(data);
-        };
-        xhr.send();
-
         this.state = {
-            name: '',
-            sampleData: ''
+            name: ''
         }
+
+        if (this.props.recordId)
+            this.fetchAsync();
     }
+
+    private async fetchAsync() {
+        let data = await server.getAsync<SubjectData>("SubjectDetails", {
+            id: this.props.recordId
+        });
+
+        this.setState(data);
+    }
+
+
+
 
     onNameChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         this.setState({ name: event.target.value });
     }
 
-    onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
 
+        if (this.state.id) {
+
+            let response = await server.postAsync("AA");
+            console.log(response);
+        }
     }
 
     render() {
@@ -105,6 +123,7 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
                     <label>
                         Nazwa:
                         <input type="text" value={this.state.name} onChange={this.onNameChange} />
+                        <input type="submit" value="Zapisz" />
                     </label>
                 </form>
             </div>

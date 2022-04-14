@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
 using SchoolAssistant.Logic.DataManagement.Subjects;
 
 namespace SchoolAssistant.Web.Pages.DataManagement
@@ -30,7 +31,12 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             return new JsonResult(details);
         }
 
-        public JsonResult OnPostSubjectData()
+        public JsonResult OnPostAA()
+        {
+            return new JsonResult(new { success = true });
+        }
+
+        public async Task<JsonResult> OnPostSubjectDataAsync(SubjectDetailsJsonModel model)
         {
 
             return new JsonResult(new { success = true });

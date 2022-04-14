@@ -15,6 +15,7 @@
     <Content Remove="wwwroot\js\data-management\main.tsx" />
     <Content Remove="wwwroot\js\data-management\navigation.tsx" />
     <Content Remove="wwwroot\js\data-management\subjects.tsx" />
+    <Content Remove="wwwroot\js\help\server-connection.tsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +53,7 @@
     <TypeScriptCompile Include="wwwroot\js\data-management\main.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\navigation.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\subjects.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\help\server-connection.tsx" />
   </ItemGroup>
 
 	<Target Name="Typecheck" AfterTargets="AfterBuild">

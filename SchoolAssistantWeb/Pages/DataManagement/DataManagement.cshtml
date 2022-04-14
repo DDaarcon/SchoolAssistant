@@ -1,6 +1,9 @@
 ﻿@page
+@using Microsoft.AspNetCore.Antiforgery
 @model SchoolAssistant.Web.Pages.DataManagement.DataManagementModel
+@inject IAntiforgery antiforgery
 @{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 @section Head {
@@ -10,8 +13,13 @@
 @Html.React("DataManagementMainScreen", new {})
 
 @section Scripts {
+    <script>
+        const antiforgeryToken = '@token';
+    </script>
+
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
+    <script src="~/js/help/server-connection.tsx"></script>
     <script src="~/js/data-management/enums.tsx"></script>
     <script src="~/js/data-management/components.tsx"></script>
     <script src="~/js/data-management/navigation.tsx"></script>

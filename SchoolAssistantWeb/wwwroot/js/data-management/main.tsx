@@ -5,7 +5,7 @@ type MainScreenState = {
     active: Category;
 }
 
-const baseUrl = "/DataManagement/DataManagement";
+const server = new ServerConnection("/DataManagement/DataManagement");
 
 class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
     state = {

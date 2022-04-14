@@ -81,6 +81,7 @@ app.UseReact(config =>
     // your components as well as all of their dependencies.
     // See http://reactjs.net/ for more information. Example:
     config
+      .AddScript("~/js/help/server-connection.tsx")
       .AddScript("~/js/data-management/main.tsx")
       .AddScript("~/js/data-management/components.tsx")
       .AddScript("~/js/data-management/navigation.tsx")
