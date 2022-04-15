@@ -10,11 +10,11 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\js\data-management\classes.tsx" />
-    <Content Remove="wwwroot\js\data-management\components.tsx" />
     <Content Remove="wwwroot\js\data-management\enums.tsx" />
     <Content Remove="wwwroot\js\data-management\main.tsx" />
     <Content Remove="wwwroot\js\data-management\navigation.tsx" />
     <Content Remove="wwwroot\js\data-management\subjects.tsx" />
+    <Content Remove="wwwroot\js\data-management\table.tsx" />
     <Content Remove="wwwroot\js\shared\loader.tsx" />
     <Content Remove="wwwroot\js\shared\server-connection.tsx" />
   </ItemGroup>
@@ -49,7 +49,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\components.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\table.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\enums.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\main.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\navigation.tsx" />
