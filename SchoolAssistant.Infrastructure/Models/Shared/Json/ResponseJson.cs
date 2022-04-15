@@ -8,7 +8,7 @@ namespace SchoolAssistant.Infrastructure.Models.Shared.Json
 {
     public class ResponseJson
     {
-        public bool success { get; set; }
+        public bool success => message is null;
         public string? message { get; set; }
     }
 }

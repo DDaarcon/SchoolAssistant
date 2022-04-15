@@ -31,15 +31,10 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             return new JsonResult(details);
         }
 
-        public JsonResult OnPostAA()
+        public async Task<JsonResult> OnPostSubjectDataAsync([FromBody] SubjectDetailsJson model)
         {
-            return new JsonResult(new { success = true });
-        }
-
-        public async Task<JsonResult> OnPostSubjectDataAsync(SubjectDetailsJsonModel model)
-        {
-
-            return new JsonResult(new { success = true });
+            var result = await _subjectsService.CreateOrUpdateAsync(model);
+            return new JsonResult(result);
         }
     }
 }
