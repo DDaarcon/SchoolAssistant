@@ -12,13 +12,13 @@ type ModificationComponentProps = {
 
 
 type ColumnSetting<TData extends TableData> = {
+    header: string;
     prop: keyof TData;
     style?: React.CSSProperties;
 }
 
 
 type TableProps<TData extends TableData> = {
-    headers: string[];
     modificationComponent: new (props: ModificationComponentProps) => React.Component<ModificationComponentProps>;
     columnsSetting: ColumnSetting<TData>[];
     loadDataAsync: () => Promise<TData[]>;
@@ -101,7 +101,9 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                         {this.props.columnsSetting.map(this.renderColumnSetting)}
                     </colgroup>
                     <thead>
-                        <tr>{this.props.headers.map((h, i) => <th key={i}>{h}</th>)}</tr>
+                        <tr>
+                            {this.props.columnsSetting.map((setting, i) => <th key={i}>{setting.header}</th>)}
+                        </tr>
                     </thead>
                     <tbody>
                         {this.state.data?.map((data, i) => {

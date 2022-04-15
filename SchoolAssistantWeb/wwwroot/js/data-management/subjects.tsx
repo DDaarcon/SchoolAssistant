@@ -1,5 +1,4 @@
 ﻿interface SubjectData extends TableData {
-    id?: number;
     name: string;
 }
 
@@ -16,10 +15,6 @@ type PageState = {
 }
 
 class SubjectsPage extends React.Component<PageProps, PageState> {
-    constructor(props) {
-        super(props);
-
-    }
 
     render() {
         return (
@@ -40,11 +35,12 @@ type SubjectTableProps = {
 }
 
 const SubjectTable = (props: SubjectTableProps) => {
-    const headers = [
-        "Nazwa",
-    ];
     const columnsSetting: ColumnSetting<SubjectData>[] = [
-        { prop: "name", style: { width: '50%'} }
+        {
+            header: "Nazwa",
+            prop: "name",
+            style: { width: '50%' }
+        }
     ];
 
     const loadAsync = async (): Promise<SubjectData[]> => {
@@ -54,7 +50,6 @@ const SubjectTable = (props: SubjectTableProps) => {
 
     return (
         <Table
-            headers={headers}
             columnsSetting={columnsSetting}
             modificationComponent={SubjectModificationComponent}
             loadDataAsync={loadAsync}
@@ -113,11 +108,23 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
         return (
             <div>
                 <form onSubmit={this.onSubmitAsync}>
-                    <label>
-                        Nazwa:
-                        <input type="text" value={this.state.name} onChange={this.onNameChange} />
-                        <input type="submit" value="Zapisz" />
-                    </label>
+                    <div className="form-group">
+                        <label htmlFor="subject-name">Nazwa</label>
+                        <input
+                            type="text"
+                            id="subject-name"
+                            className="form-control"
+                            value={this.state.name}
+                            onChange={this.onNameChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="submit"
+                            value="Zapisz"
+                            className="form-control"
+                        />
+                    </div>
                 </form>
             </div>
         )
