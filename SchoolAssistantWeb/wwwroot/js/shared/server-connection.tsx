@@ -45,3 +45,8 @@
         return `${this._baseUrl}${queryStr}`;
     }
 }
+
+type ResponseJson = {
+    success: boolean;
+    message: string | null;
+}
