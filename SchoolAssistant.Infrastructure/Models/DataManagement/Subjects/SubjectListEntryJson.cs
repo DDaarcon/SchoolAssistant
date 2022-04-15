@@ -1,6 +1,6 @@
 ﻿namespace SchoolAssistant.Infrastructure.Models.DataManagement.Subjects
 {
-    public class SubjectListEntryJsonModel
+    public class SubjectListEntryJson
     {
         public long id { get; set; }
         public string name { get; set; } = null!;
