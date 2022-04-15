@@ -85,24 +85,9 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
         return <col key={index} />
     }
 
-    renderModificationComponent = () => {
-        const ModificationComponent = this.props.modificationComponent;
-        if (this.state.addingNew)
-            return (
-                <td colSpan={this.props.columnsSetting.length + 1} className="dm-modification-component-container">
-                    <ModificationComponent
-                        recordId={undefined}
-                        reloadAsync={this.loadAsync}
-                        onMadeAnyChange={this.onMadeAnyChange}
-                    />
-                </td>
-            )
-        else
-            return (<></>);
-    }
-
     render() {
         const displayProperties = this.props.columnsSetting.map(x => x.prop);
+        const ModificationComponent = this.props.modificationComponent;
 
         return (
             <>
@@ -130,19 +115,29 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                                     displayProperties={displayProperties}
                                     onOpenEdit={this.openOrCloseModification}
                                     reloadAsync={this.loadAsync}
+                                    isEven={i % 2 == 1}
                                 />
                             )
                         })}
-                        <tr>
-                            <td colSpan={this.props.columnsSetting.length + 1}>
-                                <a onClick={this.openOrCloseAddingNew} href="#">
-                                    Dodaj
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            {this.renderModificationComponent()}
-                        </tr>
+                        <RowGroup
+                            isEven={this.state.data?.length % 2 == 1}
+                            openedModification={this.state.addingNew}
+                            columnsCount={this.props.columnsSetting.length + 1}
+                            dataRow={
+                                <td colSpan={this.props.columnsSetting.length + 1}>
+                                    <a onClick={this.openOrCloseAddingNew} href="#">
+                                        Dodaj
+                                    </a>
+                                </td>
+                            }
+                            modificationComponent={
+                                <ModificationComponent
+                                    recordId={undefined}
+                                    reloadAsync={this.loadAsync}
+                                    onMadeAnyChange={this.onMadeAnyChange}
+                                />
+                            }
+                        />
                     </tbody>
                 </table>
             </>
@@ -163,6 +158,8 @@ type TableRecordProps<TData extends TableData> = {
     modificationComponent: new (props: ModificationComponentProps) => React.Component<ModificationComponentProps>;
     modifying: boolean;
     reloadAsync: () => Promise<void>;
+
+    isEven: boolean;
 }
 type TableRecordState = {
 
@@ -185,42 +182,72 @@ class TableRecord<TData extends TableData> extends React.Component<TableRecordPr
         this.madeAnyChange = true;
     }
 
-    renderModificationComponent = () => {
+    render() {
+        const keys = this.props.displayProperties;
         const ModificationComponent = this.props.modificationComponent;
 
-        if (this.props.modifying)
-            return (
-                <td colSpan={this.props.displayProperties.length + 1} className="dm-modification-component-container">
+        return (
+            <RowGroup
+                isEven={this.props.isEven}
+                openedModification={this.props.modifying}
+                columnsCount={this.props.displayProperties.length + 1}
+                dataRow={
+                    <>
+                        {keys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
+                        <td className="dm-edit-btn-cell">
+                            <a onClick={this.onClickedEditBtn} href="#">
+                                Edytuj
+                            </a>
+                        </td>
+                    </>
+                }
+                modificationComponent={
                     <ModificationComponent
                         recordId={this.props.recordId}
                         reloadAsync={this.props.reloadAsync}
                         onMadeAnyChange={this.onMadeAnyChange}
                     />
-                </td>
-            )
-        else
-            return (<></>);
-    }
-
-    render() {
-        const keys = this.props.displayProperties;
-
-        return (
-            <>
-                <tr>
-                    {keys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
-                    <td className="dm-edit-btn-cell">
-                        <a onClick={this.onClickedEditBtn} href="#">
-                            Edytuj
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    {this.renderModificationComponent()}
-                </tr>
-            </>
+                }
+            />
         )
     }
+}
+
+type RowGroupProps = {
+    isEven: boolean;
+    openedModification: boolean;
+    columnsCount: number;
+    dataRow: JSX.Element;
+    modificationComponent: JSX.Element;
+}
+const RowGroup = (props: RowGroupProps) => {
+    const modificationRow = props.openedModification
+        ? (
+            <td className="dm-modification-component-container"
+                colSpan={props.columnsCount}
+            >
+                {props.modificationComponent}
+            </td>
+        ) : <></>;
+
+    return (
+        <>
+            <tr className={
+                    (props.isEven ? "even-row" : "") +
+                    " data-row" +
+                    (props.openedModification ? "" : " single-standing-row")
+                }
+            >
+                {props.dataRow}
+            </tr>
+            <tr className={props.isEven ? "even-row" : ""}>
+                {modificationRow}
+            </tr>
+            <tr className="separation-row">
+                <td colSpan={props.columnsCount}> </td>
+            </tr>
+        </>
+    );
 }
 
 
