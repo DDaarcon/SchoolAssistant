@@ -12,30 +12,19 @@ type PageProps = {
 
 };
 type PageState = {
-    tableData: SubjectData[];
+
 }
 
 class SubjectsPage extends React.Component<PageProps, PageState> {
-    state: PageState = {
-        tableData: []
-    }
-
     constructor(props) {
         super(props);
 
     }
 
-    async componentDidMount() {
-        let response = await server.getAsync<SubjectData[]>("SubjectEntries");
-        this.setState({
-            tableData: response
-        });
-    }
-
     render() {
         return (
             <div className="dm-subjects-page">
-                <SubjectTable data={this.state?.tableData ?? []} />
+                <SubjectTable />
             </div>
         )
     }
@@ -47,7 +36,6 @@ class SubjectsPage extends React.Component<PageProps, PageState> {
 
 
 type SubjectTableProps = {
-    data: SubjectData[];
 
 }
 
@@ -59,12 +47,17 @@ const SubjectTable = (props: SubjectTableProps) => {
         "name",
     ];
 
+    const loadAsync = async (): Promise<SubjectData[]> => {
+        let response = await server.getAsync<SubjectData[]>("SubjectEntries");
+        return response;
+    }
+
     return (
         <Table
             headers={headers}
-            data={props.data}
             displayProperties={properties}
             modificationComponent={SubjectModificationComponent}
+            loadDataAsync={loadAsync}
         />
     );
 }
@@ -106,20 +99,21 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
         this.setState({ name: event.target.value });
     }
 
-    onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+    onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        if (this.state.id) {
+        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, this.state);
 
-            let response = await server.postAsync("AA");
-            console.log(response);
-        }
+        if (response.success)
+            await this.props.reloadAsync();
+        else
+            console.debug(response);
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.onSubmitAsync}>
                     <label>
                         Nazwa:
                         <input type="text" value={this.state.name} onChange={this.onNameChange} />

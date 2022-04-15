@@ -76,27 +76,19 @@ else
 // Initialise ReactJS.NET. Must be before static files.
 app.UseReact(config =>
 {
-    // If you want to use server-side rendering of React components,
-    // add all the necessary JavaScript files here. This includes
-    // your components as well as all of their dependencies.
-    // See http://reactjs.net/ for more information. Example:
     config
-      .AddScript("~/js/help/server-connection.tsx")
-      .AddScript("~/js/data-management/main.tsx")
-      .AddScript("~/js/data-management/components.tsx")
-      .AddScript("~/js/data-management/navigation.tsx")
-      .AddScript("~/js/data-management/subjects.tsx")
-      .AddScript("~/js/data-management/classes.tsx")
-      .AddScript("~/js/data-management/enums.tsx");
-    //  .AddScript("~/js/Second.jsx");
+       .AddScript("~/js/shared/loader.tsx");
 
-    // If you use an external build too (for example, Babel, Webpack,
-    // Browserify or Gulp), you can improve performance by disabling
-    // ReactJS.NET's version of Babel and loading the pre-transpiled
-    // scripts. Example:
-    //config
-    //  .SetLoadBabel(false)
-    //  .AddScriptWithoutTransform("~/js/bundle.server.js");
+
+    config
+        .AddScript("~/js/shared/server-connection.tsx")
+        .AddScript("~/js/data-management/main.tsx")
+        .AddScript("~/js/data-management/table.tsx")
+        .AddScript("~/js/data-management/navigation.tsx")
+        .AddScript("~/js/data-management/subjects.tsx")
+        .AddScript("~/js/data-management/classes.tsx")
+        .AddScript("~/js/data-management/enums.tsx");
+
 });
 
 #endregion

@@ -5,6 +5,7 @@
 
 type ModificationComponentProps = {
     recordId?: number;
+    reloadAsync: () => Promise<void>;
 }
 
 
@@ -14,18 +15,26 @@ type ModificationComponentProps = {
 
 type TableProps<TData extends TableData> = {
     headers: string[];
-    data: TData[];
     modificationComponent: new (props: ModificationComponentProps) => React.Component<ModificationComponentProps>;
     displayProperties: (keyof TData)[];
+    loadDataAsync: () => Promise<TData[]>;
 }
-type TableState = {
+type TableState<TData extends TableData> = {
     editedRecordId?: number;
     addingNew: boolean;
+    data?: TData[];
+    loading: boolean;
 }
 
-class Table<TData extends TableData> extends React.Component<TableProps<TData>, TableState> {
-    state: TableState = {
-        addingNew: false
+class Table<TData extends TableData> extends React.Component<TableProps<TData>, TableState<TData>> {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            addingNew: false,
+            loading: true
+        }
+        this.loadAsync();
     }
 
     openModificationFor = (id: number) => {
@@ -36,49 +45,66 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
         this.setState({ editedRecordId: undefined, addingNew: true });
     }
 
+    loadAsync = async () => {
+        this.setState({ loading: true });
+        const newData = await this.props.loadDataAsync();
+        this.setState({
+            data: newData,
+            loading: false
+        });
+    }
+
     render() {
         const ModificationComponent = this.props.modificationComponent;
 
         let addingNewRow;
         if (this.state.addingNew)
             addingNewRow =
-                <td colSpan={this.props.displayProperties.length + 1}>
-                    <ModificationComponent recordId={undefined} />
+                <td colSpan={this.props.displayProperties.length + 1} className="dm-modification-component-container">
+                    <ModificationComponent recordId={undefined} reloadAsync={this.loadAsync} />
                 </td>;
         else
             addingNewRow = undefined;
 
         return (
-            <table className="dm-table">
-                <thead>
-                    <tr>{this.props.headers.map((h, i) => <th key={i}>{h}</th>)}</tr>
-                </thead>
-                <tbody>
-                    {this.props.data.map((data, i) => {
-                        const recordId = data.id;
-                        return (
-                            <TableRecord<TData> key={i}
-                                recordId={recordId}
-                                recordData={data}
-                                modificationComponent={this.props.modificationComponent}
-                                modifying={recordId == this.state?.editedRecordId}
-                                displayProperties={this.props.displayProperties}
-                                onOpenEdit={this.openModificationFor}
-                            />
-                        )
-                    })}
-                    <tr>
-                        <td colSpan={this.props.displayProperties.length + 1}>
-                            <a onClick={this.openAddingNew} href="#">
-                                Dodaj
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        {addingNewRow}
-                    </tr>
-                </tbody>
-            </table>
+            <>
+                <Loader
+                    enable={this.state?.loading}
+                    size={LoaderSize.Medium}
+                    type={LoaderType.Absolute}
+                />
+                <table className="dm-table">
+                    <thead>
+                        <tr>{this.props.headers.map((h, i) => <th key={i}>{h}</th>)}</tr>
+                    </thead>
+                    <tbody>
+                        {this.state.data?.map((data, i) => {
+                            const recordId = data.id;
+                            return (
+                                <TableRecord<TData> key={i}
+                                    recordId={recordId}
+                                    recordData={data}
+                                    modificationComponent={this.props.modificationComponent}
+                                    modifying={recordId == this.state?.editedRecordId}
+                                    displayProperties={this.props.displayProperties}
+                                    onOpenEdit={this.openModificationFor}
+                                    reloadAsync={this.loadAsync}
+                                />
+                            )
+                        })}
+                        <tr>
+                            <td colSpan={this.props.displayProperties.length + 1}>
+                                <a onClick={this.openAddingNew} href="#">
+                                    Dodaj
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            {addingNewRow}
+                        </tr>
+                    </tbody>
+                </table>
+            </>
         )
     }
 }
@@ -95,6 +121,7 @@ type TableRecordProps<TData extends TableData> = {
     displayProperties: (keyof TData)[];
     modificationComponent: new (props: ModificationComponentProps) => React.Component<ModificationComponentProps>;
     modifying: boolean;
+    reloadAsync: () => Promise<void>;
 }
 type TableRecordState = {
 
@@ -113,8 +140,8 @@ class TableRecord<TData extends TableData> extends React.Component<TableRecordPr
         let modificationRow;
         if (this.props.modifying)
             modificationRow =
-                <td colSpan={keys.length + 1}>
-                    <ModificationComponent recordId={this.props.recordId} />
+                <td colSpan={keys.length + 1} className="dm-modification-component-container">
+                    <ModificationComponent recordId={this.props.recordId} reloadAsync={this.props.reloadAsync} />
                 </td>;
         else
             modificationRow = undefined;

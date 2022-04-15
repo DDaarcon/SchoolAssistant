@@ -8,6 +8,7 @@
 
 @section Head {
     <link rel="stylesheet" href="~/css/data-management.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/loader.css" asp-append-version="true" />
 }
 
 @Html.React("DataManagementMainScreen", new {})
@@ -19,12 +20,14 @@
 
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
-    <script src="~/js/help/server-connection.tsx"></script>
-    <script src="~/js/data-management/enums.tsx"></script>
-    <script src="~/js/data-management/components.tsx"></script>
-    <script src="~/js/data-management/navigation.tsx"></script>
-    <script src="~/js/data-management/subjects.tsx"></script>
-    <script src="~/js/data-management/classes.tsx"></script>
-    <script src="~/js/data-management/main.tsx"></script>
+    <script src="~/js/shared/loader.tsx" asp-append-version="true"></script>
+    <script src="~/js/shared/server-connection.tsx" asp-append-version="true"></script>
+
+    <script src="~/js/data-management/enums.tsx" asp-append-version="true"></script>
+    <script src="~/js/data-management/table.tsx" asp-append-version="true"></script>
+    <script src="~/js/data-management/navigation.tsx" asp-append-version="true"></script>
+    <script src="~/js/data-management/subjects.tsx" asp-append-version="true"></script>
+    <script src="~/js/data-management/classes.tsx" asp-append-version="true"></script>
+    <script src="~/js/data-management/main.tsx" asp-append-version="true"></script>
     @Html.ReactInitJavaScript()
 }

@@ -39,11 +39,20 @@
     width: 100%;
 }
 
-.dm-table tbody tr {
-    background-color: transparent;
-}
+/* Row colors */
 
 .dm-table tbody tr:nth-child(4n+1),
-.dm-table tbody tr:nth-child(4n+2) {
+.dm-table tbody tr:nth-child(4n+2) .dm-modification-component-container {
     background-color: #ebebeb;
+}
+
+.dm-table tbody tr:nth-child(4n+3),
+.dm-table tbody tr:nth-child(4n+4) .dm-modification-component-container {
+    background-color: #c9ffb0;
+}
+
+.dm-modification-component-container {
+    padding: 10px;
+    border-end-start-radius: 10px;
+    border-end-end-radius: 10px;
 }
