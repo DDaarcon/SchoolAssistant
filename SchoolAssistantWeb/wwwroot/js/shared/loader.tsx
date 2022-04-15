@@ -1,5 +1,6 @@
 ﻿enum LoaderType {
     DivWholeSpace,
+    Absolute,
     Inline
 }
 
@@ -56,7 +57,14 @@ const Loader = (props: LoaderProps) => {
     switch (props.type) {
         case LoaderType.DivWholeSpace:
             return (
-                <div className="div-whole-space">
+                <div className="loader-div-whole-space">
+                    {dots}
+                </div>
+            );
+
+        case LoaderType.Absolute:
+            return (
+                <div className="loader-absolute">
                     {dots}
                 </div>
             );
