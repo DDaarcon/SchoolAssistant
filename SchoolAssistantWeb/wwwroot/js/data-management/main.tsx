@@ -2,35 +2,37 @@
 
 }
 type MainScreenState = {
-    active: Category;
+    active?: Category;
+    pageComponent?: new (props: {}) => React.Component<{}>
 }
 
 const server = new ServerConnection("/DataManagement/DataManagement");
 
 class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
-    state = {
-        active: Category.Subjects
+    state: MainScreenState = {
+        active: undefined,
+        pageComponent: undefined
     }
 
-    onBlockClick = (type: Category) => {
-        this.setState({ active: type });
+    onBlockClick = (type: Category, pageComponent: new (props: {}) => React.Component) => {
+        this.setState({
+            active: type,
+            pageComponent: pageComponent
+        });
     }
 
     renderPageContent() {
-        switch (this.state.active) {
-            case Category.Subjects:
-                return <SubjectsPage />;
-            case Category.Classes:
-                return <ClassesPage />
-            default:
-                return undefined;
+        if (this.state?.pageComponent) {
+            const PageComponent = this.state.pageComponent;
+            return <PageComponent />
         }
+        return <WelcomeScreen />
     }
 
     render() {
         return (
             <div className="data-management-main">
-                <DMNavigationBar onClick={this.onBlockClick} active={this.state.active} />
+                <DMNavigationBar onSelect={this.onBlockClick} active={this.state.active} />
 
                 <div className="dm-page-content">
                     {this.renderPageContent()}
@@ -38,5 +40,11 @@ class DataManagementMainScreen extends React.Component<MainScreenProps, MainScre
             </div>
         )
     }
+}
+
+const WelcomeScreen = () => {
+    return (
+        <h4>Zarządzanie danymi</h4>
+    )
 }
 

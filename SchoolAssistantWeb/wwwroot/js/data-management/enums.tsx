@@ -1,7 +1,7 @@
 ﻿
 enum Category {
     Subjects,
-    Teachers,
+    Staff,
     Rooms,
     Classes,
     Students,

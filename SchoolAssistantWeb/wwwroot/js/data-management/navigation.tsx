@@ -1,6 +1,6 @@
 ﻿type BarProps = {
-    active: Category;
-    onClick: (category: Category) => void;
+    active?: Category;
+    onSelect: (category: Category, pageComponent: new (props: {}) => React.Component<{}, {}>) => void;
 }
 type BarState = {
 
@@ -11,15 +11,16 @@ class DMNavigationBar extends React.Component<BarProps, BarState> {
 
     generateNavItems() {
         this.items = [
-            this.createNavItem("Przedmioty", Category.Subjects),
-            this.createNavItem("Klasy", Category.Classes),
+            this.createNavItem("Przedmioty", Category.Subjects, SubjectsPage),
+            this.createNavItem("Personel", Category.Staff, StaffPage),
+            this.createNavItem("Klasy", Category.Classes, ClassesPage),
         ]
     }
 
-    createNavItem(label: string, category: Category) {
+    createNavItem(label: string, category: Category, pageComponent: new (props: {}) => React.Component<{}>) {
         return {
             label: label,
-            onClick: () => { this.props.onClick(category); },
+            onClick: () => { this.props.onSelect(category, pageComponent); },
             active: this.props.active == category
         };
     }
