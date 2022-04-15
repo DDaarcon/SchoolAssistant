@@ -43,8 +43,8 @@ const SubjectTable = (props: SubjectTableProps) => {
     const headers = [
         "Nazwa",
     ];
-    const properties: (keyof SubjectData)[] = [
-        "name",
+    const columnsSetting: ColumnSetting<SubjectData>[] = [
+        { prop: "name", style: { width: '50%'} }
     ];
 
     const loadAsync = async (): Promise<SubjectData[]> => {
@@ -55,7 +55,7 @@ const SubjectTable = (props: SubjectTableProps) => {
     return (
         <Table
             headers={headers}
-            displayProperties={properties}
+            columnsSetting={columnsSetting}
             modificationComponent={SubjectModificationComponent}
             loadDataAsync={loadAsync}
         />

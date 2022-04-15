@@ -10,13 +10,16 @@ type ModificationComponentProps = {
 
 
 
-
+type ColumnSetting<TData extends TableData> = {
+    prop: keyof TData;
+    style?: React.CSSProperties;
+}
 
 
 type TableProps<TData extends TableData> = {
     headers: string[];
     modificationComponent: new (props: ModificationComponentProps) => React.Component<ModificationComponentProps>;
-    displayProperties: (keyof TData)[];
+    columnsSetting: ColumnSetting<TData>[];
     loadDataAsync: () => Promise<TData[]>;
 }
 type TableState<TData extends TableData> = {
@@ -54,13 +57,22 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
         });
     }
 
+    renderColumnSetting = (setting: ColumnSetting<TData>) => {
+        if (setting.style)
+            return (
+                <col style={setting.style} />
+            )
+        return <col />
+    }
+
     render() {
+        const displayProperties = this.props.columnsSetting.map(x => x.prop);
         const ModificationComponent = this.props.modificationComponent;
 
         let addingNewRow;
         if (this.state.addingNew)
             addingNewRow =
-                <td colSpan={this.props.displayProperties.length + 1} className="dm-modification-component-container">
+                <td colSpan={this.props.columnsSetting.length + 1} className="dm-modification-component-container">
                     <ModificationComponent recordId={undefined} reloadAsync={this.loadAsync} />
                 </td>;
         else
@@ -74,6 +86,9 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                     type={LoaderType.Absolute}
                 />
                 <table className="dm-table">
+                    <colgroup>
+                        {this.props.columnsSetting.map(this.renderColumnSetting)}
+                    </colgroup>
                     <thead>
                         <tr>{this.props.headers.map((h, i) => <th key={i}>{h}</th>)}</tr>
                     </thead>
@@ -86,14 +101,14 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                                     recordData={data}
                                     modificationComponent={this.props.modificationComponent}
                                     modifying={recordId == this.state?.editedRecordId}
-                                    displayProperties={this.props.displayProperties}
+                                    displayProperties={displayProperties}
                                     onOpenEdit={this.openModificationFor}
                                     reloadAsync={this.loadAsync}
                                 />
                             )
                         })}
                         <tr>
-                            <td colSpan={this.props.displayProperties.length + 1}>
+                            <td colSpan={this.props.columnsSetting.length + 1}>
                                 <a onClick={this.openAddingNew} href="#">
                                     Dodaj
                                 </a>
@@ -150,7 +165,7 @@ class TableRecord<TData extends TableData> extends React.Component<TableRecordPr
             <>
                 <tr>
                     {keys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
-                    <td>
+                    <td className="dm-edit-btn-cell">
                         <a onClick={this.editThis} href="#">
                             Edytuj
                         </a>
