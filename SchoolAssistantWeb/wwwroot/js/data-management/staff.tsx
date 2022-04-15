@@ -51,13 +51,46 @@ const StaffTable = (props: StaffTableProps) => {
         }
     ];
 
-    const loadAsync = async (): Promise<StaffPersonData[]> => {
-        let response = await server.getAsync<StaffPersonData[]>("StaffPeopleEntries");
-        return response;
+    const loadAsync = async (): Promise<GroupedTableData<StaffPersonData>[]> => {
+        //let response = await server.getAsync<GroupedTableData<StaffPersonData>[]>("StaffPersonsEntries");
+        return [
+            {
+                id: 'teacher',
+                name: 'Nauczyciele',
+                entries: [
+                    {
+                        id: 1,
+                        name: "Lolek trolek",
+                        role: "Wychowawca"
+                    },
+                    {
+                        id: 2,
+                        name: "Lolek trolek Worek",
+                        role: "Wychowawca"
+                    },
+                ]
+            },
+            {
+                id: 'test',
+                name: 'Testerzy',
+                entries: [
+                    {
+                        id: 3,
+                        name: "Lolek trolek",
+                        role: "Wychowawca"
+                    },
+                    {
+                        id: 4,
+                        name: "Lolek trolek Worek",
+                        role: "Wychowawca"
+                    },
+                ]
+            },
+        ];
     }
 
     return (
-        <Table
+        <GroupedTable<StaffPersonData>
             columnsSetting={columnsSetting}
             loadDataAsync={loadAsync}
             modificationComponent={StaffPersonModificationComponent}
@@ -69,7 +102,7 @@ const StaffTable = (props: StaffTableProps) => {
 
 
 
-type StaffPersonModificationComponentProps = ModificationComponentProps;
+type StaffPersonModificationComponentProps = GroupedModificationComponentProps;
 type StaffPersonModificationComponentState = StaffPersonDetailedData & {
 
 }
@@ -109,7 +142,10 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, this.state);
+        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, {
+            groupId: this.props.groupId,
+            ...this.state
+        });
 
         if (response.success)
             await this.props.reloadAsync();

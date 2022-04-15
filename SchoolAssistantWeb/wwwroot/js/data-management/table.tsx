@@ -3,19 +3,30 @@
     id?: number;
 }
 
+interface GroupedTableData<TData extends TableData> {
+    id: string;
+    name: string;
+    entries: TData[];
+}
+
 type ModificationComponentProps = {
     recordId?: number;
     reloadAsync: () => Promise<void>;
     onMadeAnyChange: () => void;
 }
 
-
+type GroupedModificationComponentProps = ModificationComponentProps & {
+    groupId: string;
+}
 
 type ColumnSetting<TData extends TableData> = {
     header: string;
     prop: keyof TData;
     style?: React.CSSProperties;
 }
+
+
+// TODO: Extract common part from Table and GroupedTable
 
 
 type TableProps<TData extends TableData> = {
@@ -40,7 +51,6 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
             addingNew: false,
             loading: true
         }
-        //this.loadAsync();
     }
 
     async componentDidMount() {
@@ -109,7 +119,7 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                         {this.state.data?.map((data, i) => {
                             const recordId = data.id;
                             return (
-                                <TableRecord<TData> key={i}
+                                <TableRecord<TData, ModificationComponentProps> key={i}
                                     recordId={recordId}
                                     recordData={data}
                                     modificationComponent={this.props.modificationComponent}
@@ -121,7 +131,7 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                                 />
                             )
                         })}
-                        <RowGroup
+                        <RecordRows
                             isEven={this.state.data?.length % 2 == 1}
                             openedModification={this.state.addingNew}
                             columnsCount={this.props.columnsSetting.length + 1}
@@ -151,23 +161,174 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
 
 
 
+type GroupedTableProps<TData extends TableData> = {
+    modificationComponent: new (props: GroupedModificationComponentProps) => React.Component<GroupedModificationComponentProps>;
+    columnsSetting: ColumnSetting<TData>[];
+    loadDataAsync: () => Promise<GroupedTableData<TData>[]>;
+}
+type GroupedTableState<TData extends TableData> = {
+    editedRecordId?: number;
+    addingNewOfGroup?: string;
+    data?: GroupedTableData<TData>[];
+    loading: boolean;
+}
+class GroupedTable<TData extends TableData> extends React.Component<GroupedTableProps<TData>, GroupedTableState<TData>> {
+    private madeAnyChange: boolean = false;
 
-type TableRecordProps<TData extends TableData> = {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true
+        }
+    }
+
+    async componentDidMount() {
+        await this.loadAsync();
+    }
+
+    openOrCloseModification = (id: number) => {
+        if (id == this.state.editedRecordId)
+            this.setState({ editedRecordId: undefined, addingNewOfGroup: undefined });
+        else
+            this.setState({ editedRecordId: id, addingNewOfGroup: undefined });
+    }
+
+    createOpenOrCloseAddingNewHandler = (groupId: string) => {
+        return () => {
+            if (this.madeAnyChange) {
+                const confirmation = confirmClosing();
+                if (!confirmation) return;
+            }
+
+            this.madeAnyChange = false;
+            if (groupId == this.state.addingNewOfGroup)
+                this.setState({ editedRecordId: undefined, addingNewOfGroup: undefined });
+            else
+                this.setState({ editedRecordId: undefined, addingNewOfGroup: groupId });
+        }
+    }
+
+    loadAsync = async () => {
+        this.setState({ loading: true });
+        const newData = await this.props.loadDataAsync();
+        this.setState({
+            data: newData,
+            loading: false
+        });
+    }
+
+    onMadeAnyChange = () => {
+        this.madeAnyChange = true;
+    }
+
+    renderColumnSetting = (setting: ColumnSetting<TData>, index: number) => {
+        if (setting.style)
+            return (
+                <col key={index} style={setting.style} />
+            )
+        return <col key={index} />
+    }
+
+    render() {
+        const displayProperties = this.props.columnsSetting.map(x => x.prop);
+        const ModificationComponent = this.props.modificationComponent;
+
+        return (
+            <>
+                <Loader
+                    enable={this.state?.loading}
+                    size={LoaderSize.Medium}
+                    type={LoaderType.Absolute}
+                />
+                <table className="dm-table">
+                    <colgroup>
+                        {this.props.columnsSetting.map(this.renderColumnSetting)}
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            {this.props.columnsSetting.map((setting, i) => <th key={i}>{setting.header}</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.data?.map((group, i) => 
+                            <React.Fragment key={i}>
+                                <tr className="group-header-row">
+                                    <th colSpan={this.props.columnsSetting.length + 1}>
+                                        {group.name}
+                                    </th>
+                                </tr>
+                                {group.entries?.map((entry, entryIndex) =>
+                                    <TableRecord<TData, GroupedModificationComponentProps> key={entry.id}
+                                        recordId={entry.id}
+                                        recordData={entry}
+                                        modificationComponent={this.props.modificationComponent}
+                                        modifying={entry.id == this.state?.editedRecordId}
+                                        displayProperties={displayProperties}
+                                        onOpenEdit={this.openOrCloseModification}
+                                        reloadAsync={this.loadAsync}
+                                        isEven={entryIndex % 2 == 1}
+                                        groupId={group.id}
+                                    />
+                                )}
+                                <RecordRows
+                                    isEven={group.entries?.length % 2 == 1}
+                                    openedModification={this.state.addingNewOfGroup == group.id}
+                                    columnsCount={this.props.columnsSetting.length + 1}
+                                    dataRow={
+                                        <td colSpan={this.props.columnsSetting.length + 1}>
+                                            <a onClick={this.createOpenOrCloseAddingNewHandler(group.id)} href="#">
+                                                Dodaj
+                                            </a>
+                                        </td>
+                                    }
+                                    modificationComponent={
+                                        <ModificationComponent
+                                            recordId={undefined}
+                                            reloadAsync={this.loadAsync}
+                                            onMadeAnyChange={this.onMadeAnyChange}
+                                            groupId={group.id}
+                                        />
+                                    }
+                                />
+                            </React.Fragment>
+                        )}
+                    </tbody>
+                </table>
+            </>
+        )
+    }
+}
+
+
+
+
+
+
+
+type TableRecordProps<
+    TData extends TableData,
+    TModificationComponentProps extends ModificationComponentProps | GroupedModificationComponentProps
+> = {
     recordId?: number;
     recordData: TData;
     onOpenEdit?: (id: number) => void;
     displayProperties: (keyof TData)[];
-    modificationComponent: new (props: ModificationComponentProps) => React.Component<ModificationComponentProps>;
+    modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
     modifying: boolean;
     reloadAsync: () => Promise<void>;
 
     isEven: boolean;
+    groupId?: string;
 }
 type TableRecordState = {
 
 }
 
-class TableRecord<TData extends TableData> extends React.Component<TableRecordProps<TData>, TableRecordState> {
+class TableRecord<
+    TData extends TableData,
+    TModificationComponentProps extends ModificationComponentProps | GroupedModificationComponentProps
+> extends React.Component<TableRecordProps<TData, TModificationComponentProps>, TableRecordState> {
     private madeAnyChange: boolean = false;
 
     onClickedEditBtn = () => {
@@ -189,7 +350,7 @@ class TableRecord<TData extends TableData> extends React.Component<TableRecordPr
         const ModificationComponent = this.props.modificationComponent;
 
         return (
-            <RowGroup
+            <RecordRows
                 isEven={this.props.isEven}
                 openedModification={this.props.modifying}
                 columnsCount={this.props.displayProperties.length + 1}
@@ -208,6 +369,8 @@ class TableRecord<TData extends TableData> extends React.Component<TableRecordPr
                         recordId={this.props.recordId}
                         reloadAsync={this.props.reloadAsync}
                         onMadeAnyChange={this.onMadeAnyChange}
+                        //@ts-ignore
+                        groupId={this.props.groupId}
                     />
                 }
             />
@@ -215,14 +378,14 @@ class TableRecord<TData extends TableData> extends React.Component<TableRecordPr
     }
 }
 
-type RowGroupProps = {
+type RecordRowsProps = {
     isEven: boolean;
     openedModification: boolean;
     columnsCount: number;
     dataRow: JSX.Element;
     modificationComponent: JSX.Element;
 }
-const RowGroup = (props: RowGroupProps) => {
+const RecordRows = (props: RecordRowsProps) => {
     const modificationRow = props.openedModification
         ? (
             <td className="dm-modification-component-container"

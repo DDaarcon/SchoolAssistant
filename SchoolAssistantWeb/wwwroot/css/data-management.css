@@ -95,3 +95,14 @@
 .dm-table tbody tr.even-row .dm-modification-component-container {
     background-color: var(--theme-color-2);
 }
+
+.dm-table tbody tr.separation-row td {
+    height: 3px;
+}
+
+.dm-table tbody tr.group-header-row th {
+    background-color: #c0c0c0;
+    padding: 5px;
+    border-radius: 5px;
+    transform: translateX(-10px);
+}
