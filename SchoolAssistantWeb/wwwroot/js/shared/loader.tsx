@@ -41,7 +41,7 @@ const Loader = (props: LoaderProps) => {
             <title>dots</title>
             <desc>Created with Sketch.</desc>
             <defs></defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                 <g id="dots" fill="#A3A3A3">
                     <circle id="dot1" cx="25" cy="30" r="13"></circle>
                     <circle id="dot2" cx="65" cy="30" r="13"></circle>

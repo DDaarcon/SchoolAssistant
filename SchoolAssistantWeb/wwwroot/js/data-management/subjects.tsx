@@ -93,10 +93,9 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
     }
 
 
-
-
     onNameChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         this.setState({ name: event.target.value });
+        this.props.onMadeAnyChange();
     }
 
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {

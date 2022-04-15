@@ -6,6 +6,7 @@
 type ModificationComponentProps = {
     recordId?: number;
     reloadAsync: () => Promise<void>;
+    onMadeAnyChange: () => void;
 }
 
 
@@ -30,6 +31,8 @@ type TableState<TData extends TableData> = {
 }
 
 class Table<TData extends TableData> extends React.Component<TableProps<TData>, TableState<TData>> {
+    private madeAnyChange: boolean = false;
+
     constructor(props) {
         super(props);
 
@@ -37,15 +40,28 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
             addingNew: false,
             loading: true
         }
-        this.loadAsync();
+        //this.loadAsync();
     }
 
-    openModificationFor = (id: number) => {
-        this.setState({ editedRecordId: id, addingNew: false });
+    async componentDidMount() {
+        await this.loadAsync();
     }
 
-    openAddingNew = () => {
-        this.setState({ editedRecordId: undefined, addingNew: true });
+    openOrCloseModification = (id: number) => {
+        if (id == this.state.editedRecordId)
+            this.setState({ editedRecordId: undefined, addingNew: false });
+        else
+            this.setState({ editedRecordId: id, addingNew: false });
+    }
+
+    openOrCloseAddingNew = () => {
+        if (this.madeAnyChange) {
+            const confirmation = confirmClosing();
+            if (!confirmation) return;
+        }
+
+        this.madeAnyChange = false;
+        this.setState({ editedRecordId: undefined, addingNew: !this.state.addingNew });
     }
 
     loadAsync = async () => {
@@ -57,26 +73,36 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
         });
     }
 
-    renderColumnSetting = (setting: ColumnSetting<TData>) => {
+    onMadeAnyChange = () => {
+        this.madeAnyChange = true;
+    }
+
+    renderColumnSetting = (setting: ColumnSetting<TData>, index: number) => {
         if (setting.style)
             return (
-                <col style={setting.style} />
+                <col key={index} style={setting.style} />
             )
-        return <col />
+        return <col key={index} />
+    }
+
+    renderModificationComponent = () => {
+        const ModificationComponent = this.props.modificationComponent;
+        if (this.state.addingNew)
+            return (
+                <td colSpan={this.props.columnsSetting.length + 1} className="dm-modification-component-container">
+                    <ModificationComponent
+                        recordId={undefined}
+                        reloadAsync={this.loadAsync}
+                        onMadeAnyChange={this.onMadeAnyChange}
+                    />
+                </td>
+            )
+        else
+            return (<></>);
     }
 
     render() {
         const displayProperties = this.props.columnsSetting.map(x => x.prop);
-        const ModificationComponent = this.props.modificationComponent;
-
-        let addingNewRow;
-        if (this.state.addingNew)
-            addingNewRow =
-                <td colSpan={this.props.columnsSetting.length + 1} className="dm-modification-component-container">
-                    <ModificationComponent recordId={undefined} reloadAsync={this.loadAsync} />
-                </td>;
-        else
-            addingNewRow = undefined;
 
         return (
             <>
@@ -102,20 +128,20 @@ class Table<TData extends TableData> extends React.Component<TableProps<TData>, 
                                     modificationComponent={this.props.modificationComponent}
                                     modifying={recordId == this.state?.editedRecordId}
                                     displayProperties={displayProperties}
-                                    onOpenEdit={this.openModificationFor}
+                                    onOpenEdit={this.openOrCloseModification}
                                     reloadAsync={this.loadAsync}
                                 />
                             )
                         })}
                         <tr>
                             <td colSpan={this.props.columnsSetting.length + 1}>
-                                <a onClick={this.openAddingNew} href="#">
+                                <a onClick={this.openOrCloseAddingNew} href="#">
                                     Dodaj
                                 </a>
                             </td>
                         </tr>
                         <tr>
-                            {addingNewRow}
+                            {this.renderModificationComponent()}
                         </tr>
                     </tbody>
                 </table>
@@ -143,38 +169,61 @@ type TableRecordState = {
 }
 
 class TableRecord<TData extends TableData> extends React.Component<TableRecordProps<TData>, TableRecordState> {
+    private madeAnyChange: boolean = false;
 
-    editThis = () => {
+    onClickedEditBtn = () => {
+        if (this.madeAnyChange) {
+            const confirmation = confirmClosing();
+            if (!confirmation) return;
+        }
+
+        this.madeAnyChange = false;
         this.props.onOpenEdit?.(this.props.recordId);
+    }
+
+    onMadeAnyChange = () => {
+        this.madeAnyChange = true;
+    }
+
+    renderModificationComponent = () => {
+        const ModificationComponent = this.props.modificationComponent;
+
+        if (this.props.modifying)
+            return (
+                <td colSpan={this.props.displayProperties.length + 1} className="dm-modification-component-container">
+                    <ModificationComponent
+                        recordId={this.props.recordId}
+                        reloadAsync={this.props.reloadAsync}
+                        onMadeAnyChange={this.onMadeAnyChange}
+                    />
+                </td>
+            )
+        else
+            return (<></>);
     }
 
     render() {
         const keys = this.props.displayProperties;
-        const ModificationComponent = this.props.modificationComponent;
-
-        let modificationRow;
-        if (this.props.modifying)
-            modificationRow =
-                <td colSpan={keys.length + 1} className="dm-modification-component-container">
-                    <ModificationComponent recordId={this.props.recordId} reloadAsync={this.props.reloadAsync} />
-                </td>;
-        else
-            modificationRow = undefined;
 
         return (
             <>
                 <tr>
                     {keys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
                     <td className="dm-edit-btn-cell">
-                        <a onClick={this.editThis} href="#">
+                        <a onClick={this.onClickedEditBtn} href="#">
                             Edytuj
                         </a>
                     </td>
                 </tr>
                 <tr>
-                    {modificationRow}
+                    {this.renderModificationComponent()}
                 </tr>
             </>
         )
     }
+}
+
+
+function confirmClosing() {
+    return confirm("Zakończyć edycję? Wprowadzone zmiany zostaną utracone");
 }
