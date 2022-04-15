@@ -39,8 +39,24 @@
     width: 100%;
 }
 
-/* Row colors */
+.dm-edit-btn-cell {
+    text-align: right;
+}
 
+.dm-table tbody tr:nth-child(2n+1) td:first-child,
+.dm-table thead th:first-child {
+    padding-left: 10px;
+}
+.dm-table tbody tr:nth-child(2n+1) td:last-child,
+.dm-table thead th:last-child {
+    padding-right: 10px;
+}
+
+.dm-table tbody tr:nth-child(2n+1) td {
+    padding: 5px;
+}
+
+/* Row colors */
 .dm-table tbody tr:nth-child(4n+1),
 .dm-table tbody tr:nth-child(4n+2) .dm-modification-component-container {
     background-color: #ebebeb;
