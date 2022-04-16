@@ -1,6 +1,6 @@
 ﻿interface StaffPersonData extends TableData {
     name: string;
-    role: string;
+    specialization?: string;
 }
 
 interface StaffPersonDetailedData {
@@ -8,8 +8,6 @@ interface StaffPersonDetailedData {
     firstName: string;
     secondName?: string;
     lastName: string;
-
-    roleId?: number;
 
     mainSubjectsIds?: number[];
     additionalSubjectsIds?: number[];
@@ -43,50 +41,16 @@ const StaffTable = (props: StaffTableProps) => {
         {
             header: "Imię i nazwisko",
             prop: "name",
-
         },
         {
-            header: "Rola",
-            prop: "role"
+            header: "Specjalizacja",
+            prop: "specialization"
         }
     ];
 
     const loadAsync = async (): Promise<GroupedTableData<StaffPersonData>[]> => {
-        //let response = await server.getAsync<GroupedTableData<StaffPersonData>[]>("StaffPersonsEntries");
-        return [
-            {
-                id: 'teacher',
-                name: 'Nauczyciele',
-                entries: [
-                    {
-                        id: 1,
-                        name: "Lolek trolek",
-                        role: "Wychowawca"
-                    },
-                    {
-                        id: 2,
-                        name: "Lolek trolek Worek",
-                        role: "Wychowawca"
-                    },
-                ]
-            },
-            {
-                id: 'test',
-                name: 'Testerzy',
-                entries: [
-                    {
-                        id: 3,
-                        name: "Lolek trolek",
-                        role: "Wychowawca"
-                    },
-                    {
-                        id: 4,
-                        name: "Lolek trolek Worek",
-                        role: "Wychowawca"
-                    },
-                ]
-            },
-        ];
+        let response = await server.getAsync<GroupedTableData<StaffPersonData>[]>("StaffPersonsEntries");
+        return response;
     }
 
     return (

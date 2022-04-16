@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
+using SchoolAssistant.Logic.DataManagement.Staff;
 using SchoolAssistant.Logic.DataManagement.Subjects;
 
 namespace SchoolAssistant.Web.Pages.DataManagement
@@ -8,11 +9,14 @@ namespace SchoolAssistant.Web.Pages.DataManagement
     public class DataManagementModel : PageModel
     {
         private readonly ISubjectsDataManagementService _subjectsService;
+        private readonly IStaffDataManagementService _staffService;
 
         public DataManagementModel(
-            ISubjectsDataManagementService subjectsService)
+            ISubjectsDataManagementService subjectsService,
+            IStaffDataManagementService staffService)
         {
             _subjectsService = subjectsService;
+            _staffService = staffService;
         }
 
         public void OnGet()
@@ -35,6 +39,18 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         {
             var result = await _subjectsService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
+        }
+
+
+        public async Task<JsonResult> OnGetStaffPersonsEntriesAsync()
+        {
+            var groups = await _staffService.GetGroupsOfEntriesJsonAsync();
+            return new JsonResult(groups);
+        }
+
+        public async Task<JsonResult> OnGetStaffPersonDetailsAsync(long id)
+        {
+            return new JsonResult(null);
         }
     }
 }
