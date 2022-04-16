@@ -65,7 +65,7 @@ namespace SchoolAssistans.Tests.DbEntities
             var teacher = _teacherRepo.AsList()[0];
 
             Assert.True(teacher.MainSubjects is not null);
-            Assert.True(teacher.MainSubjects!.Count == 1);
+            Assert.True(teacher.MainSubjects!.Count() == 1);
             Assert.True(teacher.MainSubjects.First().Name == "Modeling");
         }
 
@@ -75,7 +75,7 @@ namespace SchoolAssistans.Tests.DbEntities
             var teacher = _teacherRepo.AsList()[0];
 
             Assert.True(teacher.AdditionalSubjects is not null);
-            Assert.True(teacher.AdditionalSubjects!.Count == 1);
+            Assert.True(teacher.AdditionalSubjects!.Count() == 1);
             Assert.True(teacher.AdditionalSubjects.First().Name == "Being a bitch");
         }
 
@@ -90,16 +90,34 @@ namespace SchoolAssistans.Tests.DbEntities
             teacher = _teacherRepo.GetById(teacher.Id);
 
             Assert.True(teacher.MainSubjects is not null);
-            Assert.True(teacher.MainSubjects!.Count == 2);
+            Assert.True(teacher.MainSubjects!.Count() == 2);
 
             teacher.RemoveMainSubject(newSubject);
             _teacherRepo.Save();
             teacher = _teacherRepo.GetById(teacher.Id);
 
-            Assert.True(teacher.MainSubjects.Count == 1);
+            Assert.True(teacher.MainSubjects.Count() == 1);
         }
 
+        [Test]
+        public void ReferencingMainSubjectsInQuery()
+        {
+            var subjectNames = _teacherRepo.AsQueryable()
+                .SelectMany(x => x.MainSubjects)
+                .ToList();
 
+            Assert.IsTrue(subjectNames.Any(x => x.Name == "Modeling"));
+        }
+
+        [Test]
+        public void ReferencingAdditionalSubjectsInQuery()
+        {
+            var subjectNames = _teacherRepo.AsQueryable()
+                .SelectMany(x => x.AdditionalSubjects)
+                .ToList();
+
+            Assert.IsTrue(subjectNames.Any(x => x.Name == "Being a bitch"));
+        }
 
     }
 }

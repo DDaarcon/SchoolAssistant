@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolAssistant.DAL;
 
@@ -11,9 +12,10 @@ using SchoolAssistant.DAL;
 namespace SchoolAssistant.DAL.Migrations
 {
     [DbContext(typeof(SADbContext))]
-    partial class SADbContextModelSnapshot : ModelSnapshot
+    [Migration("20220416050508_Teacher_to_subject_fix")]
+    partial class Teacher_to_subject_fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -355,13 +357,21 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToAdditionalSubject", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
                     b.Property<long>("SubjectId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("TeacherId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("SubjectId", "TeacherId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
 
@@ -370,13 +380,21 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToMainSubject", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
                     b.Property<long>("SubjectId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("TeacherId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("SubjectId", "TeacherId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
 
@@ -876,13 +894,13 @@ namespace SchoolAssistant.DAL.Migrations
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToAdditionalSubject", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.Subjects.Subject", "Subject")
-                        .WithMany("AdditionalTeachersLinking")
+                        .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Teacher")
-                        .WithMany("AdditionalSubjectsLinking")
+                        .WithMany("_additionalSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -895,13 +913,13 @@ namespace SchoolAssistant.DAL.Migrations
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToMainSubject", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.Subjects.Subject", "Subject")
-                        .WithMany("MainTeachersLinking")
+                        .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Teacher")
-                        .WithMany("MainSubjectsLinking")
+                        .WithMany("_mainSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1167,12 +1185,12 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Staff.Teacher", b =>
                 {
-                    b.Navigation("AdditionalSubjectsLinking");
-
-                    b.Navigation("MainSubjectsLinking");
-
                     b.Navigation("Pupils")
                         .IsRequired();
+
+                    b.Navigation("_additionalSubjects");
+
+                    b.Navigation("_mainSubjects");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
@@ -1194,13 +1212,6 @@ namespace SchoolAssistant.DAL.Migrations
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Student", b =>
                 {
                     b.Navigation("Marks");
-                });
-
-            modelBuilder.Entity("SchoolAssistant.DAL.Models.Subjects.Subject", b =>
-                {
-                    b.Navigation("AdditionalTeachersLinking");
-
-                    b.Navigation("MainTeachersLinking");
                 });
 #pragma warning restore 612, 618
         }
