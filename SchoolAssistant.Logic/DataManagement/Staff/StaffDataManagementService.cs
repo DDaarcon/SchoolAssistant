@@ -1,11 +1,13 @@
 ﻿using SchoolAssistant.DAL.Models.Staff;
-using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
+using SchoolAssistant.Infrastructure.Models.Shared.Json;
 
 namespace SchoolAssistant.Logic.DataManagement.Staff
 {
     public interface IStaffDataManagementService
     {
+        Task<ResponseJson> CreateOrUpdateAsync(StaffPersonDetailsJson model);
+        Task<StaffPersonDetailsJson?> GetDetailsJsonAsync(string groupId, long id);
         Task<StaffListGroupJson[]> GetGroupsOfEntriesJsonAsync();
     }
 
@@ -13,14 +15,11 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
     public class StaffDataManagementService : IStaffDataManagementService
     {
         private readonly ITeachersDataManagementService _teachersService;
-        private readonly IRepository<Teacher> _teacherRepo;
 
         public StaffDataManagementService(
-            ITeachersDataManagementService jsonService,
-            IRepository<Teacher> teacherRepo)
+            ITeachersDataManagementService teachersService)
         {
-            _teacherRepo = teacherRepo;
-            _teachersService = jsonService;
+            _teachersService = teachersService;
         }
 
 
@@ -28,13 +27,29 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
         {
             return new[]
             {
-                await _teachersService.GetTeachersGroupJsonAsync(null)
+                await _teachersService.GetGroupJsonAsync(null)
             };
         }
 
-        public async Task<StaffPersonDetailsJson> GetDetailsJsonAsync(long id)
+        public async Task<StaffPersonDetailsJson?> GetDetailsJsonAsync(string groupId, long id)
         {
+            return groupId switch
+            {
+                nameof(Teacher) => await _teachersService.GetDetailsJsonAsync(id),
+                _ => null
+            };
+        }
 
+        public async Task<ResponseJson> CreateOrUpdateAsync(StaffPersonDetailsJson model)
+        {
+            return model.groupId switch
+            {
+                nameof(Teacher) => await _teachersService.CreateOrUpdateAsync(model),
+                _ => new ResponseJson
+                {
+                    message = "Błąd! Nieprawidłowa kategoria personelu"
+                }
+            };
         }
     }
 }

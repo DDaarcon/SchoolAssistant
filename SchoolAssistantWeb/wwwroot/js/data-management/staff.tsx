@@ -67,21 +67,29 @@ const StaffTable = (props: StaffTableProps) => {
 
 
 type StaffPersonModificationComponentProps = GroupedModificationComponentProps;
-type StaffPersonModificationComponentState = StaffPersonDetailedData & {
-
+type StaffPersonModificationComponentState = {
+    awaitingPersonData: boolean;
+    data: StaffPersonDetailedData;
+    availableSubjects: SubjectData[];
 }
 class StaffPersonModificationComponent extends React.Component<StaffPersonModificationComponentProps, StaffPersonModificationComponentState> {
     constructor(props) {
         super(props);
 
         this.state = {
-            firstName: '',
-            secondName: '',
-            lastName: ''
+            awaitingPersonData: this.props.recordId > 0,
+            data: {
+                firstName: '',
+                secondName: '',
+                lastName: ''
+            },
+            availableSubjects: []
         }
 
         if (this.props.recordId)
             this.fetchAsync();
+
+        this.fetchSubjectsAsync();
     }
 
     private async fetchAsync() {
@@ -89,7 +97,13 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
             id: this.props.recordId
         });
 
-        this.setState(data);
+        this.setState({ data, awaitingPersonData: false });
+    }
+
+    private async fetchSubjectsAsync() {
+        let availableSubjects = await server.getAsync<SubjectData[]>("AvailableSubjects");
+
+        this.setState({ availableSubjects })
     }
 
     createOnTextChangeHandler: (property: keyof StaffPersonData) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
@@ -118,6 +132,15 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
     }
 
     render() {
+        if (this.state.awaitingPersonData)
+            return (
+                <Loader
+                    enable={true}
+                    size={LoaderSize.Medium}
+                    type={LoaderType.DivWholeSpace}
+                />
+            )
+
         return (
             <div>
                 <form onSubmit={this.onSubmitAsync}>
@@ -127,7 +150,7 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                             type="text"
                             className="form-control"
                             id="first-name-input"
-                            value={this.state.firstName}
+                            value={this.state.data.firstName}
                             onChange={this.createOnTextChangeHandler('firstName')}
                         />
                     </div>
@@ -137,7 +160,7 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                             type="text"
                             className="form-control"
                             id="first-name-input"
-                            value={this.state.secondName}
+                            value={this.state.data.secondName}
                             onChange={this.createOnTextChangeHandler('secondName')}
                         />
                     </div>
@@ -147,9 +170,26 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                             type="text"
                             className="form-control"
                             id="first-name-input"
-                            value={this.state.lastName}
+                            value={this.state.data.lastName}
                             onChange={this.createOnTextChangeHandler('lastName')}
                         />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="main-subejcts-input">Główne przedmioty</label>
+                        <select
+                            className="form-select"
+                            multiple
+                            value={this.state.data.mainSubjectsIds?.map(x => `${x}`)}
+                        >
+                            {this.state.availableSubjects.map(x =>
+                                <option key={x.id}
+                                    value={x.id}
+                                    selected={this.state.data.mainSubjectsIds?.indexOf(x.id) != -1}
+                                >
+                                    {x.name}
+                                </option>
+                            )}
+                        </select>
                     </div>
                 </form>
             </div>

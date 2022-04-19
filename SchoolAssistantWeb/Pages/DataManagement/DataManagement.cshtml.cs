@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
 using SchoolAssistant.Logic.DataManagement.Staff;
 using SchoolAssistant.Logic.DataManagement.Subjects;
@@ -48,9 +49,22 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             return new JsonResult(groups);
         }
 
-        public async Task<JsonResult> OnGetStaffPersonDetailsAsync(long id)
+        public async Task<JsonResult> OnGetStaffPersonDetailsAsync(string groupId, long id)
         {
-            return new JsonResult(null);
+            var details = await _staffService.GetDetailsJsonAsync(groupId, id);
+            return new JsonResult(details);
+        }
+
+        public async Task<JsonResult> OnPostStaffPersonDataAsync([FromBody] StaffPersonDetailsJson model)
+        {
+            var result = await _staffService.CreateOrUpdateAsync(model);
+            return new JsonResult(result);
+        }
+
+        public async Task<JsonResult> OnGetAvailableSubjectsAsync()
+        {
+            var items = await _subjectsService.GetEntriesJsonAsync();
+            return new JsonResult(items);
         }
     }
 }

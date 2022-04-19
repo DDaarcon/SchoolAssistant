@@ -2,40 +2,46 @@
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
+using SchoolAssistant.Infrastructure.Models.Shared.Json;
 
 namespace SchoolAssistant.Logic.DataManagement.Staff
 {
     public interface ITeachersDataManagementService
     {
-        Task<StaffListEntryJson[]> GetTeachersEntriesJsonAsync(IQueryable<Teacher>? query);
-        Task<StaffListGroupJson> GetTeachersGroupJsonAsync(IQueryable<Teacher>? query);
+        Task<ResponseJson> CreateOrUpdateAsync(StaffPersonDetailsJson model);
+        Task<StaffPersonDetailsJson?> GetDetailsJsonAsync(long id);
+        Task<StaffListEntryJson[]> GetEntriesJsonAsync(IQueryable<Teacher>? query);
+        Task<StaffListGroupJson> GetGroupJsonAsync(IQueryable<Teacher>? query);
     }
 
     [Injectable]
     public class TeachersDataManagementService : ITeachersDataManagementService
     {
+        private readonly IModifyTeacherFromJsonService _modifySvc;
         private readonly IRepository<Teacher> _repo;
 
-        private readonly string TEACHERS_ID = "teachers";
+        private string _GeneralTeachersId => nameof(Teacher);
 
         public TeachersDataManagementService(
+            IModifyTeacherFromJsonService modifySvc,
             IRepository<Teacher> teacherRepo)
         {
+            _modifySvc = modifySvc;
             _repo = teacherRepo;
         }
 
 
-        public async Task<StaffListGroupJson> GetTeachersGroupJsonAsync(IQueryable<Teacher>? query)
+        public async Task<StaffListGroupJson> GetGroupJsonAsync(IQueryable<Teacher>? query)
         {
             return new StaffListGroupJson
             {
-                id = TEACHERS_ID,
+                id = _GeneralTeachersId,
                 name = "Nauczyciele",
-                entries = await GetTeachersEntriesJsonAsync(query)
+                entries = await GetEntriesJsonAsync(query)
             };
         }
 
-        public Task<StaffListEntryJson[]> GetTeachersEntriesJsonAsync(IQueryable<Teacher>? query)
+        public Task<StaffListEntryJson[]> GetEntriesJsonAsync(IQueryable<Teacher>? query)
         {
             query ??= _repo.AsQueryable();
             return query.Select(x => new StaffListEntryJson
@@ -46,7 +52,7 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
             }).ToArrayAsync();
         }
 
-        public async Task<StaffPersonDetailsJson?> GetTeacherDetailsJsonAsync(long id)
+        public async Task<StaffPersonDetailsJson?> GetDetailsJsonAsync(long id)
         {
             var teacher = await _repo.GetByIdAsync(id);
 
@@ -61,6 +67,11 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
                 mainSubjectsIds = teacher.MainSubjects.Select(x => x.Id).ToArray(),
                 additionalSubjectsIds = teacher.AdditionalSubjects.Select(x => x.Id).ToArray()
             };
+        }
+
+        public Task<ResponseJson> CreateOrUpdateAsync(StaffPersonDetailsJson model)
+        {
+            return _modifySvc.CreateOrUpdateAsync(model);
         }
     }
 }
