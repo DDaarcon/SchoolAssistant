@@ -1,4 +1,13 @@
-﻿interface StaffPersonData extends TableData {
+﻿import * as React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { ResponseJson } from "../shared/server-connection";
+import { server } from "./main";
+import { SubjectData } from "./subjects";
+import { ColumnSetting, GroupedModificationComponentProps, GroupedTable, GroupedTableData, TableData } from "./table";
+//import * as Select from 'react-select';
+//import makeAnimated from 'react-select/animated';
+
+interface StaffPersonData extends TableData {
     name: string;
     specialization?: string;
 }
@@ -20,7 +29,7 @@ type StaffPageProps = {
 type StaffPageState = {
 
 }
-class StaffPage extends React.Component<StaffPageProps, StaffPageState> {
+export default class StaffPage extends React.Component<StaffPageProps, StaffPageState> {
 
     render() {
         return (
@@ -64,7 +73,7 @@ const StaffTable = (props: StaffTableProps) => {
 
 
 
-
+//const animatedmultiselectComponent = makeAnimated();
 
 type StaffPersonModificationComponentProps = GroupedModificationComponentProps;
 type StaffPersonModificationComponentState = {
@@ -85,6 +94,8 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
             },
             availableSubjects: []
         }
+
+        globalThis.alert("jebać cie w ryj");
 
         if (this.props.recordId)
             this.fetchAsync();
@@ -179,12 +190,12 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                         <select
                             className="form-select"
                             multiple
+                            id="main-subject-select"
                             value={this.state.data.mainSubjectsIds?.map(x => `${x}`)}
                         >
                             {this.state.availableSubjects.map(x =>
                                 <option key={x.id}
                                     value={x.id}
-                                    selected={this.state.data.mainSubjectsIds?.indexOf(x.id) != -1}
                                 >
                                     {x.name}
                                 </option>

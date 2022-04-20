@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="~/css/loader.css" asp-append-version="true" />
 }
 
-@Html.React("DataManagementMainScreen", new {})
+@Html.React("Components.DataManagementMain", new {})
 
 @section Scripts {
     <script>
         const antiforgeryToken = '@token';
     </script>
 
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
+    @*<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
     <script src="~/js/shared/loader.tsx" asp-append-version="true"></script>
     <script src="~/js/shared/server-connection.tsx" asp-append-version="true"></script>
@@ -29,6 +29,6 @@
     <script src="~/js/data-management/subjects.tsx" asp-append-version="true"></script>
     <script src="~/js/data-management/staff.tsx" asp-append-version="true"></script>
     <script src="~/js/data-management/classes.tsx" asp-append-version="true"></script>
-    <script src="~/js/data-management/main.tsx" asp-append-version="true"></script>
-    @Html.ReactInitJavaScript()
+    <script src="~/js/data-management/main.tsx" asp-append-version="true"></script>*@
+    @*@Html.ReactInitJavaScript()*@
 }

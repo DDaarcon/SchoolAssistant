@@ -1,25 +1,28 @@
-﻿interface TableData {
+﻿import * as React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+
+export interface TableData {
     [index: string]: string | number;
     id?: number;
 }
 
-interface GroupedTableData<TData extends TableData> {
+export interface GroupedTableData<TData extends TableData> {
     id: string;
     name: string;
     entries: TData[];
 }
 
-type ModificationComponentProps = {
+export type ModificationComponentProps = {
     recordId?: number;
     reloadAsync: () => Promise<void>;
     onMadeAnyChange: () => void;
 }
 
-type GroupedModificationComponentProps = ModificationComponentProps & {
+export type GroupedModificationComponentProps = ModificationComponentProps & {
     groupId: string;
 }
 
-type ColumnSetting<TData extends TableData> = {
+export type ColumnSetting<TData extends TableData> = {
     header: string;
     prop: keyof TData;
     style?: React.CSSProperties;
@@ -41,7 +44,7 @@ type TableState<TData extends TableData> = {
     loading: boolean;
 }
 
-class Table<TData extends TableData> extends React.Component<TableProps<TData>, TableState<TData>> {
+export default class Table<TData extends TableData> extends React.Component<TableProps<TData>, TableState<TData>> {
     private madeAnyChange: boolean = false;
 
     constructor(props) {
@@ -172,7 +175,7 @@ type GroupedTableState<TData extends TableData> = {
     data?: GroupedTableData<TData>[];
     loading: boolean;
 }
-class GroupedTable<TData extends TableData> extends React.Component<GroupedTableProps<TData>, GroupedTableState<TData>> {
+export class GroupedTable<TData extends TableData> extends React.Component<GroupedTableProps<TData>, GroupedTableState<TData>> {
     private madeAnyChange: boolean = false;
 
     constructor(props) {

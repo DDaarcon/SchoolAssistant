@@ -5,9 +5,9 @@
     "target": "es6",
     "jsx": "react",
     "esModuleInterop": true,
-    "noEmit": true,
+    "sourceMap": true,
     "types": [ "./types" ],
     "lib": [ "es2015", "dom" ]
   },
-  "include": [ "./wwwroot/js/**/*" ]
+  "include": [ "./React/**/*" ]
 }

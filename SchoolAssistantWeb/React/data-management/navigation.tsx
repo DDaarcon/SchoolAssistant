@@ -1,4 +1,10 @@
-﻿type BarProps = {
+﻿import * as React from "react";
+import ClassesPage from "./classes";
+import { Category } from "./enums";
+import StaffPage from "./staff";
+import SubjectsPage from "./subjects";
+
+type BarProps = {
     active?: Category;
     onSelect: (category: Category, pageComponent: new (props: {}) => React.Component<{}, {}>) => void;
 }
@@ -6,7 +12,7 @@ type BarState = {
 
 }
 
-class DMNavigationBar extends React.Component<BarProps, BarState> {
+export default class DMNavigationBar extends React.Component<BarProps, BarState> {
     items;
 
     generateNavItems() {

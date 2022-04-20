@@ -1,22 +1,24 @@
-﻿enum LoaderType {
+﻿import * as React from "react";
+
+export enum LoaderType {
     DivWholeSpace,
     Absolute,
     Inline
 }
 
-enum LoaderSize {
+export enum LoaderSize {
     Large,
     Medium,
     Small
 }
 
-type LoaderProps = {
+export type LoaderProps = {
     enable?: boolean,
     type?: LoaderType;
     size?: LoaderSize;
 }
 
-const Loader = (props: LoaderProps) => {
+export const Loader = (props: LoaderProps) => {
     let sizeStyle;
 
     switch (props.size) {
@@ -77,3 +79,5 @@ const Loader = (props: LoaderProps) => {
             )
     }
 }
+
+export default Loader;

@@ -1,4 +1,4 @@
-﻿class ServerConnection {
+﻿export default class ServerConnection {
     constructor(
         private _baseUrl: string)
     {
@@ -46,7 +46,7 @@
     }
 }
 
-type ResponseJson = {
+export type ResponseJson = {
     success: boolean;
     message: string | null;
 }

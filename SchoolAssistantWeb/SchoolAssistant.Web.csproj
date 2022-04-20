@@ -9,28 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\data-management\classes.tsx" />
-    <Content Remove="wwwroot\js\data-management\enums.tsx" />
-    <Content Remove="wwwroot\js\data-management\main.tsx" />
-    <Content Remove="wwwroot\js\data-management\navigation.tsx" />
-    <Content Remove="wwwroot\js\data-management\staff.tsx" />
-    <Content Remove="wwwroot\js\data-management\subjects.tsx" />
-    <Content Remove="wwwroot\js\data-management\table.tsx" />
-    <Content Remove="wwwroot\js\shared\loader.tsx" />
-    <Content Remove="wwwroot\js\shared\server-connection.tsx" />
+    <Content Remove="React\data-management\classes.tsx" />
+    <Content Remove="React\data-management\enums.tsx" />
+    <Content Remove="React\data-management\main.tsx" />
+    <Content Remove="React\data-management\navigation.tsx" />
+    <Content Remove="React\data-management\staff.tsx" />
+    <Content Remove="React\data-management\subjects.tsx" />
+    <Content Remove="React\data-management\table.tsx" />
+    <Content Remove="React\shared\loader.tsx" />
+    <Content Remove="React\shared\server-connection.tsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="React\expose-components.ts" />
     <None Remove="types\index.d.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.17.4" />
-    <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.17.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.3" />
+    <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -48,19 +49,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="React\expose-components.ts" />
     <TypeScriptCompile Include="types\index.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\staff.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\table.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\enums.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\main.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\navigation.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\subjects.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shared\loader.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shared\server-connection.tsx" />
+    <TypeScriptCompile Include="React\data-management\classes.tsx" />
+    <TypeScriptCompile Include="React\data-management\staff.tsx" />
+    <TypeScriptCompile Include="React\data-management\table.tsx" />
+    <TypeScriptCompile Include="React\data-management\enums.tsx" />
+    <TypeScriptCompile Include="React\data-management\main.tsx" />
+    <TypeScriptCompile Include="React\data-management\navigation.tsx" />
+    <TypeScriptCompile Include="React\data-management\subjects.tsx" />
+    <TypeScriptCompile Include="React\shared\loader.tsx" />
+    <TypeScriptCompile Include="React\shared\server-connection.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 
 	<Target Name="Typecheck" AfterTargets="AfterBuild">
 		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Command="node_modules/.bin/tsc" />
+	</Target>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="npm run build" />
 	</Target>
 </Project>

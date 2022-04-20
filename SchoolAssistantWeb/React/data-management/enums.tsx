@@ -1,5 +1,5 @@
 ﻿
-enum Category {
+export enum Category {
     Subjects,
     Staff,
     Rooms,

@@ -76,19 +76,25 @@ else
 // Initialise ReactJS.NET. Must be before static files.
 app.UseReact(config =>
 {
-    config
-       .AddScript("~/js/shared/loader.tsx");
+    //config
+    //   .AddScript("~/js/shared/loader.tsx");
 
 
+    //config
+    //    .AddScript("~/js/shared/server-connection.tsx")
+    //    .AddScript("~/js/data-management/main.tsx")
+    //    .AddScript("~/js/data-management/table.tsx")
+    //    .AddScript("~/js/data-management/navigation.tsx")
+    //    .AddScript("~/js/data-management/subjects.tsx")
+    //    .AddScript("~/js/data-management/staff.tsx")
+    //    .AddScript("~/js/data-management/classes.tsx")
+    //    .AddScript("~/js/data-management/enums.tsx");
+
     config
-        .AddScript("~/js/shared/server-connection.tsx")
-        .AddScript("~/js/data-management/main.tsx")
-        .AddScript("~/js/data-management/table.tsx")
-        .AddScript("~/js/data-management/navigation.tsx")
-        .AddScript("~/js/data-management/subjects.tsx")
-        .AddScript("~/js/data-management/staff.tsx")
-        .AddScript("~/js/data-management/classes.tsx")
-        .AddScript("~/js/data-management/enums.tsx");
+        .SetReuseJavaScriptEngines(true)
+        .SetLoadBabel(false)
+        .SetLoadReact(false)
+        .SetReactAppBuildPath("~/dist");
 
 });
 

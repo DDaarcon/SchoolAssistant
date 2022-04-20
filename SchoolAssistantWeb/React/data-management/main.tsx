@@ -1,4 +1,9 @@
-﻿type MainScreenProps = {
+﻿import * as React from "react";
+import ServerConnection from "../shared/server-connection";
+import { Category } from "./enums";
+import DMNavigationBar from "./navigation";
+
+type MainScreenProps = {
 
 }
 type MainScreenState = {
@@ -6,9 +11,9 @@ type MainScreenState = {
     pageComponent?: new (props: {}) => React.Component<{}>
 }
 
-const server = new ServerConnection("/DataManagement/DataManagement");
+export const server = new ServerConnection("/DataManagement/DataManagement");
 
-class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
+export default class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
     state: MainScreenState = {
         active: undefined,
         pageComponent: undefined

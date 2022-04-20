@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Head", required: false)
+
+    @Html.ReactGetStylePaths()
 </head>
 <body>
     @if (!hideNavbar)
@@ -59,5 +61,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    @Html.ReactGetScriptPaths()
+    @Html.ReactInitJavaScript()
 </body>
 </html>

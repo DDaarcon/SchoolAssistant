@@ -1,9 +1,11 @@
-﻿type Props = {};
+﻿import * as React from "react";
+
+type Props = {};
 type State = {
     a: number;
 };
 
-class ClassesPage extends React.Component<Props, State> {
+export default class ClassesPage extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         
