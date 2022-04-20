@@ -1,6 +1,8 @@
-﻿using SchoolAssistant.DAL.Models.LinkingTables;
+﻿using SchoolAssistant.DAL.Models.Lessons;
+using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.Subjects;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Staff
 {
@@ -13,6 +15,8 @@ namespace SchoolAssistant.DAL.Models.Staff
 
         public long PupilsId { get; set; }
         public virtual OrganizationalClass Pupils { get; set; } = null!;
+
+        public virtual ICollection<PeriodicLesson> Schedule { get; set; } = new List<PeriodicLesson>();
 
 
         public void AddMainSubject(Subject? subject)
