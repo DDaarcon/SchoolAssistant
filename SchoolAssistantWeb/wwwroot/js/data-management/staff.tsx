@@ -94,7 +94,8 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
 
     private async fetchAsync() {
         let data = await server.getAsync<StaffPersonDetailedData>("StaffPersonDetails", {
-            id: this.props.recordId
+            id: this.props.recordId,
+            groupId: this.props.groupId
         });
 
         this.setState({ data, awaitingPersonData: false });
@@ -108,10 +109,27 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
 
     createOnTextChangeHandler: (property: keyof StaffPersonData) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
         return (event) => {
-            const stateUpdate = {};
-            stateUpdate[property] = event.target.value;
+            const value = event.target.value;
 
-            this.setState(stateUpdate);
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data[property] = value;
+                return { data };
+            });
+
+            this.props.onMadeAnyChange();
+        }
+    }
+
+    createOnSubjectsChangeHandler: (property: keyof StaffPersonData) => React.ChangeEventHandler<HTMLSelectElement> = (property) => {
+        return (event) => {
+            const values = Array.from(event.target.selectedOptions, option => parseInt(option.value));
+
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data[property] = values;
+                return { data };
+            });
 
             this.props.onMadeAnyChange();
         }
@@ -120,9 +138,9 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, {
+        let response = await server.postAsync<ResponseJson>("StaffPersonData", undefined, {
             groupId: this.props.groupId,
-            ...this.state
+            ...this.state.data
         });
 
         if (response.success)
@@ -180,16 +198,41 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                             className="form-select"
                             multiple
                             value={this.state.data.mainSubjectsIds?.map(x => `${x}`)}
+                            onChange={this.createOnSubjectsChangeHandler('mainSubjectsIds')}
                         >
                             {this.state.availableSubjects.map(x =>
                                 <option key={x.id}
                                     value={x.id}
-                                    selected={this.state.data.mainSubjectsIds?.indexOf(x.id) != -1}
                                 >
                                     {x.name}
                                 </option>
                             )}
                         </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="main-subejcts-input">Dodatkowe przedmioty</label>
+                        <select
+                            className="form-select"
+                            multiple
+                            value={this.state.data.additionalSubjectsIds?.map(x => `${x}`)}
+                            onChange={this.createOnSubjectsChangeHandler('additionalSubjectsIds')}
+                        >
+                            {this.state.availableSubjects.map(x =>
+                                <option key={x.id}
+                                    value={x.id}
+                                >
+                                    {x.name}
+                                </option>
+                            )}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <input
+                            type="submit"
+                            value="Zapisz"
+                            className="form-control"
+                        />
                     </div>
                 </form>
             </div>
