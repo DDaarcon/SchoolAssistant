@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
@@ -10,11 +12,13 @@ namespace SchoolAssistans.Tests.DbEntities
     {
 
         private IRepository<Teacher> _teacherRepo = null!;
+        private IRepository<Subject> _subjectRepo = null!;
 
         [OneTimeSetUp]
         public void Setup()
         {
             _teacherRepo = new Repository<Teacher>(TestDatabase.CreateContext(TestServices.Collection), null);
+            _subjectRepo = new Repository<Subject>(TestDatabase.Context, null);
 
             SetUpRecords();
         }
@@ -32,7 +36,7 @@ namespace SchoolAssistans.Tests.DbEntities
             });
             teacher1.AddAdditionalSubject(new Subject
             {
-                Name = "Being a bitch"
+                Name = "Being a not pleasable woman"
             });
 
             _teacherRepo.AddRange(new Teacher[]
@@ -50,33 +54,35 @@ namespace SchoolAssistans.Tests.DbEntities
         }
 
         [Test]
-        public void TeacherIsPresent()
+        public async Task TeacherIsPresentAsync()
         {
-            var teachers = _teacherRepo.AsList();
+            var teacher = await GetJoannaAsync();
 
-            Assert.True(teachers.Count == 1);
-            Assert.True(teachers[0].FirstName == "Joanna");
-            Assert.True(teachers[0].LastName == "Krupa");
+            Assert.IsNotNull(teacher);
         }
 
         [Test]
-        public void MainSubjectIsPresent()
+        public async Task MainSubjectIsPresentAsync()
         {
-            var teacher = _teacherRepo.AsList()[0];
+            var teacher = await GetJoannaAsync();
 
-            Assert.True(teacher.MainSubjects is not null);
-            Assert.True(teacher.MainSubjects!.Count() == 1);
-            Assert.True(teacher.MainSubjects.First().Name == "Modeling");
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher.MainSubjects is not null);
+            Assert.IsTrue(teacher.MainSubjects!.Any(x => x.Name == "Modeling"));
         }
 
         [Test]
-        public void AdditionalSubjectIsPresent()
+        public async Task AdditionalSubjectIsPresentAsync()
         {
-            var teacher = _teacherRepo.AsList()[0];
+            var teacher = await GetJoannaAsync();
 
             Assert.True(teacher.AdditionalSubjects is not null);
-            Assert.True(teacher.AdditionalSubjects!.Count() == 1);
-            Assert.True(teacher.AdditionalSubjects.First().Name == "Being a bitch");
+            Assert.True(teacher.AdditionalSubjects!.Any(x => x.Name == "Being a not pleasable woman"));
+        }
+
+        private Task<Teacher?> GetJoannaAsync()
+        {
+            return _teacherRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == "Joanna" && x.LastName == "Krupa");
         }
 
         [Test]
@@ -100,6 +106,57 @@ namespace SchoolAssistans.Tests.DbEntities
         }
 
         [Test]
+        public async Task AddingReferenceFromExistingTeacherToExistinSubjectAsync()
+        {
+            var subject = new Subject
+            {
+                Name = "Some subject"
+            };
+            await _subjectRepo.AddAsync(subject);
+            await _subjectRepo.SaveAsync();
+
+            var teacher = await _teacherRepo.AsQueryable().FirstAsync();
+
+            teacher.AddMainSubject(subject);
+
+            _teacherRepo.Update(teacher);
+            await _teacherRepo.SaveAsync();
+
+            teacher = await _teacherRepo.AsQueryable().FirstAsync(x => x.Id == teacher.Id);
+
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher.MainSubjects.Contains(subject));
+        }
+
+        [Test]
+        public async Task AddingNewTeacherWithReferenceToExistingSubjectAsync()
+        {
+
+            var subject = new Subject
+            {
+                Name = "Some subject other subject"
+            };
+            await _subjectRepo.AddAsync(subject);
+            await _subjectRepo.SaveAsync();
+
+            var teacher = new Teacher
+            {
+                FirstName = "John",
+                LastName = "Travolta"
+            };
+
+            teacher.AddMainSubject(subject);
+
+            await _teacherRepo.AddAsync(teacher);
+            await _teacherRepo.SaveAsync();
+
+            teacher = await _teacherRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == "John" && x.LastName == "Travolta");
+
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher.MainSubjects.Contains(subject));
+        }
+
+        [Test]
         public void ReferencingMainSubjectsInQuery()
         {
             var subjectNames = _teacherRepo.AsQueryable()
@@ -116,7 +173,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 .SelectMany(x => x.AdditionalSubjects)
                 .ToList();
 
-            Assert.IsTrue(subjectNames.Any(x => x.Name == "Being a bitch"));
+            Assert.IsTrue(subjectNames.Any(x => x.Name == "Being a not pleasable woman"));
         }
 
     }
