@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using SchoolAssistant.DAL.Models.Semesters;
+using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
@@ -20,10 +20,10 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             TestDatabase.CreateContext(TestServices.Collection);
 
-            var semesterRepo = new Repository<Semester>(TestDatabase.Context, null);
+            var semesterRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
             _classRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
 
-            var semester = new Semester
+            var semester = new SchoolYear
             {
                 Year = 2010,
                 Current = true
@@ -34,7 +34,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
             var studentsClass = new OrganizationalClass
             {
-                SemesterId = semester.Id,
+                SchoolYearId = semester.Id,
                 Supervisor = new SchoolAssistant.DAL.Models.Staff.Teacher
                 {
                     FirstName = "dasdasd",
@@ -44,7 +44,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 {
                     new Student
                     {
-                        SemesterId = semester.Id,
+                        SchoolYearId = semester.Id,
                         Info = new StudentRegisterRecord
                         {
                             FirstName = "kokoa",
