@@ -12,5 +12,8 @@ namespace SchoolAssistant.DAL.Models.StudentsOrganization
         public long? SupervisorId { get; set; }
         [ForeignKey("SupervisorId")]
         public virtual Teacher? Supervisor { get; set; }
+
+        [NotMapped]
+        public string Name => $"{Grade}{Distinction}";
     }
 }

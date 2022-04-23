@@ -5,7 +5,7 @@ using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Marks;
-using SchoolAssistant.DAL.Models.Semesters;
+using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
@@ -19,7 +19,7 @@ namespace SchoolAssistant.DAL
         {
         }
 
-        public DbSet<Semester> Semesters { get; set; } = null!;
+        public DbSet<SchoolYear> Semesters { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Student> Students { get; set; } = null!;
         public DbSet<Parent> Parents { get; set; } = null!;

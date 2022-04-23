@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Lessons
 {
-    public class Lesson : SemesterDbEntity
+    public class Lesson : SchoolYearDbEntity
     {
         public DateTime Date { get; set; }
         public string Topic { get; set; } = null!;

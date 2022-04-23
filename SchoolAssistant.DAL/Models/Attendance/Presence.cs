@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Attendance
 {
-    public class Presence : SemesterDbEntity
+    public class Presence : SchoolYearDbEntity
     {
         public long LessonId { get; set; }
         [ForeignKey(nameof(LessonId))]

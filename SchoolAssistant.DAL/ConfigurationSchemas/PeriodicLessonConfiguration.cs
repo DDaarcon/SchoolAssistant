@@ -4,7 +4,7 @@ using SchoolAssistant.DAL.Models.Lessons;
 
 namespace SchoolAssistant.DAL.ConfigurationSchemas
 {
-    internal class PeriodicLessonConfiguration : SemesterDbEntityConfiguration<PeriodicLesson>, IEntityTypeConfiguration<PeriodicLesson>
+    internal class PeriodicLessonConfiguration : SchoolYearDbEntityConfiguration<PeriodicLesson>, IEntityTypeConfiguration<PeriodicLesson>
     {
         public override void Configure(EntityTypeBuilder<PeriodicLesson> builder)
         {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.StudentsParents
 {
-    public class Student : SemesterDbEntity
+    public class Student : SchoolYearDbEntity
     {
         public int NumerInJurnal { get; set; }
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.StudentsParents
 {
-    public class Parent : SemesterDbEntity
+    public class Parent : SchoolYearDbEntity
     {
         public bool IsSecondParent { get; set; }
 

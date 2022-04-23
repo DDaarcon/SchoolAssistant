@@ -3,7 +3,7 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 
 namespace SchoolAssistant.DAL.ConfigurationSchemas
 {
-    internal class OrganizationalClassConfiguration : SemesterDbEntityConfiguration<OrganizationalClass>
+    internal class OrganizationalClassConfiguration : SchoolYearDbEntityConfiguration<OrganizationalClass>
     {
         public override void Configure(EntityTypeBuilder<OrganizationalClass> builder)
         {

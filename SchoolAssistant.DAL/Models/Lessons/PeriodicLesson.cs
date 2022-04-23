@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Lessons
 {
-    public class PeriodicLesson : SemesterDbEntity
+    public class PeriodicLesson : SchoolYearDbEntity
     {
         public string CronPeriodicity { get; set; } = null!;
 
