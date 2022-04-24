@@ -77,6 +77,8 @@ class Table<TData extends TableData> extends SharedTable<TData, ModificationComp
                                     recordId={recordId}
                                     recordData={data}
                                     modificationComponent={this.ModificationComponentToUse}
+                                    recordRowsComponent={this.RecordRowsToUse}
+                                    informationRowComponent={this.InformationRowToUse}
                                     modifying={recordId == this.state?.editedRecordId}
                                     displayProperties={displayProperties}
                                     onOpenEdit={this.openOrCloseModification}
@@ -85,7 +87,7 @@ class Table<TData extends TableData> extends SharedTable<TData, ModificationComp
                                 />
                             )
                         })}
-                        <this.RecordRowsTouse
+                        <this.RecordRowsToUse
                             isEven={this.state.data?.length % 2 == 1}
                             openedModification={this.state.addingNew}
                             columnsCount={this.props.columnsSetting.length + 1}
@@ -185,6 +187,8 @@ class GroupedTable<TData extends TableData> extends SharedTable<TData, GroupedMo
                                         groupId={group.id}
                                         recordData={entry}
                                         modificationComponent={this.ModificationComponentToUse}
+                                        recordRowsComponent={this.RecordRowsToUse}
+                                        informationRowComponent={this.InformationRowToUse}
                                         modifying={entry.id == this.state?.editedRecord?.id && group.id == this.state?.editedRecord?.groupId}
                                         displayProperties={displayProperties}
                                         onOpenEdit={this.openOrCloseModification}
@@ -192,7 +196,7 @@ class GroupedTable<TData extends TableData> extends SharedTable<TData, GroupedMo
                                         isEven={entryIndex % 2 == 1}
                                     />
                                 )}
-                                <this.RecordRowsTouse
+                                <this.RecordRowsToUse
                                     isEven={group.entries?.length % 2 == 1}
                                     openedModification={this.state.addingNewOfGroup == group.id}
                                     columnsCount={this.props.columnsSetting.length + 1}
@@ -235,8 +239,8 @@ type TableRecordProps<
     onOpenEdit?: (id: number, groupId?: string | number) => void;
     displayProperties: (keyof TData)[];
     modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
-    customRecordRowsComponent?: new (props: RecordRowsProps) => React.Component<RecordRowsProps>;
-    customInformationRowComponent?: new (props: InformationRowProps<TData>) => React.Component<InformationRowProps<TData>>;
+    recordRowsComponent: new (props: RecordRowsProps) => React.Component<RecordRowsProps>;
+    informationRowComponent: (props: InformationRowProps<TData>) => JSX.Element;
     modifying: boolean;
     reloadAsync: () => Promise<void>;
 
@@ -253,8 +257,8 @@ class TableRecord<
     >
 extends React.Component<TableRecordProps<TData, TModificationComponentProps>, TableRecordState>
 {
-    protected get InformationRowToUse() { return this.props.customInformationRowComponent ?? InformationRow; }
-    protected get RecordRowsToUse() { return this.props.customRecordRowsComponent ?? RecordRows; }
+    protected get InformationRowToUse() { return this.props.informationRowComponent; }
+    protected get RecordRowsToUse() { return this.props.recordRowsComponent; }
     protected get ModificationComponentToUse() { return this.props.modificationComponent; }
 
     private _madeAnyChange: boolean = false;
@@ -309,19 +313,17 @@ type InformationRowProps<TData extends TableData> = {
     recordData: TData;
     onClickedEditBtn: React.MouseEventHandler<HTMLAnchorElement>;
 }
-class InformationRow<TData extends TableData> extends React.Component<InformationRowProps<TData>> {
-    render() {
-        return (
-            <>
-                {this.props.recordDataKeys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
-                <td className="dm-edit-btn-cell">
-                    <a onClick={this.props.onClickedEditBtn} href="#">
-                        Edytuj
-                    </a>
-                </td>
-            </>
-        )
-    }
+const InformationRow = <TData extends TableData>(props: InformationRowProps<TData>) => {
+    return (
+        <>
+            {props.recordDataKeys.map((key, index) => <td key={index}>{props.recordData[key]}</td>)}
+            <td className="dm-edit-btn-cell">
+                <a onClick={props.onClickedEditBtn} href="#">
+                    Edytuj
+                </a>
+            </td>
+        </>
+    )
 }
 
 

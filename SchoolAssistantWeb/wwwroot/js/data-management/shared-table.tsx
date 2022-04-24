@@ -8,6 +8,7 @@ type SharedTableProps<
         modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
         customTableRecordComponent?: new (props: TableRecordProps<TData, TModificationComponentProps>) => React.Component<TableRecordProps<TData, TModificationComponentProps>>;
         customRecordRowsComponent?: new (props: RecordRowsProps) => React.Component<RecordRowsProps>;
+        customInformationRowComponent?: (props: InformationRowProps<TData>) => JSX.Element;
         columnsSetting: ColumnSetting<TData>[];
         loadDataAsync: () => Promise<TStoredData[]>;
     }
@@ -27,13 +28,12 @@ abstract class SharedTable<
     TState extends SharedTableState<TData, TStoredData>
     >
     extends React.Component<TProps, TState> {
-    protected readonly _defaultTableRowComponent = TableRecord;
-    protected readonly _defaultRecordRowsComponent = RecordRows;
 
     protected _madeAnyChange: boolean = false;
 
-    protected get TableRecordToUse() { return this.props.customTableRecordComponent ?? this._defaultTableRowComponent; }
-    protected get RecordRowsTouse() { return this.props.customRecordRowsComponent ?? this._defaultRecordRowsComponent; }
+    protected get TableRecordToUse() { return this.props.customTableRecordComponent ?? TableRecord; }
+    protected get RecordRowsToUse() { return this.props.customRecordRowsComponent ?? RecordRows; }
+    protected get InformationRowToUse() { return this.props.customInformationRowComponent ?? InformationRow; }
     protected get ModificationComponentToUse() { return this.props.modificationComponent; }
 
 
