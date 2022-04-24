@@ -7,7 +7,7 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
 {
     public class Student : SchoolYearDbEntity
     {
-        public int NumerInJurnal { get; set; }
+        public int NumerInJournal { get; set; }
 
         public long InfoId { get; set; }
         [ForeignKey(nameof(InfoId))]

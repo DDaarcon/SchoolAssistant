@@ -3,8 +3,11 @@
 }
 type MainScreenState = {
     active?: Category;
-    pageComponent?: new (props: {}) => React.Component<{}>
+    pageComponent?: new (props: any) => React.Component<any>;
+    props?: any;
 }
+
+type RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => void;
 
 const server = new ServerConnection("/DataManagement/DataManagement");
 
@@ -14,17 +17,24 @@ class DataManagementMainScreen extends React.Component<MainScreenProps, MainScre
         pageComponent: undefined
     }
 
-    onBlockClick = (type: Category, pageComponent: new (props: {}) => React.Component) => {
+    redirect: RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => {
         this.setState({
             active: type,
-            pageComponent: pageComponent
+            pageComponent: pageComponent,
+            props: props
         });
     }
 
     renderPageContent() {
         if (this.state?.pageComponent) {
+            const props = this.state.props;
             const PageComponent = this.state.pageComponent;
-            return <PageComponent />
+            return (
+                <PageComponent
+                    onRedirect={this.redirect}
+                    {...props}
+                />
+            )
         }
         return <WelcomeScreen />
     }
@@ -32,7 +42,7 @@ class DataManagementMainScreen extends React.Component<MainScreenProps, MainScre
     render() {
         return (
             <div className="data-management-main">
-                <DMNavigationBar onSelect={this.onBlockClick} active={this.state.active} />
+                <DMNavigationBar onSelect={this.redirect} active={this.state.active} />
 
                 <div className="dm-page-content">
                     {this.renderPageContent()}

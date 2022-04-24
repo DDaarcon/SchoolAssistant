@@ -14,23 +14,31 @@ interface ClassDetails {
 }
 
 
-type ClassesPageProps = {};
+type ClassesPageProps = {
+    onRedirect: RedirectMethod;
+};
 type ClassesPageState = {
 
 };
 
 class ClassesPage extends React.Component<ClassesPageProps, ClassesPageState> {
 
+    moveToStudents = (studentsPageProps: StudentsPageProps) => {
+        this.props.onRedirect(Category.Students, StudentsPage, studentsPageProps);
+    }
+
     render() {
         return (
-            <ClassesTable />
+            <ClassesTable
+                onMoveToStudents={this.moveToStudents}
+            />
         )
     }
 }
 
 
 type ClassesTableProps = {
-
+    onMoveToStudents: (studentsPageProps: StudentsPageProps) => void;
 }
 const ClassesTable = (props: ClassesTableProps) => {
     const columnsSetting: ColumnSetting<ClassListEntry>[] = [
@@ -53,11 +61,29 @@ const ClassesTable = (props: ClassesTableProps) => {
         return response;
     }
 
+    const informationRow = (irProps: InformationRowProps<ClassListEntry>) => 
+        <>
+            {irProps.recordDataKeys.map((key, index) => <td key={index}>{irProps.recordData[key]}</td>)}
+            <td className="dm-edit-btn-cell">
+                <a onClick={() => props.onMoveToStudents({
+                    classId: irProps.recordData.id,
+                    className: irProps.recordData.name,
+                    classSpecialization: irProps.recordData.specialization
+                })} href="#">
+                    Uczniowie
+                </a>
+                <a onClick={irProps.onClickedEditBtn} href="#">
+                    Edytuj
+                </a>
+            </td>
+        </>
+
     return (
         <Table<ClassListEntry>
             columnsSetting={columnsSetting}
             loadDataAsync={loadAsync}
             modificationComponent={ClassModificationComponent}
+            customInformationRowComponent={informationRow}
         />
     )
 }

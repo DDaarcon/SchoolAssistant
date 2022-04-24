@@ -86,6 +86,7 @@ app.UseReact(config =>
         .AddScript("~/js/data-management/shared-table.tsx")
         .AddScript("~/js/data-management/table.tsx")
         .AddScript("~/js/data-management/navigation.tsx")
+        .AddScript("~/js/data-management/students.tsx")
         .AddScript("~/js/data-management/subjects.tsx")
         .AddScript("~/js/data-management/staff.tsx")
         .AddScript("~/js/data-management/classes.tsx")

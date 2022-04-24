@@ -31,7 +31,12 @@ class DMNavigationBar extends React.Component<BarProps, BarState> {
         return (
             <div className="dm-navigation-bar">
                 {this.items.map(item =>
-                    <DMNavigationItem key={item.label} label={item.label} onClick={item.onClick} isActive={item.active} />
+                    <DMNavigationItem
+                        key={item.label}
+                        label={item.label}
+                        onClick={item.onClick}
+                        isActive={item.active}
+                    />
                 )}
             </div>
         )
