@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL.Models.Shared;
 
@@ -18,6 +19,7 @@ namespace SchoolAssistant.DAL.Repositories
         Task<bool> ExistsAsync(long id);
         TDbEntity? GetById(long id);
         ValueTask<TDbEntity?> GetByIdAsync(long id);
+        EntityEntry GetEntry(TDbEntity entity);
         void Remove(TDbEntity entity);
         void RemoveById(long id);
         void RemoveRange(IEnumerable<TDbEntity> entities);
@@ -139,6 +141,11 @@ namespace SchoolAssistant.DAL.Repositories
         #endregion
 
         #region Context methods
+
+        public EntityEntry GetEntry(TDbEntity entity)
+        {
+            return _context.Entry(entity);
+        }
 
         public void Save()
         {
