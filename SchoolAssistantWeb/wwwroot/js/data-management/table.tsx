@@ -167,7 +167,10 @@ type GroupedTableProps<TData extends TableData> = {
     loadDataAsync: () => Promise<GroupedTableData<TData>[]>;
 }
 type GroupedTableState<TData extends TableData> = {
-    editedRecordId?: number;
+    editedRecord?: {
+        groupId: string;
+        id: number;
+    };
     addingNewOfGroup?: string;
     data?: GroupedTableData<TData>[];
     loading: boolean;
@@ -187,11 +190,12 @@ class GroupedTable<TData extends TableData> extends React.Component<GroupedTable
         await this.loadAsync();
     }
 
-    openOrCloseModification = (id: number) => {
-        if (id == this.state.editedRecordId)
-            this.setState({ editedRecordId: undefined, addingNewOfGroup: undefined });
+    openOrCloseModification = (id: number, groupId?: string) => {
+        if (id == this.state.editedRecord?.id
+            && groupId == this.state.editedRecord?.groupId)
+            this.setState({ editedRecord: undefined, addingNewOfGroup: undefined });
         else
-            this.setState({ editedRecordId: id, addingNewOfGroup: undefined });
+            this.setState({ editedRecord: { id, groupId }, addingNewOfGroup: undefined });
     }
 
     createOpenOrCloseAddingNewHandler = (groupId: string) => {
@@ -203,9 +207,9 @@ class GroupedTable<TData extends TableData> extends React.Component<GroupedTable
 
             this.madeAnyChange = false;
             if (groupId == this.state.addingNewOfGroup)
-                this.setState({ editedRecordId: undefined, addingNewOfGroup: undefined });
+                this.setState({ editedRecord: undefined, addingNewOfGroup: undefined });
             else
-                this.setState({ editedRecordId: undefined, addingNewOfGroup: groupId });
+                this.setState({ editedRecord: undefined, addingNewOfGroup: groupId });
         }
     }
 
@@ -264,14 +268,14 @@ class GroupedTable<TData extends TableData> extends React.Component<GroupedTable
                                 {group.entries?.map((entry, entryIndex) =>
                                     <TableRecord<TData, GroupedModificationComponentProps> key={entry.id}
                                         recordId={entry.id}
+                                        groupId={group.id}
                                         recordData={entry}
                                         modificationComponent={this.props.modificationComponent}
-                                        modifying={entry.id == this.state?.editedRecordId}
+                                        modifying={entry.id == this.state?.editedRecord?.id && group.id == this.state?.editedRecord?.groupId}
                                         displayProperties={displayProperties}
                                         onOpenEdit={this.openOrCloseModification}
                                         reloadAsync={this.loadAsync}
                                         isEven={entryIndex % 2 == 1}
-                                        groupId={group.id}
                                     />
                                 )}
                                 <RecordRows
@@ -315,7 +319,7 @@ type TableRecordProps<
 > = {
     recordId?: number;
     recordData: TData;
-    onOpenEdit?: (id: number) => void;
+    onOpenEdit?: (id: number, groupId?: string) => void;
     displayProperties: (keyof TData)[];
     modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
     modifying: boolean;
@@ -341,7 +345,7 @@ class TableRecord<
         }
 
         this.madeAnyChange = false;
-        this.props.onOpenEdit?.(this.props.recordId);
+        this.props.onOpenEdit?.(this.props.recordId, this.props.groupId);
     }
 
     onMadeAnyChange = () => {
