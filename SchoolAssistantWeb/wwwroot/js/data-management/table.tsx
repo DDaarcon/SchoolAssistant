@@ -236,6 +236,7 @@ type TableRecordProps<
     displayProperties: (keyof TData)[];
     modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
     customRecordRowsComponent?: new (props: RecordRowsProps) => React.Component<RecordRowsProps>;
+    customInformationRowComponent?: new (props: InformationRowProps<TData>) => React.Component<InformationRowProps<TData>>;
     modifying: boolean;
     reloadAsync: () => Promise<void>;
 
@@ -252,9 +253,8 @@ class TableRecord<
     >
 extends React.Component<TableRecordProps<TData, TModificationComponentProps>, TableRecordState>
 {
-    protected readonly _defaultRecordRowsComponent = RecordRows;
-
-    protected get RecordRowsTouse() { return this.props.customRecordRowsComponent ?? this._defaultRecordRowsComponent; }
+    protected get InformationRowToUse() { return this.props.customInformationRowComponent ?? InformationRow; }
+    protected get RecordRowsToUse() { return this.props.customRecordRowsComponent ?? RecordRows; }
     protected get ModificationComponentToUse() { return this.props.modificationComponent; }
 
     private _madeAnyChange: boolean = false;
@@ -274,22 +274,17 @@ extends React.Component<TableRecordProps<TData, TModificationComponentProps>, Ta
     }
 
     render() {
-        const keys = this.props.displayProperties;
-
         return (
-            <this.RecordRowsTouse
+            <this.RecordRowsToUse
                 isEven={this.props.isEven}
                 openedModification={this.props.modifying}
                 columnsCount={this.props.displayProperties.length + 1}
                 dataRow={
-                    <>
-                        {keys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
-                        <td className="dm-edit-btn-cell">
-                            <a onClick={this.onClickedEditBtn} href="#">
-                                Edytuj
-                            </a>
-                        </td>
-                    </>
+                    <this.InformationRowToUse
+                        recordData={this.props.recordData}
+                        recordDataKeys={this.props.displayProperties}
+                        onClickedEditBtn={this.onClickedEditBtn}
+                    />
                 }
                 modificationComponent={
                     <this.ModificationComponentToUse
@@ -301,6 +296,30 @@ extends React.Component<TableRecordProps<TData, TModificationComponentProps>, Ta
                     />
                 }
             />
+        )
+    }
+}
+
+
+
+
+
+type InformationRowProps<TData extends TableData> = {
+    recordDataKeys: (keyof TData)[];
+    recordData: TData;
+    onClickedEditBtn: React.MouseEventHandler<HTMLAnchorElement>;
+}
+class InformationRow<TData extends TableData> extends React.Component<InformationRowProps<TData>> {
+    render() {
+        return (
+            <>
+                {this.props.recordDataKeys.map((key, index) => <td key={index}>{this.props.recordData[key]}</td>)}
+                <td className="dm-edit-btn-cell">
+                    <a onClick={this.props.onClickedEditBtn} href="#">
+                        Edytuj
+                    </a>
+                </td>
+            </>
         )
     }
 }
