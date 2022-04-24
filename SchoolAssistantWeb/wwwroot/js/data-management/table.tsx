@@ -258,6 +258,9 @@ class GroupedTable<TData extends TableData> extends React.Component<GroupedTable
                                         {group.name}
                                     </th>
                                 </tr>
+                                <tr className="separation-row">
+                                    <td colSpan={this.props.columnsSetting.length + 1}></td>
+                                </tr>
                                 {group.entries?.map((entry, entryIndex) =>
                                     <TableRecord<TData, GroupedModificationComponentProps> key={entry.id}
                                         recordId={entry.id}
