@@ -4,11 +4,13 @@ using SchoolAssistant.DAL.ConfigurationSchemas;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
+using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
+using SchoolAssistant.DAL.Models.Subjects;
 
 namespace SchoolAssistant.DAL
 {
@@ -31,6 +33,10 @@ namespace SchoolAssistant.DAL
 
             // TODO: Use Attribute to register and call configurations
             new TeacherConfiguration().Configure(builder.Entity<Teacher>());
+            var teacherToSubjectConfiguration = new TeacherToSubjectConfiguration();
+            teacherToSubjectConfiguration.Configure(builder.Entity<TeacherToMainSubject>());
+            teacherToSubjectConfiguration.Configure(builder.Entity<TeacherToAdditionalSubject>());
+            new SubjectConfiguration().Configure(builder.Entity<Subject>());
 
 
             new MarkConfiguration().Configure(builder.Entity<Mark>());

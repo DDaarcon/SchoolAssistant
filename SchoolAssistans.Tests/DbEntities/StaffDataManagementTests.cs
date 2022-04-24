@@ -85,7 +85,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
             Assert.IsNotNull(teacher);
             Assert.AreEqual(teacher.LastName, "Ogariusz");
-            Assert.AreEqual(teacher.MainSubjects.First().Name, matematyka.Name);
+            Assert.AreEqual(teacher.SubjectOperations.MainIter.First().Name, matematyka.Name);
         }
 
         [Test]
@@ -112,13 +112,13 @@ namespace SchoolAssistans.Tests.DbEntities
                 LastName = "Some last name"
             };
 
-            teacher.AddMainSubject(_subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Jezyk polski"));
+            teacher.SubjectOperations.AddMain(_subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Jezyk polski"));
 
             _teacherRepo.Add(teacher);
 
             _teacherRepo.Save();
 
-            Assert.IsTrue(teacher.MainSubjects.First().Name == "Jezyk polski");
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.First().Name == "Jezyk polski");
 
             var matem = _subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Matematyka");
 
@@ -141,8 +141,67 @@ namespace SchoolAssistans.Tests.DbEntities
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
             Assert.IsNotNull(teacher);
-            Assert.IsTrue(teacher.MainSubjects.Count() == 1);
-            Assert.IsTrue(teacher.MainSubjects.First().Name == "Matematyka");
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.Count() == 2);
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == "Matematyka"));
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == "Jezyk polski"));
+        }
+
+        [Test]
+        public async Task Should_modify_teacher_firstname()
+        {
+            var teacher = new Teacher
+            {
+                FirstName = "Inrelevent",
+                LastName = "Some last name"
+            };
+            _teacherRepo.Add(teacher);
+            _teacherRepo.Save();
+
+            var model = new StaffPersonDetailsJson
+            {
+                id = teacher.Id,
+                firstName = "Ulek",
+                lastName = teacher.LastName,
+                groupId = nameof(Teacher)
+            };
+
+            var response = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsTrue(response.success);
+
+            teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
+
+            Assert.IsNotNull(teacher);
+            Assert.AreEqual(teacher.FirstName, "Ulek");
+        }
+
+        [Test]
+        public async Task Should_modify_teacher_lastname()
+        {
+            var teacher = new Teacher
+            {
+                FirstName = "Inrelevent",
+                LastName = "Some last name"
+            };
+            _teacherRepo.Add(teacher);
+            _teacherRepo.Save();
+
+            var model = new StaffPersonDetailsJson
+            {
+                id = teacher.Id,
+                firstName = teacher.FirstName,
+                lastName = "Wulek",
+                groupId = nameof(Teacher)
+            };
+
+            var response = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsTrue(response.success);
+
+            teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
+
+            Assert.IsNotNull(teacher);
+            Assert.AreEqual(teacher.LastName, "Wulek");
         }
     }
 }

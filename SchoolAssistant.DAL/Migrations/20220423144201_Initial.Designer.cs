@@ -12,8 +12,8 @@ using SchoolAssistant.DAL;
 namespace SchoolAssistant.DAL.Migrations
 {
     [DbContext(typeof(SADbContext))]
-    [Migration("20220416124102_Teacher_to_subjects_second_fix")]
-    partial class Teacher_to_subjects_second_fix
+    [Migration("20220423144201_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -255,7 +255,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<long>("LessonId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
@@ -268,7 +268,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.HasIndex("StudentId");
 
@@ -289,7 +289,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<long>("FromScheduleId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Topic")
@@ -300,7 +300,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("FromScheduleId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.ToTable("Lesson");
                 });
@@ -332,7 +332,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<long>("RoomId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("SubjectId")
@@ -348,7 +348,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.HasIndex("SubjectId");
 
@@ -357,30 +357,30 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToAdditionalSubject", b =>
                 {
-                    b.Property<long>("SubjectId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("TeacherId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("SubjectId", "TeacherId");
+                    b.Property<long>("SubjectId")
+                        .HasColumnType("bigint");
 
-                    b.HasIndex("TeacherId");
+                    b.HasKey("TeacherId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("TeacherToAdditionalSubject");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToMainSubject", b =>
                 {
-                    b.Property<long>("SubjectId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("TeacherId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("SubjectId", "TeacherId");
+                    b.Property<long>("SubjectId")
+                        .HasColumnType("bigint");
 
-                    b.HasIndex("TeacherId");
+                    b.HasKey("TeacherId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("TeacherToMainSubject");
                 });
@@ -411,7 +411,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<int?>("Prefix")
                         .HasColumnType("int");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("StudentId")
@@ -429,7 +429,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("IssuerId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.HasIndex("StudentId");
 
@@ -452,7 +452,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<long?>("OrganizationalClassId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("SubjectClassId")
@@ -465,7 +465,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("OrganizationalClassId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.HasIndex("SubjectClassId");
 
@@ -495,7 +495,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.ToTable("Room");
                 });
 
-            modelBuilder.Entity("SchoolAssistant.DAL.Models.Semesters.Semester", b =>
+            modelBuilder.Entity("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -549,18 +549,28 @@ namespace SchoolAssistant.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long>("SemesterId")
+                    b.Property<string>("Distinction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SupervisorId")
+                    b.Property<string>("Specialization")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("SupervisorId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.HasIndex("SupervisorId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[SupervisorId] IS NOT NULL");
 
                     b.ToTable("OrganizationalClass");
                 });
@@ -573,17 +583,27 @@ namespace SchoolAssistant.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long?>("OrganizationalClassId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("SubjectId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("TeacherId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("OrganizationalClassId");
+
+                    b.HasIndex("SchoolYearId");
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("SubjectClass");
                 });
@@ -602,14 +622,14 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<bool>("IsSecondParent")
                         .HasColumnType("bit");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChildInfoId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.ToTable("Parents");
                 });
@@ -631,7 +651,7 @@ namespace SchoolAssistant.DAL.Migrations
                     b.Property<long?>("OrganizationalClassId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SemesterId")
+                    b.Property<long>("SchoolYearId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -640,7 +660,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.HasIndex("OrganizationalClassId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SchoolYearId");
 
                     b.ToTable("Students");
                 });
@@ -790,9 +810,9 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -804,7 +824,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.Navigation("Lesson");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
 
                     b.Navigation("Student");
                 });
@@ -817,21 +837,21 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("FromSchedule");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Lessons.PeriodicLesson", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Lecturer")
-                        .WithMany()
+                        .WithMany("Schedule")
                         .HasForeignKey("LecturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -850,9 +870,9 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -870,7 +890,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.Navigation("Room");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
 
                     b.Navigation("Subject");
                 });
@@ -878,13 +898,13 @@ namespace SchoolAssistant.DAL.Migrations
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToAdditionalSubject", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.Subjects.Subject", "Subject")
-                        .WithMany("AdditionalTeachersLinking")
+                        .WithMany("AdditionalTeachers")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Teacher")
-                        .WithMany("AdditionalSubjectsLinking")
+                        .WithMany("AdditionalSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -897,13 +917,13 @@ namespace SchoolAssistant.DAL.Migrations
             modelBuilder.Entity("SchoolAssistant.DAL.Models.LinkingTables.TeacherToMainSubject", b =>
                 {
                     b.HasOne("SchoolAssistant.DAL.Models.Subjects.Subject", "Subject")
-                        .WithMany("MainTeachersLinking")
+                        .WithMany("MainTeachers")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Teacher")
-                        .WithMany("MainSubjectsLinking")
+                        .WithMany("MainSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -925,9 +945,9 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -947,7 +967,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.Navigation("Issuer");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
 
                     b.Navigation("Student");
 
@@ -960,9 +980,9 @@ namespace SchoolAssistant.DAL.Migrations
                         .WithMany("Marks")
                         .HasForeignKey("OrganizationalClassId");
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -972,35 +992,37 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.Navigation("OrganizationalClass");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
 
                     b.Navigation("SubjectClass");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
                 {
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Supervisor")
                         .WithOne("Pupils")
-                        .HasForeignKey("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "SupervisorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "SupervisorId");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
 
                     b.Navigation("Supervisor");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.SubjectClass", b =>
                 {
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", "OrganizationalClass")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("OrganizationalClassId");
+
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
+                        .WithMany()
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -1010,9 +1032,17 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Semester");
+                    b.HasOne("SchoolAssistant.DAL.Models.Staff.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("OrganizationalClass");
+
+                    b.Navigation("SchoolYear");
 
                     b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Parent", b =>
@@ -1023,15 +1053,15 @@ namespace SchoolAssistant.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ChildInfo");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.Student", b =>
@@ -1046,9 +1076,9 @@ namespace SchoolAssistant.DAL.Migrations
                         .WithMany("Students")
                         .HasForeignKey("OrganizationalClassId");
 
-                    b.HasOne("SchoolAssistant.DAL.Models.Semesters.Semester", "Semester")
+                    b.HasOne("SchoolAssistant.DAL.Models.SchoolYears.SchoolYear", "SchoolYear")
                         .WithMany()
-                        .HasForeignKey("SemesterId")
+                        .HasForeignKey("SchoolYearId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -1056,7 +1086,7 @@ namespace SchoolAssistant.DAL.Migrations
 
                     b.Navigation("OrganizationalClass");
 
-                    b.Navigation("Semester");
+                    b.Navigation("SchoolYear");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsParents.StudentRegisterRecord", b =>
@@ -1169,12 +1199,14 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Staff.Teacher", b =>
                 {
-                    b.Navigation("AdditionalSubjectsLinking");
+                    b.Navigation("AdditionalSubjects");
 
-                    b.Navigation("MainSubjectsLinking");
+                    b.Navigation("MainSubjects");
 
                     b.Navigation("Pupils")
                         .IsRequired();
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.StudentsOrganization.OrganizationalClass", b =>
@@ -1200,9 +1232,9 @@ namespace SchoolAssistant.DAL.Migrations
 
             modelBuilder.Entity("SchoolAssistant.DAL.Models.Subjects.Subject", b =>
                 {
-                    b.Navigation("AdditionalTeachersLinking");
+                    b.Navigation("AdditionalTeachers");
 
-                    b.Navigation("MainTeachersLinking");
+                    b.Navigation("MainTeachers");
                 });
 #pragma warning restore 612, 618
         }

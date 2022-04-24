@@ -4,7 +4,7 @@
 
 namespace SchoolAssistant.DAL.Migrations
 {
-    public partial class Teacher_to_subjects_second_fix : Migration
+    public partial class Teacher_to_Subject_fix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,14 +24,6 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "IX_TeacherToAdditionalSubject_SubjectId",
                 table: "TeacherToAdditionalSubject");
 
-            migrationBuilder.DropColumn(
-                name: "Id",
-                table: "TeacherToMainSubject");
-
-            migrationBuilder.DropColumn(
-                name: "Id",
-                table: "TeacherToAdditionalSubject");
-
             migrationBuilder.AddPrimaryKey(
                 name: "PK_TeacherToMainSubject",
                 table: "TeacherToMainSubject",
@@ -41,6 +33,16 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "PK_TeacherToAdditionalSubject",
                 table: "TeacherToAdditionalSubject",
                 columns: new[] { "SubjectId", "TeacherId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherToMainSubject_TeacherId",
+                table: "TeacherToMainSubject",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherToAdditionalSubject_TeacherId",
+                table: "TeacherToAdditionalSubject",
+                column: "TeacherId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -49,35 +51,27 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "PK_TeacherToMainSubject",
                 table: "TeacherToMainSubject");
 
+            migrationBuilder.DropIndex(
+                name: "IX_TeacherToMainSubject_TeacherId",
+                table: "TeacherToMainSubject");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK_TeacherToAdditionalSubject",
                 table: "TeacherToAdditionalSubject");
 
-            migrationBuilder.AddColumn<long>(
-                name: "Id",
-                table: "TeacherToMainSubject",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L)
-                .Annotation("SqlServer:Identity", "1, 1");
-
-            migrationBuilder.AddColumn<long>(
-                name: "Id",
-                table: "TeacherToAdditionalSubject",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L)
-                .Annotation("SqlServer:Identity", "1, 1");
+            migrationBuilder.DropIndex(
+                name: "IX_TeacherToAdditionalSubject_TeacherId",
+                table: "TeacherToAdditionalSubject");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_TeacherToMainSubject",
                 table: "TeacherToMainSubject",
-                column: "Id");
+                columns: new[] { "TeacherId", "SubjectId" });
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_TeacherToAdditionalSubject",
                 table: "TeacherToAdditionalSubject",
-                column: "Id");
+                columns: new[] { "TeacherId", "SubjectId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeacherToMainSubject_SubjectId",

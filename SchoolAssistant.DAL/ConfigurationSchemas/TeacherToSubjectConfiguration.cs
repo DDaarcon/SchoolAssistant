@@ -6,14 +6,14 @@ namespace SchoolAssistant.DAL.ConfigurationSchemas
 {
     internal class TeacherToSubjectConfiguration : IEntityTypeConfiguration<TeacherToMainSubject>, IEntityTypeConfiguration<TeacherToAdditionalSubject>
     {
-        public void Configure(EntityTypeBuilder<TeacherToAdditionalSubject> builder)
-        {
-            builder.HasNoKey();
-        }
-
         public void Configure(EntityTypeBuilder<TeacherToMainSubject> builder)
         {
-            builder.HasNoKey();
+            builder.HasKey(x => new { x.SubjectId, x.TeacherId });
+        }
+
+        public void Configure(EntityTypeBuilder<TeacherToAdditionalSubject> builder)
+        {
+            builder.HasKey(x => new { x.SubjectId, x.TeacherId });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SchoolAssistant.DAL.Models.Staff;
+﻿using SchoolAssistant.DAL.Models.LinkingTables;
+using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
@@ -110,18 +111,23 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
 
         private void RemoveAllOldSubjects()
         {
-            foreach (var subject in _teacher.MainSubjects)
-                _teacher.RemoveMainSubject(subject);
-            foreach (var subject in _teacher.AdditionalSubjects)
-                _teacher.RemoveAdditionalSubject(subject);
+            var mainSubjects = new TeacherToMainSubject[_teacher.MainSubjects.Count];
+            _teacher.MainSubjects.CopyTo(mainSubjects, 0);
+            foreach (var mainSubject in mainSubjects)
+                _teacher.SubjectOperations.RemoveMain(mainSubject.Subject);
+
+            var additionalSubjects = new TeacherToAdditionalSubject[_teacher.AdditionalSubjects.Count];
+            _teacher.AdditionalSubjects.CopyTo(additionalSubjects, 0);
+            foreach (var addSubject in additionalSubjects)
+                _teacher.SubjectOperations.RemoveAdditional(addSubject.Subject);
         }
 
         private async Task AddNewSubjectsAsync()
         {
             await foreach (var subject in GetSubjects(_model.mainSubjectsIds))
-                _teacher.AddMainSubject(subject);
+                _teacher.SubjectOperations.AddMain(subject);
             await foreach (var subject in GetSubjects(_model.additionalSubjectsIds))
-                _teacher.AddAdditionalSubject(subject);
+                _teacher.SubjectOperations.AddAdditional(subject);
         }
 
         private async IAsyncEnumerable<Subject?> GetSubjects(long[]? ids)

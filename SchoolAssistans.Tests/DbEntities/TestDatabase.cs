@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL;
+using System.Diagnostics;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
@@ -60,6 +61,7 @@ namespace SchoolAssistans.Tests.DbEntities
         private static SADbContext CreateContext()
             => new SADbContext(
                 new DbContextOptionsBuilder<SADbContext>()
+                    .LogTo(message => Debug.WriteLine(message))
                     .UseSqlServer(ConnectionString)
                     .Options);
     }

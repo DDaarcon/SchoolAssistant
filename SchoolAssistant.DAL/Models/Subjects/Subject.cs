@@ -1,6 +1,7 @@
-﻿using SchoolAssistant.DAL.Models.LinkingTables;
+﻿using SchoolAssistant.DAL.Help;
+using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.Shared;
-using SchoolAssistant.DAL.Models.Staff;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Subjects
 {
@@ -8,9 +9,17 @@ namespace SchoolAssistant.DAL.Models.Subjects
     {
         public string Name { get; set; } = null!;
 
-        public virtual ICollection<Teacher> MainTeachers { get; set; } = new List<Teacher>();
-        protected virtual IEnumerable<TeacherToMainSubject> _mainTeachersLinking { get; set; } = new List<TeacherToMainSubject>();
-        public virtual ICollection<Teacher> AdditionalTeachers { get; set; } = new List<Teacher>();
-        protected virtual IEnumerable<TeacherToAdditionalSubject> _additionalTeachersLinking { get; set; } = new List<TeacherToAdditionalSubject>();
+        public virtual ICollection<TeacherToMainSubject> MainTeachers { get; set; } = new List<TeacherToMainSubject>();
+        public virtual ICollection<TeacherToAdditionalSubject> AdditionalTeachers { get; set; } = new List<TeacherToAdditionalSubject>();
+
+
+
+        [NotMapped]
+        public TeachersOperationsHelper TeacherOperations { get; init; }
+
+        public Subject()
+        {
+            TeacherOperations = new TeachersOperationsHelper(this, MainTeachers, AdditionalTeachers);
+        }
     }
 }

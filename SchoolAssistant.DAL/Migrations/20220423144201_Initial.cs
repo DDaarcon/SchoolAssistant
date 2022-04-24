@@ -107,7 +107,7 @@ namespace SchoolAssistant.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PupilsId = table.Column<long>(type: "bigint", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SecondName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -144,14 +144,14 @@ namespace SchoolAssistant.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsSecondParent = table.Column<bool>(type: "bit", nullable: false),
                     ChildInfoId = table.Column<long>(type: "bigint", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Parents_Semesters_SemesterId",
-                        column: x => x.SemesterId,
+                        name: "FK_Parents_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
                         principalTable: "Semesters",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -163,53 +163,30 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubjectClass",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubjectId = table.Column<long>(type: "bigint", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubjectClass", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubjectClass_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_SubjectClass_Subject_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrganizationalClass",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SupervisorId = table.Column<long>(type: "bigint", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    Distinction = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Specialization = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SupervisorId = table.Column<long>(type: "bigint", nullable: true),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrganizationalClass", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrganizationalClass_Semesters_SemesterId",
-                        column: x => x.SemesterId,
+                        name: "FK_OrganizationalClass_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
                         principalTable: "Semesters",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrganizationalClass_Teachers_SupervisorId",
                         column: x => x.SupervisorId,
                         principalTable: "Teachers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -221,6 +198,7 @@ namespace SchoolAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_TeacherToAdditionalSubject", x => new { x.TeacherId, x.SubjectId });
                     table.ForeignKey(
                         name: "FK_TeacherToAdditionalSubject_Subject_SubjectId",
                         column: x => x.SubjectId,
@@ -244,6 +222,7 @@ namespace SchoolAssistant.DAL.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_TeacherToMainSubject", x => new { x.TeacherId, x.SubjectId });
                     table.ForeignKey(
                         name: "FK_TeacherToMainSubject_Subject_SubjectId",
                         column: x => x.SubjectId,
@@ -259,91 +238,6 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MarksOfClass",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Weight = table.Column<int>(type: "int", nullable: true),
-                    OrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
-                    SubjectClassId = table.Column<long>(type: "bigint", nullable: true),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MarksOfClass", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MarksOfClass_OrganizationalClass_OrganizationalClassId",
-                        column: x => x.OrganizationalClassId,
-                        principalTable: "OrganizationalClass",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_MarksOfClass_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_MarksOfClass_SubjectClass_SubjectClassId",
-                        column: x => x.SubjectClassId,
-                        principalTable: "SubjectClass",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PeriodicLesson",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CronPeriodicity = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomDuration = table.Column<int>(type: "int", nullable: true),
-                    SubjectId = table.Column<long>(type: "bigint", nullable: false),
-                    ParticipatingOrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
-                    ParticipatingSubjectClassId = table.Column<long>(type: "bigint", nullable: true),
-                    LecturerId = table.Column<long>(type: "bigint", nullable: false),
-                    RoomId = table.Column<long>(type: "bigint", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PeriodicLesson", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PeriodicLesson_OrganizationalClass_ParticipatingOrganizationalClassId",
-                        column: x => x.ParticipatingOrganizationalClassId,
-                        principalTable: "OrganizationalClass",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PeriodicLesson_Room_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Room",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PeriodicLesson_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PeriodicLesson_Subject_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PeriodicLesson_SubjectClass_ParticipatingSubjectClassId",
-                        column: x => x.ParticipatingSubjectClassId,
-                        principalTable: "SubjectClass",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PeriodicLesson_Teachers_LecturerId",
-                        column: x => x.LecturerId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -352,7 +246,7 @@ namespace SchoolAssistant.DAL.Migrations
                     NumerInJurnal = table.Column<int>(type: "int", nullable: false),
                     InfoId = table.Column<long>(type: "bigint", nullable: false),
                     OrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -363,8 +257,8 @@ namespace SchoolAssistant.DAL.Migrations
                         principalTable: "OrganizationalClass",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Students_Semesters_SemesterId",
-                        column: x => x.SemesterId,
+                        name: "FK_Students_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
                         principalTable: "Semesters",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -376,29 +270,39 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lesson",
+                name: "SubjectClass",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FromScheduleId = table.Column<long>(type: "bigint", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                    SubjectId = table.Column<long>(type: "bigint", nullable: false),
+                    TeacherId = table.Column<long>(type: "bigint", nullable: true),
+                    OrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lesson", x => x.Id);
+                    table.PrimaryKey("PK_SubjectClass", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lesson_PeriodicLesson_FromScheduleId",
-                        column: x => x.FromScheduleId,
-                        principalTable: "PeriodicLesson",
+                        name: "FK_SubjectClass_OrganizationalClass_OrganizationalClassId",
+                        column: x => x.OrganizationalClassId,
+                        principalTable: "OrganizationalClass",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubjectClass_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubjectClass_Subject_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subject",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Lesson_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
+                        name: "FK_SubjectClass_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
                         principalColumn: "Id");
                 });
 
@@ -442,50 +346,85 @@ namespace SchoolAssistant.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Mark",
+                name: "MarksOfClass",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<long>(type: "bigint", nullable: false),
-                    SubjectId = table.Column<long>(type: "bigint", nullable: false),
-                    IssuerId = table.Column<long>(type: "bigint", nullable: false),
-                    CollectionId = table.Column<long>(type: "bigint", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Main = table.Column<int>(type: "int", nullable: false),
-                    Prefix = table.Column<int>(type: "int", nullable: true),
                     Weight = table.Column<int>(type: "int", nullable: true),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
+                    OrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
+                    SubjectClassId = table.Column<long>(type: "bigint", nullable: true),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mark", x => x.Id);
+                    table.PrimaryKey("PK_MarksOfClass", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mark_MarksOfClass_CollectionId",
-                        column: x => x.CollectionId,
-                        principalTable: "MarksOfClass",
+                        name: "FK_MarksOfClass_OrganizationalClass_OrganizationalClassId",
+                        column: x => x.OrganizationalClassId,
+                        principalTable: "OrganizationalClass",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Mark_Semesters_SemesterId",
-                        column: x => x.SemesterId,
+                        name: "FK_MarksOfClass_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
                         principalTable: "Semesters",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Mark_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
+                        name: "FK_MarksOfClass_SubjectClass_SubjectClassId",
+                        column: x => x.SubjectClassId,
+                        principalTable: "SubjectClass",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PeriodicLesson",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CronPeriodicity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomDuration = table.Column<int>(type: "int", nullable: true),
+                    SubjectId = table.Column<long>(type: "bigint", nullable: false),
+                    ParticipatingOrganizationalClassId = table.Column<long>(type: "bigint", nullable: true),
+                    ParticipatingSubjectClassId = table.Column<long>(type: "bigint", nullable: true),
+                    LecturerId = table.Column<long>(type: "bigint", nullable: false),
+                    RoomId = table.Column<long>(type: "bigint", nullable: false),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PeriodicLesson", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PeriodicLesson_OrganizationalClass_ParticipatingOrganizationalClassId",
+                        column: x => x.ParticipatingOrganizationalClassId,
+                        principalTable: "OrganizationalClass",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PeriodicLesson_Room_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Room",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Mark_Subject_SubjectId",
+                        name: "FK_PeriodicLesson_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PeriodicLesson_Subject_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subject",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Mark_Teachers_IssuerId",
-                        column: x => x.IssuerId,
+                        name: "FK_PeriodicLesson_SubjectClass_ParticipatingSubjectClassId",
+                        column: x => x.ParticipatingSubjectClassId,
+                        principalTable: "SubjectClass",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PeriodicLesson_Teachers_LecturerId",
+                        column: x => x.LecturerId,
                         principalTable: "Teachers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -511,39 +450,6 @@ namespace SchoolAssistant.DAL.Migrations
                         name: "FK_StudentSubjectClass_SubjectClass_SubjectClassesId",
                         column: x => x.SubjectClassesId,
                         principalTable: "SubjectClass",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Attendance",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LessonId = table.Column<long>(type: "bigint", nullable: false),
-                    StudentId = table.Column<long>(type: "bigint", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    SemesterId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Attendance_Lesson_LessonId",
-                        column: x => x.LessonId,
-                        principalTable: "Lesson",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Attendance_Semesters_SemesterId",
-                        column: x => x.SemesterId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Attendance_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -633,6 +539,116 @@ namespace SchoolAssistant.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Mark",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false),
+                    SubjectId = table.Column<long>(type: "bigint", nullable: false),
+                    IssuerId = table.Column<long>(type: "bigint", nullable: false),
+                    CollectionId = table.Column<long>(type: "bigint", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Main = table.Column<int>(type: "int", nullable: false),
+                    Prefix = table.Column<int>(type: "int", nullable: true),
+                    Weight = table.Column<int>(type: "int", nullable: true),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mark", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Mark_MarksOfClass_CollectionId",
+                        column: x => x.CollectionId,
+                        principalTable: "MarksOfClass",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Mark_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Mark_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Mark_Subject_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Mark_Teachers_IssuerId",
+                        column: x => x.IssuerId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lesson",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Topic = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FromScheduleId = table.Column<long>(type: "bigint", nullable: false),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lesson", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lesson_PeriodicLesson_FromScheduleId",
+                        column: x => x.FromScheduleId,
+                        principalTable: "PeriodicLesson",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Lesson_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attendance",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LessonId = table.Column<long>(type: "bigint", nullable: false),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    SchoolYearId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendance", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Lesson_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lesson",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Semesters_SchoolYearId",
+                        column: x => x.SchoolYearId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Attendance_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -688,9 +704,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "LessonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attendance_SemesterId",
+                name: "IX_Attendance_SchoolYearId",
                 table: "Attendance",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attendance_StudentId",
@@ -703,9 +719,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "FromScheduleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lesson_SemesterId",
+                name: "IX_Lesson_SchoolYearId",
                 table: "Lesson",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Mark_CollectionId",
@@ -718,9 +734,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "IssuerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mark_SemesterId",
+                name: "IX_Mark_SchoolYearId",
                 table: "Mark",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Mark_StudentId",
@@ -738,9 +754,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "OrganizationalClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MarksOfClass_SemesterId",
+                name: "IX_MarksOfClass_SchoolYearId",
                 table: "MarksOfClass",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MarksOfClass_SubjectClassId",
@@ -748,15 +764,16 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "SubjectClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrganizationalClass_SemesterId",
+                name: "IX_OrganizationalClass_SchoolYearId",
                 table: "OrganizationalClass",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrganizationalClass_SupervisorId",
                 table: "OrganizationalClass",
                 column: "SupervisorId",
-                unique: true);
+                unique: true,
+                filter: "[SupervisorId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parents_ChildInfoId",
@@ -764,9 +781,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "ChildInfoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parents_SemesterId",
+                name: "IX_Parents_SchoolYearId",
                 table: "Parents",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PeriodicLesson_LecturerId",
@@ -789,9 +806,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PeriodicLesson_SemesterId",
+                name: "IX_PeriodicLesson_SchoolYearId",
                 table: "PeriodicLesson",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PeriodicLesson_SubjectId",
@@ -809,9 +826,9 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "OrganizationalClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_SemesterId",
+                name: "IX_Students_SchoolYearId",
                 table: "Students",
-                column: "SemesterId");
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentSubjectClass_SubjectClassesId",
@@ -819,9 +836,14 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "SubjectClassesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubjectClass_SemesterId",
+                name: "IX_SubjectClass_OrganizationalClassId",
                 table: "SubjectClass",
-                column: "SemesterId");
+                column: "OrganizationalClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubjectClass_SchoolYearId",
+                table: "SubjectClass",
+                column: "SchoolYearId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubjectClass_SubjectId",
@@ -829,24 +851,19 @@ namespace SchoolAssistant.DAL.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubjectClass_TeacherId",
+                table: "SubjectClass",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TeacherToAdditionalSubject_SubjectId",
                 table: "TeacherToAdditionalSubject",
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherToAdditionalSubject_TeacherId",
-                table: "TeacherToAdditionalSubject",
-                column: "TeacherId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TeacherToMainSubject_SubjectId",
                 table: "TeacherToMainSubject",
                 column: "SubjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeacherToMainSubject_TeacherId",
-                table: "TeacherToMainSubject",
-                column: "TeacherId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -906,22 +923,22 @@ namespace SchoolAssistant.DAL.Migrations
                 name: "StudentRegisterRecord");
 
             migrationBuilder.DropTable(
-                name: "OrganizationalClass");
-
-            migrationBuilder.DropTable(
                 name: "Room");
 
             migrationBuilder.DropTable(
                 name: "SubjectClass");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "OrganizationalClass");
+
+            migrationBuilder.DropTable(
+                name: "Subject");
 
             migrationBuilder.DropTable(
                 name: "Semesters");
 
             migrationBuilder.DropTable(
-                name: "Subject");
+                name: "Teachers");
         }
     }
 }
