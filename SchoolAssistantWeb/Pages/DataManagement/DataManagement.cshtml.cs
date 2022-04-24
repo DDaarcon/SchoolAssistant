@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Classes;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
+using SchoolAssistant.Infrastructure.Models.DataManagement.Students;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
 using SchoolAssistant.Logic.DataManagement.Classes;
 using SchoolAssistant.Logic.DataManagement.Staff;
+using SchoolAssistant.Logic.DataManagement.Students;
 using SchoolAssistant.Logic.DataManagement.Subjects;
 
 namespace SchoolAssistant.Web.Pages.DataManagement
@@ -14,15 +16,18 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         private readonly ISubjectsDataManagementService _subjectsService;
         private readonly IStaffDataManagementService _staffService;
         private readonly IClassDataManagementService _classService;
+        private readonly IStudentsDataManagementService _studentService;
 
         public DataManagementModel(
             ISubjectsDataManagementService subjectsService,
             IStaffDataManagementService staffService,
-            IClassDataManagementService classService)
+            IClassDataManagementService classService,
+            IStudentsDataManagementService studentService)
         {
             _subjectsService = subjectsService;
             _staffService = staffService;
             _classService = classService;
+            _studentService = studentService;
         }
 
         public void OnGet()
@@ -49,7 +54,6 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             var result = await _subjectsService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
         }
-
 
 
 
@@ -96,6 +100,30 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         public async Task<JsonResult> OnPostClassDataAsync([FromBody] ClassDetailsJson model)
         {
             var result = await _classService.CreateOrUpdateAsync(model);
+            return new JsonResult(result);
+        }
+
+
+
+
+        public async Task<JsonResult> OnGetStudentsEntriesAsync(long classId)
+        {
+            var entries = await _studentService.GetEntriesJsonAsync(classId);
+            return new JsonResult(entries);
+        }
+        public async Task<JsonResult> OnGetStudentModificationDataAsync(long id)
+        {
+            var modifyModel = await _studentService.GetModificationDataJsonAsync(id);
+            return new JsonResult(modifyModel);
+        }
+        public async Task<JsonResult> OnPostStudentDataAsync([FromBody] StudentDetailsJson model)
+        {
+            var result = await _studentService.CreateOrUpdateStudentAsync(model);
+            return new JsonResult(result);
+        }
+        public async Task<JsonResult> OnPostStudentRegisterRecordDataAsync([FromBody] StudentRegisterRecordDetailsJson model)
+        {
+            var result = await _studentService.CreateOrUpdateStudentRegisterRecordAsync(model);
             return new JsonResult(result);
         }
     }

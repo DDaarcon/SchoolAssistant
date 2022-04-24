@@ -1,9 +1,33 @@
 ﻿interface StudentListEntry extends TableData {
     name: string;
-    numberInJurnal: number;
+    numberInJournal: number;
 }
 
+interface StudentDetails {
+    id?: number;
 
+    registerRecordId?: number;
+    registerRecord?: StudentRegisterRecordDetails;
+
+    organizationalClassId?: number;
+
+    numberInJournal: number;
+}
+
+interface StudentRegisterRecordDetails {
+    id?: number;
+
+    firstName: string;
+    secondName?: string;
+    lastName: string;
+
+    dateOfBirth: string;
+    placeOfBirth: string;
+
+    personalId: string;
+    address: string;
+
+}
 
 
 
@@ -17,7 +41,16 @@ type StudentsPageState = {
 
 }
 class StudentsPage extends React.Component<StudentsPageProps, StudentsPageState> {
+    constructor(props) {
+        super(props);
 
+        modalController.add({
+            children:
+                <div style={{ width: 1000, height: 1000, backgroundColor: 'green' }}>
+
+                </div>
+        });
+    }
 
     render() {
         return (
@@ -25,6 +58,9 @@ class StudentsPage extends React.Component<StudentsPageProps, StudentsPageState>
                 <ClassInfoPanel
                     name={this.props.className}
                     specialization={this.props.classSpecialization}
+                />
+                <StudentsTable
+                    classId={this.props.classId}
                 />
             </>
         )
@@ -61,6 +97,13 @@ type StudentsTableProps = {
 const StudentsTable = (props: StudentsTableProps) => {
     const columnsSetting: ColumnSetting<StudentListEntry>[] = [
         {
+            header: "Numer",
+            prop: 'numberInJournal',
+            style: {
+                width: '20px'
+            }
+        },
+        {
             header: "Imię i nazwisko",
             prop: "name",
         }
@@ -74,16 +117,16 @@ const StudentsTable = (props: StudentsTableProps) => {
     }
 
     const prepareStudentsData = (received: StudentListEntry[]): GroupedTableData<StudentListEntry> => {
-        const highestJournalNr = findHightestNr(received.map(x => x.numberInJurnal));
+        const highestJournalNr = findHightestNr(received.map(x => x.numberInJournal));
 
         const data: StudentListEntry[] = [];
         for (let i = 1; i <= highestJournalNr; i++) {
-            const existing = received.find(x => x.numberInJurnal == i);
+            const existing = received.find(x => x.numberInJournal == i);
             if (existing)
                 data.push(existing);
             else
                 data.push({
-                    numberInJurnal: i,
+                    numberInJournal: i,
                     id: 0,
                     name: '',
                 });
@@ -122,7 +165,8 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
 
     render() {
         return (
-            <></>
+            <>
+            </>
         )
     }
 }
