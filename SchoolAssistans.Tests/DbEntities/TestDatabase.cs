@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Models.Shared;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
@@ -64,5 +66,15 @@ namespace SchoolAssistans.Tests.DbEntities
                     .LogTo(message => Debug.WriteLine(message))
                     .UseSqlServer(ConnectionString)
                     .Options);
+
+        public static async Task ClearDataAsync<TDbEntity>()
+            where TDbEntity : DbEntity
+        {
+            var set = _context.Set<TDbEntity>();
+
+            await set.ForEachAsync(entity => set.Remove(entity));
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

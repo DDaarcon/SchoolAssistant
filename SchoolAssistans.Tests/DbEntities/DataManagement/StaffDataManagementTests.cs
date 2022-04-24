@@ -7,7 +7,7 @@ using SchoolAssistant.Logic.DataManagement.Staff;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SchoolAssistans.Tests.DbEntities
+namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class StaffDataManagementTests
     {

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolAssistant.Infrastructure.Models.DataManagement.Classes;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
+using SchoolAssistant.Logic.DataManagement.Classes;
 using SchoolAssistant.Logic.DataManagement.Staff;
 using SchoolAssistant.Logic.DataManagement.Subjects;
 
@@ -11,18 +13,24 @@ namespace SchoolAssistant.Web.Pages.DataManagement
     {
         private readonly ISubjectsDataManagementService _subjectsService;
         private readonly IStaffDataManagementService _staffService;
+        private readonly IClassDataManagementService _classService;
 
         public DataManagementModel(
             ISubjectsDataManagementService subjectsService,
-            IStaffDataManagementService staffService)
+            IStaffDataManagementService staffService,
+            IClassDataManagementService classService)
         {
             _subjectsService = subjectsService;
             _staffService = staffService;
+            _classService = classService;
         }
 
         public void OnGet()
         {
         }
+
+
+
 
         public async Task<JsonResult> OnGetSubjectEntriesAsync()
         {
@@ -43,12 +51,15 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         }
 
 
+
+
+
         public async Task<JsonResult> OnGetStaffPersonsEntriesAsync()
         {
             var groups = await _staffService.GetGroupsOfEntriesJsonAsync();
             return new JsonResult(groups);
         }
-
+        // TODO: Merge endpoints OnGetStaffPersonDetailsAsync and OnGetAvailableSubjectsAsync
         public async Task<JsonResult> OnGetStaffPersonDetailsAsync(string groupId, long id)
         {
             var details = await _staffService.GetDetailsJsonAsync(groupId, id);
@@ -65,6 +76,27 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         {
             var items = await _subjectsService.GetEntriesJsonAsync();
             return new JsonResult(items);
+        }
+
+
+
+
+        public async Task<JsonResult> OnGetClassEntriesAsync()
+        {
+            var entries = await _classService.GetEntriesJsonAsync();
+            return new JsonResult(entries);
+        }
+
+        public async Task<JsonResult> OnGetClassModificationDataAsync(long id)
+        {
+            var modifyModel = await _classService.GetModificationDataJsonAsync(id);
+            return new JsonResult(modifyModel);
+        }
+
+        public async Task<JsonResult> OnPostClassDataAsync([FromBody] ClassDetailsJson model)
+        {
+            var result = await _classService.CreateOrUpdateAsync(model);
+            return new JsonResult(result);
         }
     }
 }
