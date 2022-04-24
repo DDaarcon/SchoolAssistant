@@ -2,8 +2,9 @@
     private _modalSpaceRef: React.RefObject<ModalPresenter>;
     get modalSpaceRef() { return this._modalSpaceRef; }
 
+    private static _uniqueIdCounter = 0;
     get newUniqueId() {
-        return new Date().getTime();
+        return ModalController._uniqueIdCounter++;
     }
 
     private get _modalPresenter() {
@@ -61,7 +62,9 @@ type FormConfig = {
     onSubmit: () => void;
 }
 class Modal extends React.Component<ModalProps, ModalState> {
-    
+    onClose = () => {
+        this.props.assignedAtPresenter?.close(this.props.assignedAtPresenter.uniqueId);
+    }
 
     render() {
         return (
@@ -69,7 +72,7 @@ class Modal extends React.Component<ModalProps, ModalState> {
                 {this.props.children}
                 <button
                     type="button"
-                    onClick={() => this.props.assignedAtPresenter?.close(this.props.assignedAtPresenter.uniqueId)}
+                    onClick={this.onClose}
                 >
                     Zamknij
                 </button>
@@ -136,16 +139,20 @@ class ModalPresenter extends React.Component<{}, ModalPresenterState> {
         });
     }
 
-    removeLastModal = () => {
-        this.setState({
-            modals: this.state.modals.slice(0, this.state.modals.length - 1)
+    removeLastModal = (event) => {
+        this.setState(state => {
+            return {
+                modals: state.modals.slice(0, state.modals.length - 1)
+            }
         });
     }
 
     removeModalById = (uniqueId: number) => {
-        const filtered = this.state.modals.filter(x => x.props.assignedAtPresenter.uniqueId != uniqueId);
-        this.setState({
-            modals: filtered
+        this.setState(state => {
+            const filtered = state.modals.filter(x => x.props.assignedAtPresenter?.uniqueId != uniqueId);
+            return {
+                modals: filtered
+            }
         });
     }
 
@@ -156,9 +163,15 @@ class ModalPresenter extends React.Component<{}, ModalPresenterState> {
 
         return (
             <>
-                <div className="modal-background" onClick={this.removeLastModal}></div>
+                <div className="modal-background">
+                    <div className="modal-bg-scroll">
+                        <div className="modal-dismiss-listener"
+                            onClick={this.removeLastModal}
+                        ></div>
 
-                {this.state.modals}
+                        {this.state.modals}
+                    </div>
+                </div>
             </>
         )
     }
