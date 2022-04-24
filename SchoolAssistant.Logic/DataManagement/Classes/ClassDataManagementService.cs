@@ -35,6 +35,7 @@ namespace SchoolAssistant.Logic.DataManagement.Classes
 
             return query.Select(x => new ClassListEntryJson
             {
+                id = x.Id,
                 name = x.Name,
                 specialization = x.Specialization,
                 amountOfStudents = x.Students.Count
