@@ -77,11 +77,12 @@ else
 app.UseReact(config =>
 {
     config
-       .AddScript("~/js/shared/loader.tsx");
+       .AddScript("~/js/shared/server-connection.tsx")
+       .AddScript("~/js/shared/loader.tsx")
+       .AddScript("~/js/shared/modal.tsx");
 
 
     config
-        .AddScript("~/js/shared/server-connection.tsx")
         .AddScript("~/js/data-management/main.tsx")
         .AddScript("~/js/data-management/shared-table.tsx")
         .AddScript("~/js/data-management/table.tsx")

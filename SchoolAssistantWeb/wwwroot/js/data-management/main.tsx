@@ -47,6 +47,8 @@ class DataManagementMainScreen extends React.Component<MainScreenProps, MainScre
                 <div className="dm-page-content">
                     {this.renderPageContent()}
                 </div>
+
+                <ModalSpace />
             </div>
         )
     }
