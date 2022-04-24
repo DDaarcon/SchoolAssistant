@@ -63,7 +63,7 @@ namespace SchoolAssistans.Tests.DbEntities
         }
 
         [Test]
-        public async Task Should_create_teacher()
+        public async Task Should_create_teacher_async()
         {
             var matematyka = _subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Matematyka")!;
             var model = new StaffPersonDetailsJson
@@ -88,8 +88,38 @@ namespace SchoolAssistans.Tests.DbEntities
             Assert.AreEqual(teacher.SubjectOperations.MainIter.First().Name, matematyka.Name);
         }
 
+        #region Fails
+
         [Test]
-        public async Task Should_return_error_Blad_nieprawidlowa_kategoria()
+        public async Task Should_fail_creating_missing_firstname_async()
+        {
+            var model = new StaffPersonDetailsJson
+            {
+                lastName = "Ogariusz",
+                groupId = nameof(Teacher),
+            };
+
+            var response = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsFalse(response.success);
+        }
+
+        [Test]
+        public async Task Should_fail_creating_missing_lastname_async()
+        {
+            var model = new StaffPersonDetailsJson
+            {
+                firstName = "Ogariusz",
+                groupId = nameof(Teacher),
+            };
+
+            var response = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsFalse(response.success);
+        }
+
+        [Test]
+        public async Task Should_fail_creating_invalid_type_async()
         {
             var model = new StaffPersonDetailsJson
             {
@@ -100,11 +130,64 @@ namespace SchoolAssistans.Tests.DbEntities
 
             var res = await _staffDataManagementService.CreateOrUpdateAsync(model);
 
-            Assert.AreEqual(res.message, "Błąd! Nieprawidłowa kategoria personelu");
+            Assert.IsFalse(res.success);
         }
 
         [Test]
-        public async Task Should_modify_teachers_main_subjects()
+        public async Task Should_fail_updating_invalid_teacher_id_async()
+        {
+            var model = new StaffPersonDetailsJson
+            {
+                id = 999999,
+                firstName = "balbalb",
+                lastName = "yhydhyd",
+                groupId = "JakasBledna"
+            };
+
+            var res = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_creating_invalid_subject_id_async()
+        {
+            var model = new StaffPersonDetailsJson
+            {
+                firstName = "balbalb",
+                lastName = "yhydhyd",
+                groupId = "JakasBledna",
+                mainSubjectsIds = new long[]
+                {
+                    999999
+                }
+            };
+
+            var res = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_fetching_invalid_id_async()
+        {
+            var res = await _staffDataManagementService.GetDetailsJsonAsync(nameof(Teacher), 999999);
+
+            Assert.IsNull(res);
+        }
+
+        [Test]
+        public async Task Should_fail_fetching_invalid_group_async()
+        {
+            var res = await _staffDataManagementService.GetDetailsJsonAsync("Incorrect", 1);
+
+            Assert.IsNull(res);
+        }
+
+        #endregion
+
+        [Test]
+        public async Task Should_modify_teachers_main_subjects_async()
         {
             var teacher = new Teacher
             {
@@ -147,7 +230,7 @@ namespace SchoolAssistans.Tests.DbEntities
         }
 
         [Test]
-        public async Task Should_modify_teacher_firstname()
+        public async Task Should_modify_teacher_firstname_async()
         {
             var teacher = new Teacher
             {
@@ -176,7 +259,7 @@ namespace SchoolAssistans.Tests.DbEntities
         }
 
         [Test]
-        public async Task Should_modify_teacher_lastname()
+        public async Task Should_modify_teacher_lastname_async()
         {
             var teacher = new Teacher
             {
@@ -202,6 +285,54 @@ namespace SchoolAssistans.Tests.DbEntities
 
             Assert.IsNotNull(teacher);
             Assert.AreEqual(teacher.LastName, "Wulek");
+        }
+
+        [Test]
+        public async Task Should_fetch_details_async()
+        {
+            var teacher = new Teacher
+            {
+                FirstName = "Alvro",
+                LastName = "Suez"
+            };
+            var subject = new Subject
+            {
+                Name = "Rolling"
+            };
+
+            teacher.SubjectOperations.AddNewlyCreatedMain(subject);
+
+            await _teacherRepo.AddAsync(teacher);
+            await _teacherRepo.SaveAsync();
+
+            var res = await _staffDataManagementService.GetDetailsJsonAsync(nameof(Teacher), teacher.Id);
+
+            Assert.IsNotNull(res);
+            Assert.AreEqual(res.firstName, teacher.FirstName);
+            Assert.AreEqual(res.lastName, teacher.LastName);
+            Assert.AreEqual(res.mainSubjectsIds.First(), teacher.SubjectOperations.MainIter.First().Id);
+        }
+
+        [Test]
+        public async Task Should_fetch_group_async()
+        {
+            var teacher = new Teacher
+            {
+                FirstName = "Alvro",
+                LastName = "Suez"
+            };
+
+            await _teacherRepo.AddAsync(teacher);
+            await _teacherRepo.SaveAsync();
+
+            var res = await _staffDataManagementService.GetGroupsOfEntriesJsonAsync();
+
+            Assert.IsNotNull(res);
+
+            var teachersGroup = res.FirstOrDefault(x => x.id == nameof(Teacher));
+
+            Assert.IsNotNull(teachersGroup);
+            Assert.IsTrue(teachersGroup.entries.Any());
         }
     }
 }
