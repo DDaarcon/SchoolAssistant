@@ -48,7 +48,7 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
             {
                 id = x.Id,
                 name = x.GetFullName(),
-                specialization = String.Join(", ", x.SubjectOperations.MainIter.Select(x => x.Name))
+                specialization = String.Join(", ", x.MainSubjects.Select(x => x.Subject.Name))
             }).ToArrayAsync();
         }
 
