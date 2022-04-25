@@ -183,13 +183,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsTrue(res.data.id == student.Id);
             Assert.IsTrue(res.data.numberInJournal == student.NumberInJournal);
             Assert.AreEqual(res.data.registerRecordId, student.InfoId);
-            //Assert.IsNotNull(res.data.registerRecord);
-            //Assert.IsTrue(res.data.registerRecord.id == student.Info.Id);
-            //Assert.IsTrue(res.data.registerRecord.firstName == student.Info.FirstName);
-            //Assert.IsTrue(res.data.registerRecord.personalId == student.Info.PersonalID);
-            //Assert.IsTrue(res.data.registerRecord.address == student.Info.Address);
-            //var date = DateTime.Parse(res.data.registerRecord.dateOfBirth).Date;
-            //Assert.AreEqual(date, student.Info.DateOfBirth);
         }
 
         [Test]
@@ -270,8 +263,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             Assert.IsNotNull(student);
         }
-
-
 
 
         #region Fails
@@ -389,6 +380,21 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsFalse(res.success);
         }
 
+        [Test]
+        public async Task Should_fail_fetch_modify_data_invalid_id_async()
+        {
+            var res = await _dataManagementService.GetModificationDataJsonAsync(9999);
+
+            Assert.IsNull(res);
+        }
+
+        [Test]
+        public async Task Should_fail_fetch_entries_invaid_class_id_async()
+        {
+            var res = await _dataManagementService.GetEntriesJsonAsync(9999);
+
+            Assert.IsNull(res);
+        }
 
         #endregion
     }

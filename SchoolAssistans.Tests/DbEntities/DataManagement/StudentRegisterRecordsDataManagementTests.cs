@@ -149,7 +149,32 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             return orgClass;
         }
 
-
+        private StudentRegisterRecordDetailsJson SampleValidStudentRegisterDetailsJson => new StudentRegisterRecordDetailsJson
+        {
+            firstName = "Mateusz",
+            lastName = "Wojak",
+            dateOfBirth = "08.10.2000",
+            placeOfBirth = "Nowy sącz",
+            personalId = "5678876545673",
+            address = "Kraków ul. Stara 15",
+            firstParent = new ParentRegisterSubrecordDetailsJson
+            {
+                firstName = "Grażyna",
+                lastName = "Nowak",
+                address = "Warsaw ul.Ciekawa 17",
+                phoneNumber = "3647897128",
+                email = "blablabla@ulululu.com"
+            },
+            secondParent = new ParentRegisterSubrecordDetailsJson
+            {
+                firstName = "Mariusz",
+                secondName = "Rolek",
+                lastName = "Nowak",
+                address = "Warsaw ul.Ciekawa 17",
+                phoneNumber = "21371289",
+                email = "blablabla@ulululu.com"
+            }
+        };
 
 
 
@@ -178,13 +203,8 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsNotNull(res);
             Assert.IsNotNull(res.data);
             Assert.IsTrue(res.data.id == record.Id);
-            Assert.IsTrue(res.data.address == record.Address);
-            Assert.IsTrue(res.data.firstName == record.FirstName);
-            Assert.IsTrue(res.data.personalId == record.PersonalID);
-            Assert.IsTrue(res.data.placeOfBirth == record.PlaceOfBirth);
-            Assert.IsTrue(res.data.secondName == record.SecondName);
-            var date = DateTime.Parse(res.data.dateOfBirth).Date;
-            Assert.AreEqual(date, record.DateOfBirth);
+
+            Validate(record, res.data);
         }
 
         [Test]
@@ -197,7 +217,16 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 dateOfBirth = "08.10.2000",
                 placeOfBirth = "Nowy sącz",
                 personalId = "5678876545673",
-                address = "Kraków ul. Stara 15"
+                address = "Kraków ul. Stara 15",
+                firstParent = new ParentRegisterSubrecordDetailsJson
+                {
+                    firstName = "Jolanta",
+                    secondName = "Renata",
+                    lastName = "Majczak",
+                    address = "Kraków ul. Stara 15",
+                    phoneNumber = "134987324",
+                    email = "jujuj@grgr.com",
+                }
             };
 
             var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
@@ -207,20 +236,14 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             var registerRec = await _studentRegRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == model.firstName && x.LastName == model.lastName);
 
-            Assert.IsNotNull(registerRec);
-            Assert.AreEqual(model.lastName, registerRec.LastName);
-            Assert.AreEqual(model.placeOfBirth, registerRec.PlaceOfBirth);
-            Assert.AreEqual(model.personalId, registerRec.PersonalID);
-            Assert.AreEqual(model.address, registerRec.Address);
-            var date = DateTime.Parse(model.dateOfBirth).Date;
-            Assert.AreEqual(date, registerRec.DateOfBirth);
+            Validate(registerRec, model);
         }
 
         [Test]
-        public async Task Should_update_register_record_async()
+        public async Task Should_update_register_record_and_add_second_parent_async()
         {
             var orgClass = await Add_3b_2_Students_Async();
-            var student = orgClass.Students.First();
+            var student = orgClass.Students.Where(x => x.Info.SecondParent is not null).First();
 
             var model = new StudentRegisterRecordDetailsJson
             {
@@ -230,7 +253,24 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 dateOfBirth = "08.10.2000",
                 placeOfBirth = "Nowy sącz",
                 personalId = "5678876545673",
-                address = "Kraków ul. Stara 15"
+                address = "Kraków ul. Stara 15",
+                firstParent = new ParentRegisterSubrecordDetailsJson
+                {
+                    firstName = "Grażyna",
+                    lastName = "Nowak",
+                    address = "Warsaw ul.Ciekawa 17",
+                    phoneNumber = "3647897128",
+                    email = "blablabla@ulululu.com"
+                },
+                secondParent = new ParentRegisterSubrecordDetailsJson
+                {
+                    firstName = "Mariusz",
+                    secondName = "Rolek",
+                    lastName = "Nowak",
+                    address = "Warsaw ul.Ciekawa 17",
+                    phoneNumber = "21371289",
+                    email = "blablabla@ulululu.com"
+                }
             };
 
             var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
@@ -240,14 +280,210 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             var registerRec = await _studentRegRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == model.firstName && x.LastName == model.lastName);
 
-            Assert.IsNotNull(registerRec);
-            Assert.AreEqual(model.id, student.Info.Id);
-            Assert.AreEqual(model.lastName, registerRec.LastName);
-            Assert.AreEqual(model.placeOfBirth, registerRec.PlaceOfBirth);
-            Assert.AreEqual(model.personalId, registerRec.PersonalID);
-            Assert.AreEqual(model.address, registerRec.Address);
-            var date = DateTime.Parse(model.dateOfBirth).Date;
-            Assert.AreEqual(date, registerRec.DateOfBirth);
+            Validate(registerRec, model);
         }
+
+
+        private void Validate(StudentRegisterRecord entity, StudentRegisterRecordDetailsJson json)
+        {
+            Assert.IsNotNull(json);
+            Assert.IsNotNull(entity);
+
+            Assert.AreEqual(json.lastName, entity.LastName);
+            Assert.AreEqual(json.placeOfBirth, entity.PlaceOfBirth);
+            Assert.AreEqual(json.personalId, entity.PersonalID);
+            Assert.AreEqual(json.address, entity.Address);
+            var date = DateTime.Parse(json.dateOfBirth).Date;
+            Assert.AreEqual(date, entity.DateOfBirth);
+
+            var parent = entity.FirstParent;
+            Assert.IsNotNull(parent);
+            Assert.AreEqual(json.firstParent.firstName, parent.FirstName);
+            Assert.AreEqual(json.firstParent.secondName, parent.SecondName);
+            Assert.AreEqual(json.firstParent.lastName, parent.LastName);
+            Assert.AreEqual(json.firstParent.phoneNumber, parent.PhoneNumber);
+            Assert.AreEqual(json.firstParent.address, parent.Address);
+
+            var secondParent = entity.SecondParent;
+            Assert.IsNotNull(secondParent);
+            Assert.AreEqual(json.secondParent.firstName, secondParent.FirstName);
+            Assert.AreEqual(json.secondParent.secondName, secondParent.SecondName);
+            Assert.AreEqual(json.secondParent.lastName, secondParent.LastName);
+            Assert.AreEqual(json.secondParent.phoneNumber, secondParent.PhoneNumber);
+            Assert.AreEqual(json.secondParent.address, secondParent.Address);
+        }
+
+
+        #region Fails
+
+        [Test]
+        public async Task Should_fail_missing_fist_name()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstName = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_last_name()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.lastName = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_address()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.address = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_date_of_birth()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.dateOfBirth = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_invalid_date_of_birth()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.dateOfBirth = "not date";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_personal_id()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.personalId = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_place_of_birth()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.placeOfBirth = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_fist_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent = null!;
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_fist_name_of_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent.firstName = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_last_name_of_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent.lastName = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_phone_number_of_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent.phoneNumber = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_address_of_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent.address = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_email_of_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent.email = "";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_invalid_email_of_parent()
+        {
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.firstParent.email = "not valid email";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        #endregion
     }
 }
