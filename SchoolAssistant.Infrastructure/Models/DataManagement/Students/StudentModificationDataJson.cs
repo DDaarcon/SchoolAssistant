@@ -3,5 +3,6 @@
     public class StudentModificationDataJson
     {
         public StudentDetailsJson data { get; set; } = null!;
+        public StudentRegisterRecordListEntryJson[] registerRecords { get; set; } = null!;
     }
 }

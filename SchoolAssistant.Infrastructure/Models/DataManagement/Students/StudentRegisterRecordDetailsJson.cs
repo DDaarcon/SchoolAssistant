@@ -13,5 +13,8 @@
 
         public string personalId { get; set; } = null!;
         public string address { get; set; } = null!;
+
+        public ParentRegisterSubrecordDetailsJson firstParent { get; set; } = null!;
+        public ParentRegisterSubrecordDetailsJson? secondParent { get; set; }
     }
 }
