@@ -17,17 +17,20 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         private readonly IStaffDataManagementService _staffService;
         private readonly IClassDataManagementService _classService;
         private readonly IStudentsDataManagementService _studentService;
+        private readonly IStudentRegisterRecordsDataManagementService _studentsRegisterService;
 
         public DataManagementModel(
             ISubjectsDataManagementService subjectsService,
             IStaffDataManagementService staffService,
             IClassDataManagementService classService,
-            IStudentsDataManagementService studentService)
+            IStudentsDataManagementService studentService,
+            IStudentRegisterRecordsDataManagementService studentsRegisterService)
         {
             _subjectsService = subjectsService;
             _staffService = staffService;
             _classService = classService;
             _studentService = studentService;
+            _studentsRegisterService = studentsRegisterService;
         }
 
         public void OnGet()
@@ -118,12 +121,23 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         }
         public async Task<JsonResult> OnPostStudentDataAsync([FromBody] StudentDetailsJson model)
         {
-            var result = await _studentService.CreateOrUpdateStudentAsync(model);
+            var result = await _studentService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
+        }
+
+        public async Task<JsonResult> OnGetStudentRegisterRecordEntriesAsync()
+        {
+            var entries = await _studentsRegisterService.GetEntriesJsonAsync();
+            return new JsonResult(entries);
+        }
+        public async Task<JsonResult> OnGetStudentRegisterRecordModificationDataAsync(long id)
+        {
+            var modifyModel = await _studentsRegisterService.GetModificationDataJsonAsync(id);
+            return new JsonResult(modifyModel);
         }
         public async Task<JsonResult> OnPostStudentRegisterRecordDataAsync([FromBody] StudentRegisterRecordDetailsJson model)
         {
-            var result = await _studentService.CreateOrUpdateStudentRegisterRecordAsync(model);
+            var result = await _studentsRegisterService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
         }
     }
