@@ -17,6 +17,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
     {
         private ISchoolYearService _schoolYearService;
         private IStudentsDataManagementService _dataManagementService;
+        private IStudentRegisterRecordsDataManagementService _registerDataManagementService;
         private IRepository<OrganizationalClass> _orgClassRepo;
         private IRepository<Student> _studentRepo;
         private IRepository<StudentRegisterRecord> _studentRegRepo;
@@ -32,7 +33,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
-            _dataManagementService = new StudentsDataManagementService(_orgClassRepo);
+            _dataManagementService = new StudentsDataManagementService(_orgClassRepo, _studentRepo);
+            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(_studentRegRepo);
+
             var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
             _schoolYearService = new SchoolYearService(yearRepo);
         }
@@ -179,76 +182,14 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsNotNull(res.data);
             Assert.IsTrue(res.data.id == student.Id);
             Assert.IsTrue(res.data.numberInJournal == student.NumberInJournal);
-            Assert.IsNotNull(res.data.registerRecord);
-            Assert.IsTrue(res.data.registerRecord.id == student.Info.Id);
-            Assert.IsTrue(res.data.registerRecord.firstName == student.Info.FirstName);
-            Assert.IsTrue(res.data.registerRecord.personalId == student.Info.PersonalID);
-            Assert.IsTrue(res.data.registerRecord.address == student.Info.Address);
-            var date = DateTime.Parse(res.data.registerRecord.dateOfBirth).Date;
-            Assert.AreEqual(date, student.Info.DateOfBirth);
-        }
-
-        [Test]
-        public async Task Should_create_register_record_async()
-        {
-            var model = new StudentRegisterRecordDetailsJson
-            {
-                firstName = "Mateusz",
-                lastName = "Wojak",
-                dateOfBirth = "08.10.2000",
-                placeOfBirth = "Nowy sącz",
-                personalId = "5678876545673",
-                address = "Kraków ul. Stara 15"
-            };
-
-            var res = await _dataManagementService.CreateOrUpdateStudentRegisterRecordAsync(model);
-
-            Assert.IsNotNull(res);
-            Assert.IsTrue(res.success);
-
-            var registerRec = await _studentRegRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == model.firstName && x.LastName == model.lastName);
-
-            Assert.IsNotNull(registerRec);
-            Assert.AreEqual(model.lastName, registerRec.LastName);
-            Assert.AreEqual(model.placeOfBirth, registerRec.PlaceOfBirth);
-            Assert.AreEqual(model.personalId, registerRec.PersonalID);
-            Assert.AreEqual(model.address, registerRec.Address);
-            var date = DateTime.Parse(model.dateOfBirth).Date;
-            Assert.AreEqual(date, registerRec.DateOfBirth);
-        }
-
-        [Test]
-        public async Task Should_update_register_record_async()
-        {
-            var orgClass = await Add_3b_2_Students_Async();
-            var student = orgClass.Students.First();
-
-            var model = new StudentRegisterRecordDetailsJson
-            {
-                id = student.Info.Id,
-                firstName = "Mateusz",
-                lastName = "Wojak",
-                dateOfBirth = "08.10.2000",
-                placeOfBirth = "Nowy sącz",
-                personalId = "5678876545673",
-                address = "Kraków ul. Stara 15"
-            };
-
-            var res = await _dataManagementService.CreateOrUpdateStudentRegisterRecordAsync(model);
-
-            Assert.IsNotNull(res);
-            Assert.IsTrue(res.success);
-
-            var registerRec = await _studentRegRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == model.firstName && x.LastName == model.lastName);
-
-            Assert.IsNotNull(registerRec);
-            Assert.AreEqual(model.id, student.Info.Id);
-            Assert.AreEqual(model.lastName, registerRec.LastName);
-            Assert.AreEqual(model.placeOfBirth, registerRec.PlaceOfBirth);
-            Assert.AreEqual(model.personalId, registerRec.PersonalID);
-            Assert.AreEqual(model.address, registerRec.Address);
-            var date = DateTime.Parse(model.dateOfBirth).Date;
-            Assert.AreEqual(date, registerRec.DateOfBirth);
+            Assert.AreEqual(res.data.registerRecordId, student.InfoId);
+            //Assert.IsNotNull(res.data.registerRecord);
+            //Assert.IsTrue(res.data.registerRecord.id == student.Info.Id);
+            //Assert.IsTrue(res.data.registerRecord.firstName == student.Info.FirstName);
+            //Assert.IsTrue(res.data.registerRecord.personalId == student.Info.PersonalID);
+            //Assert.IsTrue(res.data.registerRecord.address == student.Info.Address);
+            //var date = DateTime.Parse(res.data.registerRecord.dateOfBirth).Date;
+            //Assert.AreEqual(date, student.Info.DateOfBirth);
         }
 
         [Test]
@@ -267,7 +208,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 registerRecordId = regRecord.Id
             };
 
-            var res = await _dataManagementService.CreateOrUpdateStudentAsync(model);
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
 
             Assert.IsNotNull(res);
             Assert.IsTrue(res.success);
@@ -296,7 +237,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 registerRecordId = student.Info.Id
             };
 
-            var res = await _dataManagementService.CreateOrUpdateStudentAsync(model);
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
 
             Assert.IsNotNull(res);
             Assert.IsTrue(res.success);
@@ -305,5 +246,150 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             Assert.IsNotNull(student);
         }
+
+        [Test]
+        public async Task Should_change_class_async()
+        {
+            var orgClass1 = await Add_3b_2_Students_Async();
+            var orgClass2 = await Add_2g_Studentless_Async();
+            var student = orgClass1.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                organizationalClassId = orgClass2.Id,
+                registerRecordId = student.Info.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsTrue(res.success);
+
+            student = orgClass2.Students.FirstOrDefault(x => x.Id == student.Id);
+
+            Assert.IsNotNull(student);
+        }
+
+
+
+
+        #region Fails
+
+        [Test]
+        public async Task Should_fail_invalid_id_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            var student = orgClass.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = 9999,
+                organizationalClassId = orgClass.Id,
+                registerRecordId = student.Info.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_invalid_class_id_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            var student = orgClass.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                organizationalClassId = 9999,
+                registerRecordId = student.Info.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_invalid_register_record_id_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            var student = orgClass.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                organizationalClassId = orgClass.Id,
+                registerRecordId = 9999
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_register_record_id_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            var student = orgClass.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                organizationalClassId = orgClass.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_class_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            var student = orgClass.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                registerRecordId = student.Info.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_taken_register_id_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            var student = orgClass.Students.First();
+            var student2 = orgClass.Students.Skip(1).First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                organizationalClassId = orgClass.Id,
+                registerRecordId = student2.Info.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+
+        #endregion
     }
 }
