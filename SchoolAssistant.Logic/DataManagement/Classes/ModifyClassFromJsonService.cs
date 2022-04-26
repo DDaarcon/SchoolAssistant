@@ -48,6 +48,12 @@ namespace SchoolAssistant.Logic.DataManagement.Classes
 
         private async Task<bool> ValidateAsync()
         {
+            if (_model is null)
+            {
+                _response.message = "Błąd! Brakuje modelu";
+                return false;
+            }
+
             if (_model.id.HasValue && !await _repo.ExistsAsync(_model.id!.Value))
             {
                 _response.message = "Błąd! Modyfikowana klasa nie istnieje";

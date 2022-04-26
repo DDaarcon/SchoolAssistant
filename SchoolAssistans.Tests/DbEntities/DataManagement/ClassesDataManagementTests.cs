@@ -206,6 +206,15 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             var res = await _classDataManagementService.CreateOrUpdateAsync(model);
 
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_model_async()
+        {
+            var res = await _classDataManagementService.CreateOrUpdateAsync(null!);
+
+            Assert.IsFalse(res.success);
         }
 
         [Test]
