@@ -34,10 +34,11 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
             _dataManagementService = new StudentsDataManagementService(_orgClassRepo, _studentRepo);
-            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(_studentRegRepo);
 
             var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
             _schoolYearService = new SchoolYearService(yearRepo);
+
+            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(_schoolYearService, _studentRegRepo);
         }
 
         [OneTimeTearDown]

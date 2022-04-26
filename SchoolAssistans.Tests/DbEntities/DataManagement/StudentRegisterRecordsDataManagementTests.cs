@@ -8,6 +8,7 @@ using SchoolAssistant.Infrastructure.Models.DataManagement.Students;
 using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.DataManagement.Students;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,10 +32,11 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
-            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(_studentRegRepo);
 
             var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
             _schoolYearService = new SchoolYearService(yearRepo);
+
+            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(_schoolYearService, _studentRegRepo);
         }
 
         [OneTimeTearDown]
@@ -111,6 +113,24 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             NumberInJournal = 12
         };
 
+        private StudentRegisterRecord SampleStudentRegister3 => new StudentRegisterRecord
+        {
+            FirstName = "Fiufiu",
+            LastName = "Krychowiak",
+            DateOfBirth = new DateTime(1999, 10, 18),
+            PlaceOfBirth = "Londyn",
+            PersonalID = "6134838139",
+            Address = "Warsaw ul.Ciekawa 150",
+            FirstParent = new ParentRegisterSubrecord
+            {
+                FirstName = "Milena",
+                LastName = "Krychowiak",
+                Address = "Warsaw ul.Ciekawa 150",
+                PhoneNumber = "458739123",
+                Email = "trututu@lalala.com"
+            },
+        };
+
 
         private async Task<OrganizationalClass> Add_3b_2_Students_Async()
         {
@@ -179,7 +199,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
 
         [Test]
-        public async Task Should_fetch_enties_async()
+        public async Task Should_fetch_enties_1_async()
         {
             var orgClass = await Add_3b_2_Students_Async();
 
@@ -190,6 +210,31 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.InfoId).Contains(x.id)));
             Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.Info.GetFullName()).Contains(x.name)));
             Assert.IsTrue(res.All(x => x.className == orgClass.Name));
+        }
+
+        [Test]
+        public async Task Should_fetch_enties_correct_order_async()
+        {
+            var orgClass = await Add_3b_2_Students_Async();
+            await _studentRegRepo.AddAsync(SampleStudentRegister3);
+            await _studentRegRepo.SaveAsync();
+
+            var res = await _registerDataManagementService.GetEntriesJsonAsync();
+
+            Assert.IsNotNull(res);
+            Assert.IsTrue(res.Length == 3);
+
+            var expected = new List<StudentRegisterRecord>
+            {
+                SampleStudentRegister3,
+                SampleStudentRegister2,
+                SampleStudentRegister1
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(expected[i].GetFullName(), res[i].name);
+            }
         }
 
         [Test]

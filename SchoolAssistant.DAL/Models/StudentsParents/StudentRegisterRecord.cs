@@ -19,5 +19,7 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
 
         public ParentRegisterSubrecord FirstParent { get; set; } = null!;
         public ParentRegisterSubrecord? SecondParent { get; set; }
+
+        public virtual ICollection<Student> StudentInstances { get; set; } = new List<Student>();
     }
 }

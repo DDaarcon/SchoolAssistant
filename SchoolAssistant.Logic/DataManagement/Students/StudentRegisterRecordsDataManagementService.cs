@@ -1,4 +1,5 @@
-﻿using SchoolAssistant.DAL.Models.StudentsParents;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Students;
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
@@ -15,18 +16,38 @@ namespace SchoolAssistant.Logic.DataManagement.Students
     [Injectable]
     public class StudentRegisterRecordsDataManagementService : IStudentRegisterRecordsDataManagementService
     {
-        private readonly IRepository<StudentRegisterRecord> _registerRepo;
+        private readonly ISchoolYearService _schoolYearService;
+        private readonly IRepository<StudentRegisterRecord> _repo;
 
         public StudentRegisterRecordsDataManagementService(
-            IRepository<StudentRegisterRecord> registerRepo)
+            ISchoolYearService schoolYearService,
+            IRepository<StudentRegisterRecord> repo)
         {
-            _registerRepo = registerRepo;
+            _schoolYearService = schoolYearService;
+            _repo = repo;
         }
 
 
         public async Task<StudentRegisterRecordListEntryJson[]> GetEntriesJsonAsync()
         {
-            return null;
+            var year = await _schoolYearService.GetOrCreateCurrentAsync();
+
+            var query = _repo.AsQueryable()
+                .Select(i => new
+                {
+                    record = i,
+                    thisYearIns = i.StudentInstances.SingleOrDefault(s => s.SchoolYearId == year.Id)
+                })
+                .OrderByDescending(x => x.thisYearIns == null)
+                .ThenBy(x => x.record.LastName);
+
+            return await query.Select(x => new StudentRegisterRecordListEntryJson
+            {
+                id = x.record.Id,
+                name = x.record.GetFullName(),
+                className = x.thisYearIns == null ? null : x.thisYearIns.OrganizationalClass == null ? null
+                    : x.thisYearIns.OrganizationalClass.Name
+            }).ToArrayAsync();
         }
 
         public async Task<StudentRegisterRecordModificationDataJson?> GetModificationDataJsonAsync(long id)

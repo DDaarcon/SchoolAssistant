@@ -9,6 +9,9 @@ namespace SchoolAssistant.DAL.ConfigurationSchemas
         public override void Configure(EntityTypeBuilder<Student> builder)
         {
             base.Configure(builder);
+
+            builder.HasOne(x => x.Info)
+                .WithMany(x => x.StudentInstances);
         }
     }
 }
