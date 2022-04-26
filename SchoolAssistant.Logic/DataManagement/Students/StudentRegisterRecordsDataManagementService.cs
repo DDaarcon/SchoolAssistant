@@ -17,13 +17,16 @@ namespace SchoolAssistant.Logic.DataManagement.Students
     public class StudentRegisterRecordsDataManagementService : IStudentRegisterRecordsDataManagementService
     {
         private readonly ISchoolYearService _schoolYearService;
+        private readonly IModifyStudentRegisterRecordFromJsonService _modifyFromJsonService;
         private readonly IRepository<StudentRegisterRecord> _repo;
 
         public StudentRegisterRecordsDataManagementService(
             ISchoolYearService schoolYearService,
+            IModifyStudentRegisterRecordFromJsonService modifyFromJsonService,
             IRepository<StudentRegisterRecord> repo)
         {
             _schoolYearService = schoolYearService;
+            _modifyFromJsonService = modifyFromJsonService;
             _repo = repo;
         }
 
@@ -76,9 +79,9 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             };
         }
 
-        public async Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
+        public Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
         {
-            return null;
+            return _modifyFromJsonService.CreateOrUpdateAsync(model);
         }
 
         private ParentRegisterSubrecordDetailsJson CreateParentRegisterSubrecordDetailsJson(ParentRegisterSubrecord entity)

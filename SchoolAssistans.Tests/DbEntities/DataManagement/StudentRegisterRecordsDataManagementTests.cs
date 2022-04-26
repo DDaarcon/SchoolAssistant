@@ -36,7 +36,10 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
             _schoolYearService = new SchoolYearService(yearRepo);
 
-            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(_schoolYearService, _studentRegRepo);
+            _registerDataManagementService = new StudentRegisterRecordsDataManagementService(
+                _schoolYearService, 
+                new ModifyStudentRegisterRecordFromJsonService(_studentRegRepo),
+                _studentRegRepo);
         }
 
         [OneTimeTearDown]
