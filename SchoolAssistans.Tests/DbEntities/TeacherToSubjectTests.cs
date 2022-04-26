@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
@@ -14,15 +15,30 @@ namespace SchoolAssistans.Tests.DbEntities
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepository<Subject> _subjectRepo = null!;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             _teacherRepo = new Repository<Teacher>(TestDatabase.CreateContext(TestServices.Collection), null);
             _subjectRepo = new Repository<Subject>(TestDatabase.Context, null);
+        }
+
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            TestDatabase.DisposeContext();
+        }
+
+        [SetUp]
+        public async Task SetupOne()
+        {
+            await TestDatabase.ClearDataAsync<TeacherToMainSubject>();
+            await TestDatabase.ClearDataAsync<TeacherToAdditionalSubject>();
+            await TestDatabase.ClearDataAsync<Subject>();
+            await TestDatabase.ClearDataAsync<Teacher>();
 
             SetUpRecords();
         }
-
         private void SetUpRecords()
         {
             var teacher1 = new Teacher
@@ -47,11 +63,8 @@ namespace SchoolAssistans.Tests.DbEntities
             _teacherRepo.Save();
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            TestDatabase.DisposeContext();
-        }
+
+
 
         [Test]
         public async Task TeacherIsPresentAsync()

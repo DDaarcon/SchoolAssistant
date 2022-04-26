@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL;
-using SchoolAssistant.DAL.Models.Shared;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -68,7 +67,7 @@ namespace SchoolAssistans.Tests.DbEntities
                     .Options);
 
         public static async Task ClearDataAsync<TDbEntity>()
-            where TDbEntity : DbEntity
+            where TDbEntity : class
         {
             var set = _context.Set<TDbEntity>();
 
