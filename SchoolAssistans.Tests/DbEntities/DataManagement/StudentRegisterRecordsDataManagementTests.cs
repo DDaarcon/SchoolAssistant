@@ -47,9 +47,11 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
 
         [SetUp]
-        public void SetupOne()
+        public async Task SetupOne()
         {
-
+            await TestDatabase.ClearDataAsync<Student>();
+            await TestDatabase.ClearDataAsync<OrganizationalClass>();
+            await TestDatabase.ClearDataAsync<StudentRegisterRecord>();
         }
 
 
@@ -350,7 +352,12 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.AreEqual(json.firstParent.address, parent.Address);
 
             var secondParent = entity.SecondParent;
-            Assert.IsNotNull(secondParent);
+            if (secondParent is null)
+            {
+                Assert.IsNull(json.secondParent);
+                return;
+            }
+            Assert.IsNotNull(json.secondParent);
             Assert.AreEqual(json.secondParent.firstName, secondParent.FirstName);
             Assert.AreEqual(json.secondParent.secondName, secondParent.SecondName);
             Assert.AreEqual(json.secondParent.lastName, secondParent.LastName);

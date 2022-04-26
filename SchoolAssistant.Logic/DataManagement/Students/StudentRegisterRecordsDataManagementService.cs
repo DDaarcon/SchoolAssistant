@@ -52,12 +52,44 @@ namespace SchoolAssistant.Logic.DataManagement.Students
 
         public async Task<StudentRegisterRecordModificationDataJson?> GetModificationDataJsonAsync(long id)
         {
-            return null;
+            var record = await _repo.GetByIdAsync(id);
+            if (record is null)
+                return null;
+
+            return new StudentRegisterRecordModificationDataJson
+            {
+                data = new StudentRegisterRecordDetailsJson
+                {
+                    id = record.Id,
+                    firstName = record.FirstName,
+                    secondName = record.LastName,
+                    lastName = record.LastName,
+                    personalId = record.PersonalID,
+                    address = record.Address,
+                    dateOfBirth = record.DateOfBirth.ToString(),
+                    placeOfBirth = record.PlaceOfBirth,
+                    firstParent = CreateParentRegisterSubrecordDetailsJson(record.FirstParent),
+                    secondParent = record.SecondParent is not null
+                        ? CreateParentRegisterSubrecordDetailsJson(record.SecondParent)
+                        : null
+                }
+            };
         }
 
         public async Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
         {
             return null;
         }
+
+        private ParentRegisterSubrecordDetailsJson CreateParentRegisterSubrecordDetailsJson(ParentRegisterSubrecord entity)
+            => new ParentRegisterSubrecordDetailsJson
+            {
+                firstName = entity.FirstName,
+                secondName = entity.SecondName,
+                lastName = entity.LastName,
+                phoneNumber = entity.PhoneNumber,
+                address = entity.Address,
+                email = entity.Email
+            };
     }
 }
