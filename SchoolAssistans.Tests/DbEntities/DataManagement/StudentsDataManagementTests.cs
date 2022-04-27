@@ -15,12 +15,12 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class StudentsDataManagementTests
     {
-        private ISchoolYearService _schoolYearService;
-        private IStudentsDataManagementService _dataManagementService;
-        private IStudentRegisterRecordsDataManagementService _registerDataManagementService;
-        private IRepository<OrganizationalClass> _orgClassRepo;
-        private IRepository<Student> _studentRepo;
-        private IRepository<StudentRegisterRecord> _studentRegRepo;
+        private ISchoolYearService _schoolYearService = null!;
+        private IStudentsDataManagementService _dataManagementService = null!;
+        private IStudentRegisterRecordsDataManagementService _registerDataManagementService = null!;
+        private IRepository<OrganizationalClass> _orgClassRepo = null!;
+        private IRepository<Student> _studentRepo = null!;
+        private IRepository<StudentRegisterRecord> _studentRegRepo = null!;
 
 
 
@@ -33,7 +33,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
-            _dataManagementService = new StudentsDataManagementService(_orgClassRepo, _studentRepo);
 
             var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
             _schoolYearService = new SchoolYearService(yearRepo);
@@ -42,6 +41,11 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 _schoolYearService,
                 new ModifyStudentRegisterRecordFromJsonService(_studentRegRepo),
                 _studentRegRepo);
+
+            _dataManagementService = new StudentsDataManagementService(
+                _orgClassRepo,
+                _studentRepo,
+                _registerDataManagementService);
         }
 
         [OneTimeTearDown]
@@ -62,128 +66,40 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
         private SchoolYear Year => _schoolYearService.GetOrCreateCurrent();
 
-        private StudentRegisterRecord SampleStudentRegister1 => new StudentRegisterRecord
-        {
-            FirstName = "Jolek",
-            SecondName = "Karol",
-            LastName = "Wałek",
-            DateOfBirth = new DateTime(2000, 1, 18),
-            PlaceOfBirth = "Kraków",
-            PersonalID = "234567876543",
-            Address = "Warsaw ul.Pokątna 177",
-            FirstParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Grażyna",
-                LastName = "Wałek",
-                Address = "Warsaw ul.Pokątna 177",
-                PhoneNumber = "4738237938",
-                Email = "blablabla@ulululu.com"
-            }
-        };
-        private Student SampleStudent1 => new Student
-        {
-            SchoolYearId = Year.Id,
-            Info = SampleStudentRegister1,
-            NumberInJournal = 1
-        };
-
-        private StudentRegisterRecord SampleStudentRegister2 => new StudentRegisterRecord
-        {
-            FirstName = "Wolek",
-            SecondName = "Major",
-            LastName = "Nowak",
-            DateOfBirth = new DateTime(1999, 10, 18),
-            PlaceOfBirth = "Częstochowa",
-            PersonalID = "6134838139",
-            Address = "Warsaw ul.Ciekawa 17",
-            FirstParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Grażyna",
-                LastName = "Nowak",
-                Address = "Warsaw ul.Ciekawa 17",
-                PhoneNumber = "3647897128",
-                Email = "blablabla@ulululu.com"
-            },
-            SecondParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Mariusz",
-                LastName = "Nowak",
-                Address = "Warsaw ul.Ciekawa 17",
-                PhoneNumber = "21371289",
-                Email = "blablabla@ulululu.com"
-            }
-        };
-        private Student SampleStudent2 => new Student
-        {
-            SchoolYearId = Year.Id,
-            Info = SampleStudentRegister2,
-            NumberInJournal = 12
-        };
-
-
-        private async Task<OrganizationalClass> Add_3b_2_Students()
-        {
-            var orgClass = new OrganizationalClass
-            {
-                SchoolYearId = Year.Id,
-                Grade = 3,
-                Distinction = "b"
-            };
-
-            var std1 = SampleStudent1;
-            var std2 = SampleStudent2;
-
-            orgClass.Students.Add(std1);
-            orgClass.Students.Add(std2);
-
-
-            await _orgClassRepo.AddAsync(orgClass);
-            await _orgClassRepo.SaveAsync();
-
-            return orgClass;
-        }
-
-        private async Task<OrganizationalClass> Add_2g_Studentless()
-        {
-            var orgClass = new OrganizationalClass
-            {
-                SchoolYearId = Year.Id,
-                Grade = 2,
-                Distinction = "g"
-            };
-
-            await _orgClassRepo.AddAsync(orgClass);
-            await _orgClassRepo.SaveAsync();
-
-            return orgClass;
-        }
 
 
         [Test]
         public async Task Should_fetch_enties()
         {
-            var orgClass = await Add_3b_2_Students();
+            await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
+
+            var orgClass = await FakeData.Class_3b_27Students(
+                Year,
+                _orgClassRepo);
 
             var res = await _dataManagementService.GetEntriesJsonAsync(orgClass.Id);
 
             Assert.IsNotNull(res);
-            Assert.IsTrue(res.Length == 2);
+            Assert.IsTrue(res.Length == 27);
             Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.Id).Contains(x.id)));
             Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.NumberInJournal).Contains(x.numberInJournal)));
-            Assert.IsTrue(res.Any(x => x.name == SampleStudentRegister1.GetFullName()));
-            Assert.IsTrue(res.Any(x => x.name == SampleStudentRegister2.GetFullName()));
+            Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.Info.GetFullName()).Contains(x.name)));
         }
 
         [Test]
         public async Task Should_fetch_modification_data()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             var res = await _dataManagementService.GetModificationDataJsonAsync(student.Id);
 
             Assert.IsNotNull(res);
-            Assert.IsNotNull(res.data);
+            Assert.IsNotNull(res!.data);
             Assert.IsTrue(res.data.id == student.Id);
             Assert.IsTrue(res.data.numberInJournal == student.NumberInJournal);
             Assert.AreEqual(res.data.registerRecordId, student.InfoId);
@@ -192,11 +108,11 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_create_student()
         {
-            var orgClass = await Add_2g_Studentless();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
 
-            var regRecord = SampleStudentRegister1;
-            await _studentRegRepo.AddAsync(regRecord);
-            await _studentRegRepo.SaveAsync();
+            var regRecord = await FakeData.StudentRegisterRecord(_studentRegRepo);
 
             var model = new StudentDetailsJson
             {
@@ -211,17 +127,19 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsTrue(res.success);
 
             orgClass = await _orgClassRepo.GetByIdAsync(orgClass.Id);
-            var student = orgClass.Students.FirstOrDefault();
+            var student = orgClass!.Students.FirstOrDefault();
 
             Assert.IsNotNull(student);
-            Assert.AreEqual(model.registerRecordId, student.Info.Id);
+            Assert.AreEqual(model.registerRecordId, student!.Info.Id);
             Assert.AreEqual(model.numberInJournal, student.NumberInJournal);
         }
 
         [Test]
         public async Task Should_change_number_in_journal()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             int newNumber = student.NumberInJournal + 4;
@@ -247,8 +165,12 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_change_class()
         {
-            var orgClass1 = await Add_3b_2_Students();
-            var orgClass2 = await Add_2g_Studentless();
+            var orgClass1 = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
+            var orgClass2 = await FakeData.Class_3b_27Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass1.Students.First();
 
             var model = new StudentDetailsJson
@@ -274,7 +196,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_invalid_id()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -293,7 +217,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_invalid_class_id()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -312,7 +238,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_invalid_register_record_id()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -331,7 +259,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_missing_register_record_id()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -349,7 +279,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_missing_class()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -367,7 +299,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_taken_register_id()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.First();
             var student2 = orgClass.Students.Skip(1).First();
 
@@ -397,7 +331,8 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         {
             var res = await _dataManagementService.GetEntriesJsonAsync(9999);
 
-            Assert.IsNull(res);
+            Assert.IsNotNull(res);
+            Assert.IsEmpty(res);
         }
 
         public async Task Should_fail_missing_model()

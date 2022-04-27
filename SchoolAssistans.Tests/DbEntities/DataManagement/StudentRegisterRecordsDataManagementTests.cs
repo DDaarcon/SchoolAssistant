@@ -16,11 +16,11 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class StudentRegisterRecordsDataManagementTests
     {
-        private ISchoolYearService _schoolYearService;
-        private IStudentRegisterRecordsDataManagementService _registerDataManagementService;
-        private IRepository<Student> _studentRepo;
-        private IRepository<StudentRegisterRecord> _studentRegRepo;
-        private IRepository<OrganizationalClass> _orgClassRepo;
+        private ISchoolYearService _schoolYearService = null!;
+        private IStudentRegisterRecordsDataManagementService _registerDataManagementService = null!;
+        private IRepository<Student> _studentRepo = null!;
+        private IRepository<StudentRegisterRecord> _studentRegRepo = null!;
+        private IRepository<OrganizationalClass> _orgClassRepo = null!;
 
 
         [OneTimeSetUp]
@@ -60,120 +60,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
         private SchoolYear Year => _schoolYearService.GetOrCreateCurrent();
 
-        private StudentRegisterRecord SampleStudentRegister1 => new StudentRegisterRecord
-        {
-            FirstName = "Jolek",
-            SecondName = "Karol",
-            LastName = "Wałek",
-            DateOfBirth = new DateTime(2000, 1, 18),
-            PlaceOfBirth = "Kraków",
-            PersonalID = "234567876543",
-            Address = "Warsaw ul.Pokątna 177",
-            FirstParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Grażyna",
-                LastName = "Wałek",
-                Address = "Warsaw ul.Pokątna 177",
-                PhoneNumber = "4738237938",
-                Email = "blablabla@ulululu.com"
-            }
-        };
-        private Student SampleStudent1 => new Student
-        {
-            SchoolYearId = Year.Id,
-            Info = SampleStudentRegister1,
-            NumberInJournal = 1
-        };
-
-        private StudentRegisterRecord SampleStudentRegister2 => new StudentRegisterRecord
-        {
-            FirstName = "Wolek",
-            SecondName = "Major",
-            LastName = "Nowak",
-            DateOfBirth = new DateTime(1999, 10, 18),
-            PlaceOfBirth = "Częstochowa",
-            PersonalID = "6134838139",
-            Address = "Warsaw ul.Ciekawa 17",
-            FirstParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Grażyna",
-                LastName = "Nowak",
-                Address = "Warsaw ul.Ciekawa 17",
-                PhoneNumber = "3647897128",
-                Email = "blablabla@ulululu.com"
-            },
-            SecondParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Mariusz",
-                LastName = "Nowak",
-                Address = "Warsaw ul.Ciekawa 17",
-                PhoneNumber = "21371289",
-                Email = "blablabla@ulululu.com"
-            }
-        };
-        private Student SampleStudent2 => new Student
-        {
-            SchoolYearId = Year.Id,
-            Info = SampleStudentRegister2,
-            NumberInJournal = 12
-        };
-
-        private StudentRegisterRecord SampleStudentRegister3 => new StudentRegisterRecord
-        {
-            FirstName = "Fiufiu",
-            LastName = "Krychowiak",
-            DateOfBirth = new DateTime(1999, 10, 18),
-            PlaceOfBirth = "Londyn",
-            PersonalID = "6134838139",
-            Address = "Warsaw ul.Ciekawa 150",
-            FirstParent = new ParentRegisterSubrecord
-            {
-                FirstName = "Milena",
-                LastName = "Krychowiak",
-                Address = "Warsaw ul.Ciekawa 150",
-                PhoneNumber = "458739123",
-                Email = "trututu@lalala.com"
-            },
-        };
-
-
-        private async Task<OrganizationalClass> Add_3b_2_Students()
-        {
-            var orgClass = new OrganizationalClass
-            {
-                SchoolYearId = Year.Id,
-                Grade = 3,
-                Distinction = "b"
-            };
-
-            var std1 = SampleStudent1;
-            var std2 = SampleStudent2;
-
-            orgClass.Students.Add(std1);
-            orgClass.Students.Add(std2);
-
-
-            await _orgClassRepo.AddAsync(orgClass);
-            await _orgClassRepo.SaveAsync();
-
-            return orgClass;
-        }
-
-        private async Task<OrganizationalClass> Add_2g_Studentless()
-        {
-            var orgClass = new OrganizationalClass
-            {
-                SchoolYearId = Year.Id,
-                Grade = 2,
-                Distinction = "g"
-            };
-
-            await _orgClassRepo.AddAsync(orgClass);
-            await _orgClassRepo.SaveAsync();
-
-            return orgClass;
-        }
-
         private StudentRegisterRecordDetailsJson SampleValidStudentRegisterDetailsJson => new StudentRegisterRecordDetailsJson
         {
             firstName = "Mateusz",
@@ -206,37 +92,47 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fetch_enties_1()
         {
-            var orgClass = await Add_3b_2_Students();
+            await FakeData.Class_3b_27Students(
+                Year,
+                _orgClassRepo);
+            await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
+
+            for (int i = 0; i < 5; i++)
+                await FakeData.StudentRegisterRecord(_studentRegRepo);
 
             var res = await _registerDataManagementService.GetEntriesJsonAsync();
 
             Assert.IsNotNull(res);
-            Assert.IsTrue(res.Length == 2);
-            Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.InfoId).Contains(x.id)));
-            Assert.IsTrue(res.All(x => orgClass.Students.Select(x => x.Info.GetFullName()).Contains(x.name)));
-            Assert.IsTrue(res.All(x => x.className == orgClass.Name));
+            Assert.IsTrue(res.Length == 27 + 15 + 5);
         }
 
         [Test]
         public async Task Should_fetch_enties_correct_order()
         {
-            var orgClass = await Add_3b_2_Students();
-            await _studentRegRepo.AddAsync(SampleStudentRegister3);
-            await _studentRegRepo.SaveAsync();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
+
+            var std1 = await FakeData.StudentRegisterRecord(_studentRegRepo,
+                "Aaron", "Afuk");
+            var std2 = await FakeData.StudentRegisterRecord(_studentRegRepo,
+                lastName: "Benx");
+            var std3 = await FakeData.StudentRegisterRecord(_studentRegRepo,
+                lastName: "Zertan");
 
             var res = await _registerDataManagementService.GetEntriesJsonAsync();
 
             Assert.IsNotNull(res);
-            Assert.IsTrue(res.Length == 3);
+            Assert.IsTrue(res.Length == 15 + 3);
 
             var expected = new List<StudentRegisterRecord>
             {
-                SampleStudentRegister3,
-                SampleStudentRegister2,
-                SampleStudentRegister1
-            };
+                std1, std2, std3
+            }.Concat(orgClass.Students.Select(x => x.Info).OrderBy(x => x.LastName)).ToList();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 15 + 3; i++)
             {
                 Assert.AreEqual(expected[i].GetFullName(), res[i].name);
             }
@@ -245,13 +141,15 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fetch_modification_data()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var record = orgClass.Students.First().Info;
 
             var res = await _registerDataManagementService.GetModificationDataJsonAsync(record.Id);
 
             Assert.IsNotNull(res);
-            Assert.IsNotNull(res.data);
+            Assert.IsNotNull(res!.data);
             Assert.IsTrue(res.data.id == record.Id);
 
             Validate(record, res.data);
@@ -286,13 +184,15 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             var registerRec = await _studentRegRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == model.firstName && x.LastName == model.lastName);
 
-            Validate(registerRec, model);
+            Validate(registerRec!, model);
         }
 
         [Test]
         public async Task Should_update_register_record_and_add_second_parent()
         {
-            var orgClass = await Add_3b_2_Students();
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
             var student = orgClass.Students.Where(x => x.Info.SecondParent is not null).First();
 
             var model = new StudentRegisterRecordDetailsJson
@@ -330,7 +230,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             var registerRec = await _studentRegRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == model.firstName && x.LastName == model.lastName);
 
-            Validate(registerRec, model);
+            Validate(registerRec!, model);
         }
 
 
@@ -361,7 +261,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 return;
             }
             Assert.IsNotNull(json.secondParent);
-            Assert.AreEqual(json.secondParent.firstName, secondParent.FirstName);
+            Assert.AreEqual(json.secondParent!.firstName, secondParent.FirstName);
             Assert.AreEqual(json.secondParent.secondName, secondParent.SecondName);
             Assert.AreEqual(json.secondParent.lastName, secondParent.LastName);
             Assert.AreEqual(json.secondParent.phoneNumber, secondParent.PhoneNumber);
@@ -551,11 +451,10 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fail_existing_personal_id()
         {
-            await _studentRegRepo.AddAsync(SampleStudentRegister1);
-            await _studentRegRepo.SaveAsync();
+            var student = await FakeData.StudentRegisterRecord(_studentRegRepo);
 
             var model = SampleValidStudentRegisterDetailsJson;
-            model.personalId = SampleStudentRegister1.PersonalID;
+            model.personalId = student.PersonalID;
 
             var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
 
