@@ -1,4 +1,5 @@
-﻿using SchoolAssistant.DAL.Models.StudentsParents;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Students;
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
@@ -88,6 +89,12 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             if (String.IsNullOrWhiteSpace(_model.personalId))
             {
                 _response.message = "Brakuje numeru identyfikacyjnego";
+                return false;
+            }
+
+            if (await _repo.AsQueryable().AnyAsync(x => x.PersonalID == _model.personalId))
+            {
+                _response.message = "Istnieje już uczeń z tym numerem identyfikacyjnym";
                 return false;
             }
 

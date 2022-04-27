@@ -121,7 +121,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         };
 
 
-        private async Task<OrganizationalClass> Add_3b_2_Students_Async()
+        private async Task<OrganizationalClass> Add_3b_2_Students()
         {
             var orgClass = new OrganizationalClass
             {
@@ -143,7 +143,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             return orgClass;
         }
 
-        private async Task<OrganizationalClass> Add_2g_Studentless_Async()
+        private async Task<OrganizationalClass> Add_2g_Studentless()
         {
             var orgClass = new OrganizationalClass
             {
@@ -160,9 +160,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
 
         [Test]
-        public async Task Should_fetch_enties_async()
+        public async Task Should_fetch_enties()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
 
             var res = await _dataManagementService.GetEntriesJsonAsync(orgClass.Id);
 
@@ -175,9 +175,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fetch_modification_data_async()
+        public async Task Should_fetch_modification_data()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             var res = await _dataManagementService.GetModificationDataJsonAsync(student.Id);
@@ -190,9 +190,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_create_student_async()
+        public async Task Should_create_student()
         {
-            var orgClass = await Add_2g_Studentless_Async();
+            var orgClass = await Add_2g_Studentless();
 
             var regRecord = SampleStudentRegister1;
             await _studentRegRepo.AddAsync(regRecord);
@@ -219,9 +219,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_change_number_in_journal_async()
+        public async Task Should_change_number_in_journal()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             int newNumber = student.NumberInJournal + 4;
@@ -245,10 +245,10 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_change_class_async()
+        public async Task Should_change_class()
         {
-            var orgClass1 = await Add_3b_2_Students_Async();
-            var orgClass2 = await Add_2g_Studentless_Async();
+            var orgClass1 = await Add_3b_2_Students();
+            var orgClass2 = await Add_2g_Studentless();
             var student = orgClass1.Students.First();
 
             var model = new StudentDetailsJson
@@ -272,9 +272,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         #region Fails
 
         [Test]
-        public async Task Should_fail_invalid_id_async()
+        public async Task Should_fail_invalid_id()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -291,9 +291,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_invalid_class_id_async()
+        public async Task Should_fail_invalid_class_id()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -310,9 +310,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_invalid_register_record_id_async()
+        public async Task Should_fail_invalid_register_record_id()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -329,9 +329,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_missing_register_record_id_async()
+        public async Task Should_fail_missing_register_record_id()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -347,9 +347,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_missing_class_async()
+        public async Task Should_fail_missing_class()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
 
             var model = new StudentDetailsJson
@@ -365,9 +365,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_taken_register_id_async()
+        public async Task Should_fail_taken_register_id()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.First();
             var student2 = orgClass.Students.Skip(1).First();
 
@@ -385,7 +385,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_fetch_modify_data_invalid_id_async()
+        public async Task Should_fail_fetch_modify_data_invalid_id()
         {
             var res = await _dataManagementService.GetModificationDataJsonAsync(9999);
 
@@ -393,11 +393,19 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_fetch_entries_invaid_class_id_async()
+        public async Task Should_fail_fetch_entries_invaid_class_id()
         {
             var res = await _dataManagementService.GetEntriesJsonAsync(9999);
 
             Assert.IsNull(res);
+        }
+
+        public async Task Should_fail_missing_model()
+        {
+            var res = await _dataManagementService.CreateOrUpdateAsync(null!);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
         }
 
         #endregion

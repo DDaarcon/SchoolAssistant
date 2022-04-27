@@ -137,7 +137,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         };
 
 
-        private async Task<OrganizationalClass> Add_3b_2_Students_Async()
+        private async Task<OrganizationalClass> Add_3b_2_Students()
         {
             var orgClass = new OrganizationalClass
             {
@@ -159,7 +159,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             return orgClass;
         }
 
-        private async Task<OrganizationalClass> Add_2g_Studentless_Async()
+        private async Task<OrganizationalClass> Add_2g_Studentless()
         {
             var orgClass = new OrganizationalClass
             {
@@ -204,9 +204,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
 
         [Test]
-        public async Task Should_fetch_enties_1_async()
+        public async Task Should_fetch_enties_1()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
 
             var res = await _registerDataManagementService.GetEntriesJsonAsync();
 
@@ -218,9 +218,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fetch_enties_correct_order_async()
+        public async Task Should_fetch_enties_correct_order()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             await _studentRegRepo.AddAsync(SampleStudentRegister3);
             await _studentRegRepo.SaveAsync();
 
@@ -243,9 +243,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fetch_modification_data_async()
+        public async Task Should_fetch_modification_data()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var record = orgClass.Students.First().Info;
 
             var res = await _registerDataManagementService.GetModificationDataJsonAsync(record.Id);
@@ -258,7 +258,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_create_register_record_async()
+        public async Task Should_create_register_record()
         {
             var model = new StudentRegisterRecordDetailsJson
             {
@@ -290,9 +290,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_update_register_record_and_add_second_parent_async()
+        public async Task Should_update_register_record_and_add_second_parent()
         {
-            var orgClass = await Add_3b_2_Students_Async();
+            var orgClass = await Add_3b_2_Students();
             var student = orgClass.Students.Where(x => x.Info.SecondParent is not null).First();
 
             var model = new StudentRegisterRecordDetailsJson
@@ -532,6 +532,30 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         {
             var model = SampleValidStudentRegisterDetailsJson;
             model.firstParent.email = "not valid email";
+
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_model()
+        {
+            var res = await _registerDataManagementService.CreateOrUpdateAsync(null!);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_existing_personal_id()
+        {
+            await _studentRegRepo.AddAsync(SampleStudentRegister1);
+            await _studentRegRepo.SaveAsync();
+
+            var model = SampleValidStudentRegisterDetailsJson;
+            model.personalId = SampleStudentRegister1.PersonalID;
 
             var res = await _registerDataManagementService.CreateOrUpdateAsync(model);
 
