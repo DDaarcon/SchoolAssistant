@@ -8,55 +8,107 @@ namespace SchoolAssistant.DAL.Repositories
     public interface IRepositoryBySchoolYear<TSchoolYearDbEntity> : IRepository<TSchoolYearDbEntity>
         where TSchoolYearDbEntity : SchoolYearDbEntity
     {
-        IList<TSchoolYearDbEntity> AsListByCurrentSchoolYear();
-        Task<List<TSchoolYearDbEntity>> AsListByCurrentSchoolYearAsync();
-        IList<TSchoolYearDbEntity> AsListBySchoolYear(SchoolYear semester);
-        IList<TSchoolYearDbEntity> AsListBySchoolYear(long semesterId);
-        Task<List<TSchoolYearDbEntity>> AsListBySchoolYearAsync(SchoolYear semester);
-        Task<List<TSchoolYearDbEntity>> AsListBySchoolYearAsync(long semesterId);
+        RepositoryBySchoolYear<TSchoolYearDbEntity>.SchoolYearOperations<List<TSchoolYearDbEntity>> AsListByYear { get; init; }
+        RepositoryBySchoolYear<TSchoolYearDbEntity>.SchoolYearOperations<IQueryable<TSchoolYearDbEntity>> AsQueryableByYear { get; init; }
+
+        void SelectYear(SchoolYear year);
     }
 
     [Injectable(typeof(IRepositoryBySchoolYear<>))]
     public class RepositoryBySchoolYear<TSchoolYearDbEntity> : Repository<TSchoolYearDbEntity>, IRepositoryBySchoolYear<TSchoolYearDbEntity>
         where TSchoolYearDbEntity : SchoolYearDbEntity
     {
-        protected readonly ISchoolYearService _semesterSvc;
+        protected readonly ISchoolYearService _schoolYearSvc;
+
+        protected SchoolYear? _selectedYear;
 
         public RepositoryBySchoolYear(
             SADbContext context,
             IServiceScopeFactory scopeFactory,
             ISchoolYearService semesterSvc) : base(context, scopeFactory)
         {
-            _semesterSvc = semesterSvc;
+            _schoolYearSvc = semesterSvc;
+
+            AsListByYear = new SchoolYearOperations<List<TSchoolYearDbEntity>>(
+                _schoolYearSvc,
+                () => _Repo,
+                () => _selectedYear,
+                (query) => query.ToList(),
+                (query) => query.ToListAsync());
+
+            AsQueryableByYear = new SchoolYearOperations<IQueryable<TSchoolYearDbEntity>>(
+                _schoolYearSvc,
+                () => _Repo,
+                () => _selectedYear,
+                (query) => query,
+                (query) => Task.FromResult(query));
         }
 
-        public IList<TSchoolYearDbEntity> AsListByCurrentSchoolYear()
-        {
-            var curSemester = _semesterSvc.GetOrCreateCurrent();
-            return AsListBySchoolYear(curSemester);
-        }
-        public IList<TSchoolYearDbEntity> AsListBySchoolYear(SchoolYear semester)
-        {
-            return AsListBySchoolYear(semester.Id);
-        }
-        public IList<TSchoolYearDbEntity> AsListBySchoolYear(long semesterId)
-        {
-            return _Repo.Where(x => x.SchoolYearId == semesterId).ToList();
-        }
+
+        public void SelectYear(SchoolYear year)
+            => _selectedYear = year;
 
 
-        public async Task<List<TSchoolYearDbEntity>> AsListByCurrentSchoolYearAsync()
+        public SchoolYearOperations<List<TSchoolYearDbEntity>> AsListByYear { get; init; }
+
+        public SchoolYearOperations<IQueryable<TSchoolYearDbEntity>> AsQueryableByYear { get; init; }
+
+
+
+        public class SchoolYearOperations<TResult>
         {
-            var curSemester = await _semesterSvc.GetOrCreateCurrentAsync();
-            return await AsListBySchoolYearAsync(curSemester);
-        }
-        public Task<List<TSchoolYearDbEntity>> AsListBySchoolYearAsync(SchoolYear semester)
-        {
-            return AsListBySchoolYearAsync(semester.Id);
-        }
-        public Task<List<TSchoolYearDbEntity>> AsListBySchoolYearAsync(long semesterId)
-        {
-            return _Repo.Where(x => x.SchoolYearId == semesterId).ToListAsync();
+            readonly ISchoolYearService _schoolYearSvc;
+
+            readonly Func<DbSet<TSchoolYearDbEntity>> _getRepo;
+            readonly Func<SchoolYear?> _getSelectedYear;
+
+            readonly Func<IQueryable<TSchoolYearDbEntity>, TResult> _resolver;
+            readonly Func<IQueryable<TSchoolYearDbEntity>, Task<TResult>> _asyncResolver;
+
+
+            private DbSet<TSchoolYearDbEntity> _Repo => _getRepo();
+            private SchoolYear? _SelectedYear => _getSelectedYear();
+
+            public SchoolYearOperations(
+                ISchoolYearService schoolYearSvc,
+                Func<DbSet<TSchoolYearDbEntity>> getRepo,
+                Func<SchoolYear?> getSelectedYear,
+                Func<IQueryable<TSchoolYearDbEntity>, TResult> resolver,
+                Func<IQueryable<TSchoolYearDbEntity>, Task<TResult>> asyncResolver)
+            {
+                _getRepo = getRepo;
+                _getSelectedYear = getSelectedYear;
+                _resolver = resolver;
+                _asyncResolver = asyncResolver;
+                _schoolYearSvc = schoolYearSvc;
+            }
+
+            public TResult ByCurrent()
+            {
+                var curSemester = _schoolYearSvc.GetOrCreateCurrent();
+                return By(curSemester);
+            }
+            public TResult By(SchoolYear semester)
+                => By(semester.Id);
+            public TResult By(long semesterId)
+                => _resolver(_Repo.Where(x => x.SchoolYearId == semesterId));
+
+
+            public async Task<TResult> ByCurrentAsync()
+            {
+                var curSemester = await _schoolYearSvc.GetOrCreateCurrentAsync();
+                return await ByAsync(curSemester);
+            }
+            public Task<TResult> ByAsync(SchoolYear semester)
+                => ByAsync(semester.Id);
+            public Task<TResult> ByAsync(long semesterId)
+                => _asyncResolver(_Repo.Where(x => x.SchoolYearId == semesterId));
+
+
+            public TResult BySelected()
+                => By(_SelectedYear?.Id ?? 0);
+            public Task<TResult> BySelectedAsync()
+                => ByAsync(_SelectedYear?.Id ?? 0);
         }
     }
 }
