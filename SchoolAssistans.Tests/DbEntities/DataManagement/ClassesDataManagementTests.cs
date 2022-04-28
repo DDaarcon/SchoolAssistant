@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Classes;
@@ -10,9 +9,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class ClassesDataManagementTests
     {
-        private ISchoolYearService _schoolYearService;
-        private IClassDataManagementService _classDataManagementService;
-        private IRepository<OrganizationalClass> _organizationalClassRepository;
+        private ISchoolYearRepository _schoolYearService = null!;
+        private IClassDataManagementService _classDataManagementService = null!;
+        private IRepository<OrganizationalClass> _organizationalClassRepository = null!;
 
         [OneTimeSetUp]
         public void Setup()
@@ -20,8 +19,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             TestDatabase.CreateContext(TestServices.Collection);
 
             _organizationalClassRepository = new Repository<OrganizationalClass>(TestDatabase.Context, null);
-            var schoolYearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
-            _schoolYearService = new SchoolYearService(schoolYearRepo);
+            _schoolYearService = new SchoolYearRepository(TestDatabase.Context, null);
 
             var modifyClassesJsonSvc = new ModifyClassFromJsonService(_organizationalClassRepository, _schoolYearService);
 
@@ -147,7 +145,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var res = await _classDataManagementService.GetModificationDataJsonAsync(orgCl.Id);
 
             Assert.IsNotNull(res);
-            Assert.IsNotNull(res.data);
+            Assert.IsNotNull(res!.data);
             Assert.AreEqual(res.data.id, orgCl.Id);
             Assert.AreEqual(res.data.grade, orgCl.Grade);
             Assert.AreEqual(res.data.distinction, orgCl.Distinction);

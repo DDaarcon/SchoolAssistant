@@ -16,7 +16,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class StudentRegisterRecordsDataManagementTests
     {
-        private ISchoolYearService _schoolYearService = null!;
+        private ISchoolYearRepository _schoolYearService = null!;
         private IStudentRegisterRecordsDataManagementService _registerDataManagementService = null!;
         private IRepository<Student> _studentRepo = null!;
         private IRepository<StudentRegisterRecord> _studentRegRepo = null!;
@@ -32,9 +32,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
-
-            var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
-            _schoolYearService = new SchoolYearService(yearRepo);
+            _schoolYearService = new SchoolYearRepository(TestDatabase.Context, null);
 
             _registerDataManagementService = new StudentRegisterRecordsDataManagementService(
                 _schoolYearService,

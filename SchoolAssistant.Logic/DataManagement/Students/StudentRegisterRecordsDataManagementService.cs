@@ -16,12 +16,12 @@ namespace SchoolAssistant.Logic.DataManagement.Students
     [Injectable]
     public class StudentRegisterRecordsDataManagementService : IStudentRegisterRecordsDataManagementService
     {
-        private readonly ISchoolYearService _schoolYearService;
+        private readonly ISchoolYearRepository _schoolYearService;
         private readonly IModifyStudentRegisterRecordFromJsonService _modifyFromJsonService;
         private readonly IRepository<StudentRegisterRecord> _repo;
 
         public StudentRegisterRecordsDataManagementService(
-            ISchoolYearService schoolYearService,
+            ISchoolYearRepository schoolYearService,
             IModifyStudentRegisterRecordFromJsonService modifyFromJsonService,
             IRepository<StudentRegisterRecord> repo)
         {

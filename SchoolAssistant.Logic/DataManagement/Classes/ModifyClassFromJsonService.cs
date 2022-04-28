@@ -15,7 +15,7 @@ namespace SchoolAssistant.Logic.DataManagement.Classes
     public class ModifyClassFromJsonService : IModifyClassFromJsonService
     {
         private readonly IRepository<OrganizationalClass> _repo;
-        private readonly ISchoolYearService _yearSvc;
+        private readonly ISchoolYearRepository _yearSvc;
 
         private OrganizationalClass _entity = null!;
         private ClassDetailsJson _model = null!;
@@ -23,7 +23,7 @@ namespace SchoolAssistant.Logic.DataManagement.Classes
 
         public ModifyClassFromJsonService(
             IRepository<OrganizationalClass> repo,
-            ISchoolYearService yearSvc)
+            ISchoolYearRepository yearSvc)
         {
             _repo = repo;
             _yearSvc = yearSvc;

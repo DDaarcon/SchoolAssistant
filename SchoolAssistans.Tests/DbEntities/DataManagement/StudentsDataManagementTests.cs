@@ -15,7 +15,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class StudentsDataManagementTests
     {
-        private ISchoolYearService _schoolYearService = null!;
+        private ISchoolYearRepository _schoolYearRepo = null!;
         private IStudentsDataManagementService _dataManagementService = null!;
         private IStudentRegisterRecordsDataManagementService _registerDataManagementService = null!;
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
@@ -34,11 +34,10 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
 
-            var yearRepo = new Repository<SchoolYear>(TestDatabase.Context, null);
-            _schoolYearService = new SchoolYearService(yearRepo);
+            _schoolYearRepo = new SchoolYearRepository(TestDatabase.Context, null);
 
             _registerDataManagementService = new StudentRegisterRecordsDataManagementService(
-                _schoolYearService,
+                _schoolYearRepo,
                 new ModifyStudentRegisterRecordFromJsonService(_studentRegRepo),
                 _studentRegRepo);
 
@@ -64,7 +63,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             await TestDatabase.ClearDataAsync<OrganizationalClass>();
         }
 
-        private SchoolYear Year => _schoolYearService.GetOrCreateCurrent();
+        private SchoolYear Year => _schoolYearRepo.GetOrCreateCurrent();
 
 
 
@@ -165,17 +164,14 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_change_class()
         {
-            var orgClass1 = await FakeData.Class_2a_Mechanics_15Students(
-                Year,
-                _orgClassRepo);
-            var orgClass2 = await FakeData.Class_3b_27Students(
-                Year,
-                _orgClassRepo);
+            var orgClass1 = await FakeData.Class_2a_Mechanics_15Students(Year, _orgClassRepo);
+            var orgClass2 = await FakeData.Class_3b_27Students(Year, _orgClassRepo);
             var student = orgClass1.Students.First();
 
             var model = new StudentDetailsJson
             {
                 id = student.Id,
+                numberInJournal = GetMaxNumberInJournal(orgClass2) + 1,
                 organizationalClassId = orgClass2.Id,
                 registerRecordId = student.Info.Id
             };
@@ -188,6 +184,97 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             student = orgClass2.Students.FirstOrDefault(x => x.Id == student.Id);
 
             Assert.IsNotNull(student);
+        }
+
+        [Test]
+        public async Task Should_remove_existing_student_in_the_same_year()
+        {
+            var orgClass1 = await FakeData.Class_2a_Mechanics_15Students(Year, _orgClassRepo);
+            var orgClass2 = await FakeData.Class_3b_27Students(Year, _orgClassRepo);
+            var student = orgClass1.Students.First(x => x.NumberInJournal == 5);
+
+            int number = GetMaxNumberInJournal(orgClass2) + 1;
+            long recordId = student.Info.Id;
+
+            var model = new StudentDetailsJson
+            {
+                numberInJournal = number,
+                organizationalClassId = orgClass2.Id,
+                registerRecordId = recordId
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsTrue(res.success);
+
+            student = orgClass1.Students.FirstOrDefault(x => x.NumberInJournal == 5);
+            Assert.IsNull(student);
+
+            student = orgClass1.Students.FirstOrDefault(x => x.NumberInJournal == number);
+            Assert.IsNotNull(student);
+            Assert.AreEqual(student!.InfoId, recordId);
+        }
+
+        [Test]
+        public async Task Should_not_remove_existing_student_in_different_year()
+        {
+            var orgClass1 = await FakeData.Class_2a_Mechanics_15Students(Year, _orgClassRepo);
+            var student = orgClass1.Students.First(x => x.NumberInJournal == 5);
+
+            var diffYear = await _schoolYearRepo.GetOrCreateAsync(Year.Year - 1);
+            var orgClass2 = await FakeData.Class_3b_27Students(diffYear, _orgClassRepo);
+
+            int number = GetMaxNumberInJournal(orgClass2) + 1;
+            long recordId = student.Info.Id;
+
+            var model = new StudentDetailsJson
+            {
+                numberInJournal = 5,
+                organizationalClassId = orgClass2.Id,
+                registerRecordId = recordId
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsTrue(res.success);
+
+            var record = await _studentRegRepo.GetByIdAsync(recordId);
+            Assert.IsNotNull(record);
+            Assert.AreEqual(record!.StudentInstances.Count, 2);
+        }
+
+        [Test]
+        public async Task Should_move_numbers_in_journal_up()
+        {
+            var orgClass = await FakeData.Class_3b_27Students(Year, _orgClassRepo);
+            var names = orgClass.Students
+                .OrderBy(x => x.NumberInJournal)
+                .Select(x => x.Info.GetFullName()).ToList();
+
+            var record = await FakeData.StudentRegisterRecord(_studentRegRepo);
+
+            var model = new StudentDetailsJson
+            {
+                numberInJournal = 5,
+                organizationalClassId = orgClass.Id,
+                registerRecordId = record.Id
+            };
+
+            names.Insert(4, record.GetFullName());
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsTrue(res.success);
+
+            var newNames = orgClass.Students
+                .OrderBy(x => x.NumberInJournal)
+                .Select(x => x.Info.GetFullName()).ToArray();
+
+            for (int i = 0; i < names.Count; i++)
+                Assert.AreEqual(names[i], newNames[i]);
         }
 
 
@@ -204,6 +291,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var model = new StudentDetailsJson
             {
                 id = 9999,
+                numberInJournal = student.NumberInJournal,
                 organizationalClassId = orgClass.Id,
                 registerRecordId = student.Info.Id
             };
@@ -225,6 +313,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var model = new StudentDetailsJson
             {
                 id = student.Id,
+                numberInJournal = student.NumberInJournal,
                 organizationalClassId = 9999,
                 registerRecordId = student.Info.Id
             };
@@ -246,6 +335,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var model = new StudentDetailsJson
             {
                 id = student.Id,
+                numberInJournal = student.NumberInJournal,
                 organizationalClassId = orgClass.Id,
                 registerRecordId = 9999
             };
@@ -267,6 +357,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var model = new StudentDetailsJson
             {
                 id = student.Id,
+                numberInJournal = student.NumberInJournal,
                 organizationalClassId = orgClass.Id
             };
 
@@ -287,6 +378,28 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var model = new StudentDetailsJson
             {
                 id = student.Id,
+                numberInJournal = student.NumberInJournal,
+                registerRecordId = student.Info.Id
+            };
+
+            var res = await _dataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res.success);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_numberInJournal()
+        {
+            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
+                Year,
+                _orgClassRepo);
+            var student = orgClass.Students.First();
+
+            var model = new StudentDetailsJson
+            {
+                id = student.Id,
+                organizationalClassId = orgClass.Id,
                 registerRecordId = student.Info.Id
             };
 
@@ -308,6 +421,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var model = new StudentDetailsJson
             {
                 id = student.Id,
+                numberInJournal = student.NumberInJournal,
                 organizationalClassId = orgClass.Id,
                 registerRecordId = student2.Info.Id
             };
@@ -335,6 +449,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsEmpty(res);
         }
 
+        [Test]
         public async Task Should_fail_missing_model()
         {
             var res = await _dataManagementService.CreateOrUpdateAsync(null!);
@@ -344,5 +459,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         #endregion
+
+
+        private int GetMaxNumberInJournal(OrganizationalClass orgClass)
+            => orgClass.Students.Max(x => x.NumberInJournal);
     }
 }

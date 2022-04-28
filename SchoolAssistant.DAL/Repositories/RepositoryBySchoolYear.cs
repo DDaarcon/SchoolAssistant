@@ -18,14 +18,14 @@ namespace SchoolAssistant.DAL.Repositories
     public class RepositoryBySchoolYear<TSchoolYearDbEntity> : Repository<TSchoolYearDbEntity>, IRepositoryBySchoolYear<TSchoolYearDbEntity>
         where TSchoolYearDbEntity : SchoolYearDbEntity
     {
-        protected readonly ISchoolYearService _schoolYearSvc;
+        protected readonly ISchoolYearRepository _schoolYearSvc;
 
         protected SchoolYear? _selectedYear;
 
         public RepositoryBySchoolYear(
             SADbContext context,
             IServiceScopeFactory scopeFactory,
-            ISchoolYearService semesterSvc) : base(context, scopeFactory)
+            ISchoolYearRepository semesterSvc) : base(context, scopeFactory)
         {
             _schoolYearSvc = semesterSvc;
 
@@ -57,7 +57,7 @@ namespace SchoolAssistant.DAL.Repositories
 
         public class SchoolYearOperations<TResult>
         {
-            readonly ISchoolYearService _schoolYearSvc;
+            readonly ISchoolYearRepository _schoolYearSvc;
 
             readonly Func<DbSet<TSchoolYearDbEntity>> _getRepo;
             readonly Func<SchoolYear?> _getSelectedYear;
@@ -70,7 +70,7 @@ namespace SchoolAssistant.DAL.Repositories
             private SchoolYear? _SelectedYear => _getSelectedYear();
 
             public SchoolYearOperations(
-                ISchoolYearService schoolYearSvc,
+                ISchoolYearRepository schoolYearSvc,
                 Func<DbSet<TSchoolYearDbEntity>> getRepo,
                 Func<SchoolYear?> getSelectedYear,
                 Func<IQueryable<TSchoolYearDbEntity>, TResult> resolver,
