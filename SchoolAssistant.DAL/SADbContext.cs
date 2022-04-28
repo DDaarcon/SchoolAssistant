@@ -52,6 +52,8 @@ namespace SchoolAssistant.DAL
 
             new StudentConfiguration().Configure(builder.Entity<Student>());
             new ParentConfiguration().Configure(builder.Entity<Parent>());
+
+            new StudentRegisterRecordConfiguration().Configure(builder.Entity<StudentRegisterRecord>());
         }
     }
 }

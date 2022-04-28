@@ -50,7 +50,7 @@ namespace SchoolAssistans.Tests.DbEntities
                             FirstName = "kokoa",
                             LastName = "dajsdiaudna",
                             Address = "dadawd",
-                            DateOfBirth = DateTime.Today,
+                            DateOfBirth = DateOnly.FromDateTime(DateTime.Today),
                             PersonalID = "dasdasdas",
                             PlaceOfBirth = "dadasdasd",
                             FirstParent = new ParentRegisterSubrecord

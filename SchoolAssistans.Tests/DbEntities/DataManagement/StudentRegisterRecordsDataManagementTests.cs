@@ -37,7 +37,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _schoolYearService = new SchoolYearService(yearRepo);
 
             _registerDataManagementService = new StudentRegisterRecordsDataManagementService(
-                _schoolYearService, 
+                _schoolYearService,
                 new ModifyStudentRegisterRecordFromJsonService(_studentRegRepo),
                 _studentRegRepo);
         }
@@ -243,7 +243,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.AreEqual(json.placeOfBirth, entity.PlaceOfBirth);
             Assert.AreEqual(json.personalId, entity.PersonalID);
             Assert.AreEqual(json.address, entity.Address);
-            var date = DateTime.Parse(json.dateOfBirth).Date;
+            var date = DateOnly.Parse(json.dateOfBirth);
             Assert.AreEqual(date, entity.DateOfBirth);
 
             var parent = entity.FirstParent;

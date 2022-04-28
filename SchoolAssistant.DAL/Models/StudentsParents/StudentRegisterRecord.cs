@@ -9,7 +9,7 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
         public string? SecondName { get; set; } = null!;
         public string LastName { get; set; } = null!;
 
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
         public string PlaceOfBirth { get; set; } = null!;
 
         /// <summary> e.g. PESEL, ID (card) number </summary>

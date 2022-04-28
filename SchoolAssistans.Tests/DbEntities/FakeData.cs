@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
+using System;
+using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
@@ -28,7 +25,7 @@ namespace SchoolAssistans.Tests.DbEntities
             .RuleFor(x => x.PlaceOfBirth, f => f.Address.City())
             .RuleFor(x => x.PersonalID, f => f.UniqueIndex.ToString())
             .RuleFor(x => x.Address, f => f.Address.FullAddress())
-            .RuleFor(x => x.DateOfBirth, f => f.Date.BetweenDateOnly(new DateOnly(2002, 1, 1), new DateOnly(2010, 12, 31)).ToDateTime(new TimeOnly()))
+            .RuleFor(x => x.DateOfBirth, f => f.Date.BetweenDateOnly(new DateOnly(2002, 1, 1), new DateOnly(2010, 12, 31)))
             .RuleFor(x => x.FirstParent, (f, reg) =>
             {
                 var parentFaker = _ParentRegisterSubrecordFaker

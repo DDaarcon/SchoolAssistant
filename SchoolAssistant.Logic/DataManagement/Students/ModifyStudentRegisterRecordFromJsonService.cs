@@ -80,7 +80,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             }
 
             if (String.IsNullOrEmpty(_model.dateOfBirth)
-                || !DateTime.TryParse(_model.dateOfBirth, out _))
+                || !DateOnly.TryParse(_model.dateOfBirth, out _))
             {
                 _response.message = "Nieprawidłowa data urodzenia";
                 return false;
@@ -163,7 +163,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             _entity.LastName = _model.lastName;
 
             _entity.PlaceOfBirth = _model.placeOfBirth;
-            _entity.DateOfBirth = DateTime.Parse(_model.dateOfBirth);
+            _entity.DateOfBirth = DateOnly.Parse(_model.dateOfBirth);
 
             _entity.Address = _model.address;
             _entity.PersonalID = _model.personalId;
@@ -184,7 +184,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
                 SecondName = _model.secondName,
                 LastName = _model.lastName,
                 PlaceOfBirth = _model.placeOfBirth,
-                DateOfBirth = DateTime.Parse(_model.dateOfBirth),
+                DateOfBirth = DateOnly.Parse(_model.dateOfBirth),
                 Address = _model.address,
                 PersonalID = _model.personalId,
                 FirstParent = CreateParent(_model.firstParent)
