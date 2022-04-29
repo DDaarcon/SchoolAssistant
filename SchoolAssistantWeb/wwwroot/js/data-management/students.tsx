@@ -20,38 +20,10 @@ interface StudentDetails {
     numberInJournal?: number;
 }
 
-interface StudentRegisterRecordDetails {
-    id?: number;
-
-    firstName: string;
-    secondName?: string;
-    lastName: string;
-
-    dateOfBirth: string;
-    placeOfBirth: string;
-
-    personalId: string;
-    address: string;
-}
-
-interface ParentRegisterSubecordDetails {
-    firstName: string;
-    secondName?: string;
-    lastName: string;
-
-    phoneNumber: string;
-    email?: string;
-
-    address: string;
-}
 
 interface StudentModificationData {
     data: StudentDetails;
     registerRecords: StudentRegisterRecordListEntry[];
-}
-
-interface StudentRegisterRecordModificationData {
-    data: StudentRegisterRecordDetails;
 }
 
 
@@ -68,13 +40,6 @@ type StudentsPageState = {
 class StudentsPage extends React.Component<StudentsPageProps, StudentsPageState> {
     constructor(props) {
         super(props);
-
-        modalController.add({
-            children:
-                <div style={{ width: 1000, height: 1000, backgroundColor: 'green' }}>
-
-                </div>
-        });
     }
 
     render() {
@@ -239,16 +204,59 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
     }
 
     onRegisterRecordChangeHandler: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-        const value = parseInt(event.target.value);
+        let value = event.target.selectedIndex;
+        if (value == -1) value = undefined;
 
-        this.setState(prevState => {
-            const data = { ...prevState.data };
-            data.registerRecordId = value;
-            return { data };
-        });
+        const setRecord = () => {
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data.registerRecordId = value;
+                return { data };
+            });
+        }
+
+        const selected = this.state.registerRecords.find(x => x.id == value);
+
+        if (selected?.className != undefined) {
+            modalController.addConfirmation({
+                header: "Ten uczeń jest już przypisany do klasy",
+                text: `Ten uczeń jest przypisany do klasy ${selected.className}. Czy chcesz przepisać go do tej?`,
+                onConfirm: () => {
+                    setRecord();
+                }
+            })
+        }
+        else
+            setRecord();
 
         this.props.onMadeAnyChange();
     }
+
+    openStudentRegisterRecordMCForCreation = () => {
+        modalController.addModificationComponent({
+            modificationComponent: StudentRegisterRecordMC,
+            modificationComponentProps: {
+                onMadeAnyChange: () => { },
+                reloadAsync: async () => { }
+            },
+            style: {
+                width: '500px'
+            }
+        });
+    }
+
+    openStudentRegisterRecordMCForModification = () => {
+        if (!this.state.data.registerRecordId) return;
+        modalController.addModificationComponent({
+            modificationComponent: StudentRegisterRecordMC,
+            modificationComponentProps: {
+                recordId: this.state.data.registerRecordId,
+                onMadeAnyChange: () => { },
+                reloadAsync: async () => { },
+            }
+        })
+    }
+
 
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
@@ -304,6 +312,24 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
                                 </option>
                             )}
                         </select>
+
+                        {this.state.data.registerRecordId != undefined
+                            ? (
+                                <button
+                                    type="button"
+                                    onClick={this.openStudentRegisterRecordMCForModification}
+                                >
+                                    Dodaj nowego ucznia
+                                </button>
+                            ) : undefined}
+
+                        <button
+                            type="button"
+                            onClick={this.openStudentRegisterRecordMCForCreation}
+                        >
+                            Dodaj nowego ucznia
+                        </button>
+
                     </div>
 
                     <div className="form-group">

@@ -14,6 +14,7 @@
     <Content Remove="wwwroot\js\data-management\main.tsx" />
     <Content Remove="wwwroot\js\data-management\modal.tsx" />
     <Content Remove="wwwroot\js\data-management\navigation.tsx" />
+    <Content Remove="wwwroot\js\data-management\register-records.tsx" />
     <Content Remove="wwwroot\js\data-management\shared-table.tsx" />
     <Content Remove="wwwroot\js\data-management\staff.tsx" />
     <Content Remove="wwwroot\js\data-management\students.tsx" />
@@ -53,6 +54,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\register-records.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shared\modal.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\shared-table.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\staff.tsx" />

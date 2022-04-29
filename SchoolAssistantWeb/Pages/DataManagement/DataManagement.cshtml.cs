@@ -109,7 +109,7 @@ namespace SchoolAssistant.Web.Pages.DataManagement
 
 
 
-        public async Task<JsonResult> OnGetStudentsEntriesAsync(long classId)
+        public async Task<JsonResult> OnGetStudentEntriesAsync(long classId)
         {
             var entries = await _studentService.GetEntriesJsonAsync(classId);
             return new JsonResult(entries);
