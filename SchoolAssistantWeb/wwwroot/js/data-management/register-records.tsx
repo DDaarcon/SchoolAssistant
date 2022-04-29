@@ -66,8 +66,8 @@ class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCPro
                 secondParent: EmptyParentRegisterSubrecordDetails()
             },
             addressSameAsChilds: {
-                firstParent: false,
-                secondParent: false
+                firstParent: true,
+                secondParent: true
             }
         }
 
@@ -105,10 +105,29 @@ class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCPro
         }
     }
 
+    onAddressChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        const value = event.target.value;
+
+        this.setState(prevState => {
+            const data = { ...prevState.data };
+
+            data.address = value;
+            if (this.state.addressSameAsChilds.firstParent)
+                data.firstParent.address = value;
+            if (this.state.addressSameAsChilds.secondParent && this.state.data.secondParent)
+                data.secondParent.address = value;
+
+            return { data };
+        });
+
+        this.props.onMadeAnyChange();
+    }
+
+
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        let response = await server.postAsync<ResponseJson>("StudentData", undefined, {
+        let response = await server.postAsync<ResponseJson>("StudentRegisterRecordData", undefined, {
             ...this.state.data
         });
 
@@ -204,7 +223,7 @@ class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCPro
                             className="form-control"
                             name="address-input"
                             value={this.state.data.address}
-                            onChange={this.createOnTextChangeHandler('address')}
+                            onChange={this.onAddressChange}
                         />
                     </div>
 
