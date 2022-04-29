@@ -50,3 +50,7 @@ type ResponseJson = {
     success: boolean;
     message: string | null;
 }
+
+type SaveResponseJson = ResponseJson & {
+    id?: number;
+}

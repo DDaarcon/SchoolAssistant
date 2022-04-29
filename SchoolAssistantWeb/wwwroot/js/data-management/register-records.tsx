@@ -38,7 +38,7 @@ interface StudentRegisterRecordModificationData {
 
 
 type StudentRegisterRecordMCProps = ModaledModificationComponentProps & CommonModalProps & {
-
+    selectRecord: (id: number) => void;
 }
 type StudentRegisterRecordMCState = {
     data: StudentRegisterRecordDetails;
@@ -127,12 +127,15 @@ class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCPro
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        let response = await server.postAsync<ResponseJson>("StudentRegisterRecordData", undefined, {
+        let response = await server.postAsync<SaveResponseJson>("StudentRegisterRecordData", undefined, {
             ...this.state.data
         });
 
-        if (response.success)
+        if (response.success) {
+            this.props.selectRecord(response.id);
             await this.props.reloadAsync();
+            this.props.assignedAtPresenter.close(this.props.assignedAtPresenter.uniqueId);
+        }
         else
             console.debug(response);
     }
@@ -288,15 +291,49 @@ class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCPro
         }
     }
 
+    removeSecondParent = () => {
+        this.setState(prevState => {
+            const data = { ...prevState.data };
+            data.secondParent = undefined;
+            return { data };
+        });
+    }
+
+    addSecondParent = () => {
+        this.setState(prevState => {
+            const data = { ...prevState.data };
+            data.secondParent = EmptyParentRegisterSubrecordDetails();
+            return { data };
+        });
+    }
+
 
     parentInputs = (
         parent: ParentRegisterSubecordDetails,
         parentProp: "firstParent" | "secondParent"
     ): JSX.Element => {
-        if (parent == undefined) return <></>;
+        if (parent == undefined)
+            return (
+                <>
+                    <button
+                        onClick={this.addSecondParent}
+                    >
+                        Dodaj drugiego rodzica
+                    </button>
+                </>
+            );
 
         return (
             <div className="col">
+                <h3>Rodzic #{parentProp == "firstParent" ? 1 : 2}</h3>
+                {parentProp == "firstParent" ? <></>
+                    : (
+                        <button
+                            onClick={this.removeSecondParent}
+                        >
+                            Usuń
+                        </button>)}
+                
                 <div className="form-group">
                     <label htmlFor={`${parentProp}-first-name-input`}>Imię</label>
                     <input
@@ -348,7 +385,7 @@ class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCPro
                         type="checkbox"
                         className="form-check-input"
                         name={`${parentProp}-address-same-as-childs-input`}
-                        value={this.state.addressSameAsChilds[parentProp] as unknown as string}
+                        checked={this.state.addressSameAsChilds[parentProp]}
                         onChange={this.createOnAddressSameAsChildsChangeHandler(parentProp)}
                     />
                 </div>

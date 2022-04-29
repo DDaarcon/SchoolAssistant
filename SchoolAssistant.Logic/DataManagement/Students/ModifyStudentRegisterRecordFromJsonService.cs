@@ -9,7 +9,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
 {
     public interface IModifyStudentRegisterRecordFromJsonService
     {
-        Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model);
+        Task<SaveResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model);
     }
 
     [Injectable]
@@ -21,7 +21,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
 
         private StudentRegisterRecordDetailsJson _model = null!;
         private StudentRegisterRecord _entity = null!;
-        private ResponseJson _response = null!;
+        private SaveResponseJson _response = null!;
 
         public ModifyStudentRegisterRecordFromJsonService(
             IRepository<StudentRegisterRecord> repo)
@@ -30,10 +30,10 @@ namespace SchoolAssistant.Logic.DataManagement.Students
         }
 
 
-        public async Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
+        public async Task<SaveResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
         {
             _model = model;
-            _response = new ResponseJson();
+            _response = new SaveResponseJson();
 
             if (!await ValidateAsync())
                 return _response;
@@ -43,6 +43,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             else
                 await CreateAsync();
 
+            _response.id = _entity.Id;
             return _response;
         }
 

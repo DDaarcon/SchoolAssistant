@@ -159,7 +159,6 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
         this.state = {
             awaitingData: this.props.recordId > 0,
             data: {
-                numberInJournal: 0,
                 organizationalClassId: this.props.groupId as number
             },
             registerRecords: []
@@ -189,6 +188,11 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
         this.setState({ registerRecords: response, awaitingData: false });
     }
 
+    private refetchRegisterRecords = async () => {
+        this.setState({ awaitingData: true });
+        await this.fetchRegisterRecords();
+    }
+
     createOnTextChangeHandler: (property: keyof StudentDetails) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
         return (event) => {
             const value = event.target.value;
@@ -204,8 +208,9 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
     }
 
     onRegisterRecordChangeHandler: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-        let value = event.target.selectedIndex;
-        if (value == -1) value = undefined;
+        let value = event.target.value == ""
+            ? undefined
+            : parseInt(event.target.value);
 
         const setRecord = () => {
             this.setState(prevState => {
@@ -237,7 +242,8 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
             modificationComponent: StudentRegisterRecordMC,
             modificationComponentProps: {
                 onMadeAnyChange: () => { },
-                reloadAsync: async () => { }
+                reloadAsync: this.refetchRegisterRecords,
+                selectRecord: this.selectRecord
             },
             style: {
                 width: '500px'
@@ -252,9 +258,18 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
             modificationComponentProps: {
                 recordId: this.state.data.registerRecordId,
                 onMadeAnyChange: () => { },
-                reloadAsync: async () => { },
+                reloadAsync: this.refetchRegisterRecords,
+                selectRecord: this.selectRecord
             }
         })
+    }
+
+    private selectRecord = (id: number) => {
+        this.setState(prevState => {
+            const data = { ...prevState.data };
+            data.registerRecordId = id;
+            return { data };
+        });
     }
 
 
@@ -285,7 +300,7 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
             <div>
                 <form onSubmit={this.onSubmitAsync}>
                     <div className="form-group">
-                        <label htmlFor="number-in-journal-input">Numer klasy</label>
+                        <label htmlFor="number-in-journal-input">Numer w dzienniku</label>
                         <input
                             type="number"
                             className="form-control"
@@ -299,11 +314,11 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
                         <label htmlFor="register-record-input">Dane ucznia</label>
                         <select
                             className="form-select"
-                            multiple
                             name="register-record-input"
                             value={this.state.data.registerRecordId}
                             onChange={this.onRegisterRecordChangeHandler}
                         >
+                            <option value="">Wybierz</option>
                             {this.state.registerRecords.map(x =>
                                 <option key={x.id}
                                     value={x.id}
@@ -319,7 +334,7 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
                                     type="button"
                                     onClick={this.openStudentRegisterRecordMCForModification}
                                 >
-                                    Dodaj nowego ucznia
+                                    Edytuj dane ucznia
                                 </button>
                             ) : undefined}
 

@@ -8,7 +8,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
 {
     public interface IStudentRegisterRecordsDataManagementService
     {
-        Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model);
+        Task<SaveResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model);
         Task<StudentRegisterRecordListEntryJson[]> GetEntriesJsonAsync();
         Task<StudentRegisterRecordModificationDataJson?> GetModificationDataJsonAsync(long id);
     }
@@ -79,7 +79,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             };
         }
 
-        public Task<ResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
+        public Task<SaveResponseJson> CreateOrUpdateAsync(StudentRegisterRecordDetailsJson model)
         {
             return _modifyFromJsonService.CreateOrUpdateAsync(model);
         }
