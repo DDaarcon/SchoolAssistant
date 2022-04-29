@@ -24,7 +24,7 @@ namespace SchoolAssistant.DAL.Repositories
 
         public RepositoryBySchoolYear(
             SADbContext context,
-            IServiceScopeFactory scopeFactory,
+            IServiceScopeFactory? scopeFactory,
             ISchoolYearRepository semesterSvc) : base(context, scopeFactory)
         {
             _schoolYearSvc = semesterSvc;
@@ -88,6 +88,8 @@ namespace SchoolAssistant.DAL.Repositories
                 var curSemester = _schoolYearSvc.GetOrCreateCurrent();
                 return By(curSemester);
             }
+            public TResult ByYearOf(SchoolYearDbEntity entity)
+                => By(entity.SchoolYear?.Id ?? entity.SchoolYearId);
             public TResult By(SchoolYear semester)
                 => By(semester.Id);
             public TResult By(long semesterId)
@@ -99,6 +101,8 @@ namespace SchoolAssistant.DAL.Repositories
                 var curSemester = await _schoolYearSvc.GetOrCreateCurrentAsync();
                 return await ByAsync(curSemester);
             }
+            public Task<TResult> ByYearOfAsync(SchoolYearDbEntity entity)
+                => ByAsync(entity.SchoolYear?.Id ?? entity.SchoolYearId);
             public Task<TResult> ByAsync(SchoolYear semester)
                 => ByAsync(semester.Id);
             public Task<TResult> ByAsync(long semesterId)
