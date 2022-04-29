@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
@@ -29,12 +30,39 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         public void Setup()
         {
             TestDatabase.CreateContext(TestServices.Collection);
+        }
 
-            _schoolYearRepo = new SchoolYearRepository(TestDatabase.Context, null);
+        [OneTimeTearDown]
+        public void Teardown()
+        {
+            TestDatabase.DisposeContext();
+        }
 
-            _studentRepo = new RepositoryBySchoolYear<Student>(TestDatabase.Context, null, _schoolYearRepo);
-            _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, TestServices.GetService<IServiceScopeFactory>());
-            _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
+
+        [SetUp]
+        public async Task SetupOne()
+        {
+            /* For some reason executing all tests in sequence results in error during creation of fake data
+             * Temporary solution is to recreate `SADbContext` for each test (or maybe this solution is closer to normal behaviour?)
+             */
+
+            await TestDatabase.ClearDataAsync<Student>();
+            await TestDatabase.ClearDataAsync<StudentRegisterRecord>();
+            await TestDatabase.ClearDataAsync<OrganizationalClass>();
+            await TestDatabase.ClearDataAsync<SchoolYear>();
+
+            TestDatabase.RequestContextFromServices(TestServices.Collection);
+
+            SetupServices(TestDatabase.Context);
+        }
+
+        private void SetupServices(SADbContext context)
+        {
+            _schoolYearRepo = new SchoolYearRepository(context, null);
+
+            _studentRepo = new RepositoryBySchoolYear<Student>(context, null, _schoolYearRepo);
+            _orgClassRepo = new Repository<OrganizationalClass>(context, TestServices.GetService<IServiceScopeFactory>());
+            _studentRegRepo = new Repository<StudentRegisterRecord>(context, null);
 
 
 
@@ -50,24 +78,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 new ModifyStudentFromJsonService(_studentRepo, _studentRegRepo, _orgClassRepo));
         }
 
-        [OneTimeTearDown]
-        public void Teardown()
-        {
-            TestDatabase.DisposeContext();
-        }
-
-
-
-        [SetUp]
-        public async Task SetupOne()
-        {
-            await TestDatabase.ClearDataAsync<Student>();
-            await TestDatabase.ClearDataAsync<StudentRegisterRecord>();
-            await TestDatabase.ClearDataAsync<OrganizationalClass>();
-            await TestDatabase.ClearDataAsync<SchoolYear>();
-
-            TestDatabase.StopTrackingEntities();
-        }
 
         private Task<SchoolYear> Year => _schoolYearRepo.GetOrCreateCurrentAsync();
 

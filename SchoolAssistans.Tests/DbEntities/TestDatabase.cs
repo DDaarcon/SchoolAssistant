@@ -36,11 +36,11 @@ namespace SchoolAssistans.Tests.DbEntities
                         {
                             options.UseSqlServer(ConnectionString);
                         });
-                        _context = services.BuildServiceProvider().GetRequiredService<SADbContext>();
+                        RequestContextFromServices(services);
                     }
                     else
                     {
-                        _context = CreateContext();
+                        _context = ConstructContext();
                     }
 
                     _context.Database.EnsureDeleted();
@@ -59,7 +59,7 @@ namespace SchoolAssistans.Tests.DbEntities
             _databaseInitialized = false;
         }
 
-        private static SADbContext CreateContext()
+        private static SADbContext ConstructContext()
             => new SADbContext(
                 new DbContextOptionsBuilder<SADbContext>()
                     .LogTo(message => Debug.WriteLine(message))
@@ -71,11 +71,13 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             var set = _context.Set<TDbEntity>();
 
-            await set.ForEachAsync(entity => set.Remove(entity));
+            set.RemoveRange(set);
 
             await _context.SaveChangesAsync();
         }
 
         public static void StopTrackingEntities() => _context.ChangeTracker.Clear();
+
+        public static void RequestContextFromServices(IServiceCollection services) => _context = services.BuildServiceProvider().GetRequiredService<SADbContext>();
     }
 }

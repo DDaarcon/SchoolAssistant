@@ -18,6 +18,7 @@ namespace SchoolAssistans.Tests.DbEntities
             .RuleFor(x => x.Address, f => f.Address.FullAddress())
             .RuleFor(x => x.Email, (f, reg) => f.Internet.Email(reg.FirstName, reg.LastName));
 
+
         private static Faker<StudentRegisterRecord> _StudentRegisterRecordFaker => new Faker<StudentRegisterRecord>()
             .RuleFor(x => x.FirstName, f => f.Name.FirstName())
             .RuleFor(x => x.SecondName, f => f.Name.FirstName())
