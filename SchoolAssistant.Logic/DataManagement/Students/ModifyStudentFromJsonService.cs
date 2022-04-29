@@ -101,6 +101,25 @@ namespace SchoolAssistant.Logic.DataManagement.Students
         private async Task UpdateAsync()
         {
             _entity = (await _studentRepo.GetByIdAsync(_model.id!.Value))!;
+
+            await UpdateCreateCommonAsync();
+
+            _studentRepo.Update(_entity);
+            await _studentRepo.SaveAsync();
+        }
+
+        private async Task CreateAsync()
+        {
+            _entity = new Student();
+
+            await UpdateCreateCommonAsync();
+
+            _studentRepo.Add(_entity);
+            await _studentRepo.SaveAsync();
+        }
+
+        private async Task UpdateCreateCommonAsync()
+        {
             _classToAdd = (await _orgClassRepo.GetByIdAsync(_model.organizationalClassId!.Value))!;
 
             await RemoveStudentWithSameInfoAtSameYear();
@@ -111,14 +130,6 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             _entity.InfoId = _model.registerRecordId!.Value;
             _entity.OrganizationalClassId = _classToAdd.Id;
             _entity.NumberInJournal = _model.numberInJournal!.Value;
-
-            _studentRepo.Update(_entity);
-            await _studentRepo.SaveAsync();
-        }
-
-        private async Task CreateAsync()
-        {
-
         }
 
         private async Task AssignNumberAndMoveOtherUpAsync(Student student, int number)

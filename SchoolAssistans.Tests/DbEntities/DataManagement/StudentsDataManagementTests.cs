@@ -425,29 +425,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_taken_register_id()
-        {
-            var orgClass = await FakeData.Class_2a_Mechanics_15Students(
-                await Year,
-                _orgClassRepo);
-            var student = orgClass.Students.First();
-            var student2 = orgClass.Students.Skip(1).First();
-
-            var model = new StudentDetailsJson
-            {
-                id = student.Id,
-                numberInJournal = student.NumberInJournal,
-                organizationalClassId = orgClass.Id,
-                registerRecordId = student2.Info.Id
-            };
-
-            var res = await _dataManagementService.CreateOrUpdateAsync(model);
-
-            Assert.IsNotNull(res);
-            Assert.IsFalse(res.success);
-        }
-
-        [Test]
         public async Task Should_fail_fetch_modify_data_invalid_id()
         {
             var res = await _dataManagementService.GetModificationDataJsonAsync(9999);
