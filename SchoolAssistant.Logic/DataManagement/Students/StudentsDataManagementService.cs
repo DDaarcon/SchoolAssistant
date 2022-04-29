@@ -20,15 +20,18 @@ namespace SchoolAssistant.Logic.DataManagement.Students
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
         private readonly IRepository<Student> _studentRepo;
         private readonly IStudentRegisterRecordsDataManagementService _registerDataManagementService;
+        private readonly IModifyStudentFromJsonService _modifyFromJsonSvc;
 
         public StudentsDataManagementService(
             IRepository<OrganizationalClass> orgClassRepo,
             IRepository<Student> studentRepo,
-            IStudentRegisterRecordsDataManagementService registerDataManagementService)
+            IStudentRegisterRecordsDataManagementService registerDataManagementService,
+            IModifyStudentFromJsonService modifyFromJsonSvc)
         {
             _orgClassRepo = orgClassRepo;
             _studentRepo = studentRepo;
             _registerDataManagementService = registerDataManagementService;
+            _modifyFromJsonSvc = modifyFromJsonSvc;
         }
 
 
@@ -67,9 +70,9 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             };
         }
 
-        public async Task<ResponseJson> CreateOrUpdateAsync(StudentDetailsJson model)
+        public Task<ResponseJson> CreateOrUpdateAsync(StudentDetailsJson model)
         {
-            return null;
+            return _modifyFromJsonSvc.CreateOrUpdateAsync(model);
         }
     }
 }

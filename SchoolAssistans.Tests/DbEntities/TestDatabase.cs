@@ -75,5 +75,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
             await _context.SaveChangesAsync();
         }
+
+        public static void StopTrackingEntities() => _context.ChangeTracker.Clear();
     }
 }

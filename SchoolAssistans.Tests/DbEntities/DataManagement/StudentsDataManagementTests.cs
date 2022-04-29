@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
@@ -19,7 +20,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         private IStudentsDataManagementService _dataManagementService = null!;
         private IStudentRegisterRecordsDataManagementService _registerDataManagementService = null!;
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
-        private IRepository<Student> _studentRepo = null!;
+        private IRepositoryBySchoolYear<Student> _studentRepo = null!;
         private IRepository<StudentRegisterRecord> _studentRegRepo = null!;
 
 
@@ -29,12 +30,13 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         {
             TestDatabase.CreateContext(TestServices.Collection);
 
-            _studentRepo = new Repository<Student>(TestDatabase.Context, null);
-            _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
+            _schoolYearRepo = new SchoolYearRepository(TestDatabase.Context, null);
+
+            _studentRepo = new RepositoryBySchoolYear<Student>(TestDatabase.Context, null, _schoolYearRepo);
+            _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, TestServices.GetService<IServiceScopeFactory>());
             _studentRegRepo = new Repository<StudentRegisterRecord>(TestDatabase.Context, null);
 
 
-            _schoolYearRepo = new SchoolYearRepository(TestDatabase.Context, null);
 
             _registerDataManagementService = new StudentRegisterRecordsDataManagementService(
                 _schoolYearRepo,
@@ -44,7 +46,8 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             _dataManagementService = new StudentsDataManagementService(
                 _orgClassRepo,
                 _studentRepo,
-                _registerDataManagementService);
+                _registerDataManagementService,
+                new ModifyStudentFromJsonService(_studentRepo, _studentRegRepo, _orgClassRepo));
         }
 
         [OneTimeTearDown]
@@ -61,6 +64,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             await TestDatabase.ClearDataAsync<Student>();
             await TestDatabase.ClearDataAsync<StudentRegisterRecord>();
             await TestDatabase.ClearDataAsync<OrganizationalClass>();
+            await TestDatabase.ClearDataAsync<SchoolYear>();
+
+            TestDatabase.StopTrackingEntities();
         }
 
         private SchoolYear Year => _schoolYearRepo.GetOrCreateCurrent();
@@ -125,12 +131,10 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsNotNull(res);
             Assert.IsTrue(res.success);
 
-            orgClass = await _orgClassRepo.GetByIdAsync(orgClass.Id);
-            var student = orgClass!.Students.FirstOrDefault();
-
-            Assert.IsNotNull(student);
-            Assert.AreEqual(model.registerRecordId, student!.Info.Id);
-            Assert.AreEqual(model.numberInJournal, student.NumberInJournal);
+            Assert.IsTrue(await _studentRepo.AsQueryable().AnyAsync(
+                x => x.OrganizationalClassId == orgClass.Id
+                && x.NumberInJournal == model.numberInJournal
+                && x.InfoId == model.registerRecordId));
         }
 
         [Test]
@@ -156,9 +160,10 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsNotNull(res);
             Assert.IsTrue(res.success);
 
-            student = orgClass.Students.FirstOrDefault(x => x.NumberInJournal == newNumber);
-
-            Assert.IsNotNull(student);
+            Assert.IsTrue(await _studentRepo.AsQueryable().AnyAsync(
+                x => x.OrganizationalClassId == orgClass.Id
+                && x.NumberInJournal == newNumber
+                && x.Id == student.Id));
         }
 
         [Test]
@@ -181,9 +186,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsNotNull(res);
             Assert.IsTrue(res.success);
 
-            student = orgClass2.Students.FirstOrDefault(x => x.Id == student.Id);
-
-            Assert.IsNotNull(student);
+            Assert.IsTrue(await _studentRepo.AsQueryable().AnyAsync(
+                x => x.Id == model.id
+                && x.OrganizationalClassId == model.organizationalClassId));
         }
 
         [Test]
@@ -208,12 +213,12 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             Assert.IsNotNull(res);
             Assert.IsTrue(res.success);
 
-            student = orgClass1.Students.FirstOrDefault(x => x.NumberInJournal == 5);
-            Assert.IsNull(student);
+            Assert.IsFalse(await _studentRepo.ExistsAsync(student.Id));
 
-            student = orgClass1.Students.FirstOrDefault(x => x.NumberInJournal == number);
-            Assert.IsNotNull(student);
-            Assert.AreEqual(student!.InfoId, recordId);
+            Assert.IsTrue(await _studentRepo.ExistsAsync(
+                x => x.InfoId == model.registerRecordId
+                && x.NumberInJournal == model.numberInJournal
+                && x.OrganizationalClassId == model.organizationalClassId));
         }
 
         [Test]

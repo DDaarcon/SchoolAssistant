@@ -102,6 +102,7 @@ namespace SchoolAssistant.DAL.Repositories
                 foreach (var existingCurrent in existingCurrents)
                     existingCurrent.Current = false;
 
+                UpdateRange(existingCurrents);
             }
             base.Add(entity);
         }
@@ -113,6 +114,8 @@ namespace SchoolAssistant.DAL.Repositories
                 var existingCurrents = await _Repo.Where(x => x.Current).ToListAsync();
                 foreach (var existingCurrent in existingCurrents)
                     existingCurrent.Current = false;
+
+                UpdateRange(existingCurrents);
             }
             await base.AddAsync(entity);
         }
