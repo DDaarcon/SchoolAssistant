@@ -1,4 +1,11 @@
-﻿class ModalController {
+﻿/*
+ *  Instance of ModalController (`modalController`) is used for ordering modal displays
+ * 
+ */
+
+type ModalPropsToPass<TModalProps extends CommonModalProps> = Omit<TModalProps, "assignedAtPresenter">;
+
+class ModalController {
     private _modalSpaceRef: React.RefObject<ModalPresenter>;
     get modalSpaceRef() { return this._modalSpaceRef; }
 
@@ -18,11 +25,37 @@
         this._modalSpaceRef = React.createRef<ModalPresenter>();
     }
 
-
-    add(props: Omit<ModalProps, "assignedAtPresenter">) {
+    add(props: ModalPropsToPass<ModalProps>) {
         const id = this.newUniqueId;
         this._modalPresenter.addModal(
             <Modal
+                key={id}
+                assignedAtPresenter={{}}
+                {...props}
+            />,
+            id
+        );
+    }
+
+    addConfirmation(props: ModalPropsToPass<ConfirmationModalProps>) {
+        const id = this.newUniqueId;
+        this._modalPresenter.addModal(
+            <ConfirmationModal
+                key={id}
+                assignedAtPresenter={{}}
+                {...props}
+            />,
+            id
+        );
+    }
+
+    addModificationComponent
+        <TMCPassedProps extends ModificationComponentProps>
+        (props: ModalPropsToPass<ModificationComponentModalProps<TMCPassedProps>>) {
+
+        const id = this.newUniqueId;
+        this._modalPresenter.addModal(
+            <ModificationComponentModal
                 key={id}
                 assignedAtPresenter={{}}
                 {...props}
@@ -41,6 +74,29 @@ const modalController = new ModalController;
 
 
 
+/*
+ *  Below are defined modal templated
+ * 
+ * 
+ * 
+ */
+
+type ModalBodyProps = {
+    style?: React.CSSProperties;
+    children: React.ReactNode;
+}
+const ModalBody: (props: ModalBodyProps) => JSX.Element = (props) => {
+    return (
+        <div
+            className="modal-container"
+            style={props.style}
+        >
+            {props.children}
+        </div>
+    )
+}
+
+
 
 
 type CommonModalProps = {
@@ -51,6 +107,7 @@ type CommonModalProps = {
 }
 
 type ModalProps = CommonModalProps & {
+    style?: React.CSSProperties;
     form?: FormConfig;
     children: React.ReactNode;
 }
@@ -60,6 +117,7 @@ type ModalState = {
 
 type FormConfig = {
     onSubmit: () => void;
+    onDismiss: () => void;
 }
 class Modal extends React.Component<ModalProps, ModalState> {
     onClose = () => {
@@ -68,15 +126,18 @@ class Modal extends React.Component<ModalProps, ModalState> {
 
     render() {
         return (
-            <div className="modal-container">
+            <ModalBody
+                style={this.props.style}
+            >
                 {this.props.children}
+
                 <button
                     type="button"
                     onClick={this.onClose}
                 >
                     Zamknij
                 </button>
-            </div>
+            </ModalBody>
         )
     }
 }
@@ -85,6 +146,105 @@ class Modal extends React.Component<ModalProps, ModalState> {
 
 
 
+
+type ConfirmationModalProps = CommonModalProps & {
+    onConfirm: () => void;
+    onDecline?: () => void;
+    header: string;
+    text: string;
+    style?: React.CSSProperties;
+}
+type ConfirmationModalState = {
+
+}
+class ConfirmationModal extends React.Component<ConfirmationModalProps, ConfirmationModalState> {
+    onCloseConfirm = () => this.onCloseWith(this.props.onConfirm);
+    onCloseDecline = () => this.onCloseWith(this.props.onDecline);
+
+    onCloseWith = (action?: () => void) => {
+        action?.();
+        this.props.assignedAtPresenter?.close(this.props.assignedAtPresenter.uniqueId);
+    }
+
+    render() {
+        return (
+            <ModalBody
+                style={this.props.style }
+            >
+                <h3>{this.props.header}</h3>
+                <p>{this.props.text}</p>
+                <button
+                    type="button"
+                    onClick={this.onCloseConfirm}
+                >
+                    Ok
+                </button>
+                <button
+                    type="button"
+                    onClick={this.onCloseDecline}
+                >
+                    Anuluj
+                </button>
+            </ModalBody>
+        )
+    }
+}
+
+
+
+
+type ModaledModificationComponentProps = ModificationComponentProps & {
+
+}
+
+type ModificationComponentModalProps
+    <TMCPassedProps extends ModaledModificationComponentProps> = CommonModalProps &
+{
+    modificationComponent: new (props: TMCPassedProps & CommonModalProps) => React.Component<TMCPassedProps & CommonModalProps>;
+    modificationComponentProps: TMCPassedProps;
+    style?: React.CSSProperties;
+}
+type ModificationComponentModalState = {
+
+}
+class ModificationComponentModal
+    <TModificationComponentProps extends ModaledModificationComponentProps>
+    extends React.Component<ModificationComponentModalProps<TModificationComponentProps>, ModificationComponentModalState>
+{
+
+    render() {
+        return (
+            <ModalBody
+                style={this.props.style}
+            >
+                <this.props.modificationComponent
+                    {...this.props.modificationComponentProps}
+                    assignedAtPresenter={this.props.assignedAtPresenter}
+                />
+            </ModalBody>
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ *  Components below are responsible for displaying modals added via `modalController`
+ */
 
 class ModalSpace extends React.Component {
     private static _validSpaceAlreadyExists: boolean = false;
