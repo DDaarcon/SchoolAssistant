@@ -104,7 +104,7 @@ namespace SchoolAssistant.Logic.DataManagement.Classes
                 Specialization = _model.specialization
             };
 
-            await _repo.AddAsync(_entity);
+            _repo.Add(_entity);
 
             await _repo.SaveAsync();
         }

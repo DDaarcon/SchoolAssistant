@@ -104,7 +104,7 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
 
             await AddNewSubjectsAsync();
 
-            await _teacherRepo.AddAsync(_teacher);
+            _teacherRepo.Add(_teacher);
 
             await _teacherRepo.SaveAsync();
         }

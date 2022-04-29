@@ -27,7 +27,7 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             var teacherRepo = new Repository<Teacher>(TestDatabase.Context, null);
 
-            await teacherRepo.AddAsync(new Teacher
+            teacherRepo.Add(new Teacher
             {
                 FirstName = "Jonasz",
                 LastName = "Monasz"

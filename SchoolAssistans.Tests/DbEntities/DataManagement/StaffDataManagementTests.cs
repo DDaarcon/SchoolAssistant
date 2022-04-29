@@ -11,9 +11,9 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 {
     public class StaffDataManagementTests
     {
-        private IStaffDataManagementService _staffDataManagementService;
-        private IRepository<Subject> _subjectRepo;
-        private IRepository<Teacher> _teacherRepo;
+        private IStaffDataManagementService _staffDataManagementService = null!;
+        private IRepository<Subject> _subjectRepo = null!;
+        private IRepository<Teacher> _teacherRepo = null!;
 
         [OneTimeSetUp]
         public async Task Setup()
@@ -28,7 +28,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             _staffDataManagementService = new StaffDataManagementService(teacherDataService);
 
-            await _subjectRepo.AddRangeAsync(new Subject[]
+            _subjectRepo.AddRange(new Subject[]
             {
                 new ()
                 {
@@ -46,7 +46,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 }
             });
 
-            await _teacherRepo.AddAsync(new Teacher
+            _teacherRepo.Add(new Teacher
             {
                 FirstName = "Jolanta",
                 SecondName = "Marzena",
@@ -84,7 +84,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var teacher = _teacherRepo.AsQueryable().FirstOrDefault(x => x.FirstName == "Mariusz");
 
             Assert.IsNotNull(teacher);
-            Assert.AreEqual(teacher.LastName, "Ogariusz");
+            Assert.AreEqual(teacher!.LastName, "Ogariusz");
             Assert.AreEqual(teacher.SubjectOperations.MainIter.First().Name, matematyka.Name);
         }
 
@@ -213,7 +213,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 groupId = nameof(Teacher),
                 mainSubjectsIds = new[]
                 {
-                    matem.Id
+                    matem!.Id
                 }
             };
 
@@ -224,7 +224,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
             Assert.IsNotNull(teacher);
-            Assert.IsTrue(teacher.SubjectOperations.MainIter.Count() == 2);
+            Assert.IsTrue(teacher!.SubjectOperations.MainIter.Count() == 2);
             Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == "Matematyka"));
             Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == "Jezyk polski"));
         }
@@ -255,7 +255,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
             Assert.IsNotNull(teacher);
-            Assert.AreEqual(teacher.FirstName, "Ulek");
+            Assert.AreEqual(teacher!.FirstName, "Ulek");
         }
 
         [Test]
@@ -284,7 +284,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
             Assert.IsNotNull(teacher);
-            Assert.AreEqual(teacher.LastName, "Wulek");
+            Assert.AreEqual(teacher!.LastName, "Wulek");
         }
 
         [Test]
@@ -302,15 +302,15 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             teacher.SubjectOperations.AddNewlyCreatedMain(subject);
 
-            await _teacherRepo.AddAsync(teacher);
+            _teacherRepo.Add(teacher);
             await _teacherRepo.SaveAsync();
 
             var res = await _staffDataManagementService.GetDetailsJsonAsync(nameof(Teacher), teacher.Id);
 
             Assert.IsNotNull(res);
-            Assert.AreEqual(res.firstName, teacher.FirstName);
+            Assert.AreEqual(res!.firstName, teacher.FirstName);
             Assert.AreEqual(res.lastName, teacher.LastName);
-            Assert.AreEqual(res.mainSubjectsIds.First(), teacher.SubjectOperations.MainIter.First().Id);
+            Assert.AreEqual(res.mainSubjectsIds!.First(), teacher.SubjectOperations.MainIter.First().Id);
         }
 
         [Test]
@@ -322,7 +322,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 LastName = "Suez"
             };
 
-            await _teacherRepo.AddAsync(teacher);
+            _teacherRepo.Add(teacher);
             await _teacherRepo.SaveAsync();
 
             var res = await _staffDataManagementService.GetGroupsOfEntriesJsonAsync();
@@ -332,7 +332,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             var teachersGroup = res.FirstOrDefault(x => x.id == nameof(Teacher));
 
             Assert.IsNotNull(teachersGroup);
-            Assert.IsTrue(teachersGroup.entries.Any());
+            Assert.IsTrue(teachersGroup!.entries.Any());
         }
     }
 }

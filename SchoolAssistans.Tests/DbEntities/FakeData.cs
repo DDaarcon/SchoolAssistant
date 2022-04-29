@@ -70,7 +70,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 .RuleFor(x => x.NumberInJournal, _ => i++)
                 .Generate(27);
 
-            await orgClassRepo.AddAsync(orgClass);
+            orgClassRepo.Add(orgClass);
             await orgClassRepo.SaveAsync();
 
             return orgClass;
@@ -94,7 +94,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 .RuleFor(x => x.NumberInJournal, _ => i++)
                 .Generate(15);
 
-            await orgClassRepo.AddAsync(orgClass);
+            orgClassRepo.Add(orgClass);
             await orgClassRepo.SaveAsync();
 
             return orgClass;
@@ -111,7 +111,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 Distinction = "e",
             };
 
-            await orgClassRepo.AddAsync(orgClass);
+            orgClassRepo.Add(orgClass);
             await orgClassRepo.SaveAsync();
 
             return orgClass;
@@ -135,7 +135,7 @@ namespace SchoolAssistans.Tests.DbEntities
             if (lastName is not null) student.LastName = lastName;
             if (address is not null) student.Address = address;
 
-            await registerRepo.AddAsync(student);
+            registerRepo.Add(student);
             await registerRepo.SaveAsync();
 
             return student;
@@ -159,7 +159,7 @@ namespace SchoolAssistans.Tests.DbEntities
             if (organizationalClassId is not null) student.OrganizationalClassId = organizationalClassId.Value;
             if (numberInJournal is not null) student.NumberInJournal = numberInJournal.Value;
 
-            await studentRepo.AddAsync(student);
+            studentRepo.Add(student);
             await studentRepo.SaveAsync();
 
             return student;

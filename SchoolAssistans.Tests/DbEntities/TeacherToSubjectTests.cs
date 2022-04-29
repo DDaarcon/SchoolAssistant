@@ -80,7 +80,7 @@ namespace SchoolAssistans.Tests.DbEntities
             var teacher = await GetJoannaAsync();
 
             Assert.IsNotNull(teacher);
-            Assert.IsTrue(teacher.MainSubjects is not null);
+            Assert.IsTrue(teacher!.MainSubjects is not null);
             Assert.IsTrue(teacher.MainSubjects!.Any(x => x.Subject.Name == "Modeling"));
         }
 
@@ -89,7 +89,7 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             var teacher = await GetJoannaAsync();
 
-            Assert.True(teacher.AdditionalSubjects is not null);
+            Assert.True(teacher!.AdditionalSubjects is not null);
             Assert.True(teacher.AdditionalSubjects!.Any(x => x.Subject.Name == "Being a not pleasable woman"));
         }
 
@@ -107,7 +107,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 LastName = "Jackson"
             };
 
-            await _teacherRepo.AddAsync(teacher);
+            _teacherRepo.Add(teacher);
             await _teacherRepo.SaveAsync();
 
             var newSubject = new Subject { Name = "Judging" };
@@ -116,14 +116,14 @@ namespace SchoolAssistans.Tests.DbEntities
             await _teacherRepo.SaveAsync();
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
-            Assert.IsTrue(teacher.AdditionalSubjects is not null);
+            Assert.IsTrue(teacher!.AdditionalSubjects is not null);
             Assert.IsTrue(teacher.AdditionalSubjects!.Count() == 1);
 
             teacher.SubjectOperations.RemoveAdditional(newSubject);
             await _subjectRepo.SaveAsync();
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
-            Assert.IsTrue(teacher.AdditionalSubjects.Count() == 0);
+            Assert.IsTrue(teacher!.AdditionalSubjects.Count() == 0);
         }
 
         [Test]
@@ -133,7 +133,7 @@ namespace SchoolAssistans.Tests.DbEntities
             {
                 Name = "Some subject"
             };
-            await _subjectRepo.AddAsync(subject);
+            _subjectRepo.Add(subject);
             await _subjectRepo.SaveAsync();
 
             var teacher = await _teacherRepo.AsQueryable().FirstAsync();
@@ -156,7 +156,7 @@ namespace SchoolAssistans.Tests.DbEntities
             {
                 Name = "Some subject other subject"
             };
-            await _subjectRepo.AddAsync(subject);
+            _subjectRepo.Add(subject);
             await _subjectRepo.SaveAsync();
 
             var teacher = new Teacher
@@ -167,13 +167,13 @@ namespace SchoolAssistans.Tests.DbEntities
 
             teacher.SubjectOperations.AddMain(subject);
 
-            await _teacherRepo.AddAsync(teacher);
+            _teacherRepo.Add(teacher);
             await _teacherRepo.SaveAsync();
 
             var teacher2 = await _teacherRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == "John" && x.LastName == "Travolta");
 
             Assert.IsNotNull(teacher2);
-            Assert.IsTrue(teacher2.MainSubjects.Any(x => x.SubjectId == subject.Id));
+            Assert.IsTrue(teacher2!.MainSubjects.Any(x => x.SubjectId == subject.Id));
         }
 
         [Test]

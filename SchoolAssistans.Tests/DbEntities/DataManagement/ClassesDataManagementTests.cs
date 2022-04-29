@@ -57,7 +57,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 Specialization = "Technik mechatronik",
 
             };
-            await _organizationalClassRepository.AddAsync(orgClass);
+            _organizationalClassRepository.Add(orgClass);
             await _organizationalClassRepository.SaveAsync();
 
             return orgClass;
@@ -73,7 +73,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 Specialization = "Technik mechatronik",
 
             };
-            await _organizationalClassRepository.AddAsync(orgClass);
+            _organizationalClassRepository.Add(orgClass);
             await _organizationalClassRepository.SaveAsync();
 
             return orgClass;

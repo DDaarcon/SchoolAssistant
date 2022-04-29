@@ -86,7 +86,7 @@ namespace SchoolAssistant.DAL.Repositories
                 Current = isCurrent
             };
 
-            await AddAsync(current);
+            Add(current);
             await SaveAsync();
 
             return current;

@@ -193,7 +193,7 @@ namespace SchoolAssistant.Logic.DataManagement.Students
             if (_model.secondParent is not null)
                 _entity.SecondParent = CreateParent(_model.secondParent);
 
-            await _repo.AddAsync(_entity);
+            _repo.Add(_entity);
             await _repo.SaveAsync();
         }
 

@@ -83,7 +83,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 Year = (short)(current.Year - 1),
                 Current = true
             };
-            await _schoolYearRepo.AddAsync(newCurrent);
+            _schoolYearRepo.Add(newCurrent);
             await _schoolYearRepo.SaveAsync();
 
             Assert.IsFalse(current.Current);

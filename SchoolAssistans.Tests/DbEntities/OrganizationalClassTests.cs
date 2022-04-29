@@ -12,7 +12,7 @@ namespace SchoolAssistans.Tests.DbEntities
 {
     public class OrganizationalClassTests
     {
-        private IRepository<OrganizationalClass> _classRepo;
+        private IRepository<OrganizationalClass> _classRepo = null!;
 
 
         [OneTimeSetUp]
@@ -66,7 +66,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 }
             };
 
-            await _classRepo.AddAsync(studentsClass);
+            _classRepo.Add(studentsClass);
 
             await _classRepo.SaveAsync();
         }
