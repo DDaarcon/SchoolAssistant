@@ -8,8 +8,8 @@
         public int minutes { get; set; }
         public int? customDuration { get; set; }
 
-        public string subjectName { get; set; } = null!;
-        public string lecturerName { get; set; } = null!;
-        public string roomName { get; set; } = null!;
+        public IdNameJson subject { get; set; } = null!;
+        public IdNameJson lecturer { get; set; } = null!;
+        public IdNameJson room { get; set; } = null!;
     }
 }

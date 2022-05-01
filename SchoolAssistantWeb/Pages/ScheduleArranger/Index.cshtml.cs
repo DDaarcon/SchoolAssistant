@@ -35,17 +35,17 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
                             {
                                 hour = 9,
                                 minutes = 0,
-                                subjectName = "Matematyka",
-                                lecturerName = "Tomasz Nowakowski",
-                                roomName = "Sala nr 5"
+                                subject = new IdNameJson() { id = 1, name = "Matematyka" },
+                                lecturer = new IdNameJson() { id = 1, name = "Tomasz Nowakowski" },
+                                room = new IdNameJson() { id = 1, name = "Sala nr 5" }
                             },
                             new ()
                             {
                                 hour = 9,
                                 minutes = 50,
-                                subjectName = "Jêzyk polski",
-                                lecturerName = "Tomasz Kosakowski",
-                                roomName = "Sala nr 5"
+                                subject = new IdNameJson() { id = 2, name = "Jêzyk polski" },
+                                lecturer = new IdNameJson() { id = 2, name = "Tomasz Kosakowski" },
+                                room = new IdNameJson() { id = 1, name = "Sala nr 5" }
                             },
                         }
                     }

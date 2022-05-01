@@ -16,19 +16,86 @@
 
 .schedule-arranger-selector {
     flex-basis: 300px;
-    border: 1px solid black;
 }
 
 .sa-schedule-day-column {
     position: relative !important;
-    width: 200px;
+    flex-grow: 1;
+    border-right: 1px solid;
 }
 
+
+
+.sa-time-column {
+    position: relative !important;
+    flex-basis: 65px;
+    border-right: 1px solid;
+}
+
+.sa-time-label {
+    position: absolute !important;
+    border-top: 1px solid darkgrey;
+    width: 100%;
+}
+
+
+
 .sa-schedule-cell {
-    outline: 1px solid red;
+    z-index: 20;
+}
+.sa-whole-hour-line {
+    width: 100%;
+    height: 1px;
+    background-color: darkgrey;
 }
 
 .sa-lesson-tile {
     position: absolute !important;
     width: 100%;
+}
+
+
+
+
+.sa-lesson-placing-shadow {
+    z-index: -1;
+    padding: 5px;
+    text-align: center;
+    background-color: #6cff986d;
+    border-radius: 10px;
+}
+
+
+
+/* Prefab */
+.sa-lesson-prefab {
+    margin: 5px;
+    border-radius: 10px;
+    border: 3px solid #3cb37177;
+    background-color: #3cb37177;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.sa-lesson-prefab:active {
+    background-color: #3cb37144;
+    border-color: #3cb37144;
+}
+
+.sa-lesson-prefab-subject {
+    text-align: center;
+}
+
+.sa-lesson-prefab-bottom > div {
+    width: 49%;
+}
+
+.sa-lesson-prefab-lecturer {
+    float: left;
+    text-align: left;
+}
+
+.sa-lesson-prefab-room {
+    float: right;
+    text-align: right;
 }

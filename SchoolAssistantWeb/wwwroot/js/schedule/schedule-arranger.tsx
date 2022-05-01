@@ -14,16 +14,20 @@ interface PeriodicLessonTimetableEntry {
     minutes: number;
     customDuration?: number;
 
-    subjectId: number;
-    subjectName: string;
-    lecturerId: number;
-    lecturerName: string;
-    roomId: number;
-    roomName?: string;
+    subject: IdName;
+    lecturer: IdName;
+    room?: IdName;
 }
 
 interface ScheduleLessonPrefab {
+    subject: IdName;
+    lecturer: IdName;
+    room?: IdName;
+}
 
+interface IdName {
+    id: number;
+    name: string;
 }
 
 enum DayOfWeek {
@@ -100,7 +104,7 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
         }
     }
 
-    onDropped = (dayIndicator: DayOfWeek, cellIndex: number, data: DataTransfer) => {
+    onDropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
 
     }
 
@@ -109,6 +113,8 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
 
         return (
             <div className="schedule-arranger-timeline">
+
+                <ScheduleTimeColumn/>
 
                 <ScheduleDayColumn
                     dayIndicator={DayOfWeek.Monday}
@@ -149,14 +155,43 @@ type ScheduleArrangerSelectorProps = {
     data: ScheduleDayLessons[];
 }
 type ScheduleArrangerSelectorState = {
-
+    prefabs: ScheduleLessonPrefab[];
 }
 class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorProps, ScheduleArrangerSelectorState> {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            prefabs: []
+        }
+
+        let prefabs = this.props.data.flatMap(dayLessons => dayLessons.lessons).map(this.lessonToPrefab);
+
+        for (let prefab of prefabs) {
+            if (this.state.prefabs.some(x =>
+                x.subject.id == prefab.subject.id
+                && x.lecturer.id == prefab.lecturer.id
+                && x.room.id == prefab.room.id)) continue;
+
+            this.state.prefabs.push(prefab);
+        }
+    }
+
+    private lessonToPrefab = (lesson: PeriodicLessonTimetableEntry): ScheduleLessonPrefab => ({
+        subject: lesson.subject,
+        lecturer: lesson.lecturer,
+        room: lesson.room
+    })
 
     render() {
         return (
             <div className="schedule-arranger-selector">
-
+                {this.state.prefabs.map((prefab, index) => (
+                    <ScheduleLessonPrefabTile
+                        key={index}
+                        data={prefab}
+                    />
+                ))}
             </div>
         )
     }
