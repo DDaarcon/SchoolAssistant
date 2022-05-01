@@ -22,6 +22,7 @@ namespace SchoolAssistant.DAL.Models.Lessons
         public virtual OrganizationalClass? ParticipatingOrganizationalClass { get; set; }
 
         public long? ParticipatingSubjectClassId { get; set; }
+        [ForeignKey(nameof(ParticipatingSubjectClassId))]
         public virtual SubjectClass? ParticipatingSubjectClass { get; set; }
 
         public long LecturerId { get; set; }
