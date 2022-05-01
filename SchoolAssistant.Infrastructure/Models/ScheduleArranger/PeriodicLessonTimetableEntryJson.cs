@@ -4,8 +4,7 @@
     {
         public long? id { get; set; }
 
-        public int hour { get; set; }
-        public int minutes { get; set; }
+        public TimeJson time { get; set; }
         public int? customDuration { get; set; }
 
         public IdNameJson subject { get; set; } = null!;

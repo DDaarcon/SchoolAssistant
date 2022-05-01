@@ -1,13 +1,4 @@
-﻿interface Time {
-    hour: number;
-    minutes: number;
-}
-
-
-
-
-
-type ScheduleDayColumnProps = {
+﻿type ScheduleDayColumnProps = {
     dayIndicator: DayOfWeek;
     lessons: PeriodicLessonTimetableEntry[];
 
@@ -73,6 +64,7 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
                 onDragEnd={this.hideLessonShadow}
             >
                 <LessonPlacingShadow time={this.state.shadowFor} />
+                <LessonsByDay lessons={this.props.lessons} />
                 {this._cells}
             </div>
         )
@@ -150,7 +142,32 @@ type LessonsByDayState = {
 }
 class LessonsByDay extends React.Component<LessonsByDayProps, LessonsByDayState> {
 
-
+    render() {
+        return (
+            <>
+                {this.props.lessons.map(lesson => 
+                    <GenericLessonTile className="sa-placed-lesson"
+                        key={`${lesson.time.hour}${lesson.time.minutes}`}
+                        time={lesson.time}
+                        customDuration={lesson.customDuration}
+                    >
+                        <div className="sa-lesson-time">
+                            {displayTime(lesson.time)}
+                        </div>
+                        <div className="sa-lesson-subject">
+                            {lesson.subject.name}
+                        </div>
+                        <div className="sa-lesson-lecturer">
+                            {lesson.lecturer.name}
+                        </div>
+                        <div className="sa-lesson-room">
+                            {lesson.room?.name}
+                        </div>
+                    </GenericLessonTile>
+                )}
+            </>
+        )
+    }
 }
 
 

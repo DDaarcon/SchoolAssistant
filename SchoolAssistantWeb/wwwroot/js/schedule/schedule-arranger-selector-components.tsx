@@ -23,9 +23,9 @@ class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileP
                 onDrag={this.onDrag}
                 onDragEnd={this.onEnd}
             >
-                <h4 className="sa-lesson-prefab-subject">
+                <span className="sa-lesson-prefab-subject">
                     {this.props.data.subject.name}
-                </h4>
+                </span>
                 <div className="sa-lesson-prefab-bottom">
                     <div className="sa-lesson-prefab-lecturer">
                         {this.props.data.lecturer.name}

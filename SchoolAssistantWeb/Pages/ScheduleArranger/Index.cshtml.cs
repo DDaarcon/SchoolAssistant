@@ -33,18 +33,24 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
                         {
                             new ()
                             {
-                                hour = 9,
-                                minutes = 0,
+                                time = new TimeJson
+                                {
+                                    hour = 9,
+                                    minutes = 0
+                                },
                                 subject = new IdNameJson() { id = 1, name = "Matematyka" },
-                                lecturer = new IdNameJson() { id = 1, name = "Tomasz Nowakowski" },
+                                lecturer = new IdNameJson() { id = 1, name = "T. Nowakowski" },
                                 room = new IdNameJson() { id = 1, name = "Sala nr 5" }
                             },
                             new ()
                             {
-                                hour = 9,
-                                minutes = 50,
+                                time = new TimeJson
+                                {
+                                    hour = 9,
+                                    minutes = 50
+                                },
                                 subject = new IdNameJson() { id = 2, name = "Jêzyk polski" },
-                                lecturer = new IdNameJson() { id = 2, name = "Tomasz Kosakowski" },
+                                lecturer = new IdNameJson() { id = 2, name = "T. Kosakowski" },
                                 room = new IdNameJson() { id = 1, name = "Sala nr 5" }
                             },
                         }

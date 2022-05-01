@@ -7,11 +7,15 @@ interface ScheduleDayLessons {
     lessons: PeriodicLessonTimetableEntry[];
 }
 
+interface Time {
+    hour: number;
+    minutes: number;
+}
+
 interface PeriodicLessonTimetableEntry {
     id?: number;
 
-    hour: number;
-    minutes: number;
+    time: Time;
     customDuration?: number;
 
     subject: IdName;
@@ -31,13 +35,13 @@ interface IdName {
 }
 
 enum DayOfWeek {
+    Sunday,
     Monday,
     Tuesday,
     Wednesday,
     Thursday,
     Friday,
-    Saturday,
-    Sunday
+    Saturday
 }
 
 
