@@ -20,6 +20,10 @@
     <Content Remove="wwwroot\js\data-management\students.tsx" />
     <Content Remove="wwwroot\js\data-management\subjects.tsx" />
     <Content Remove="wwwroot\js\data-management\table.tsx" />
+    <Content Remove="wwwroot\js\schedule\main.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-arranger.tsx" />
     <Content Remove="wwwroot\js\shared\loader.tsx" />
     <Content Remove="wwwroot\js\shared\server-connection.tsx" />
   </ItemGroup>
@@ -55,6 +59,10 @@
     <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\register-records.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\main.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shared\modal.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\shared-table.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\staff.tsx" />

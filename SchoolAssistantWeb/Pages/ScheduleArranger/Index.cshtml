@@ -1,0 +1,33 @@
+﻿@page
+@using Microsoft.AspNetCore.Antiforgery
+@model SchoolAssistant.Web.Pages.ScheduleArranger.ScheduleArrangerModel
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+
+@section Head {
+    <link rel="stylesheet" href="~/css/schedule-arranger.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/loader.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
+}
+
+@Html.React("ScheduleArrangerMainScreen", Model.Config)
+
+@section Scripts {
+    <script>
+        const antiforgeryToken = '@token';
+    </script>
+
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
+    <script src="~/js/shared/loader.tsx" asp-append-version="true"></script>
+    <script src="~/js/shared/modal.tsx" asp-append-version="true"></script>
+    <script src="~/js/shared/server-connection.tsx" asp-append-version="true"></script>
+
+    <script src="~/js/schedule/schedule-arranger-timeline-components.tsx" asp-append-version="true"></script>
+    <script src="~/js/schedule/schedule-arranger-selector-components.tsx" asp-append-version="true"></script>
+    <script src="~/js/schedule/schedule-arranger.tsx" asp-append-version="true"></script>
+    <script src="~/js/schedule/main.tsx" asp-append-version="true"></script>
+    @Html.ReactInitJavaScript()
+}

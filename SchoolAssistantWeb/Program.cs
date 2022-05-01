@@ -94,6 +94,12 @@ app.UseReact(config =>
         .AddScript("~/js/data-management/classes.tsx")
         .AddScript("~/js/data-management/enums.tsx");
 
+    config
+        .AddScript("~/js/schedule/schedule-arranger-timeline-components.tsx")
+        .AddScript("~/js/schedule/schedule-arranger-selector-components.tsx")
+        .AddScript("~/js/schedule/schedule-arranger.tsx")
+        .AddScript("~/js/schedule/main.tsx");
+
 });
 
 #endregion
