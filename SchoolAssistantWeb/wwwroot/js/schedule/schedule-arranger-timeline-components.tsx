@@ -57,6 +57,8 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
             this.setState({ shadowFor: undefined });
     }
 
+
+
     render() {
 
         return (
@@ -188,7 +190,7 @@ class LessonPlacingShadow extends React.Component<LessonPlacingShadowProps, Less
             <GenericLessonTile className="sa-lesson-placing-shadow"
                 time={this.props.time}
             >
-                <h4>{displayTime(this.props.time)}</h4>
+                <h4>{displayTime(this.props.time)} - {displayTime(sumTimes(this.props.time, { hour: 0, minutes: scheduleArrangerConfig.defaultLessonDuration }))}</h4>
             </GenericLessonTile>
         )
     }
@@ -291,6 +293,16 @@ class ScheduleTimeColumn extends React.Component<ScheduleTimeColumnProps, Schedu
     }
 }
 
+
+
+
+const sumTimes = (timeA: Time, timeB: Time): Time => {
+    const summedMinutes = timeA.minutes + timeB.minutes;
+    return {
+        hour: timeA.hour + timeB.hour + Math.floor(summedMinutes / 60),
+        minutes: summedMinutes % 60
+    };
+}
 
 const displayTime = (time: Time) => `${time.hour}:${displayMinutes(time.minutes)}`;
 const displayMinutes = (minutes: number) => minutes < 10 ? `0${minutes}` : minutes.toString();

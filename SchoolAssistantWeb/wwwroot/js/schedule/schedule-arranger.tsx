@@ -45,6 +45,11 @@ enum DayOfWeek {
 }
 
 
+interface AddLessonResponse extends ResponseJson {
+    lesson?: PeriodicLessonTimetableEntry;
+}
+
+
 
 
 
@@ -84,37 +89,54 @@ type ScheduleArrangerTimelineState = {
 
 }
 class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
-    private _monday: ScheduleDayLessons;
-    private _tuesday: ScheduleDayLessons;
-    private _wednesday: ScheduleDayLessons;
-    private _thursday: ScheduleDayLessons;
-    private _friday: ScheduleDayLessons;
+    private _days: ScheduleDayLessons[];
 
-    private assignDays() {
+    constructor(props) {
+        super(props);
+
+        this._assignDaysFromProps();
+    }
+
+    private _assignDaysFromProps() {
+        this._days = [];
         for (let dayData of this.props.data) {
-            switch (dayData.dayIndicator) {
-                case DayOfWeek.Monday: this._monday = dayData;
-                    break;
-                case DayOfWeek.Tuesday: this._tuesday = dayData;
-                    break;
-                case DayOfWeek.Wednesday: this._wednesday = dayData;
-                    break;
-                case DayOfWeek.Thursday: this._thursday = dayData;
-                    break;
-                case DayOfWeek.Friday: this._friday = dayData;
-                    break;
-                default: break;
-            }
+            this._days[dayData.dayIndicator] = dayData;
         }
     }
 
     onDropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+        const prefab: ScheduleLessonPrefab | undefined = JSON.parse(data.getData("prefab"));
 
+        const lessons = this._days[dayIndicator];
+        if (!lessons) return;
+
+        for (const lesson of lessons.lessons ?? []) {
+            const overlaps = areTimesOverlapping(
+                lesson.time,
+                sumTimes(lesson.time, { hour: 0, minutes: lesson.customDuration ?? scheduleArrangerConfig.defaultLessonDuration }),
+                time,
+                { hour: 0, minutes: scheduleArrangerConfig.defaultLessonDuration }
+            );
+
+            if (overlaps) return;
+        }
+
+        scheduleServer.postAsync<AddLessonResponse>("Lesson", {}, {
+            classId: scheduleArrangerConfig.classId,
+            time: time,
+            customDuration: undefined,
+            subjectId: prefab.subject.id,
+            lecturerId: prefab.lecturer.id,
+            roomId: prefab.room.id
+        }).then(result => {
+            if (result.success) {
+                this._days[dayIndicator].lessons.push(result.lesson);
+                this.forceUpdate();
+            }
+        })
     }
 
     render() {
-        this.assignDays();
-
         return (
             <div className="schedule-arranger-timeline">
 
@@ -122,27 +144,27 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
 
                 <ScheduleDayColumn
                     dayIndicator={DayOfWeek.Monday}
-                    lessons={this._monday?.lessons ?? []}
+                    lessons={this._days[DayOfWeek.Monday]?.lessons ?? []}
                     dropped={this.onDropped}
                 />
                 <ScheduleDayColumn
                     dayIndicator={DayOfWeek.Tuesday}
-                    lessons={this._tuesday?.lessons ?? []}
+                    lessons={this._days[DayOfWeek.Tuesday]?.lessons ?? []}
                     dropped={this.onDropped}
                 />
                 <ScheduleDayColumn
                     dayIndicator={DayOfWeek.Wednesday}
-                    lessons={this._wednesday?.lessons ?? []}
+                    lessons={this._days[DayOfWeek.Wednesday]?.lessons ?? []}
                     dropped={this.onDropped}
                 />
                 <ScheduleDayColumn
                     dayIndicator={DayOfWeek.Thursday}
-                    lessons={this._thursday?.lessons ?? []}
+                    lessons={this._days[DayOfWeek.Thursday]?.lessons ?? []}
                     dropped={this.onDropped}
                 />
                 <ScheduleDayColumn
                     dayIndicator={DayOfWeek.Friday}
-                    lessons={this._friday?.lessons ?? []}
+                    lessons={this._days[DayOfWeek.Friday]?.lessons ?? []}
                     dropped={this.onDropped}
                 />
 
@@ -200,3 +222,12 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
         )
     }
 }
+
+
+
+const areTimesOverlapping = (timeAStart: Time, timeAEnd: Time, timeBStart: Time, timeBEnd: Time): boolean =>
+    toMinutes(timeAStart) > toMinutes(timeBStart) && toMinutes(timeAStart) < toMinutes(timeBEnd)
+    || toMinutes(timeAEnd) > toMinutes(timeBStart) && toMinutes(timeAEnd) < toMinutes(timeBEnd)
+    || toMinutes(timeAStart) <= toMinutes(timeBStart) && toMinutes(timeAEnd) >= toMinutes(timeBEnd);
+
+const toMinutes = (time: Time) => time.hour * 60 + time.minutes;

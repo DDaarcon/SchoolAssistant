@@ -6,10 +6,8 @@ type ScheduleLessonPrefabTileState = {
 }
 class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileProps, ScheduleLessonPrefabTileState> {
 
-    onDrag: React.DragEventHandler<HTMLDivElement> = (event) => {
-        event.dataTransfer.setData("subject", this.props.data.subject.id.toString());
-        event.dataTransfer.setData("lecturer", this.props.data.subject.id.toString());
-        event.dataTransfer.setData("subject", this.props.data.subject.id.toString());
+    onStart: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
     }
 
     onEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
@@ -20,7 +18,7 @@ class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileP
         return (
             <div className="sa-lesson-prefab"
                 draggable
-                onDrag={this.onDrag}
+                onDragStart={this.onStart}
                 onDragEnd={this.onEnd}
             >
                 <span className="sa-lesson-prefab-subject">
