@@ -1,15 +1,31 @@
 ﻿using Bogus;
+using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.SchoolYears;
+using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
+using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Cronos;
+using SchoolAssistant.DAL.Models.Lessons;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
     public class FakeData
     {
+        private static readonly string[] _SubjectNames = new string[] {
+            "Art", "Music", "Drama", "Latin", "Sport Science", "Design Technology", "Computer Science"
+        };
+
+        private static readonly IList<string> _RoomNames = new List<string>
+        {
+            "art room", "computer room", "library"
+        };
+
         private static Faker<ParentRegisterSubrecord> _ParentRegisterSubrecordFaker => new Faker<ParentRegisterSubrecord>()
             .RuleFor(x => x.FirstName, f => f.Name.FirstName())
             .RuleFor(x => x.SecondName, f => f.Name.FirstName())
@@ -50,6 +66,32 @@ namespace SchoolAssistans.Tests.DbEntities
 
                 return recordFaker.Generate();
             });
+
+
+        private static Faker<Subject> _SubjectFaker => new Faker<Subject>()
+            .RuleFor(x => x.Name, f => f.PickRandom(_SubjectNames));
+
+        private static Faker<Subject> _UniqueSubjectFaker
+        {
+            get
+            {
+                var randomInt = new Faker().Random.Int(0);
+                return _SubjectFaker.
+                    RuleFor(x => x.Name, f => _SubjectNames[(randomInt + f.IndexFaker) % _SubjectNames.Length]);
+            }
+        }
+
+        private static Faker<Teacher> _TeacherFaker => new Faker<Teacher>()
+            .RuleFor(x => x.FirstName, f => f.Name.FirstName())
+            .RuleFor(x => x.SecondName, f => f.Name.FirstName())
+            .RuleFor(x => x.LastName, f => f.Name.LastName());
+
+
+
+        private static Faker<Room> _RoomFaker => new Faker<Room>()
+            .RuleFor(x => x.Name, f => f.PickRandom(_RoomNames.Concat(new string[] { null! })))
+            .RuleFor(x => x.Number, f => f.Random.Int(1, 30))
+            .RuleFor(x => x.Floor, f => f.Random.Int(0, 3));
 
 
         #region OrganizationalClasses
@@ -118,6 +160,59 @@ namespace SchoolAssistans.Tests.DbEntities
             return orgClass;
         }
 
+
+        public static async Task<OrganizationalClass> Class_4f_0Students_RandomSchedule(
+            SchoolYear year,
+            IRepository<OrganizationalClass> orgClassRepo,
+            IRepository<Teacher> teacherRepo,
+            int? fromHour = null,
+            int? toHour = null)
+        {
+            var orgClass = new OrganizationalClass
+            {
+                SchoolYearId = year.Id,
+                Grade = 4,
+                Distinction = "f"
+            };
+
+            var subjects = _UniqueSubjectFaker.Generate(5);
+
+            var teachers = await _5Random_Teachers(teacherRepo, subjects);
+
+            var rooms = _RoomFaker.Generate(10);
+
+            for (int weekDay = 1; weekDay < 6; weekDay++)
+            {
+                int[] hours = RandomAmountOfRandomInts(fromHour ?? 6, toHour ?? 17);
+
+                foreach (var hour in hours)
+                {
+                    var teacher = new Faker().PickRandom(teachers);
+
+                    var subject = new Faker().PickRandom(teacher.SubjectOperations.MainIter);
+
+                    var room = new Faker().PickRandom(rooms);
+
+                    var lesson = new PeriodicLesson
+                    {
+                        SchoolYearId = year.Id,
+                        LecturerId = teacher.Id,
+                        SubjectId = subject.Id,
+                        Room = room,
+                        ParticipatingOrganizationalClass = orgClass,
+                        CronPeriodicity = $"0 {hour} * * {weekDay}"
+                    };
+
+                    orgClass.Schedule.Add(lesson);
+                }
+            }
+
+            orgClassRepo.Add(orgClass);
+            await orgClassRepo.SaveAsync();
+
+            return orgClass;
+        }
+
         #endregion
 
 
@@ -168,5 +263,83 @@ namespace SchoolAssistans.Tests.DbEntities
 
 
         #endregion
+
+
+        #region Teachers
+
+
+        public static async Task<IEnumerable<Teacher>> _5Random_Teachers(
+            IRepository<Teacher> teacherRepo,
+            IList<Subject>? notSavedSubjects = null)
+        {
+            var subjects = notSavedSubjects ?? _UniqueSubjectFaker.Generate(6);
+
+            var teachers = new List<Teacher>();
+            for (int i = 0; i < 5; i++)
+            {
+                var teacher = _TeacherFaker
+                    .FinishWith((f, t) =>
+                    {
+                        var randomInts = RandomAmountOfRandomInts(0, subjects.Count - 1);
+
+                        for (int j = 0; j < randomInts.Length; j++)
+                        {
+                            if (!(j > randomInts.Length / 2))
+                                t.SubjectOperations.AddNewlyCreatedMain(subjects[randomInts[j]]);
+                            else
+                                t.SubjectOperations.AddNewlyCreatedAdditional(subjects[randomInts[j]]);
+                        }
+                    })
+                    .Generate();
+                teachers.Add(teacher);
+            }
+            teacherRepo.AddRange(teachers);
+            await teacherRepo.SaveAsync();
+
+            return teachers;
+        }
+
+        #endregion
+
+        #region Rooms
+
+
+        public static async Task<Room> Room(
+            IRepository<Room> roomRepo)
+        {
+            var room = _RoomFaker.Generate();
+
+            roomRepo.Add(room);
+            await roomRepo.SaveAsync();
+
+            return room;
+        }
+
+
+        #endregion
+
+
+
+
+
+        public static int[] RandomAmountOfRandomInts(int from, int to)
+        {
+            var faker = new Faker();
+            var ints = new List<int>();
+            var amount = faker.Random.Int((to - from) / 2, to - from - 1);
+
+            for (; amount > 0; amount--)
+            {
+                var random = faker.Random.Int(from, to);
+
+                if (ints.Contains(random))
+                {
+                    amount++; continue;
+                }
+                ints.Add(random);
+            }
+
+            return ints.ToArray();
+        }
     }
 }
