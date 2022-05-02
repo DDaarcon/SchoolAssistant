@@ -89,7 +89,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
 
         private static Faker<Room> _RoomFaker => new Faker<Room>()
-            .RuleFor(x => x.Name, f => f.PickRandom(_RoomNames.Concat(new string[] { null! })))
+            .RuleFor(x => x.Name, f => f.PickRandom(_RoomNames))
             .RuleFor(x => x.Number, f => f.Random.Int(1, 30))
             .RuleFor(x => x.Floor, f => f.Random.Int(0, 3));
 

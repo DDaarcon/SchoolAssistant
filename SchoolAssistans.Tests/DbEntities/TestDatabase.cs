@@ -13,7 +13,7 @@ namespace SchoolAssistans.Tests.DbEntities
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
 
-        private static SADbContext _context = null!;
+        private static SADbContext? _context;
         public static SADbContext Context { get { return CreateContext(); } private set { _context = value; } }
 
 
@@ -21,7 +21,7 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             InitializeContext(services);
 
-            return _context;
+            return _context!;
         }
 
         private static void InitializeContext(IServiceCollection? services)
@@ -32,21 +32,18 @@ namespace SchoolAssistans.Tests.DbEntities
                 {
                     if (services is not null)
                     {
-                        services.AddDbContext<SADbContext>(options =>
-                        {
-                            options.UseSqlServer(ConnectionString);
-                        });
+                        AddContextToServices(services);
+                        _databaseInitialized = true;
                         RequestContextFromServices(services);
                     }
                     else
                     {
                         _context = ConstructContext();
+                        _databaseInitialized = true;
                     }
 
-                    _context.Database.EnsureDeleted();
+                    _context!.Database.EnsureDeleted();
                     _context.Database.EnsureCreated();
-
-                    _databaseInitialized = true;
                 }
             }
         }
@@ -69,15 +66,28 @@ namespace SchoolAssistans.Tests.DbEntities
         public static async Task ClearDataAsync<TDbEntity>()
             where TDbEntity : class
         {
+            if (_context is null) return;
+
             var set = _context.Set<TDbEntity>();
 
-            set.RemoveRange(set);
+            set?.RemoveRange(set);
 
             await _context.SaveChangesAsync();
         }
 
-        public static void StopTrackingEntities() => _context.ChangeTracker.Clear();
+        public static void StopTrackingEntities() => _context?.ChangeTracker.Clear();
 
-        public static void RequestContextFromServices(IServiceCollection services) => _context = services.BuildServiceProvider().GetRequiredService<SADbContext>();
+        public static void RequestContextFromServices(IServiceCollection services) {
+            if (!_databaseInitialized) InitializeContext(services);
+            else _context = services.BuildServiceProvider().GetRequiredService<SADbContext>();
+        }
+
+        private static void AddContextToServices(IServiceCollection services)
+        {
+            services.AddDbContext<SADbContext>(options =>
+            {
+                options.UseSqlServer(ConnectionString);
+            });
+        }
     }
 }
