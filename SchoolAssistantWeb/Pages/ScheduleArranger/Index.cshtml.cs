@@ -1,12 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Logic.ScheduleArranger;
 
 namespace SchoolAssistant.Web.Pages.ScheduleArranger
 {
     public class ScheduleArrangerModel : PageModel
     {
+        private readonly IFetchLessonsService _fetchLessonsSvc;
+        private readonly IAddLessonService _addLessonSvc;
+
         public ScheduleArrangerConfigJson Config { get; set; } = null!;
+
+
+        public ScheduleArrangerModel(
+            IFetchLessonsService fetchLessonsService,
+            IAddLessonService addLessonService)
+        {
+            _fetchLessonsSvc = fetchLessonsService;
+            _addLessonSvc = addLessonService;
+        }
+
 
         public void OnGet()
         {
@@ -22,9 +36,21 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         public async Task<JsonResult> OnGetClassLessonsAsync(long classId)
         {
-            var model = new ScheduleClassLessonsJson
-            {
-                data = new ScheduleDayLessonsJson[]
+            var model = await _fetchLessonsSvc.ForClassAsync(classId);
+            return new JsonResult(model);
+        }
+
+        public async Task<JsonResult> OnPostLessonAsync([FromBody] AddLessonRequestJson model)
+        {
+            var result = await _addLessonSvc.AddToClass(model);
+            return new JsonResult(model);
+        }
+
+
+
+        private ScheduleClassLessonsJson _lessonsMockupModel => new ScheduleClassLessonsJson
+        {
+            data = new ScheduleDayLessonsJson[]
                 {
                     new ()
                     {
@@ -56,8 +82,6 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
                         }
                     }
                 }
-            };
-            return new JsonResult(model);
-        }
+        };
     }
 }
