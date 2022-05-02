@@ -13,6 +13,7 @@ class DMNavigationBar extends React.Component<BarProps, BarState> {
         this.items = [
             this.createNavItem("Przedmioty", Category.Subjects, SubjectsPage),
             this.createNavItem("Personel", Category.Staff, StaffPage),
+            this.createNavItem("Pomieszczenia", Category.Rooms, RoomsPage),
             this.createNavItem("Klasy", Category.Classes, ClassesPage),
         ]
     }

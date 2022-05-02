@@ -15,6 +15,7 @@
     <Content Remove="wwwroot\js\data-management\modal.tsx" />
     <Content Remove="wwwroot\js\data-management\navigation.tsx" />
     <Content Remove="wwwroot\js\data-management\register-records.tsx" />
+    <Content Remove="wwwroot\js\data-management\rooms.tsx" />
     <Content Remove="wwwroot\js\data-management\shared-table.tsx" />
     <Content Remove="wwwroot\js\data-management\staff.tsx" />
     <Content Remove="wwwroot\js\data-management\students.tsx" />
@@ -59,6 +60,7 @@
     <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\register-records.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\rooms.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\main.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />

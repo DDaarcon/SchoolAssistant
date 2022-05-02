@@ -70,7 +70,7 @@ type StaffPersonModificationComponentProps = GroupedModificationComponentProps;
 type StaffPersonModificationComponentState = {
     awaitingPersonData: boolean;
     data: StaffPersonDetailedData;
-    availableSubjects: SubjectData[];
+    availableSubjects: SubjectListEntry[];
 }
 class StaffPersonModificationComponent extends React.Component<StaffPersonModificationComponentProps, StaffPersonModificationComponentState> {
     constructor(props) {
@@ -102,7 +102,7 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
     }
 
     private async fetchSubjectsAsync() {
-        let availableSubjects = await server.getAsync<SubjectData[]>("AvailableSubjects");
+        let availableSubjects = await server.getAsync<SubjectListEntry[]>("AvailableSubjects");
 
         this.setState({ availableSubjects })
     }
@@ -197,6 +197,7 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                         <select
                             className="form-select"
                             multiple
+                            name="main-subejcts-input"
                             value={this.state.data.mainSubjectsIds?.map(x => `${x}`)}
                             onChange={this.createOnSubjectsChangeHandler('mainSubjectsIds')}
                         >
@@ -210,10 +211,11 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="main-subejcts-input">Dodatkowe przedmioty</label>
+                        <label htmlFor="additional-subejcts-input">Dodatkowe przedmioty</label>
                         <select
                             className="form-select"
                             multiple
+                            name="additional-subejcts-input"
                             value={this.state.data.additionalSubjectsIds?.map(x => `${x}`)}
                             onChange={this.createOnSubjectsChangeHandler('additionalSubjectsIds')}
                         >

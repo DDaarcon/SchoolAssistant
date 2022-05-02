@@ -9,7 +9,7 @@ type MainScreenState = {
 
 type RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => void;
 
-const server = new ServerConnection("/DataManagement/DataManagement");
+const server = new ServerConnection("/DataManagement");
 
 class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
     state: MainScreenState = {

@@ -1,4 +1,4 @@
-﻿interface SubjectData extends TableData {
+﻿interface SubjectListEntry extends TableData {
     name: string;
 }
 
@@ -7,14 +7,14 @@
 
 
 
-type PageProps = {
+type SubjectsPageProps = {
 
 };
-type PageState = {
+type SubjectsPageState = {
 
 }
 
-class SubjectsPage extends React.Component<PageProps, PageState> {
+class SubjectsPage extends React.Component<SubjectsPageProps, SubjectsPageState> {
 
     render() {
         return (
@@ -35,7 +35,7 @@ type SubjectTableProps = {
 }
 
 const SubjectTable = (props: SubjectTableProps) => {
-    const columnsSetting: ColumnSetting<SubjectData>[] = [
+    const columnsSetting: ColumnSetting<SubjectListEntry>[] = [
         {
             header: "Nazwa",
             prop: "name",
@@ -43,8 +43,8 @@ const SubjectTable = (props: SubjectTableProps) => {
         }
     ];
 
-    const loadAsync = async (): Promise<SubjectData[]> => {
-        let response = await server.getAsync<SubjectData[]>("SubjectEntries");
+    const loadAsync = async (): Promise<SubjectListEntry[]> => {
+        let response = await server.getAsync<SubjectListEntry[]>("SubjectEntries");
         return response;
     }
 
@@ -63,8 +63,9 @@ const SubjectTable = (props: SubjectTableProps) => {
 
 
 type SubjectModificationComponentProps = ModificationComponentProps;
-type SubjectModificationComponentState = SubjectData & {
-
+type SubjectModificationComponentState = {
+    awaitingData: boolean;
+    data: SubjectListEntry;
 }
 
 class SubjectModificationComponent extends React.Component<SubjectModificationComponentProps, SubjectModificationComponentState> {
@@ -72,7 +73,10 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
         super(props);
 
         this.state = {
-            name: ''
+            awaitingData: this.props.recordId > 0,
+            data: {
+                name: ''
+            }
         }
 
         if (this.props.recordId)
@@ -80,23 +84,30 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
     }
 
     private async fetchAsync() {
-        let data = await server.getAsync<SubjectData>("SubjectDetails", {
+        let data = await server.getAsync<SubjectListEntry>("SubjectDetails", {
             id: this.props.recordId
         });
 
-        this.setState(data);
+        this.setState({ data, awaitingData: false });
     }
 
 
     onNameChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        this.setState({ name: event.target.value });
+        const value = event.target.value;
+
+        this.setState(prevState => {
+            const data: SubjectListEntry = { ...prevState.data };
+            data.name = value;
+            return { data };
+        });
+
         this.props.onMadeAnyChange();
     }
 
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, this.state);
+        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, this.state.data);
 
         if (response.success)
             await this.props.reloadAsync();
@@ -105,16 +116,25 @@ class SubjectModificationComponent extends React.Component<SubjectModificationCo
     }
 
     render() {
+        if (this.state.awaitingData)
+            return (
+                <Loader
+                    enable={true}
+                    size={LoaderSize.Medium}
+                    type={LoaderType.DivWholeSpace}
+                />
+            )
+
         return (
             <div>
                 <form onSubmit={this.onSubmitAsync}>
                     <div className="form-group">
-                        <label htmlFor="subject-name">Nazwa</label>
+                        <label htmlFor="name-input">Nazwa</label>
                         <input
                             type="text"
-                            id="subject-name"
+                            id="name-input"
                             className="form-control"
-                            value={this.state.name}
+                            value={this.state.data.name}
                             onChange={this.onNameChange}
                         />
                     </div>
