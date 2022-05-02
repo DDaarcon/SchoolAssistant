@@ -16,11 +16,14 @@ namespace SchoolAssistant.Logic.DataManagement.Rooms
     [Injectable]
     public class RoomDataManagementService : IRoomDataManagementService
     {
+        private readonly IModifyRoomFromJsonService _modifyFromJsonService;
         private readonly IRepository<Room> _roomRepo;
 
         public RoomDataManagementService(
+            IModifyRoomFromJsonService modifyRoomFromJsonService,
             IRepository<Room> roomRepo)
         {
+            _modifyFromJsonService = modifyRoomFromJsonService;
             _roomRepo = roomRepo;
         }
 

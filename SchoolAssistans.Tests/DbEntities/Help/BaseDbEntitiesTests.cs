@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
+using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
@@ -48,6 +44,11 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             Assert.IsNotNull(res);
             Assert.IsTrue(res!.success);
+        }
+        protected void AssertResponseFail(ResponseJson? res)
+        {
+            Assert.IsNotNull(res);
+            Assert.IsFalse(res!.success);
         }
 
         protected abstract void SetupServices();

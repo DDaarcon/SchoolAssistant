@@ -135,6 +135,8 @@ class RoomModificationComponent extends React.Component<RoomModificationComponen
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
+        if (this.state.data.name == "") this.state.data.name = this.state.defaultName;
+
         let response = await server.postAsync<ResponseJson>("RoomData", undefined, this.state.data);
 
         if (response.success)
