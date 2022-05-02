@@ -12,8 +12,8 @@ using SchoolAssistant.DAL;
 namespace SchoolAssistant.DAL.Migrations
 {
     [DbContext(typeof(SADbContext))]
-    [Migration("20220502171509_Optional_room_name")]
-    partial class Optional_room_name
+    [Migration("20220502202335_Optional_room_number")]
+    partial class Optional_room_number
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -484,9 +484,10 @@ namespace SchoolAssistant.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Number")
+                    b.Property<int?>("Number")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
