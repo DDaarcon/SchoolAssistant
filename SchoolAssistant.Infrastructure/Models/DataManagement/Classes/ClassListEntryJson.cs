@@ -1,8 +1,9 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.DataManagement.Classes
+﻿using SchoolAssistant.Infrastructure.Models.Shared.Json;
+
+namespace SchoolAssistant.Infrastructure.Models.DataManagement.Classes
 {
-    public class ClassListEntryJson
+    public class ClassListEntryJson : ListEntryJson
     {
-        public long id { get; set; }
         public string name { get; set; } = null!;
         public string? specialization { get; set; }
         public int amountOfStudents { get; set; }

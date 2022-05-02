@@ -1,8 +1,9 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.DataManagement.Students
+﻿using SchoolAssistant.Infrastructure.Models.Shared.Json;
+
+namespace SchoolAssistant.Infrastructure.Models.DataManagement.Students
 {
-    public class StudentRegisterRecordListEntryJson
+    public class StudentRegisterRecordListEntryJson : ListEntryJson
     {
-        public long id { get; set; }
         public string name { get; set; } = null!;
         public string? className { get; set; }
     }
