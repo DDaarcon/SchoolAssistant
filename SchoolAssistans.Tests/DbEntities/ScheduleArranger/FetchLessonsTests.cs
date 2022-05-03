@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cronos;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.Staff;
@@ -12,6 +6,8 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ScheduleArranger;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 {
@@ -24,7 +20,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         private IRepository<Teacher> _teacherRepo = null!;
 
         [OneTimeSetUp]
-        public async Task Setup()
+        public void Setup()
         {
             TestDatabase.CreateContext(TestServices.Collection);
         }
@@ -54,7 +50,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             _orgClassRepo = new Repository<OrganizationalClass>(TestDatabase.Context, null);
             _teacherRepo = new Repository<Teacher>(TestDatabase.Context, null);
 
-            _fetchLessonsService = new FetchLessonsService();
+            _fetchLessonsService = new FetchLessonsService(_orgClassRepo);
         }
 
         private Task<SchoolYear> _Year => _schoolYearRepository.GetOrCreateCurrentAsync();
@@ -69,7 +65,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             var res = await _fetchLessonsService.ForClassAsync(orgClass.Id);
 
             Assert.IsNotNull(res);
-            Assert.IsNotNull(res.data);
+            Assert.IsNotNull(res!.data);
 
             var resLessonsWithDay = res.data.SelectMany(x => x.lessons.Select(y => new
             {
@@ -79,18 +75,18 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             foreach (var lesson in orgClass.Schedule)
             {
-                var cron = CronExpression.Parse(lesson.CronPeriodicity);
-                var occurance = cron.GetNextOccurrence(DateTime.Now);
+                var occurance = lesson.GetNextOccurance();
 
                 Assert.IsTrue(resLessonsWithDay.Any(x =>
                     x.day == occurance!.Value.DayOfWeek
+                    && x.lesson.customDuration == lesson.CustomDuration
                     && x.lesson.time.hour == occurance!.Value.Hour
                     && x.lesson.time.minutes == occurance!.Value.Minute
-                    && x.lesson.lecturer.name == lesson.Lecturer.GetFullName()
+                    && x.lesson.lecturer.name == lesson.Lecturer.GetShortenedName()
                     && x.lesson.lecturer.id == lesson.LecturerId
                     && x.lesson.subject.name == lesson.Subject.Name
                     && x.lesson.subject.id == lesson.SubjectId
-                    && x.lesson.room.name == lesson.Room.Name
+                    && x.lesson.room.name == lesson.Room.DisplayName
                     && x.lesson.room.id == lesson.RoomId));
             }
         }

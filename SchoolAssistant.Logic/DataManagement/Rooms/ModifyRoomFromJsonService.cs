@@ -10,6 +10,8 @@ namespace SchoolAssistant.Logic.DataManagement.Rooms
         Task<ResponseJson> CreateOrUpdateAsync(RoomDetailsJson model);
     }
 
+
+    // TODO: Extract common part of every 'ModifyFromJsonService' to base service
     [Injectable]
     public class ModifyRoomFromJsonService : IModifyRoomFromJsonService
     {
