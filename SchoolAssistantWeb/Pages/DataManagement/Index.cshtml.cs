@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Classes;
+using SchoolAssistant.Infrastructure.Models.DataManagement.Rooms;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Students;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Subjects;
 using SchoolAssistant.Logic.DataManagement.Classes;
+using SchoolAssistant.Logic.DataManagement.Rooms;
 using SchoolAssistant.Logic.DataManagement.Staff;
 using SchoolAssistant.Logic.DataManagement.Students;
 using SchoolAssistant.Logic.DataManagement.Subjects;
@@ -18,28 +20,32 @@ namespace SchoolAssistant.Web.Pages.DataManagement
         private readonly IClassDataManagementService _classService;
         private readonly IStudentsDataManagementService _studentService;
         private readonly IStudentRegisterRecordsDataManagementService _studentsRegisterService;
+        private readonly IRoomDataManagementService _roomsService;
 
         public DataManagementModel(
             ISubjectsDataManagementService subjectsService,
             IStaffDataManagementService staffService,
             IClassDataManagementService classService,
             IStudentsDataManagementService studentService,
-            IStudentRegisterRecordsDataManagementService studentsRegisterService)
+            IStudentRegisterRecordsDataManagementService studentsRegisterService,
+            IRoomDataManagementService roomsService)
         {
             _subjectsService = subjectsService;
             _staffService = staffService;
             _classService = classService;
             _studentService = studentService;
             _studentsRegisterService = studentsRegisterService;
+            _roomsService = roomsService;
         }
 
         public void OnGet()
         {
         }
 
+        // TODO: In React, openning ModificationComponent (editing some record), when another ModificationComponent was already opened, cause error
 
 
-
+        #region Subjects
         public async Task<JsonResult> OnGetSubjectEntriesAsync()
         {
             var entries = await _subjectsService.GetEntriesJsonAsync();
@@ -57,10 +63,10 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             var result = await _subjectsService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
         }
+        #endregion
 
 
-
-
+        #region Staff
         public async Task<JsonResult> OnGetStaffPersonsEntriesAsync()
         {
             var groups = await _staffService.GetGroupsOfEntriesJsonAsync();
@@ -84,10 +90,10 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             var items = await _subjectsService.GetEntriesJsonAsync();
             return new JsonResult(items);
         }
+        #endregion
 
 
-
-
+        #region Classes
         public async Task<JsonResult> OnGetClassEntriesAsync()
         {
             var entries = await _classService.GetEntriesJsonAsync();
@@ -105,10 +111,10 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             var result = await _classService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
         }
+        #endregion
 
 
-
-
+        #region Students
         public async Task<JsonResult> OnGetStudentEntriesAsync(long classId)
         {
             var entries = await _studentService.GetEntriesJsonAsync(classId);
@@ -140,5 +146,30 @@ namespace SchoolAssistant.Web.Pages.DataManagement
             var result = await _studentsRegisterService.CreateOrUpdateAsync(model);
             return new JsonResult(result);
         }
+        #endregion
+
+
+        #region Rooms
+        public async Task<JsonResult> OnGetRoomEntriesAsync()
+        {
+            var entries = await _roomsService.GetEntriesJsonAsync();
+            return new JsonResult(entries);
+        }
+        public async Task<JsonResult> OnGetRoomModificationDataAsync(long id)
+        {
+            var modifyModel = await _roomsService.GetModificationDataJsonAsync(id);
+            return new JsonResult(modifyModel);
+        }
+        public async Task<JsonResult> OnPostRoomDataAsync([FromBody] RoomDetailsJson model)
+        {
+            var result = await _roomsService.CreateOrUpdateAsync(model);
+            return new JsonResult(result);
+        }
+        public async Task<JsonResult> OnGetRoomDefaultNameAsync()
+        {
+            var modifyModel = await _roomsService.GetDefaultNameAsync();
+            return new JsonResult(modifyModel);
+        }
+        #endregion
     }
 }

@@ -105,7 +105,7 @@ class RoomModificationComponent extends React.Component<RoomModificationComponen
     }
 
     private async fetchAsync() {
-        let res = await server.getAsync<RoomModificationData>("RoomDetails", {
+        let res = await server.getAsync<RoomModificationData>("RoomModificationData", {
             id: this.props.recordId
         });
 
