@@ -12,7 +12,7 @@ interface RoomDetails {
 
 interface RoomModificationData {
     data: RoomDetails;
-    defaultName: string;
+    defaultName?: string;
 }
 
 
