@@ -123,6 +123,7 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
 
         scheduleServer.postAsync<AddLessonResponse>("Lesson", {}, {
             classId: scheduleArrangerConfig.classId,
+            day: dayIndicator,
             time: time,
             customDuration: undefined,
             subjectId: prefab.subject.id,

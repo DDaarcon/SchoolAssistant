@@ -6,6 +6,7 @@ using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Repositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
             RegisterIdentity();
 
-            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager);
+            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager, new AppConfigRepository(TestDatabase.Context, null));
         }
 
         private void RegisterIdentity()

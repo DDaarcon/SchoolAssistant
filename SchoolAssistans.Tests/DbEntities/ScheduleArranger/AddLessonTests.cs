@@ -35,6 +35,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         protected override async Task CleanDataAfterEveryTestAsync()
         {
             await TestDatabase.ClearDataAsync<PeriodicLesson>();
+            await TestDatabase.ClearDataAsync<OrganizationalClass>();
         }
 
         protected override async Task SetupDataForEveryTestAsync()
@@ -58,7 +59,8 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 _orgClassRepo,
                 new Repository<Subject>(_Context, null),
                 _teacherRepo,
-                _roomRepo);
+                _roomRepo,
+                new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo));
         }
 
 
@@ -85,7 +87,8 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             AssertResponseSuccess(res);
 
-            Assert.AreEqual(res!.lesson!.time, model.time);
+            Assert.AreEqual(res!.lesson!.time.hour, model.time.hour);
+            Assert.AreEqual(res!.lesson!.time.minutes, model.time.minutes);
             Assert.IsNull(res!.lesson!.customDuration);
             Assert.AreEqual(res!.lesson!.lecturer.name, _Teacher.GetShortenedName());
             Assert.AreEqual(res!.lesson!.subject.name, subject.Name);
@@ -118,7 +121,8 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             AssertResponseSuccess(res);
 
-            Assert.AreEqual(res!.lesson!.time, model.time);
+            Assert.AreEqual(res!.lesson!.time.hour, model.time.hour);
+            Assert.AreEqual(res!.lesson!.time.minutes, model.time.minutes);
             Assert.AreEqual(res!.lesson!.customDuration, 90);
             Assert.AreEqual(res!.lesson!.lecturer.name, _Teacher.GetShortenedName());
             Assert.AreEqual(res!.lesson!.subject.name, subject.Name);
@@ -345,6 +349,58 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                     minutes = 20
                 },
                 day = (DayOfWeek)10
+            };
+
+            var res = await _addLessonService.AddToClass(model);
+
+            AssertResponseFail(res);
+        }
+        [Test]
+        public async Task Should_fail_overlapping_with_other()
+        {
+            var orgClass = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
+            var lessonTime = orgClass.Schedule.First(x => x.GetDayOfWeek() == DayOfWeek.Monday).GetTime()!.Value;
+            var lessonTimeInMin = Math.Max(lessonTime.Hour * 60 + lessonTime.Minute + 20, 0);
+
+            var subject = _Teacher.SubjectOperations.MainIter.First();
+            var model = new AddLessonRequestJson
+            {
+                classId = orgClass.Id,
+                lecturerId = _Teacher.Id,
+                subjectId = subject.Id,
+                roomId = _Room.Id,
+                time = new TimeJson
+                {
+                    hour = lessonTimeInMin / 60,
+                    minutes = lessonTimeInMin % 60
+                },
+                day = DayOfWeek.Monday
+            };
+
+            var res = await _addLessonService.AddToClass(model);
+
+            AssertResponseFail(res);
+        }
+        [Test]
+        public async Task Should_fail_overlapping_with_other_2()
+        {
+            var orgClass = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
+            var lessonTime = orgClass.Schedule.First(x => x.GetDayOfWeek() == DayOfWeek.Monday).GetTime()!.Value;
+            var lessonTimeInMin = lessonTime.Hour * 60 + lessonTime.Minute - 20;
+
+            var subject = _Teacher.SubjectOperations.MainIter.First();
+            var model = new AddLessonRequestJson
+            {
+                classId = orgClass.Id,
+                lecturerId = _Teacher.Id,
+                subjectId = subject.Id,
+                roomId = _Room.Id,
+                time = new TimeJson
+                {
+                    hour = lessonTimeInMin / 60,
+                    minutes = lessonTimeInMin % 60
+                },
+                day = DayOfWeek.Monday
             };
 
             var res = await _addLessonService.AddToClass(model);
