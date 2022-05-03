@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SchoolAssistant.DAL.Models.Application;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.SchoolYears;
@@ -15,6 +16,7 @@ namespace SchoolAssistant.DAL
         {
         }
 
+        protected DbSet<AppConfig> _Config { get; set; } = null!;
         public DbSet<SchoolYear> Semesters { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Student> Students { get; set; } = null!;
