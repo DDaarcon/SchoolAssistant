@@ -34,15 +34,15 @@ namespace SchoolAssistant.DAL.Repositories
         }
 
         [AppConfigKey("defaultLessonDuration")]
-        public ConfigRecordOperations DefaultLessonDuration { get; private set; } = null!;
+        public ConfigRecordOperationsInt DefaultLessonDuration { get; private set; } = null!;
         [AppConfigKey("scheduleArrangerCellDuration")]
-        public ConfigRecordOperations ScheduleArrangerCellDuration { get; private set; } = null!;
+        public ConfigRecordOperationsInt ScheduleArrangerCellDuration { get; private set; } = null!;
         [AppConfigKey("scheduleArrangerCellHeight")]
-        public ConfigRecordOperations ScheduleArrangerCellHeight { get; private set; } = null!;
+        public ConfigRecordOperationsInt ScheduleArrangerCellHeight { get; private set; } = null!;
 
 
 
-        public ConfigRecordOperations CustomConfig(string key) => new ConfigRecordOperations(key, () => _context);
+        public ConfigRecordOperationsString CustomConfig(string key) => new ConfigRecordOperationsString(key, () => _context);
 
         public void Save()
         {
@@ -68,7 +68,7 @@ namespace SchoolAssistant.DAL.Repositories
             foreach (var property in properties)
             {
                 if (helper.IsPropertyValid(property))
-                    property.SetValue(this, helper.CreateForProperty(property));
+                    property.SetValue(this, helper.CreateForProperty.In);
             }
         }
     }

@@ -18,12 +18,13 @@ namespace SchoolAssistant.DAL.Help.Application
                 && property.GetCustomAttribute<AppConfigKeyAttribute>() is not null;
         }
 
-        public ConfigRecordOperations? CreateForProperty(PropertyInfo property)
+        public ConfigRecordOperations<>? CreateForProperty<T>(PropertyInfo property)
         {
             if (!IsPropertyValid(property)) return null;
             var attr = property.GetCustomAttribute<AppConfigKeyAttribute>()!;
 
-            return new ConfigRecordOperations(attr.Key, _getContext);
+            //return new ConfigRecordOperations(attr.Key, _getContext);
+            return null;
         }
     }
 }
