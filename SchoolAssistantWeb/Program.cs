@@ -119,7 +119,8 @@ app.MapRazorPages();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 var seeder = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDefaultDataSeeder>();
-await seeder.SeedAllAsync();
+await seeder.SeedRolesAndAdminAsync();
+await seeder.SeedAppConfigAsync();
 
 #endregion
 

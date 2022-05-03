@@ -52,6 +52,20 @@ namespace SchoolAssistant.DAL.Help.Application
             await _Context.SaveChangesAsync();
         }
 
+        public bool SetIfEmpty(string value)
+        {
+            if (_Repo.Any(x => x.Key == _key && !String.IsNullOrEmpty(value))) return false;
+            Set(value);
+            return true;
+        }
+
+        public async Task<bool> SetIfEmptyAsync(string value)
+        {
+            if (await _Repo.AnyAsync(x => x.Key == _key && !String.IsNullOrEmpty(value))) return false;
+            await SetAsync(value);
+            return true;
+        }
+
         private AppConfig Add()
         {
             var entry = new AppConfig

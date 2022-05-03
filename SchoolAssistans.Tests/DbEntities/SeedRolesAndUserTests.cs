@@ -42,7 +42,7 @@ namespace SchoolAssistans.Tests.DbEntities
         [Test]
         public async Task SeedDefaultRolesAndUsers()
         {
-            await _dataSeeder.SeedAllAsync();
+            await _dataSeeder.SeedRolesAndAdminAsync();
 
             var rolesEnum = Enum.GetValues<UserType>();
             var roles = _roleManager.Roles.ToList();

@@ -10,6 +10,8 @@ namespace SchoolAssistant.DAL.Repositories
         ConfigRecordOperations ScheduleArrangerCellDuration { get; }
         ConfigRecordOperations DefaultLessonDuration { get; }
         ConfigRecordOperations DefaultRoomName { get; }
+        ConfigRecordOperations ScheduleStartHour { get; }
+        ConfigRecordOperations ScheduleEndhour { get; }
 
         ConfigRecordOperations CustomConfig(string key);
         void Save();
@@ -42,6 +44,10 @@ namespace SchoolAssistant.DAL.Repositories
         public ConfigRecordOperations ScheduleArrangerCellHeight { get; private set; } = null!;
         [AppConfigKey("defaultRoomName")]
         public ConfigRecordOperations DefaultRoomName { get; private set; } = null!;
+        [AppConfigKey("scheduleStartHour")]
+        public ConfigRecordOperations ScheduleStartHour { get; private set; } = null!;
+        [AppConfigKey("scheduleEndHour")]
+        public ConfigRecordOperations ScheduleEndhour { get; private set; } = null!;
 
 
 

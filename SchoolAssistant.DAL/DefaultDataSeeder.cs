@@ -2,12 +2,14 @@
 using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Repositories;
 
 namespace SchoolAssistant.DAL
 {
     public interface IDefaultDataSeeder
     {
-        Task SeedAllAsync();
+        Task SeedAppConfigAsync();
+        Task SeedRolesAndAdminAsync();
         Task SeedRolesAsync();
         Task SeedSystemAdminAsync();
     }
@@ -17,6 +19,7 @@ namespace SchoolAssistant.DAL
     {
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IAppConfigRepository _configRepo;
 
         private readonly User _systemAdmin = new()
         {
@@ -35,13 +38,15 @@ namespace SchoolAssistant.DAL
 
         public DefaultDataSeeder(
             RoleManager<Role> roleManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IAppConfigRepository configRepo)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _configRepo = configRepo;
         }
 
-        public async Task SeedAllAsync()
+        public async Task SeedRolesAndAdminAsync()
         {
             await SeedRolesAsync();
             await SeedSystemAdminAsync();
@@ -86,6 +91,23 @@ namespace SchoolAssistant.DAL
 
                 await _userManager.AddToRoleAsync(user, UserType.SystemAdmin.GetUserTypeAttribute()!.RoleName);
             }
+        }
+
+
+        public async Task SeedAppConfigAsync()
+        {
+            var results = new bool[]
+            {
+                await _configRepo.ScheduleArrangerCellHeight.SetIfEmptyAsync("5"),
+                await _configRepo.ScheduleArrangerCellDuration.SetIfEmptyAsync("5"),
+                await _configRepo.DefaultLessonDuration.SetIfEmptyAsync("45"),
+                await _configRepo.ScheduleStartHour.SetIfEmptyAsync("7"),
+                await _configRepo.ScheduleEndhour.SetIfEmptyAsync("18"),
+                await _configRepo.DefaultRoomName.SetIfEmptyAsync("Sala")
+            };
+
+            if (results.Any(x => x))
+                await _configRepo.SaveAsync();
         }
     }
 }
