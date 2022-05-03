@@ -95,6 +95,8 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
 
             AssertResponseSuccess(res);
 
+            var list = _roomRepo.AsList();
+
             Assert.IsTrue(await _roomRepo.ExistsAsync(x =>
                 x.Name == model.name
                 && x.Number == model.number

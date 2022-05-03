@@ -31,10 +31,9 @@ namespace SchoolAssistant.Logic.DataManagement.Rooms
             _configRepo = configRepo;
         }
 
-        public async Task<string?> GetDefaultNameAsync()
+        public Task<string?> GetDefaultNameAsync()
         {
-            var name = await _configRepo.DefaultRoomName.GetAsync();
-            return name;
+            return _configRepo.DefaultRoomName.GetAsync();
         }
 
         public Task<RoomListEntryJson[]> GetEntriesJsonAsync()
@@ -48,13 +47,26 @@ namespace SchoolAssistant.Logic.DataManagement.Rooms
                 }).ToArrayAsync();
         }
 
-        public Task<RoomModificationDataJson?> GetModificationDataJsonAsync(long id)
+        public async Task<RoomModificationDataJson?> GetModificationDataJsonAsync(long id)
         {
-            throw new NotImplementedException();
+            var room = await _roomRepo.GetByIdAsync(id);
+            if (room is null) return null;
+
+            return new RoomModificationDataJson
+            {
+                defaultName = await GetDefaultNameAsync(),
+                data = new RoomDetailsJson
+                {
+                    id = room.Id,
+                    name = room.Name,
+                    number = room.Number,
+                    floor = room.Floor
+                }
+            };
         }
         public Task<ResponseJson> CreateOrUpdateAsync(RoomDetailsJson model)
         {
-            throw new NotImplementedException();
+            return _modifyFromJsonService.CreateOrUpdateAsync(model);
         }
     }
 }
