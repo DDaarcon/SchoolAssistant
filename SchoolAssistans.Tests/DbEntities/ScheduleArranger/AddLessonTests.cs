@@ -138,7 +138,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         [Test]
         public async Task Should_fail_invalid_hour_to_early()
         {
-            await _configRepo.ScheduleStartHour.SetAndSaveAsync("11");
+            await _configRepo.ScheduleStartHour.SetAndSaveAsync(11);
 
             var subject = _Teacher.SubjectOperations.MainIter.First();
             var model = new AddLessonRequestJson
@@ -162,7 +162,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         [Test]
         public async Task Should_fail_invalid_hour_to_late()
         {
-            await _configRepo.ScheduleEndhour.SetAndSaveAsync("18");
+            await _configRepo.ScheduleEndhour.SetAndSaveAsync(18);
 
             var subject = _Teacher.SubjectOperations.MainIter.First();
             var model = new AddLessonRequestJson

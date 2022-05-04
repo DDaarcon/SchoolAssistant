@@ -98,11 +98,11 @@ namespace SchoolAssistant.DAL
         {
             var results = new bool[]
             {
-                await _configRepo.ScheduleArrangerCellHeight.SetIfEmptyAsync("5"),
-                await _configRepo.ScheduleArrangerCellDuration.SetIfEmptyAsync("5"),
-                await _configRepo.DefaultLessonDuration.SetIfEmptyAsync("45"),
-                await _configRepo.ScheduleStartHour.SetIfEmptyAsync("7"),
-                await _configRepo.ScheduleEndhour.SetIfEmptyAsync("18"),
+                await _configRepo.ScheduleArrangerCellHeight.SetIfEmptyAsync(5),
+                await _configRepo.ScheduleArrangerCellDuration.SetIfEmptyAsync(5),
+                await _configRepo.DefaultLessonDuration.SetIfEmptyAsync(45),
+                await _configRepo.ScheduleStartHour.SetIfEmptyAsync(7),
+                await _configRepo.ScheduleEndhour.SetIfEmptyAsync(18),
                 await _configRepo.DefaultRoomName.SetIfEmptyAsync("Sala")
             };
 

@@ -38,7 +38,7 @@ namespace SchoolAssistant.DAL.Help.Application
 
         public async Task<T?> GetAsync() => _toType((await _Repo.FirstOrDefaultAsync(x => x.Key == _key))?.Value);
 
-        public void Set(T value)
+        public void Set(T? value)
         {
             var entry = _Repo.FirstOrDefault(x => x.Key == _key);
             entry ??= Add();
@@ -46,7 +46,7 @@ namespace SchoolAssistant.DAL.Help.Application
             entry.Value = _fromType(value);
         }
 
-        public async Task SetAsync(T value)
+        public async Task SetAsync(T? value)
         {
             var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key);
             entry ??= Add();
@@ -54,16 +54,36 @@ namespace SchoolAssistant.DAL.Help.Application
             entry.Value = _fromType(value);
         }
 
-        public void SetAndSave(T value)
+        public void SetAndSave(T? value)
         {
             Set(value);
             _Context.SaveChanges();
         }
 
-        public async Task SetAndSaveAsync(T value)
+        public async Task SetAndSaveAsync(T? value)
         {
             await SetAsync(value);
             await _Context.SaveChangesAsync();
+        }
+
+        public bool SetIfEmpty(T? value)
+        {
+            var entry = _Repo.FirstOrDefault(x => x.Key == _key);
+            if (!String.IsNullOrEmpty(entry?.Value))
+                return false;
+
+            Set(value);
+            return true;
+        }
+
+        public async Task<bool> SetIfEmptyAsync(T? value)
+        {
+            var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key);
+            if (!String.IsNullOrEmpty(entry?.Value))
+                return false;
+
+            await SetAsync(value);
+            return true;
         }
 
         private AppConfig Add()

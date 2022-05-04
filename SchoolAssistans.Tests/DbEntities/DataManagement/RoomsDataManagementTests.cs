@@ -13,7 +13,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
     {
         private IRoomDataManagementService _dataManagementService = null!;
         private IModifyRoomFromJsonService _modifyFromJsonService = null!;
-        private IAppConfigRepository _configRepo;
+        private IAppConfigRepository _configRepo = null!;
 
         private IRepository<Room> _roomRepo = null!;
 

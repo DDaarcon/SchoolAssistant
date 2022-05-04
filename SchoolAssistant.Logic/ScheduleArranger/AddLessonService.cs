@@ -96,9 +96,9 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 
         private async Task<bool> ValidateTime()
         {
-            var minHour = int.Parse(await _configRepo.ScheduleStartHour.GetAsync() ?? "0");
-            var maxHour = int.Parse(await _configRepo.ScheduleEndhour.GetAsync() ?? "24");
-            var duration = _model.customDuration ?? int.Parse(await _configRepo.DefaultLessonDuration.GetAsync() ?? "45");
+            var minHour = await _configRepo.ScheduleStartHour.GetAsync() ?? 0;
+            var maxHour = await _configRepo.ScheduleEndhour.GetAsync() ?? 24;
+            var duration = _model.customDuration ?? await _configRepo.DefaultLessonDuration.GetAsync() ?? 45;
             var lessonEndHour = _model.time.hour + (_model.time.minutes + duration) / 60;
 
             return _model.time.minutes >= 0 && _model.time.minutes < 60
@@ -121,7 +121,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
                 .ToListAsync();
             var lessonsThatDay = lessons.Where(x => x.GetDayOfWeek() == _model.day);
 
-            var defaultDuration = int.Parse(await _configRepo.DefaultLessonDuration.GetAsync() ?? "45");
+            var defaultDuration = await _configRepo.DefaultLessonDuration.GetAsync() ?? 45;
 
             foreach (var lesson in lessonsThatDay)
             {
