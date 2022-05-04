@@ -23,12 +23,6 @@ interface PeriodicLessonTimetableEntry {
     room?: IdName;
 }
 
-interface ScheduleLessonPrefab {
-    subject: IdName;
-    lecturer: IdName;
-    room?: IdName;
-}
-
 interface IdName {
     id: number;
     name: string;
@@ -182,26 +176,28 @@ type ScheduleArrangerSelectorProps = {
     data: ScheduleDayLessons[];
 }
 type ScheduleArrangerSelectorState = {
-    prefabs: ScheduleLessonPrefab[];
 }
 class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorProps, ScheduleArrangerSelectorState> {
+    private _addPrefabModalId?: number;
+
     constructor(props) {
         super(props);
 
-        this.state = {
-            prefabs: []
-        }
-
-        let prefabs = this.props.data.flatMap(dayLessons => dayLessons.lessons).map(this.lessonToPrefab);
+        const prefabs = this.props.data.flatMap(dayLessons => dayLessons.lessons).map(this.lessonToPrefab);
+        const validPrefabs: ScheduleLessonPrefab[] = [];
 
         for (let prefab of prefabs) {
-            if (this.state.prefabs.some(x =>
+            if (validPrefabs.some(x =>
                 x.subject.id == prefab.subject.id
                 && x.lecturer.id == prefab.lecturer.id
                 && x.room.id == prefab.room.id)) continue;
 
-            this.state.prefabs.push(prefab);
+            validPrefabs.push(prefab);
         }
+
+        scheduleDataService.prefabs = validPrefabs;
+
+        addEventListener('addPrefab', () => this.forceUpdate());
     }
 
     private lessonToPrefab = (lesson: PeriodicLessonTimetableEntry): ScheduleLessonPrefab => ({
@@ -210,15 +206,38 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
         room: lesson.room
     })
 
+    openAddPrefabModal = () => {
+        this._addPrefabModalId = modalController.add({
+            children: (
+                <ScheduleLessonModificationComponent
+                    submit={this.addPrefab}
+                />
+            )
+        })
+    }
+
+    private addPrefab = (info: ScheduleLessonModificationData) => {
+        modalController.closeById(this._addPrefabModalId);
+
+        scheduleDataService.addPrefab({
+            subject: { id: info.subjectId, name: scheduleDataService.getSubjectName(info.subjectId) },
+            lecturer: { id: info.teacherId, name: scheduleDataService.getTeacherName(info.teacherId) },
+            room: { id: info.roomId, name: scheduleDataService.getRoomName(info.roomId) }
+        });
+    }
+
     render() {
         return (
             <div className="schedule-arranger-selector">
-                {this.state.prefabs.map((prefab, index) => (
+                {scheduleDataService.prefabs.map((prefab, index) => (
                     <ScheduleLessonPrefabTile
                         key={index}
                         data={prefab}
                     />
                 ))}
+                <ScheduleAddPrefabTile
+                    onClick={this.openAddPrefabModal}
+                />
             </div>
         )
     }

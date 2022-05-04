@@ -11,7 +11,7 @@ namespace SchoolAssistant.Logic
 
         public static string GetShortenedName(this IPerson person)
         {
-            return $"{person.FirstName.FirstOrDefault()}. ${person.LastName}";
+            return $"{person.FirstName[0]}. {person.LastName}";
         }
     }
 }

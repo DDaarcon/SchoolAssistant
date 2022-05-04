@@ -35,6 +35,7 @@ class ModalController {
             />,
             id
         );
+        return id;
     }
 
     addConfirmation(props: ModalPropsToPass<ConfirmationModalProps>) {
@@ -47,6 +48,7 @@ class ModalController {
             />,
             id
         );
+        return id;
     }
 
     addModificationComponent
@@ -62,10 +64,17 @@ class ModalController {
             />,
             id
         );
+        return id;
     }
 
     addCustom(modal: React.ReactElement<CommonModalProps>) {
-        this._modalPresenter.addModal(modal, this.newUniqueId);
+        const id = this.newUniqueId;
+        this._modalPresenter.addModal(modal, id);
+        return id;
+    }
+
+    closeById(id: number) {
+        this._modalPresenter.removeModalById(id);
     }
 }
 
@@ -108,16 +117,10 @@ type CommonModalProps = {
 
 type ModalProps = CommonModalProps & {
     style?: React.CSSProperties;
-    form?: FormConfig;
     children: React.ReactNode;
 }
 type ModalState = {
 
-}
-
-type FormConfig = {
-    onSubmit: () => void;
-    onDismiss: () => void;
 }
 class Modal extends React.Component<ModalProps, ModalState> {
     onClose = () => {

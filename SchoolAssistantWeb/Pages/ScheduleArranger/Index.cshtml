@@ -14,7 +14,10 @@
 
 @Html.React("ScheduleArrangerMainScreen", new {
     config = Model.Config,
-    classes = Model.Classes
+    classes = Model.Classes,
+    subjects = Model.Subjects,
+    teachers = Model.Teachers,
+    rooms = Model.Rooms
 })
 
 @section Scripts {

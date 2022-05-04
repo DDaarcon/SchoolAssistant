@@ -1,4 +1,4 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
+﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact
 {
     public class ScheduleArrangerConfigJson
     {

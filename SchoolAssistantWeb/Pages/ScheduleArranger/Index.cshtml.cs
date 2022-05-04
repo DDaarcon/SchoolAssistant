@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact;
 using SchoolAssistant.Logic.ScheduleArranger;
 
 namespace SchoolAssistant.Web.Pages.ScheduleArranger
@@ -8,23 +9,26 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
     public class ScheduleArrangerModel : PageModel
     {
         private readonly IFetchScheduleArrangerConfigService _fetchConfigService;
-        private readonly IFetchClassesForScheduleArrangerService _fetchClassesService;
+        private readonly IFetchScheduleArrangerDataService _fetchDataService;
 
         private readonly IFetchLessonsForScheduleArrangerService _fetchLessonsSvc;
         private readonly IAddLessonByScheduleArrangerService _addLessonSvc;
 
-        public ScheduleArrangerConfigJson Config { get; set; } = null!;
-        public ScheduleClassSelectorEntryJson[] Classes { get; set; } = null!;
+        public ScheduleArrangerConfigJson Config { get; private set; } = null!;
+        public ScheduleClassSelectorEntryJson[] Classes { get; private set; } = null!;
+        public ScheduleSubjectEntryJson[] Subjects { get; private set; } = null!;
+        public ScheduleTeacherEntryJson[] Teachers { get; private set; } = null!;
+        public ScheduleRoomEntryJson[] Rooms { get; private set; } = null!;
 
 
         public ScheduleArrangerModel(
             IFetchScheduleArrangerConfigService fetchConfigService,
-            IFetchClassesForScheduleArrangerService fetchClassesService,
+            IFetchScheduleArrangerDataService fetchDataService,
             IFetchLessonsForScheduleArrangerService fetchLessonsService,
             IAddLessonByScheduleArrangerService addLessonService)
         {
             _fetchConfigService = fetchConfigService;
-            _fetchClassesService = fetchClassesService;
+            _fetchDataService = fetchDataService;
             _fetchLessonsSvc = fetchLessonsService;
             _addLessonSvc = addLessonService;
         }
@@ -34,7 +38,10 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
         {
             Config = await _fetchConfigService.FetchAsync();
             Config.classId = classId;
-            Classes = await _fetchClassesService.FetchForCurrentYearAsync();
+            Classes = await _fetchDataService.FetchClassesForCurrentYearAsync();
+            Subjects = await _fetchDataService.FetchSubjectsAsync();
+            Teachers = await _fetchDataService.FetchTeachersAsync();
+            Rooms = await _fetchDataService.FetchRoomsAsync();
         }
 
         public async Task<JsonResult> OnGetClassLessonsAsync(long classId)
@@ -48,43 +55,5 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             var result = await _addLessonSvc.AddToClassAsync(model);
             return new JsonResult(result);
         }
-
-
-
-        private ScheduleClassLessonsJson _lessonsMockupModel => new ScheduleClassLessonsJson
-        {
-            data = new ScheduleDayLessonsJson[]
-                {
-                    new ()
-                    {
-                        dayIndicator = DayOfWeek.Monday,
-                        lessons = new PeriodicLessonTimetableEntryJson[]
-                        {
-                            new ()
-                            {
-                                time = new TimeJson
-                                {
-                                    hour = 9,
-                                    minutes = 0
-                                },
-                                subject = new IdNameJson() { id = 1, name = "Matematyka" },
-                                lecturer = new IdNameJson() { id = 1, name = "T. Nowakowski" },
-                                room = new IdNameJson() { id = 1, name = "Sala nr 5" }
-                            },
-                            new ()
-                            {
-                                time = new TimeJson
-                                {
-                                    hour = 9,
-                                    minutes = 50
-                                },
-                                subject = new IdNameJson() { id = 2, name = "Jêzyk polski" },
-                                lecturer = new IdNameJson() { id = 2, name = "T. Kosakowski" },
-                                room = new IdNameJson() { id = 1, name = "Sala nr 5" }
-                            },
-                        }
-                    }
-                }
-        };
     }
 }

@@ -1,10 +1,5 @@
 ﻿using SchoolAssistant.DAL.Repositories;
-using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
