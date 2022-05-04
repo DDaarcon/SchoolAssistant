@@ -6,11 +6,11 @@ namespace SchoolAssistant.DAL.Repositories
 {
     public interface IAppConfigRepository
     {
-        ConfigRecordOperations ScheduleArrangerCellHeight { get; }
-        ConfigRecordOperations ScheduleArrangerCellDuration { get; }
-        ConfigRecordOperations DefaultLessonDuration { get; }
+        ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellHeight { get; }
+        ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellDuration { get; }
+        ConfigRecordOperationsPrimitive<int> DefaultLessonDuration { get; }
 
-        ConfigRecordOperations CustomConfig(string key);
+        ConfigRecordOperations<string> CustomConfig(string key);
         void Save();
         Task SaveAsync();
         void UseIndependentDbContext();
@@ -30,19 +30,22 @@ namespace SchoolAssistant.DAL.Repositories
             _context = context;
             _scopeFactory = scopeFactory;
 
-            SetupConfigRecords();
+            var helper = new ConfigRecordOperationsHelper(() => _context, this);
+
+            helper.SetUpProperties();
         }
 
         [AppConfigKey("defaultLessonDuration")]
-        public ConfigRecordOperationsInt DefaultLessonDuration { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> DefaultLessonDuration { get; private set; } = null!;
         [AppConfigKey("scheduleArrangerCellDuration")]
-        public ConfigRecordOperationsInt ScheduleArrangerCellDuration { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellDuration { get; private set; } = null!;
         [AppConfigKey("scheduleArrangerCellHeight")]
-        public ConfigRecordOperationsInt ScheduleArrangerCellHeight { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellHeight { get; private set; } = null!;
 
 
 
-        public ConfigRecordOperationsString CustomConfig(string key) => new ConfigRecordOperationsString(key, () => _context);
+        public ConfigRecordOperations<string> CustomConfig(string key) => 
+            new ConfigRecordOperations<string>(key, () => _context, v => v, v => v);
 
         public void Save()
         {
@@ -57,19 +60,6 @@ namespace SchoolAssistant.DAL.Repositories
         public void UseIndependentDbContext()
         {
             _context = _scopeFactory?.CreateScope().ServiceProvider.GetRequiredService<SADbContext>() ?? _context;
-        }
-
-
-        private void SetupConfigRecords()
-        {
-            var helper = new ConfigRecordOperationsHelper(() => _context);
-            var properties = GetType().GetProperties()!;
-
-            foreach (var property in properties)
-            {
-                if (helper.IsPropertyValid(property))
-                    property.SetValue(this, helper.CreateForProperty.In);
-            }
         }
     }
 }
