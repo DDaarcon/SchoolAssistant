@@ -12,7 +12,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 {
     public interface IAddLessonByScheduleArrangerService
     {
-        Task<AddLessonResponseJson> AddToClass(AddLessonRequestJson model);
+        Task<AddLessonResponseJson> AddToClassAsync(AddLessonRequestJson model);
     }
 
     [Injectable]
@@ -47,7 +47,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
         }
 
 
-        public async Task<AddLessonResponseJson> AddToClass(AddLessonRequestJson model)
+        public async Task<AddLessonResponseJson> AddToClassAsync(AddLessonRequestJson model)
         {
             _model = model;
             _response = new AddLessonResponseJson();

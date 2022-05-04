@@ -83,7 +83,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseSuccess(res);
 
@@ -117,7 +117,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseSuccess(res);
 
@@ -155,7 +155,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -179,7 +179,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -201,7 +201,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -223,7 +223,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -245,7 +245,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -267,7 +267,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -289,7 +289,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -311,7 +311,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -329,7 +329,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Tuesday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -351,7 +351,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = (DayOfWeek)10
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -377,7 +377,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Monday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
@@ -403,7 +403,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 day = DayOfWeek.Monday
             };
 
-            var res = await _addLessonService.AddToClass(model);
+            var res = await _addLessonService.AddToClassAsync(model);
 
             AssertResponseFail(res);
         }
