@@ -6,14 +6,14 @@ namespace SchoolAssistant.DAL.Repositories
 {
     public interface IAppConfigRepository
     {
-        ConfigRecordOperations ScheduleArrangerCellHeight { get; }
-        ConfigRecordOperations ScheduleArrangerCellDuration { get; }
-        ConfigRecordOperations DefaultLessonDuration { get; }
-        ConfigRecordOperations DefaultRoomName { get; }
-        ConfigRecordOperations ScheduleStartHour { get; }
-        ConfigRecordOperations ScheduleEndhour { get; }
+        ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellHeight { get; }
+        ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellDuration { get; }
+        ConfigRecordOperationsPrimitive<int> DefaultLessonDuration { get; }
+        ConfigRecordOperations<string> DefaultRoomName { get; }
+        ConfigRecordOperationsPrimitive<int> ScheduleStartHour { get; }
+        ConfigRecordOperationsPrimitive<int> ScheduleEndhour { get; }
 
-        ConfigRecordOperations CustomConfig(string key);
+        ConfigRecordOperations<string> CustomConfig(string key);
         void Save();
         Task SaveAsync();
         void UseIndependentDbContext();
@@ -33,25 +33,28 @@ namespace SchoolAssistant.DAL.Repositories
             _context = context;
             _scopeFactory = scopeFactory;
 
-            SetupConfigRecords();
+            var helper = new ConfigRecordOperationsHelper(() => _context, this);
+
+            helper.SetUpProperties();
         }
 
         [AppConfigKey("defaultLessonDuration")]
-        public ConfigRecordOperations DefaultLessonDuration { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> DefaultLessonDuration { get; private set; } = null!;
         [AppConfigKey("scheduleArrangerCellDuration")]
-        public ConfigRecordOperations ScheduleArrangerCellDuration { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellDuration { get; private set; } = null!;
         [AppConfigKey("scheduleArrangerCellHeight")]
-        public ConfigRecordOperations ScheduleArrangerCellHeight { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> ScheduleArrangerCellHeight { get; private set; } = null!;
         [AppConfigKey("defaultRoomName")]
-        public ConfigRecordOperations DefaultRoomName { get; private set; } = null!;
+        public ConfigRecordOperations<string> DefaultRoomName { get; private set; } = null!;
         [AppConfigKey("scheduleStartHour")]
-        public ConfigRecordOperations ScheduleStartHour { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> ScheduleStartHour { get; private set; } = null!;
         [AppConfigKey("scheduleEndHour")]
-        public ConfigRecordOperations ScheduleEndhour { get; private set; } = null!;
+        public ConfigRecordOperationsPrimitive<int> ScheduleEndhour { get; private set; } = null!;
 
 
 
-        public ConfigRecordOperations CustomConfig(string key) => new ConfigRecordOperations(key, () => _context);
+        public ConfigRecordOperations<string> CustomConfig(string key) => 
+            new ConfigRecordOperations<string>(key, () => _context, v => v, v => v);
 
         public void Save()
         {
@@ -66,19 +69,6 @@ namespace SchoolAssistant.DAL.Repositories
         public void UseIndependentDbContext()
         {
             _context = _scopeFactory?.CreateScope().ServiceProvider.GetRequiredService<SADbContext>() ?? _context;
-        }
-
-
-        private void SetupConfigRecords()
-        {
-            var helper = new ConfigRecordOperationsHelper(() => _context);
-            var properties = GetType().GetProperties()!;
-
-            foreach (var property in properties)
-            {
-                if (helper.IsPropertyValid(property))
-                    property.SetValue(this, helper.CreateForProperty(property));
-            }
         }
     }
 }
