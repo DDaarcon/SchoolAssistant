@@ -4,17 +4,17 @@ using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
-    public interface IFetchLessonsService
+    public interface IFetchLessonsForScheduleArrangerService
     {
         Task<ScheduleClassLessonsJson?> ForClassAsync(long classId);
     }
 
     [Injectable]
-    public class FetchLessonsService : IFetchLessonsService
+    public class FetchLessonsForScheduleArrangerService : IFetchLessonsForScheduleArrangerService
     {
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
 
-        public FetchLessonsService(
+        public FetchLessonsForScheduleArrangerService(
             IRepository<OrganizationalClass> orgClassRepo)
         {
             _orgClassRepo = orgClassRepo;

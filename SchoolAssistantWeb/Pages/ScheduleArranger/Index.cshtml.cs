@@ -7,31 +7,27 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 {
     public class ScheduleArrangerModel : PageModel
     {
-        private readonly IFetchLessonsService _fetchLessonsSvc;
-        private readonly IAddLessonService _addLessonSvc;
+        private readonly IFetchScheduleArrangerConfigService _fetchConfigService;
+        private readonly IFetchLessonsForScheduleArrangerService _fetchLessonsSvc;
+        private readonly IAddLessonByScheduleArrangerService _addLessonSvc;
 
         public ScheduleArrangerConfigJson Config { get; set; } = null!;
 
 
         public ScheduleArrangerModel(
-            IFetchLessonsService fetchLessonsService,
-            IAddLessonService addLessonService)
+            IFetchScheduleArrangerConfigService fetchConfigService,
+            IFetchLessonsForScheduleArrangerService fetchLessonsService,
+            IAddLessonByScheduleArrangerService addLessonService)
         {
+            _fetchConfigService = fetchConfigService;
             _fetchLessonsSvc = fetchLessonsService;
             _addLessonSvc = addLessonService;
         }
 
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            Config = new ScheduleArrangerConfigJson
-            {
-                defaultLessonDuration = 45,
-                cellDuration = 5,
-                cellHeight = 5,
-                startHour = 6,
-                endHour = 20
-            };
+            Config = await _fetchConfigService.FetchAsync();
         }
 
         public async Task<JsonResult> OnGetClassLessonsAsync(long classId)

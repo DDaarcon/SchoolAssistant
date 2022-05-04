@@ -8,7 +8,5 @@
 
         public int cellDuration { get; set; }
         public int cellHeight { get; set; }
-
-        public int? classId { get; set; }
     }
 }

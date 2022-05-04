@@ -17,7 +17,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 {
     public class AddLessonTests : BaseDbEntitiesTests
     {
-        private IAddLessonService _addLessonService = null!;
+        private IAddLessonByScheduleArrangerService _addLessonService = null!;
 
         private IAppConfigRepository _configRepo = null!;
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
@@ -54,7 +54,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _roomRepo = new Repository<Room>(_Context, null);
 
-            _addLessonService = new AddLessonService(
+            _addLessonService = new AddLessonByScheduleArrangerService(
                 _configRepo,
                 _orgClassRepo,
                 new Repository<Subject>(_Context, null),

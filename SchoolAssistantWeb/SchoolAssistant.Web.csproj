@@ -21,6 +21,7 @@
     <Content Remove="wwwroot\js\data-management\students.tsx" />
     <Content Remove="wwwroot\js\data-management\subjects.tsx" />
     <Content Remove="wwwroot\js\data-management\table.tsx" />
+    <Content Remove="wwwroot\js\schedule\class-selector.tsx" />
     <Content Remove="wwwroot\js\schedule\main.tsx" />
     <Content Remove="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
     <Content Remove="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
@@ -61,6 +62,7 @@
     <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\register-records.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\rooms.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\class-selector.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\main.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />

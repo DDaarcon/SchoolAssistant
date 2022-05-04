@@ -5,19 +5,25 @@
 
     cellDuration: number;
     cellHeight: number;
+}
 
-    classId?: number;
+interface ScheduleClassSelectorEntry {
+    id: number;
+    name: string;
+    specialization?: string;
 }
 
 let scheduleArrangerConfig: ScheduleArrangerConfig;
-let schedulePageChangeScreen: (pageComponent: JSX.Element) => void;
+let scheduleChangePageScreen: (pageComponent: JSX.Element) => void;
 const scheduleServer = new ServerConnection("/ScheduleArranger");
 
 
 
 
-type ScheduleArrangerMainScreenProps = ScheduleArrangerConfig & {
-
+type ScheduleArrangerMainScreenProps = {
+    config: ScheduleArrangerConfig;
+    classes: ScheduleClassSelectorEntry[];
+    classId?: number;
 }
 type ScheduleArrangerMainScreenState = {
     pageComponent: JSX.Element;
@@ -30,8 +36,8 @@ class ScheduleArrangerMainScreen extends React.Component<ScheduleArrangerMainScr
             pageComponent: TempMainScreen()
         }
 
-        scheduleArrangerConfig = this.props;
-        schedulePageChangeScreen = this.changeScreen;
+        scheduleArrangerConfig = this.props.config;
+        scheduleChangePageScreen = this.changeScreen;
     }
 
     changeScreen = (pageComponent: JSX.Element) => {
@@ -56,7 +62,7 @@ const TempMainScreen = () => {
 
     scheduleServer.getAsync<ScheduleClassLessons>("ClassLessons", { classId: 0 })
         .then((result) => {
-            schedulePageChangeScreen(
+            scheduleChangePageScreen(
                 <ScheduleArrangerPage
                     classData={result}
                 />

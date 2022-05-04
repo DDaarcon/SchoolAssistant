@@ -10,13 +10,13 @@ using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
-    public interface IAddLessonService
+    public interface IAddLessonByScheduleArrangerService
     {
         Task<AddLessonResponseJson> AddToClass(AddLessonRequestJson model);
     }
 
     [Injectable]
-    public class AddLessonService : IAddLessonService
+    public class AddLessonByScheduleArrangerService : IAddLessonByScheduleArrangerService
     {
         private readonly IAppConfigRepository _configRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
@@ -30,7 +30,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
         private AddLessonRequestJson _model = null!;
         private AddLessonResponseJson _response = null!;
 
-        public AddLessonService(
+        public AddLessonByScheduleArrangerService(
             IAppConfigRepository configRepo,
             IRepository<OrganizationalClass> orgClassRepo,
             IRepository<Subject> subjectRepo,
