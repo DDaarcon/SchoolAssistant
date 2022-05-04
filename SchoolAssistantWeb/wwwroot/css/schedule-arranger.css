@@ -145,3 +145,39 @@
     float: right;
     text-align: right;
 }
+
+
+
+/* Class selector */
+.sa-selector-classes {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 30px
+}
+
+.sa-selector-classes > h2 {
+    flex-basis: 100%;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.sa-selector-class-entry {
+    height: 150px;
+    background-color: green;
+    min-width: 150px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 10px;
+    box-shadow: rgba(0,0,0,0.4) 5px 5px 10px 5px inset;
+    cursor: pointer;
+}
+
+.sa-selector-class-name {
+    display: block;
+    font-size: 3.5em;
+    text-shadow: -1px 1px 2px rgb(255, 255, 255);
+}
+
+.sa-selector-class-spec {
+    font-size: 2em;
+}

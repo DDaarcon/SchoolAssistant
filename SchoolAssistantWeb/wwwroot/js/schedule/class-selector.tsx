@@ -8,10 +8,11 @@ class ScheduleClassSelectorPage extends React.Component<ScheduleClassSelectorPag
 
     render() {
         return (
-            <div>
+            <div className="sa-selector-classes">
                 <h2>Wybierz klasę</h2>
                 {this.props.entries.map(entry =>
                     <ClassEntry
+                        key={entry.id}
                         {...entry }
                     />
                 )}
@@ -26,13 +27,16 @@ type ClassEntryProps = ScheduleClassSelectorEntry & {
 const ClassEntry = (props: ClassEntryProps) => {
     const selectClass = () =>
         scheduleServer.getAsync<ScheduleClassLessons>("ClassLessons", { classId: props.id })
-        .then((result) => {
-            scheduleChangePageScreen(
-                <ScheduleArrangerPage
-                    classData={result}
-                />
-            );
-        });
+            .then((result) => {
+                if (result == null) return;
+
+                scheduleArrangerConfig.classId = props.id;
+                scheduleChangePageScreen(
+                    <ScheduleArrangerPage
+                        classData={result}
+                    />
+                );
+            });
 
 
     return (

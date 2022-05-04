@@ -5,6 +5,8 @@
 
     cellDuration: number;
     cellHeight: number;
+
+    classId?: number;
 }
 
 interface ScheduleClassSelectorEntry {
@@ -33,7 +35,10 @@ class ScheduleArrangerMainScreen extends React.Component<ScheduleArrangerMainScr
         super(props);
 
         this.state = {
-            pageComponent: TempMainScreen()
+            pageComponent:
+                <ScheduleClassSelectorPage
+                    entries={this.props.classes}
+                />
         }
 
         scheduleArrangerConfig = this.props.config;
@@ -56,20 +61,4 @@ class ScheduleArrangerMainScreen extends React.Component<ScheduleArrangerMainScr
             </div>
         )
     }
-}
-
-const TempMainScreen = () => {
-
-    scheduleServer.getAsync<ScheduleClassLessons>("ClassLessons", { classId: 0 })
-        .then((result) => {
-            scheduleChangePageScreen(
-                <ScheduleArrangerPage
-                    classData={result}
-                />
-            );
-        });
-
-    return (
-        <h1>Witaj w zarządzaniu planem lekcji</h1>
-    )
 }

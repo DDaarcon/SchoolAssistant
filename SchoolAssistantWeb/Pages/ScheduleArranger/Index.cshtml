@@ -12,7 +12,10 @@
     <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
 }
 
-@Html.React("ScheduleArrangerMainScreen", Model.Config)
+@Html.React("ScheduleArrangerMainScreen", new {
+    config = Model.Config,
+    classes = Model.Classes
+})
 
 @section Scripts {
     <script>
@@ -28,6 +31,7 @@
     <script src="~/js/schedule/schedule-arranger-timeline-components.tsx" asp-append-version="true"></script>
     <script src="~/js/schedule/schedule-arranger-selector-components.tsx" asp-append-version="true"></script>
     <script src="~/js/schedule/schedule-arranger.tsx" asp-append-version="true"></script>
+    <script src="~/js/schedule/class-selector.tsx" asp-append-version="true"></script>
     <script src="~/js/schedule/main.tsx" asp-append-version="true"></script>
     @Html.ReactInitJavaScript()
 }

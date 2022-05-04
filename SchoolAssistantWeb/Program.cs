@@ -99,6 +99,7 @@ app.UseReact(config =>
         .AddScript("~/js/schedule/schedule-arranger-timeline-components.tsx")
         .AddScript("~/js/schedule/schedule-arranger-selector-components.tsx")
         .AddScript("~/js/schedule/schedule-arranger.tsx")
+        .AddScript("~/js/schedule/class-selector.tsx")
         .AddScript("~/js/schedule/main.tsx");
 
 });

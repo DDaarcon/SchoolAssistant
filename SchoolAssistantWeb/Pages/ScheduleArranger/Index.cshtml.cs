@@ -8,26 +8,33 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
     public class ScheduleArrangerModel : PageModel
     {
         private readonly IFetchScheduleArrangerConfigService _fetchConfigService;
+        private readonly IFetchClassesForScheduleArrangerService _fetchClassesService;
+
         private readonly IFetchLessonsForScheduleArrangerService _fetchLessonsSvc;
         private readonly IAddLessonByScheduleArrangerService _addLessonSvc;
 
         public ScheduleArrangerConfigJson Config { get; set; } = null!;
+        public ScheduleClassSelectorEntryJson[] Classes { get; set; } = null!;
 
 
         public ScheduleArrangerModel(
             IFetchScheduleArrangerConfigService fetchConfigService,
+            IFetchClassesForScheduleArrangerService fetchClassesService,
             IFetchLessonsForScheduleArrangerService fetchLessonsService,
             IAddLessonByScheduleArrangerService addLessonService)
         {
             _fetchConfigService = fetchConfigService;
+            _fetchClassesService = fetchClassesService;
             _fetchLessonsSvc = fetchLessonsService;
             _addLessonSvc = addLessonService;
         }
 
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(long? classId)
         {
             Config = await _fetchConfigService.FetchAsync();
+            Config.classId = classId;
+            Classes = await _fetchClassesService.FetchForCurrentYearAsync();
         }
 
         public async Task<JsonResult> OnGetClassLessonsAsync(long classId)
@@ -38,8 +45,8 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         public async Task<JsonResult> OnPostLessonAsync([FromBody] AddLessonRequestJson model)
         {
-            var result = await _addLessonSvc.AddToClass(model);
-            return new JsonResult(model);
+            var result = await _addLessonSvc.AddToClassAsync(model);
+            return new JsonResult(result);
         }
 
 
