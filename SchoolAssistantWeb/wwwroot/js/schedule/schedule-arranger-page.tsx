@@ -258,19 +258,3 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
         )
     }
 }
-
-
-const areTimesOverlappingByDuration = (timeAStart: Time, durationA: number, timeBStart: Time, durationB: number) => {
-    const aStart = toMinutes(timeAStart);
-    const aEnd = aStart + durationA;
-    const bStart = toMinutes(timeBStart);
-    const bEnd = bStart + durationB;
-
-    const left = aStart > bStart && aStart < bEnd;
-    const right = aEnd > bStart && aEnd < bEnd;
-    const over = aStart <= bStart && aEnd >= bEnd;
-
-    return left || right || over;
-}
-
-const toMinutes = (time: Time) => time.hour * 60 + time.minutes;

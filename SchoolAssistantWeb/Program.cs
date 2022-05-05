@@ -103,6 +103,7 @@ app.UseReact(config =>
         .AddScript("~/js/schedule/schedule-arranger-page.tsx")
         .AddScript("~/js/schedule/schedule-data-service.tsx")
         .AddScript("~/js/schedule/class-selector.tsx")
+        .AddScript("~/js/schedule/help-functions.tsx")
         .AddScript("~/js/schedule/main.tsx");
 
 });

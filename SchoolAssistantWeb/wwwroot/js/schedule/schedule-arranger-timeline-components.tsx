@@ -78,6 +78,7 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
             <div className="sa-schedule-day-column"
                 onDragEnd={this.hideLessonShadow}
             >
+                <DayLabel day={this.props.dayIndicator} />
                 <RoomLessonsShadow lessons={this.props.roomBusyLessons} />
                 <TeacherLessonsShadow lessons={this.props.teacherBusyLessons} />
                 <LessonPlacingShadow time={this.state.shadowFor} />
@@ -356,13 +357,14 @@ class ScheduleTimeColumn extends React.Component<ScheduleTimeColumnProps, Schedu
 
 
 
-const sumTimes = (timeA: Time, timeB: Time): Time => {
-    const summedMinutes = timeA.minutes + timeB.minutes;
-    return {
-        hour: timeA.hour + timeB.hour + Math.floor(summedMinutes / 60),
-        minutes: summedMinutes % 60
-    };
-}
 
-const displayTime = (time: Time) => `${time.hour}:${displayMinutes(time.minutes)}`;
-const displayMinutes = (minutes: number) => minutes < 10 ? `0${minutes}` : minutes.toString();
+type DayLabelProps = {
+    day: DayOfWeek;
+}
+const DayLabel = (props: DayLabelProps) => {
+    return (
+        <div className="sa-day-label">
+            {nameForDayOfWeek(props.day)}
+        </div>
+    )
+}
