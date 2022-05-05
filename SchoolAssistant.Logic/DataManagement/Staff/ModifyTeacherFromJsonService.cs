@@ -62,7 +62,7 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
 
             if (String.IsNullOrWhiteSpace(_model.lastName))
             {
-                _response.message = "Należy podać imię";
+                _response.message = "Należy podać nazwisko";
                 return false;
             }
 
@@ -73,8 +73,23 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
                 return false;
             }
 
+            if (!ValidateDistinctMainAndAdditionalSubjects())
+            {
+                _response.message = "Jeden przedmiot nie może być głównym i dodatkowym";
+                return false;
+            }
+
             return true;
         }
+
+        private bool ValidateDistinctMainAndAdditionalSubjects()
+        {
+            if (_model.mainSubjectsIds is null || _model.additionalSubjectsIds is null || _model.additionalSubjectsIds.Length == 0)
+                return true;
+
+            return !_model.mainSubjectsIds.Any(x => _model.additionalSubjectsIds.Contains(x));
+        }
+
 
         private async Task UpdateAsync()
         {

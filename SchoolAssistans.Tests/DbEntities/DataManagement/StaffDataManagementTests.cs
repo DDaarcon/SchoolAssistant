@@ -272,6 +272,37 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
+        public async Task Should_add_only_once_subject_appearing_twice()
+        {
+            var teacher = await FakeData.Teacher(_teacherRepo);
+
+            var additIds = teacher.SubjectOperations.AdditionalIter.Select(x => x.Id);
+            var subject = await _subjectRepo.AsQueryable().FirstAsync(x => !additIds.Contains(x.Id));
+
+            var model = new StaffPersonDetailsJson
+            {
+                id = teacher.Id,
+                firstName = teacher.FirstName,
+                lastName = teacher.LastName,
+                groupId = nameof(Teacher),
+                mainSubjectsIds = new[]
+                {
+                    subject!.Id, subject!.Id
+                }
+            };
+
+            var response = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsTrue(response.success);
+
+            teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
+
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher!.SubjectOperations.MainIter.Count() == 1);
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == subject.Name));
+        }
+
+        [Test]
         public async Task Should_modify_teacher_firstname()
         {
             var teacher = new Teacher
