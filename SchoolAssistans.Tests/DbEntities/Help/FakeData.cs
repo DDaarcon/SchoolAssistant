@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.Staff;
@@ -8,17 +9,15 @@ using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Cronos;
-using SchoolAssistant.DAL.Models.Lessons;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
     public class FakeData
     {
         private static readonly string[] _SubjectNames = new string[] {
-            "Art", "Music", "Drama", "Latin", "Sport Science", "Design Technology", "Computer Science"
+            "Art", "Music", "Drama", "Latin", "Sport Science", "Design Technology", "Computer Science", "Biology", "Chemistry", "Physics",
+            "History", "Geography", "Economics"
         };
 
         private static readonly IList<string> _RoomNames = new List<string>
@@ -71,6 +70,7 @@ namespace SchoolAssistans.Tests.DbEntities
         private static Faker<Subject> _SubjectFaker => new Faker<Subject>()
             .RuleFor(x => x.Name, f => f.PickRandom(_SubjectNames));
 
+        /// <summary> Max 13 </summary>
         private static Faker<Subject> _UniqueSubjectFaker
         {
             get
@@ -264,27 +264,65 @@ namespace SchoolAssistans.Tests.DbEntities
 
         #endregion
 
+        #region Subjects
+
+        /// <param name="amount"> max. 13 </param>
+        public static async Task<IEnumerable<Subject>> Subjects(
+            IRepository<Subject> subjectRepo,
+            int amount)
+        {
+            var subjects = _UniqueSubjectFaker.Generate(Math.Min(amount, 13));
+
+            subjectRepo.AddRange(subjects);
+            await subjectRepo.SaveAsync();
+
+            return subjects;
+        }
+
+        #endregion
 
         #region Teachers
 
+        public static async Task<Teacher> Teacher(
+            IRepository<Teacher> teacherRepo,
+            IList<Subject>? notSavedSubjects = null)
+        {
+            var teachers = await _XRandom_Teachers(teacherRepo, 1, notSavedSubjects);
+
+            foreach (var teacher in teachers)
+                return teacher;
+            throw new Exception();
+        }
 
         public static async Task<IEnumerable<Teacher>> _5Random_Teachers(
             IRepository<Teacher> teacherRepo,
             IList<Subject>? notSavedSubjects = null)
         {
-            var subjects = notSavedSubjects ?? _UniqueSubjectFaker.Generate(6);
+            var teachers = await _XRandom_Teachers(teacherRepo, 5, notSavedSubjects);
+
+            return teachers;
+        }
+
+        public static async Task<IEnumerable<Teacher>> _XRandom_Teachers(
+            IRepository<Teacher> teacherRepo,
+            int amount,
+            IList<Subject>? notSavedSubjects = null)
+        {
+            var subjects = notSavedSubjects ?? _UniqueSubjectFaker.Generate(13);
 
             var teachers = new List<Teacher>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < amount; i++)
             {
                 var teacher = _TeacherFaker
                     .FinishWith((f, t) =>
                     {
                         var randomInts = RandomAmountOfRandomInts(0, subjects.Count - 1);
 
-                        for (int j = 0; j < randomInts.Length; j++)
+                        int lengthOr5 = Math.Min(5, randomInts.Length);
+
+                        for (int j = 0; j < lengthOr5; j++)
                         {
-                            if (!(j > randomInts.Length / 2))
+                            if (!(j > lengthOr5 / 2))
                                 t.SubjectOperations.AddNewlyCreatedMain(subjects[randomInts[j]]);
                             else
                                 t.SubjectOperations.AddNewlyCreatedAdditional(subjects[randomInts[j]]);

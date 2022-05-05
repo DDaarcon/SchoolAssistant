@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
@@ -63,7 +64,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_create_teacher_async()
+        public async Task Should_create_teacher()
         {
             var matematyka = _subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Matematyka")!;
             var model = new StaffPersonDetailsJson
@@ -91,7 +92,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         #region Fails
 
         [Test]
-        public async Task Should_fail_creating_missing_firstname_async()
+        public async Task Should_fail_creating_missing_firstname()
         {
             var model = new StaffPersonDetailsJson
             {
@@ -105,7 +106,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_creating_missing_lastname_async()
+        public async Task Should_fail_creating_missing_lastname()
         {
             var model = new StaffPersonDetailsJson
             {
@@ -119,7 +120,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_creating_invalid_type_async()
+        public async Task Should_fail_creating_invalid_type()
         {
             var model = new StaffPersonDetailsJson
             {
@@ -134,14 +135,14 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_updating_invalid_teacher_id_async()
+        public async Task Should_fail_updating_invalid_teacher_id()
         {
             var model = new StaffPersonDetailsJson
             {
                 id = 999999,
                 firstName = "balbalb",
                 lastName = "yhydhyd",
-                groupId = "JakasBledna"
+                groupId = nameof(Teacher)
             };
 
             var res = await _staffDataManagementService.CreateOrUpdateAsync(model);
@@ -150,13 +151,13 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_creating_invalid_subject_id_async()
+        public async Task Should_fail_creating_invalid_subject_id()
         {
             var model = new StaffPersonDetailsJson
             {
                 firstName = "balbalb",
                 lastName = "yhydhyd",
-                groupId = "JakasBledna",
+                groupId = nameof(Teacher),
                 mainSubjectsIds = new long[]
                 {
                     999999
@@ -169,7 +170,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_fetching_invalid_id_async()
+        public async Task Should_fail_fetching_invalid_id()
         {
             var res = await _staffDataManagementService.GetDetailsJsonAsync(nameof(Teacher), 999999);
 
@@ -177,33 +178,43 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fail_fetching_invalid_group_async()
+        public async Task Should_fail_fetching_invalid_group()
         {
             var res = await _staffDataManagementService.GetDetailsJsonAsync("Incorrect", 1);
 
             Assert.IsNull(res);
         }
 
+
+        [Test]
+        public async Task Should_fail_same_main_and_additional_subject()
+        {
+            var subjects = await FakeData.Subjects(_subjectRepo, 2);
+
+            var model = new StaffPersonDetailsJson
+            {
+                firstName = "balbalb",
+                lastName = "yhydhyd",
+                groupId = nameof(Teacher),
+                mainSubjectsIds = new long[] { subjects.First().Id, subjects.Skip(1).First().Id },
+                additionalSubjectsIds = new long[] { subjects.First().Id }
+            };
+
+            var res = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsFalse(res.success);
+        }
+
         #endregion
 
         [Test]
-        public async Task Should_modify_teachers_main_subjects_async()
+        public async Task Should_modify_teachers_main_subjects_to_have_one_not_owned_before()
         {
-            var teacher = new Teacher
-            {
-                FirstName = "Inrelevent",
-                LastName = "Some last name"
-            };
+            var teacher = await FakeData.Teacher(_teacherRepo);
 
-            teacher.SubjectOperations.AddMain(_subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Jezyk polski"));
-
-            _teacherRepo.Add(teacher);
-
-            _teacherRepo.Save();
-
-            Assert.IsTrue(teacher.SubjectOperations.MainIter.First().Name == "Jezyk polski");
-
-            var matem = _subjectRepo.AsQueryable().FirstOrDefault(x => x.Name == "Matematyka");
+            var mainIds = teacher.SubjectOperations.MainIter.Select(x => x.Id);
+            var additIds = teacher.SubjectOperations.AdditionalIter.Select(x => x.Id);
+            var subject = await _subjectRepo.AsQueryable().FirstAsync(x => !mainIds.Contains(x.Id) && !additIds.Contains(x.Id));
 
             var model = new StaffPersonDetailsJson
             {
@@ -213,7 +224,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
                 groupId = nameof(Teacher),
                 mainSubjectsIds = new[]
                 {
-                    matem!.Id
+                    subject!.Id
                 }
             };
 
@@ -224,13 +235,44 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
             teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
             Assert.IsNotNull(teacher);
-            Assert.IsTrue(teacher!.SubjectOperations.MainIter.Count() == 2);
-            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == "Matematyka"));
-            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == "Jezyk polski"));
+            Assert.IsTrue(teacher!.SubjectOperations.MainIter.Count() == 1);
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == subject.Name));
         }
 
         [Test]
-        public async Task Should_modify_teacher_firstname_async()
+        public async Task Should_modify_teachers_main_subjects_to_have_only_one_owned_before()
+        {
+            var teacher = await FakeData.Teacher(_teacherRepo);
+
+            var mainIds = teacher.SubjectOperations.MainIter.Select(x => x.Id);
+            var additIds = teacher.SubjectOperations.AdditionalIter.Select(x => x.Id);
+            var subject = await _subjectRepo.AsQueryable().FirstAsync(x => mainIds.Contains(x.Id) && !additIds.Contains(x.Id));
+
+            var model = new StaffPersonDetailsJson
+            {
+                id = teacher.Id,
+                firstName = teacher.FirstName,
+                lastName = teacher.LastName,
+                groupId = nameof(Teacher),
+                mainSubjectsIds = new[]
+                {
+                    subject!.Id
+                }
+            };
+
+            var response = await _staffDataManagementService.CreateOrUpdateAsync(model);
+
+            Assert.IsTrue(response.success);
+
+            teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
+
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher!.SubjectOperations.MainIter.Count() == 1);
+            Assert.IsTrue(teacher.SubjectOperations.MainIter.Any(x => x.Name == subject.Name));
+        }
+
+        [Test]
+        public async Task Should_modify_teacher_firstname()
         {
             var teacher = new Teacher
             {
@@ -259,7 +301,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_modify_teacher_lastname_async()
+        public async Task Should_modify_teacher_lastname()
         {
             var teacher = new Teacher
             {
@@ -288,7 +330,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fetch_details_async()
+        public async Task Should_fetch_details()
         {
             var teacher = new Teacher
             {
@@ -314,7 +356,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         }
 
         [Test]
-        public async Task Should_fetch_group_async()
+        public async Task Should_fetch_group()
         {
             var teacher = new Teacher
             {

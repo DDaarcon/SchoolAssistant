@@ -37,11 +37,13 @@ namespace SchoolAssistant.DAL.Help
 
         public IEnumerable<TRelated> MainIter => SelectMain
             .Where(x => x is not null)
-            .Concat(_newlyAddedExistingMain);
+            .Concat(_newlyAddedExistingMain)
+            .Distinct();
 
         public IEnumerable<TRelated> AdditionalIter => SelectAdditional
             .Where(x => x is not null)
-            .Concat(_newlyAddedExistingAdditional);
+            .Concat(_newlyAddedExistingAdditional)
+            .Distinct();
 
 
 
