@@ -197,7 +197,7 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
 
         scheduleDataService.prefabs = validPrefabs;
 
-        addEventListener('addPrefab', () => this.forceUpdate());
+        addEventListener('newPrefab', (_) => this.forceUpdate());
     }
 
     private lessonToPrefab = (lesson: PeriodicLessonTimetableEntry): ScheduleLessonPrefab => ({

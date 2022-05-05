@@ -111,22 +111,18 @@
 
 
 /* Prefab */
-.sa-lesson-prefab {
+.sa-lesson-prefab, .sa-add-lesson-prefab {
     margin: 5px;
     border-radius: 10px;
     border: 3px solid #3cb37177;
     background-color: #3cb37177;
+}
+.sa-lesson-prefab {
     padding: 5px;
     display: flex;
     flex-direction: column;
     font-size: 0.8em;
-}
-.sa-add-lesson-prefab {
-    border-radius: 10px;
-    border: 3px solid #3cb37177;
-    background-color: #3cb37177;
-    cursor: pointer;
-    height: 75px;
+    cursor: grab;
 }
 
 .sa-lesson-prefab:active {
@@ -152,6 +148,19 @@
 .sa-lesson-prefab-room {
     float: right;
     text-align: right;
+}
+
+
+
+.sa-add-lesson-prefab {
+    cursor: pointer;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sa-add-lesson-prefab i {
+    transform: translateY(0px) scale(1.4);
 }
 
 
