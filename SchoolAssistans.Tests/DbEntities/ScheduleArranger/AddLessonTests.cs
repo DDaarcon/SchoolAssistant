@@ -23,6 +23,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepository<Room> _roomRepo = null!;
+        private IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo = null!;
 
 
         private OrganizationalClass _classWithNoSchedule = null!;
@@ -53,6 +54,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _roomRepo = new Repository<Room>(_Context, null);
+            _lessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
 
             _addLessonService = new AddLessonByScheduleArrangerService(
                 _configRepo,
@@ -60,7 +62,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
                 new Repository<Subject>(_Context, null),
                 _teacherRepo,
                 _roomRepo,
-                new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo));
+                _lessonRepo);
         }
 
 
@@ -87,6 +89,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             AssertResponseSuccess(res);
 
+            Assert.IsNotNull(res!.lesson!.id);
             Assert.AreEqual(res!.lesson!.time.hour, model.time.hour);
             Assert.AreEqual(res!.lesson!.time.minutes, model.time.minutes);
             Assert.IsNull(res!.lesson!.customDuration);
@@ -96,6 +99,10 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             Assert.AreEqual(res!.lesson!.lecturer.id, model.lecturerId);
             Assert.AreEqual(res!.lesson!.subject.id, model.subjectId);
             Assert.AreEqual(res!.lesson!.room.id, model.roomId);
+
+            var lesson = await _lessonRepo.GetByIdAsync(res.lesson.id!.Value);
+            Assert.IsNotNull(lesson);
+            Assert.AreEqual(lesson!.GetDayOfWeek(), model.day);
         }
 
         [Test]
@@ -121,6 +128,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             AssertResponseSuccess(res);
 
+            Assert.IsNotNull(res!.lesson!.id);
             Assert.AreEqual(res!.lesson!.time.hour, model.time.hour);
             Assert.AreEqual(res!.lesson!.time.minutes, model.time.minutes);
             Assert.AreEqual(res!.lesson!.customDuration, 90);
@@ -130,6 +138,11 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             Assert.AreEqual(res!.lesson!.lecturer.id, model.lecturerId);
             Assert.AreEqual(res!.lesson!.subject.id, model.subjectId);
             Assert.AreEqual(res!.lesson!.room.id, model.roomId);
+
+
+            var lesson = await _lessonRepo.GetByIdAsync(res.lesson.id!.Value);
+            Assert.IsNotNull(lesson);
+            Assert.AreEqual(lesson!.GetDayOfWeek(), model.day);
         }
 
 
