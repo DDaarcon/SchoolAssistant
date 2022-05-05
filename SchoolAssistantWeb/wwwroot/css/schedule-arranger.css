@@ -47,12 +47,13 @@
 .sa-whole-hour-line {
     width: 100%;
     height: 1px;
-    background-color: #65656542;
+    background-color: #6565652e;
 }
 
 .sa-lesson-tile {
     position: absolute !important;
-    width: 100%;
+    width: 98%;
+    left: 1%;
     z-index: -1;
 }
 
@@ -63,6 +64,9 @@
     top: -30px;
     font-size: 1.2em;
 }
+
+
+
 
 /* Lesson on timetable */
 .sa-placed-lesson {
@@ -104,6 +108,34 @@
     font-size: 0.8em;
     text-align: right;
 }
+
+
+
+
+/** Teacher other lessons */
+.sa-lessons-teacher-busy, .sa-lessons-room-busy {
+    background-color: #a7030367;
+    border-radius: 10px;
+    padding: 2px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
+.sa-lessons-teacher-busy div {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 1em;
+    text-align: right;
+}
+.sa-lessons-room-busy div {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.9em;
+    text-align: right;
+}
+
+
 
 
 

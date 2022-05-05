@@ -73,7 +73,7 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
         this._assignDaysFromProps();
 
         addEventListener('dragBegan', (event: CustomEvent) => this.initiateShowingOtherLessonsShadows(event));
-        addEventListener('hideLessonShadow', this.hideOtherLessonsShadows);
+        addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
     }
 
     private _assignDaysFromProps() {
@@ -126,11 +126,14 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
     }
 
 
+
     initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
         const data: ScheduleLessonPrefab = event.detail;
 
         await scheduleDataService.getTeacherAndRoomLessons(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
     }
+
+
     displayOtherLessonsShadows = (teacher?: ScheduleDayLessons[], room?: ScheduleDayLessons[]) => {
         if (!teacher && !room) return;
 
@@ -143,6 +146,8 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
             return { teacherBusyLessons, roomBusyLessons };
         });
     }
+
+
     hideOtherLessonsShadows = () => {
         this.setState({
             teacherBusyLessons: undefined,
@@ -154,23 +159,22 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
 
     private getDaysOfWeekIterable = (with6th: boolean = false, with0th: boolean = false) =>
         Object.values(DayOfWeek).map(x => parseInt(x as unknown as string)).filter(x =>
-            !isNaN(x) && (with0th || x != 0) && (with6th || x != 6));
+            !isNaN(x) && (with0th || x != 0) && (with6th || x != 6)) as DayOfWeek[];
 
     render() {
-
-        console.log(this.getDaysOfWeekIterable());
+        console.log(this.state.roomBusyLessons);
         return (
             <div className="schedule-arranger-timeline">
 
                 <ScheduleTimeColumn/>
 
-                {this.getDaysOfWeekIterable().map(x => (
+                {this.getDaysOfWeekIterable().map(day => (
                     <ScheduleDayColumn
-                        key={x}
-                        dayIndicator={x as DayOfWeek.Monday}
-                        lessons={this._days[x]?.lessons ?? []}
-                        teacherBusyLessons={this.state.teacherBusyLessons?.[x]?.lessons}
-                        roomBusyLessons={this.state.roomBusyLessons?.[x]?.lessons}
+                        key={day}
+                        dayIndicator={day}
+                        lessons={this._days.find(x => x.dayIndicator == day)?.lessons ?? []}
+                        teacherBusyLessons={this.state.teacherBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
+                        roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
                         dropped={this.onDropped}
                     />
                 ))}

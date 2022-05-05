@@ -73,7 +73,6 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
 
 
     render() {
-
         return (
             <div className="sa-schedule-day-column"
                 onDragEnd={this.hideLessonShadow}
@@ -228,7 +227,9 @@ const TeacherLessonsShadow = (props: TeacherLessonsShadowProps) => {
                     key={x.id}
                     time={x.time}
                 >
-                    {x.lecturer.name}
+                    <div>
+                        {x.lecturer.name}
+                    </div>
                 </GenericLessonTile>
             ))}
         </>
@@ -251,7 +252,9 @@ const RoomLessonsShadow = (props: RoomLessonsShadowProps) => {
                     key={x.id}
                     time={x.time}
                 >
-                    {x.room.name}
+                    <div>
+                        {x.room.name}
+                    </div>
                 </GenericLessonTile>
             ))}
         </>

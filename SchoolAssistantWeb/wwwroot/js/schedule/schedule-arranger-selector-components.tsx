@@ -28,6 +28,7 @@ class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileP
 
     onEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
         dispatchEvent(new Event("hideLessonShadow"));
+        dispatchEvent(new Event("clearOtherLessons"));
     }
 
     render() {

@@ -44,8 +44,8 @@
         });
 
         if (response) {
-            teacher.lessons = response.teacher;
-            room.lessons = response.room;
+            teacher.lessons ?? (teacher.lessons = response.teacher);
+            room.lessons ?? (room.lessons = response.room);
             apply(teacher.lessons, room.lessons);
         }
     }
