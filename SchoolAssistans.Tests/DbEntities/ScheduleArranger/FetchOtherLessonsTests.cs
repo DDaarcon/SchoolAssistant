@@ -61,8 +61,8 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             Assert.IsNotNull(res!.teacher);
             Assert.IsNotNull(res.room);
 
-            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.LecturerId == teacher.Id).Count(), res.teacher!.Length);
-            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.RoomId == room.Id).Count(), res.room!.Length);
+            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.LecturerId == teacher.Id).Count(), res.teacher!.SelectMany(x => x.lessons).Count());
+            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.RoomId == room.Id).Count(), res.room!.SelectMany(x => x.lessons).Count());
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             Assert.IsNotEmpty(res!.teacher!);
             Assert.IsEmpty(res.room!);
 
-            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.LecturerId == teacher.Id).Count(), res.teacher!.Length);
+            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.LecturerId == teacher.Id).Count(), res.teacher!.SelectMany(x => x.lessons).Count());
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             Assert.IsNotEmpty(res!.room!);
             Assert.IsEmpty(res!.teacher!);
 
-            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.RoomId == room.Id).Count(), res.room!.Length);
+            Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.RoomId == room.Id).Count(), res.room!.SelectMany(x => x.lessons).Count());
         }
 
 

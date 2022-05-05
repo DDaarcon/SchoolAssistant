@@ -3,7 +3,6 @@ using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
-using System.Linq.Expressions;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
@@ -27,32 +26,6 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             _orgClassRepo = orgClassRepo;
         }
 
-        private Expression<Func<PeriodicLesson, PeriodicLessonTimetableEntryJson>> _entityToJson = entity => new PeriodicLessonTimetableEntryJson
-        {
-            id = entity.Id,
-            customDuration = entity.CustomDuration,
-            time = new TimeJson
-            {
-                hour = int.Parse(entity.CronPeriodicity.Split(' ', StringSplitOptions.TrimEntries)[1]),
-                minutes = int.Parse(entity.CronPeriodicity.Split(' ', StringSplitOptions.TrimEntries)[0]),
-            },
-            subject = new IdNameJson
-            {
-                id = entity.Subject.Id,
-                name = entity.Subject.Name
-            },
-            lecturer = new IdNameJson
-            {
-                id = entity.Lecturer.Id,
-                name = entity.Lecturer.GetShortenedName()
-            },
-            room = new IdNameJson
-            {
-                id = entity.Room.Id,
-                name = entity.Room.DisplayName
-            }
-        };
-
         public async Task<ScheduleOtherLessonsJson?> ForAsync(long classId, long? teacherId, long? roomId)
         {
             var orgClass = await _orgClassRepo.GetByIdAsync(classId);
@@ -61,21 +34,51 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 
             var query = _lessonRepo.AsQueryableByYear.ByYearOf(orgClass);
 
-            var teacherLessons = await query
+            var queryTeacher = query
                 .Where(x => x.ParticipatingOrganizationalClassId != classId
-                    && x.LecturerId == teacherId)
-                .Select(_entityToJson).ToArrayAsync();
+                    && x.LecturerId == teacherId);
 
-            var roomLessons = await query
+            var queryRoom = query
                 .Where(x => x.ParticipatingOrganizationalClassId != classId
-                    && x.RoomId == roomId)
-                .Select(_entityToJson).ToArrayAsync();
+                    && x.RoomId == roomId);
 
             return new ScheduleOtherLessonsJson
             {
-                teacher = teacherLessons,
-                room = roomLessons
+                teacher = await QueryToJsonArrayAsync(queryTeacher),
+                room = await QueryToJsonArrayAsync(queryRoom)
             };
+        }
+
+        private async Task<ScheduleDayLessonsJson[]> QueryToJsonArrayAsync(IQueryable<PeriodicLesson> query)
+        {
+            var lessons = await query.ToListAsync();
+
+            return lessons.GroupBy(g => g.GetDayOfWeek())
+                    .Select(x => new ScheduleDayLessonsJson
+                    {
+                        dayIndicator = x.Key,
+                        lessons = x.Select(l => new PeriodicLessonTimetableEntryJson
+                        {
+                            id = l.Id,
+                            time = new TimeJson(l.GetTime() ?? TimeOnly.MinValue),
+                            customDuration = l.CustomDuration,
+                            lecturer = new IdNameJson
+                            {
+                                id = l.LecturerId,
+                                name = l.Lecturer.GetShortenedName()
+                            },
+                            subject = new IdNameJson
+                            {
+                                id = l.SubjectId,
+                                name = l.Subject.Name
+                            },
+                            room = new IdNameJson
+                            {
+                                id = l.RoomId,
+                                name = l.Room.DisplayName
+                            },
+                        }).ToArray()
+                    }).ToArray();
         }
 
 

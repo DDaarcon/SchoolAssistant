@@ -2,7 +2,7 @@
 {
     public class ScheduleOtherLessonsJson
     {
-        public PeriodicLessonTimetableEntryJson[]? teacher { get; set; }
-        public PeriodicLessonTimetableEntryJson[]? room { get; set; }
+        public ScheduleDayLessonsJson[]? teacher { get; set; }
+        public ScheduleDayLessonsJson[]? room { get; set; }
     }
 }
