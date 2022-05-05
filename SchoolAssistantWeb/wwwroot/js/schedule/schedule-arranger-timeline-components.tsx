@@ -2,6 +2,9 @@
     dayIndicator: DayOfWeek;
     lessons: PeriodicLessonTimetableEntry[];
 
+    teacherBusyLessons?: PeriodicLessonTimetableEntry[];
+    roomBusyLessons?: PeriodicLessonTimetableEntry[];
+
     dropped: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
 }
 type ScheduleDayColumnState = {
@@ -20,6 +23,7 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
 
         this.instantiateCells();
     }
+
 
     instantiateCells = () => {
         const cellsPerHour = 60 / scheduleArrangerConfig.cellDuration;
@@ -44,6 +48,8 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
             />);
     }
 
+
+
     dropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
         this.hideLessonShadow();
         this.props.dropped(dayIndicator, cellIndex, time, data);
@@ -56,6 +62,8 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
 
         this.setState({ shadowFor: time });
     }
+
+
 
     hideLessonShadow = () => {
         if (this.state.shadowFor && !this._iAmCallingHideShadow)
@@ -70,6 +78,8 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
             <div className="sa-schedule-day-column"
                 onDragEnd={this.hideLessonShadow}
             >
+                <RoomLessonsShadow lessons={this.props.roomBusyLessons} />
+                <TeacherLessonsShadow lessons={this.props.teacherBusyLessons} />
                 <LessonPlacingShadow time={this.state.shadowFor} />
                 <LessonsByDay lessons={this.props.lessons} />
                 {this._cells}
@@ -201,6 +211,51 @@ class LessonPlacingShadow extends React.Component<LessonPlacingShadowProps, Less
     }
 }
 
+
+
+
+
+type TeacherLessonsShadowProps = {
+    lessons?: PeriodicLessonTimetableEntry[];
+}
+const TeacherLessonsShadow = (props: TeacherLessonsShadowProps) => {
+    if (!props.lessons) return <></>;
+    return (
+        <>
+            {props.lessons.map(x => (
+                <GenericLessonTile className="sa-lessons-teacher-busy"
+                    key={x.id}
+                    time={x.time}
+                >
+                    {x.lecturer.name}
+                </GenericLessonTile>
+            ))}
+        </>
+    )
+}
+
+
+
+
+
+type RoomLessonsShadowProps = {
+    lessons?: PeriodicLessonTimetableEntry[];
+}
+const RoomLessonsShadow = (props: RoomLessonsShadowProps) => {
+    if (!props.lessons) return <></>;
+    return (
+        <>
+            {props.lessons.map(x => (
+                <GenericLessonTile className="sa-lessons-room-busy"
+                    key={x.id}
+                    time={x.time}
+                >
+                    {x.room.name}
+                </GenericLessonTile>
+            ))}
+        </>
+    )
+}
 
 
 

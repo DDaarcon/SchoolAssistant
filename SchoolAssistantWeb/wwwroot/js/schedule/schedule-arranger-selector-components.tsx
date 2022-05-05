@@ -1,4 +1,17 @@
-﻿type ScheduleLessonPrefabTileProps = {
+﻿/**
+ *  This file contains:
+ *  
+ *  ScheduleLessonPrefabTile - prefab template for selector component.
+ *  
+ *  ScheduleAddPrefabTile - button for opening modal, where prefabs are composed.
+ * 
+ *  ScheduleLessonModificationComponent - component injected into modal, here prefabs are constructed.
+ *      
+ * 
+ * */
+
+
+type ScheduleLessonPrefabTileProps = {
     data: ScheduleLessonPrefab;
 }
 type ScheduleLessonPrefabTileState = {
@@ -8,6 +21,9 @@ class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileP
 
     onStart: React.DragEventHandler<HTMLDivElement> = (event) => {
         event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
+        dispatchEvent(new CustomEvent('dragBegan', {
+            detail: this.props.data
+        }));
     }
 
     onEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
@@ -58,11 +74,6 @@ const ScheduleAddPrefabTile = (props: ScheduleAddPrefabTileProps) => {
 
 
 
-interface ScheduleLessonModificationData {
-    subjectId?: number;
-    teacherId?: number;
-    roomId?: number;
-}
 
 interface ScheduleTeacherOptionEntry extends IdName {
     mainSubject: boolean;

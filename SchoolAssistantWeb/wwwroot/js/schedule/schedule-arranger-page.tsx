@@ -1,34 +1,4 @@
-﻿interface ScheduleClassLessons {
-    data: ScheduleDayLessons[];
-}
-
-interface ScheduleDayLessons {
-    dayIndicator: DayOfWeek;
-    lessons: PeriodicLessonTimetableEntry[];
-}
-
-interface Time {
-    hour: number;
-    minutes: number;
-}
-
-interface PeriodicLessonTimetableEntry {
-    id?: number;
-
-    time: Time;
-    customDuration?: number;
-
-    subject: IdName;
-    lecturer: IdName;
-    room?: IdName;
-}
-
-interface IdName {
-    id: number;
-    name: string;
-}
-
-enum DayOfWeek {
+﻿enum DayOfWeek {
     Sunday,
     Monday,
     Tuesday,
@@ -38,10 +8,19 @@ enum DayOfWeek {
     Saturday
 }
 
+/**
+ *  This file contains:
+ *  
+ *  ScheduleArrangerPage - container for timetable and prefab selector components
+ *  
+ *  ScheduleArrangerTimeline - component in which included are columns for displaying each day of week.
+ *      This component is also responsible for sending to server data about newly placed lessons on schedule.
+ * 
+ *  ScheduleArrangerSelector - holder for prefabs, creates them from already placed lessons when applicatioin is first time loaded.
+ *      Opens modal for creating new prefabs. Prefabs are stored in DataService
+ * 
+ * */
 
-interface AddLessonResponse extends ResponseJson {
-    lesson?: PeriodicLessonTimetableEntry;
-}
 
 
 
@@ -80,7 +59,8 @@ type ScheduleArrangerTimelineProps = {
 
 }
 type ScheduleArrangerTimelineState = {
-
+    teacherBusyLessons?: ScheduleDayLessons[];
+    roomBusyLessons?: ScheduleDayLessons[];
 }
 class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
     private _days: ScheduleDayLessons[];
@@ -88,18 +68,30 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
     constructor(props) {
         super(props);
 
+        this.state = {};
+
         this._assignDaysFromProps();
+
+        addEventListener('dragBegan', (event: CustomEvent) => this.initiateShowingOtherLessonsShadows(event));
+        addEventListener('hideLessonShadow', this.hideOtherLessonsShadows);
     }
 
     private _assignDaysFromProps() {
         this._days = [];
-        for (const dayOfWeek in DayOfWeek) {
-            if (isNaN(dayOfWeek as unknown as number)) continue;
-            this._days.push(this.props.data[dayOfWeek] ?? { dayIndicator: dayOfWeek as unknown as DayOfWeek, lessons: [] });
+        for (const dayOfWeekIt in DayOfWeek) {
+            if (isNaN(dayOfWeekIt as unknown as number)) continue;
+
+            const dayOfWeek = dayOfWeekIt as unknown as DayOfWeek;
+            this._days.push(
+                this.props.data.find(x => x.dayIndicator == dayOfWeek)
+                ?? { dayIndicator: dayOfWeek, lessons: [] }
+            );
         }
     }
 
     onDropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+        this.hideOtherLessonsShadows();
+
         const prefab: ScheduleLessonPrefab | undefined = JSON.parse(data.getData("prefab"));
 
         const lessons = this._days[dayIndicator];
@@ -133,37 +125,55 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
         })
     }
 
+
+    initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
+        const data: ScheduleLessonPrefab = event.detail;
+
+        await scheduleDataService.getTeacherAndRoomLessons(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
+    }
+    displayOtherLessonsShadows = (teacher?: ScheduleDayLessons[], room?: ScheduleDayLessons[]) => {
+        if (!teacher && !room) return;
+
+        this.setState(prevState => {
+            let { teacherBusyLessons, roomBusyLessons } = prevState;
+
+            teacherBusyLessons ?? (teacherBusyLessons = teacher);
+            roomBusyLessons ?? (roomBusyLessons = room);
+
+            return { teacherBusyLessons, roomBusyLessons };
+        });
+    }
+    hideOtherLessonsShadows = () => {
+        this.setState({
+            teacherBusyLessons: undefined,
+            roomBusyLessons: undefined
+        })
+    }
+
+
+
+    private getDaysOfWeekIterable = (with6th: boolean = false, with0th: boolean = false) =>
+        Object.values(DayOfWeek).map(x => parseInt(x as unknown as string)).filter(x =>
+            !isNaN(x) && (with0th || x != 0) && (with6th || x != 6));
+
     render() {
+
+        console.log(this.getDaysOfWeekIterable());
         return (
             <div className="schedule-arranger-timeline">
 
                 <ScheduleTimeColumn/>
 
-                <ScheduleDayColumn
-                    dayIndicator={DayOfWeek.Monday}
-                    lessons={this._days[DayOfWeek.Monday]?.lessons ?? []}
-                    dropped={this.onDropped}
-                />
-                <ScheduleDayColumn
-                    dayIndicator={DayOfWeek.Tuesday}
-                    lessons={this._days[DayOfWeek.Tuesday]?.lessons ?? []}
-                    dropped={this.onDropped}
-                />
-                <ScheduleDayColumn
-                    dayIndicator={DayOfWeek.Wednesday}
-                    lessons={this._days[DayOfWeek.Wednesday]?.lessons ?? []}
-                    dropped={this.onDropped}
-                />
-                <ScheduleDayColumn
-                    dayIndicator={DayOfWeek.Thursday}
-                    lessons={this._days[DayOfWeek.Thursday]?.lessons ?? []}
-                    dropped={this.onDropped}
-                />
-                <ScheduleDayColumn
-                    dayIndicator={DayOfWeek.Friday}
-                    lessons={this._days[DayOfWeek.Friday]?.lessons ?? []}
-                    dropped={this.onDropped}
-                />
+                {this.getDaysOfWeekIterable().map(x => (
+                    <ScheduleDayColumn
+                        key={x}
+                        dayIndicator={x as DayOfWeek.Monday}
+                        lessons={this._days[x]?.lessons ?? []}
+                        teacherBusyLessons={this.state.teacherBusyLessons?.[x]?.lessons}
+                        roomBusyLessons={this.state.roomBusyLessons?.[x]?.lessons}
+                        dropped={this.onDropped}
+                    />
+                ))}
 
             </div>
         )
@@ -185,6 +195,12 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
     constructor(props) {
         super(props);
 
+        this.preparePrefabs();
+
+        addEventListener('newPrefab', (_) => this.forceUpdate());
+    }
+
+    private preparePrefabs() {
         const prefabs = this.props.data.flatMap(dayLessons => dayLessons.lessons).map(this.lessonToPrefab);
         const validPrefabs: ScheduleLessonPrefab[] = [];
 
@@ -198,8 +214,6 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
         }
 
         scheduleDataService.prefabs = validPrefabs;
-
-        addEventListener('newPrefab', (_) => this.forceUpdate());
     }
 
     private lessonToPrefab = (lesson: PeriodicLessonTimetableEntry): ScheduleLessonPrefab => ({
