@@ -8,17 +8,21 @@ namespace SchoolAssistant.DAL.Help
         where TRelated : DbEntity
     {
         protected readonly TThis _this;
-        protected readonly ICollection<TeacherToMainSubject> _mainLinkings;
-        protected readonly ICollection<TeacherToAdditionalSubject> _additionalLinkings;
+        protected ICollection<TeacherToMainSubject> _MainLinkings => _getMainLinkings();
+        protected ICollection<TeacherToAdditionalSubject> _AdditionalLinkings => _getAdditionalLinkings();
+
+        // required due to ef core lazy-loading 
+        protected readonly Func<ICollection<TeacherToMainSubject>> _getMainLinkings;
+        protected readonly Func<ICollection<TeacherToAdditionalSubject>> _getAdditionalLinkings;
 
         public TeacherToSubjectOperationsHelper(
             TThis thisObject,
-            ICollection<TeacherToMainSubject> mainLinkings,
-            ICollection<TeacherToAdditionalSubject> additionalLinkings)
+            Func<ICollection<TeacherToMainSubject>> getMainLinkings,
+            Func<ICollection<TeacherToAdditionalSubject>> getAdditionalLinkings)
         {
             _this = thisObject;
-            _mainLinkings = mainLinkings;
-            _additionalLinkings = additionalLinkings;
+            _getMainLinkings = getMainLinkings;
+            _getAdditionalLinkings = getAdditionalLinkings;
         }
 
         protected abstract TeacherToMainSubject NewMainLinkingForNewlyCreated(TRelated related);
@@ -53,7 +57,7 @@ namespace SchoolAssistant.DAL.Help
             if (GetMainIfReferenced(related).linking is not null)
                 return;
 
-            _mainLinkings.Add(NewMainLinkingForNewlyCreated(related!));
+            _MainLinkings.Add(NewMainLinkingForNewlyCreated(related!));
         }
 
         public void AddMain(TRelated? related)
@@ -61,7 +65,7 @@ namespace SchoolAssistant.DAL.Help
             if (GetMainIfReferenced(related).linking is not null)
                 return;
 
-            _mainLinkings.Add(NewMainLinking(related!));
+            _MainLinkings.Add(NewMainLinking(related!));
             _newlyAddedExistingMain.Add(related!);
         }
 
@@ -72,14 +76,14 @@ namespace SchoolAssistant.DAL.Help
             if (GetAdditionalIfReferenced(related).linking is not null)
                 return;
 
-            _additionalLinkings.Add(NewAdditionalLinkingForNewlyCreated(related!));
+            _AdditionalLinkings.Add(NewAdditionalLinkingForNewlyCreated(related!));
         }
         public void AddAdditional(TRelated? related)
         {
             if (GetAdditionalIfReferenced(related).linking is not null)
                 return;
 
-            _additionalLinkings.Add(NewAdditionalLinking(related!));
+            _AdditionalLinkings.Add(NewAdditionalLinking(related!));
             _newlyAddedExistingAdditional.Add(related!);
         }
 
@@ -91,7 +95,7 @@ namespace SchoolAssistant.DAL.Help
             if (linking is null)
                 return;
 
-            _mainLinkings.Remove(linking);
+            _MainLinkings.Remove(linking);
             if (addedRelated is not null)
                 _newlyAddedExistingMain.Remove(addedRelated);
         }
@@ -102,18 +106,18 @@ namespace SchoolAssistant.DAL.Help
             if (linking is null)
                 return;
 
-            _additionalLinkings.Remove(linking);
+            _AdditionalLinkings.Remove(linking);
             if (addedRelated is not null)
                 _newlyAddedExistingAdditional.Remove(addedRelated);
         }
 
 
         private (TeacherToMainSubject? linking, TRelated? addedRelated) GetMainIfReferenced(TRelated? related) =>
-            (_mainLinkings.FirstOrDefault(x => x.Subject == related || x.SubjectId == related?.Id),
+            (_MainLinkings.FirstOrDefault(x => x.Subject == related || x.SubjectId == related?.Id),
             _newlyAddedExistingMain.FirstOrDefault(x => x == related));
 
         private (TeacherToAdditionalSubject? linking, TRelated? addedRelated) GetAdditionalIfReferenced(TRelated? related) =>
-            (_additionalLinkings.FirstOrDefault(x => x.Subject == related || x.SubjectId == related?.Id),
+            (_AdditionalLinkings.FirstOrDefault(x => x.Subject == related || x.SubjectId == related?.Id),
             _newlyAddedExistingAdditional.FirstOrDefault(x => x == related));
     }
 }

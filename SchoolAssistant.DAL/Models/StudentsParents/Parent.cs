@@ -9,6 +9,6 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
 
         public long ChildInfoId { get; set; }
         [ForeignKey(nameof(ChildInfoId))]
-        public StudentRegisterRecord ChildInfo { get; set; } = null!;
+        public virtual StudentRegisterRecord ChildInfo { get; set; } = null!;
     }
 }

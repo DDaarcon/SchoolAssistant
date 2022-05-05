@@ -213,8 +213,62 @@ namespace SchoolAssistans.Tests.DbEntities
             return orgClass;
         }
 
-        #endregion
+        public static async Task<OrganizationalClass> Class_5f_0Students_RandomScheduleAddedSeparately(
+            SchoolYear year,
+            IRepository<OrganizationalClass> orgClassRepo,
+            IRepository<Teacher> teacherRepo,
+            IRepository<PeriodicLesson> lessonRepo,
+            int? fromHour = null,
+            int? toHour = null)
+        {
+            var orgClass = new OrganizationalClass
+            {
+                SchoolYearId = year.Id,
+                Grade = 5,
+                Distinction = "f"
+            };
+            orgClassRepo.Add(orgClass);
+            await orgClassRepo.SaveAsync();
 
+            var subjects = _UniqueSubjectFaker.Generate(5);
+
+            var teachers = await _5Random_Teachers(teacherRepo, subjects);
+
+            var rooms = _RoomFaker.Generate(10);
+
+            for (int weekDay = 1; weekDay < 6; weekDay++)
+            {
+                int[] hours = RandomAmountOfRandomInts(fromHour ?? 6, toHour ?? 17);
+
+                foreach (var hour in hours)
+                {
+                    var teacher = new Faker().PickRandom(teachers);
+
+                    var subject = new Faker().PickRandom(teacher.SubjectOperations.MainIter);
+
+                    var room = new Faker().PickRandom(rooms);
+
+                    var lesson = new PeriodicLesson
+                    {
+                        SchoolYearId = year.Id,
+                        LecturerId = teacher.Id,
+                        SubjectId = subject.Id,
+                        Room = room,
+                        ParticipatingOrganizationalClass = orgClass,
+                        CronPeriodicity = $"0 {hour} * * {weekDay}"
+                    };
+
+                    lessonRepo.Add(lesson);
+                }
+            }
+            await lessonRepo.SaveAsync();
+
+            return orgClass;
+        }
+
+
+
+        #endregion
 
         #region Students
 

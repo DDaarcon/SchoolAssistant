@@ -61,6 +61,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 new DbContextOptionsBuilder<SADbContext>()
                     .LogTo(message => Debug.WriteLine(message))
                     .UseSqlServer(ConnectionString)
+                    .UseLazyLoadingProxies()
                     .Options);
 
         public static async Task ClearDataAsync<TDbEntity>()
@@ -77,7 +78,8 @@ namespace SchoolAssistans.Tests.DbEntities
 
         public static void StopTrackingEntities() => _context?.ChangeTracker.Clear();
 
-        public static void RequestContextFromServices(IServiceCollection services) {
+        public static void RequestContextFromServices(IServiceCollection services)
+        {
             if (!_databaseInitialized) InitializeContext(services);
             else _context = services.BuildServiceProvider().GetRequiredService<SADbContext>();
         }
@@ -87,6 +89,7 @@ namespace SchoolAssistans.Tests.DbEntities
             services.AddDbContext<SADbContext>(options =>
             {
                 options.UseSqlServer(ConnectionString);
+                options.UseLazyLoadingProxies();
             });
         }
     }

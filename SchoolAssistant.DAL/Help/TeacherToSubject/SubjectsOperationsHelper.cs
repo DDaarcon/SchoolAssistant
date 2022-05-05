@@ -8,13 +8,13 @@ namespace SchoolAssistant.DAL.Help
     {
         public SubjectsOperationsHelper(
             Teacher thisObject,
-            ICollection<TeacherToMainSubject> mainLinkings,
-            ICollection<TeacherToAdditionalSubject> additionalLinkings) : base(thisObject, mainLinkings, additionalLinkings)
+            Func<ICollection<TeacherToMainSubject>> getMainLinkings,
+            Func<ICollection<TeacherToAdditionalSubject>> getAdditionalLinkings) : base(thisObject, getMainLinkings, getAdditionalLinkings)
         {
         }
 
-        protected override IEnumerable<Subject> SelectMain => _mainLinkings.Select(x => x.Subject);
-        protected override IEnumerable<Subject> SelectAdditional => _additionalLinkings.Select(x => x.Subject);
+        protected override IEnumerable<Subject> SelectMain => _MainLinkings.Select(x => x.Subject);
+        protected override IEnumerable<Subject> SelectAdditional => _AdditionalLinkings.Select(x => x.Subject);
 
         protected override TeacherToAdditionalSubject NewAdditionalLinking(Subject related) => new TeacherToAdditionalSubject
         {

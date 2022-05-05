@@ -13,7 +13,7 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
         [ForeignKey(nameof(InfoId))]
         public virtual StudentRegisterRecord Info { get; set; } = null!;
 
-        public ICollection<Mark> Marks { get; set; } = new List<Mark>();
+        public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
 
         public long? OrganizationalClassId { get; set; }
         [ForeignKey(nameof(OrganizationalClassId))]

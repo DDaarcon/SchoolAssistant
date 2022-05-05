@@ -22,7 +22,7 @@ namespace SchoolAssistant.DAL.Models.Staff
 
         public Teacher()
         {
-            SubjectOperations = new SubjectsOperationsHelper(this, MainSubjects, AdditionalSubjects);
+            SubjectOperations = new SubjectsOperationsHelper(this, () => MainSubjects, () => AdditionalSubjects);
         }
     }
 }

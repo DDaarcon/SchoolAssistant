@@ -19,7 +19,7 @@ namespace SchoolAssistant.DAL.Models.Subjects
 
         public Subject()
         {
-            TeacherOperations = new TeachersOperationsHelper(this, MainTeachers, AdditionalTeachers);
+            TeacherOperations = new TeachersOperationsHelper(this, () => MainTeachers, () => AdditionalTeachers);
         }
     }
 }
