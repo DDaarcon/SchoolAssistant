@@ -14,7 +14,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 {
     public class FetchLessonsTests
     {
-        private IFetchLessonsForScheduleArrangerService _fetchLessonsService = null!;
+        private IFetchClassLessonsForScheduleArrangerService _fetchLessonsService = null!;
 
         private ISchoolYearRepository _schoolYearRepository = null!;
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
@@ -56,7 +56,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             _teacherRepo = new Repository<Teacher>(TestDatabase.Context, null);
             _lessonRepo = new Repository<PeriodicLesson>(TestDatabase.Context, null);
 
-            _fetchLessonsService = new FetchLessonsForScheduleArrangerService(_orgClassRepo);
+            _fetchLessonsService = new FetchClassLessonsForScheduleArrangerService(_orgClassRepo);
         }
 
         private Task<SchoolYear> _Year => _schoolYearRepository.GetOrCreateCurrentAsync();
@@ -68,7 +68,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         {
             var orgClass = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
 
-            var res = await _fetchLessonsService.ForClassAsync(orgClass.Id);
+            var res = await _fetchLessonsService.ForAsync(orgClass.Id);
 
             Assert.IsNotNull(res);
             Assert.IsNotNull(res!.data);
@@ -106,7 +106,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             var lessons = await _lessonRepo.AsListAsync();
 
-            var res = await _fetchLessonsService.ForClassAsync(orgClass.Id);
+            var res = await _fetchLessonsService.ForAsync(orgClass.Id);
 
             Assert.IsNotNull(res);
             Assert.IsNotNull(res!.data);
@@ -143,7 +143,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         [Test]
         public async Task Should_fail_invalid_classId()
         {
-            var res = await _fetchLessonsService.ForClassAsync(9999);
+            var res = await _fetchLessonsService.ForAsync(9999);
 
             Assert.IsNull(res);
         }

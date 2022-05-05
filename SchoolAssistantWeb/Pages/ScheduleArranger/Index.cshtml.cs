@@ -11,7 +11,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
         private readonly IFetchScheduleArrangerConfigService _fetchConfigService;
         private readonly IFetchScheduleArrangerDataService _fetchDataService;
 
-        private readonly IFetchLessonsForScheduleArrangerService _fetchLessonsSvc;
+        private readonly IFetchClassLessonsForScheduleArrangerService _fetchLessonsSvc;
         private readonly IAddLessonByScheduleArrangerService _addLessonSvc;
 
         public ScheduleArrangerConfigJson Config { get; private set; } = null!;
@@ -24,7 +24,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
         public ScheduleArrangerModel(
             IFetchScheduleArrangerConfigService fetchConfigService,
             IFetchScheduleArrangerDataService fetchDataService,
-            IFetchLessonsForScheduleArrangerService fetchLessonsService,
+            IFetchClassLessonsForScheduleArrangerService fetchLessonsService,
             IAddLessonByScheduleArrangerService addLessonService)
         {
             _fetchConfigService = fetchConfigService;
@@ -46,7 +46,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         public async Task<JsonResult> OnGetClassLessonsAsync(long classId)
         {
-            var model = await _fetchLessonsSvc.ForClassAsync(classId);
+            var model = await _fetchLessonsSvc.ForAsync(classId);
             return new JsonResult(model);
         }
 
