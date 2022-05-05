@@ -73,6 +73,7 @@ type ScheduleLessonModificationComponentProps = ScheduleLessonModificationData &
 }
 type ScheduleLessonModificationComponentState = ScheduleLessonModificationData & { }
 class ScheduleLessonModificationComponent extends React.Component<ScheduleLessonModificationComponentProps, ScheduleLessonModificationComponentState> {
+    private _validator = new Validator<ScheduleLessonModificationData>();
 
     private get _subjectFilteredTeachers(): ScheduleTeacherOptionEntry[] {
         return [
@@ -80,7 +81,7 @@ class ScheduleLessonModificationComponent extends React.Component<ScheduleLesson
                 .filter(x => x.mainSubjectIds.includes(this.state.subjectId))
                 .map(x => ({ id: x.id, name: x.name, mainSubject: true })),
             ...scheduleDataService.teachers
-                .filter(x => x.additionalSubjectIds.includes(this.state.subjectId))
+                .filter(x => !x.mainSubjectIds.includes(this.state.subjectId) && x.additionalSubjectIds.includes(this.state.subjectId))
                 .map(x => ({ id: x.id, name: x.name, mainSubject: false }))
         ]
     }
@@ -93,6 +94,13 @@ class ScheduleLessonModificationComponent extends React.Component<ScheduleLesson
             teacherId: this.props.teacherId,
             roomId: this.props.roomId
         }
+
+        this._validator.forModelGetter(() => this.state);
+        this._validator.setRules({
+            subjectId: { notNull: true },
+            teacherId: { notNull: true },
+            roomId: { notNull: true }
+        })
     }
 
     createOnSelectChangeHandler: (property: keyof ScheduleLessonModificationComponentState) => React.ChangeEventHandler<HTMLSelectElement> = (property) =>
@@ -110,68 +118,87 @@ class ScheduleLessonModificationComponent extends React.Component<ScheduleLesson
 
 
     onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+        e.preventDefault();
 
+        if (!this._validator.validate()) {
+            console.log(this._validator.errors);
+            this.forceUpdate();
+            return;
+        }
+
+        this.props.submit(this.state);
     }
 
     render() {
         return (
             <form onSubmit={this.onSubmit}>
+                <FormSelect
+                    label="Przedmiot"
+                    name="subject-input"
+                    value={this.state.subjectId}
+                    onChange={this.createOnSelectChangeHandler('subjectId')}
+                    errorMessages={this._validator.errors.filter(x => x.on == 'subjectId').map(x => x.error)}
+                    options={
+                        <>
+                            <option value="">Wybierz</option>
+                            {scheduleDataService.subjects.map(x =>
+                                <option key={x.id}
+                                    value={x.id}
+                                >
+                                    {x.name}
+                                </option>
+                            )}
+                        </>
+                    }
+                />
+
+                <FormSelect
+                    label="Nauczyciel"
+                    name="teacher-input"
+                    value={this.state.teacherId}
+                    onChange={this.createOnSelectChangeHandler('teacherId')}
+                    errorMessages={this._validator.errors.filter(x => x.on == 'teacherId').map(x => x.error)}
+                    options={
+                        <>
+                            <option value="">Wybierz</option>
+                            {this._subjectFilteredTeachers.map(x =>
+                                <option className={x.mainSubject ? "sa-lesson-modify-teacher-main" : "sa-lesson-modify-teacher-addit"}
+                                    key={x.id}
+                                    value={x.id}
+                                >
+                                    {x.name}
+                                </option>
+                            )}
+                        </>
+                    }
+                />
+
+                <FormSelect
+                    label="Pomieszczenie"
+                    name="room-input"
+                    value={this.state.roomId}
+                    onChange={this.createOnSelectChangeHandler('roomId')}
+                    errorMessages={this._validator.errors.filter(x => x.on == 'roomId').map(x => x.error)}
+                    options={
+                        <>
+                            <option value="">Wybierz</option>
+                            {scheduleDataService.rooms.map(x =>
+                                <option key={x.id}
+                                    value={x.id}
+                                >
+                                    {x.name}
+                                </option>
+                            )}
+                        </>
+                    }
+                />
+
                 <div className="form-group">
-                    <label htmlFor="subject-input">Przedmiot</label>
-                    <select
-                        className="form-select"
-                        name="subject-input"
-                        value={this.state.subjectId}
-                        onChange={this.createOnSelectChangeHandler('subjectId')}
-                    >
-                        <option value="">Wybierz</option>
-                        {scheduleDataService.subjects.map(x =>
-                            <option key={x.id}
-                                value={x.id}
-                            >
-                                {x.name}
-                            </option>
-                        )}
-                    </select>
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="teacher-input">Nauczyciel</label>
-                    <select
-                        className="form-select"
-                        name="teacher-input"
-                        value={this.state.teacherId}
-                        onChange={this.createOnSelectChangeHandler('teacherId')}
-                    >
-                        <option value="">Wybierz</option>
-                        {this._subjectFilteredTeachers.map(x =>
-                            <option className={x.mainSubject ? "sa-lesson-modify-teacher-main" : "sa-lesson-modify-teacher-addit"}
-                                key={x.id}
-                                value={x.id}
-                            >
-                                {x.name}
-                            </option>
-                        )}
-                    </select>
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="room-input">Pomieszczenie</label>
-                    <select
-                        className="form-select"
-                        name="room-input"
-                        value={this.state.roomId}
-                        onChange={this.createOnSelectChangeHandler('roomId')}
-                    >
-                        <option value="">Wybierz</option>
-                        {scheduleDataService.rooms.map(x =>
-                            <option key={x.id}
-                                value={x.id}
-                            >
-                                {x.name}
-                            </option>
-                        )}
-                    </select>
+                    <input
+                        type="submit"
+                        value="Zapisz"
+                        className="form-control"
+                    />
                 </div>
             </form>
         )

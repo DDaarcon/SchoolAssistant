@@ -79,6 +79,8 @@ app.UseReact(config =>
     config
        .AddScript("~/js/shared/server-connection.tsx")
        .AddScript("~/js/shared/loader.tsx")
+       .AddScript("~/js/shared/validators.tsx")
+       .AddScript("~/js/shared/form-controls.tsx")
        .AddScript("~/js/shared/modal.tsx");
 
 

@@ -26,8 +26,10 @@
     <Content Remove="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
     <Content Remove="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
     <Content Remove="wwwroot\js\schedule\schedule-arranger.tsx" />
+    <Content Remove="wwwroot\js\shared\form-controls.tsx" />
     <Content Remove="wwwroot\js\shared\loader.tsx" />
     <Content Remove="wwwroot\js\shared\server-connection.tsx" />
+    <Content Remove="wwwroot\js\shared\validators.tsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +69,7 @@
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
     <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shared\form-controls.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shared\modal.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\shared-table.tsx" />
     <TypeScriptCompile Include="wwwroot\js\data-management\staff.tsx" />
@@ -78,6 +81,7 @@
     <TypeScriptCompile Include="wwwroot\js\data-management\subjects.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shared\loader.tsx" />
     <TypeScriptCompile Include="wwwroot\js\shared\server-connection.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shared\validators.tsx" />
   </ItemGroup>
 
 	<Target Name="Typecheck" AfterTargets="AfterBuild">
