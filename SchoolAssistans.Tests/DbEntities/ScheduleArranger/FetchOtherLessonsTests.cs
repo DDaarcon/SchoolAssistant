@@ -58,7 +58,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             Assert.IsNotNull(res);
 
-            Assert.IsNotNull(res.teacher);
+            Assert.IsNotNull(res!.teacher);
             Assert.IsNotNull(res.room);
 
             Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.LecturerId == teacher.Id).Count(), res.teacher!.Length);
@@ -77,7 +77,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             Assert.IsNotNull(res);
 
-            Assert.IsNotNull(res.teacher);
+            Assert.IsNotNull(res!.teacher);
             Assert.IsNotNull(res.room);
 
             Assert.IsEmpty(res.teacher!);
@@ -94,8 +94,8 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             Assert.IsNotNull(res);
 
-            Assert.IsNotNull(res.teacher);
-            Assert.IsNull(res.room);
+            Assert.IsNotEmpty(res!.teacher!);
+            Assert.IsEmpty(res.room!);
 
             Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.LecturerId == teacher.Id).Count(), res.teacher!.Length);
         }
@@ -109,8 +109,8 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             Assert.IsNotNull(res);
 
-            Assert.IsNotNull(res.room);
-            Assert.IsNull(res.teacher);
+            Assert.IsNotEmpty(res!.room!);
+            Assert.IsEmpty(res!.teacher!);
 
             Assert.AreEqual(_orgClassWithSchedule.Schedule.Where(x => x.RoomId == room.Id).Count(), res.room!.Length);
         }
@@ -143,7 +143,10 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             var res = await _fetchLessonsService.ForAsync(_orgClass.Id, 9999, room.Id);
 
-            Assert.IsNull(res);
+            Assert.IsNotNull(res);
+
+            Assert.IsNotEmpty(res!.room!);
+            Assert.IsEmpty(res.teacher!);
         }
 
         [Test]
@@ -156,7 +159,10 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             var res = await _fetchLessonsService.ForAsync(_orgClass.Id, teacher.Id, 9999);
 
-            Assert.IsNull(res);
+            Assert.IsNotNull(res);
+
+            Assert.IsNotEmpty(res!.teacher!);
+            Assert.IsEmpty(res.room!);
         }
 
 

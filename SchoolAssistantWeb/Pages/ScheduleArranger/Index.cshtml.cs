@@ -14,6 +14,8 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
         private readonly IFetchClassLessonsForScheduleArrangerService _fetchLessonsSvc;
         private readonly IAddLessonByScheduleArrangerService _addLessonSvc;
 
+        private readonly IFetchOtherLessonsForScheduleArrangerService _fetchOtherLessonsSvc;
+
         public ScheduleArrangerConfigJson Config { get; private set; } = null!;
         public ScheduleClassSelectorEntryJson[] Classes { get; private set; } = null!;
         public ScheduleSubjectEntryJson[] Subjects { get; private set; } = null!;
@@ -25,12 +27,14 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             IFetchScheduleArrangerConfigService fetchConfigService,
             IFetchScheduleArrangerDataService fetchDataService,
             IFetchClassLessonsForScheduleArrangerService fetchLessonsService,
-            IAddLessonByScheduleArrangerService addLessonService)
+            IAddLessonByScheduleArrangerService addLessonService,
+            IFetchOtherLessonsForScheduleArrangerService fetchOtherLessonsService)
         {
             _fetchConfigService = fetchConfigService;
             _fetchDataService = fetchDataService;
             _fetchLessonsSvc = fetchLessonsService;
             _addLessonSvc = addLessonService;
+            _fetchOtherLessonsSvc = fetchOtherLessonsService;
         }
 
 
@@ -53,6 +57,12 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
         public async Task<JsonResult> OnPostLessonAsync([FromBody] AddLessonRequestJson model)
         {
             var result = await _addLessonSvc.AddToClassAsync(model);
+            return new JsonResult(result);
+        }
+
+        public async Task<JsonResult> OnGetOtherLessonsAsync(long classId, long? teacherId, long? roomId)
+        {
+            var result = await _fetchOtherLessonsSvc.ForAsync(classId, teacherId, roomId);
             return new JsonResult(result);
         }
     }
