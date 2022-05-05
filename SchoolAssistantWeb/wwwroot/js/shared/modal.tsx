@@ -89,17 +89,34 @@ const modalController = new ModalController;
  * 
  * 
  */
+type CommonModalProps = {
+    assignedAtPresenter: {
+        uniqueId?: number;
+        close?: (uniqueId: number) => void;
+    }
+}
 
-type ModalBodyProps = {
+
+type ModalBodyProps = CommonModalProps & {
     style?: React.CSSProperties;
+    closeBtnStyle?: React.CSSProperties;
     children: React.ReactNode;
 }
 const ModalBody: (props: ModalBodyProps) => JSX.Element = (props) => {
+    const close = () => {
+        props.assignedAtPresenter?.close(props.assignedAtPresenter.uniqueId);
+    }
+
     return (
-        <div
-            className="modal-container"
+        <div className="modal-container"
             style={props.style}
         >
+            <a className="modal-close-btn"
+                style={props.closeBtnStyle}
+                onClick={close}
+            >
+                <i className="fa-solid fa-xmark"></i>
+            </a>
             {props.children}
         </div>
     )
@@ -108,12 +125,7 @@ const ModalBody: (props: ModalBodyProps) => JSX.Element = (props) => {
 
 
 
-type CommonModalProps = {
-    assignedAtPresenter: {
-        uniqueId?: number;
-        close?: (uniqueId: number) => void;
-    }
-}
+
 
 type ModalProps = CommonModalProps & {
     style?: React.CSSProperties;
@@ -123,23 +135,14 @@ type ModalState = {
 
 }
 class Modal extends React.Component<ModalProps, ModalState> {
-    onClose = () => {
-        this.props.assignedAtPresenter?.close(this.props.assignedAtPresenter.uniqueId);
-    }
 
     render() {
         return (
             <ModalBody
+                assignedAtPresenter={this.props.assignedAtPresenter}
                 style={this.props.style}
             >
                 {this.props.children}
-
-                <button
-                    type="button"
-                    onClick={this.onClose}
-                >
-                    Zamknij
-                </button>
             </ModalBody>
         )
     }
@@ -172,6 +175,7 @@ class ConfirmationModal extends React.Component<ConfirmationModalProps, Confirma
     render() {
         return (
             <ModalBody
+                assignedAtPresenter={this.props.assignedAtPresenter}
                 style={this.props.style }
             >
                 <h3>{this.props.header}</h3>
@@ -218,6 +222,7 @@ class ModificationComponentModal
     render() {
         return (
             <ModalBody
+                assignedAtPresenter={this.props.assignedAtPresenter}
                 style={this.props.style}
             >
                 <this.props.modificationComponent

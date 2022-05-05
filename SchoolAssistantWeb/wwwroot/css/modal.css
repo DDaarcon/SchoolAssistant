@@ -34,3 +34,13 @@
     z-index: 10;
     background-color: #0000002e;
 }
+
+.modal-close-btn {
+    cursor: pointer;
+    color: black;
+    float: right;
+    transform: translate(10px, -16px) scale(1.2);
+}
+.modal-close-btn:hover {
+    color: #9a0000;
+}
