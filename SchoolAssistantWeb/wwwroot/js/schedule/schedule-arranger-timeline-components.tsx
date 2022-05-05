@@ -44,6 +44,11 @@ class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, Schedule
             />);
     }
 
+    dropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+        this.hideLessonShadow();
+        this.props.dropped(dayIndicator, cellIndex, time, data);
+    }
+
     onEntered = (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
         this._iAmCallingHideShadow = true;
         dispatchEvent(new Event('hideLessonShadow'));

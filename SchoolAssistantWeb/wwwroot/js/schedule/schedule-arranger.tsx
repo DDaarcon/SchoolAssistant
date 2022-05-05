@@ -93,8 +93,9 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
 
     private _assignDaysFromProps() {
         this._days = [];
-        for (let dayData of this.props.data) {
-            this._days[dayData.dayIndicator] = dayData;
+        for (const dayOfWeek in DayOfWeek) {
+            if (isNaN(dayOfWeek as unknown as number)) continue;
+            this._days.push(this.props.data[dayOfWeek] ?? { dayIndicator: dayOfWeek as unknown as DayOfWeek, lessons: [] });
         }
     }
 
@@ -105,11 +106,11 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
         if (!lessons) return;
 
         for (const lesson of lessons.lessons ?? []) {
-            const overlaps = areTimesOverlapping(
+            const overlaps = areTimesOverlappingByDuration(
                 lesson.time,
-                sumTimes(lesson.time, { hour: 0, minutes: lesson.customDuration ?? scheduleArrangerConfig.defaultLessonDuration }),
+                lesson.customDuration ?? scheduleArrangerConfig.defaultLessonDuration,
                 time,
-                { hour: 0, minutes: scheduleArrangerConfig.defaultLessonDuration }
+                scheduleArrangerConfig.defaultLessonDuration
             );
 
             if (overlaps) return;
@@ -124,6 +125,7 @@ class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineP
             lecturerId: prefab.lecturer.id,
             roomId: prefab.room.id
         }).then(result => {
+            console.log(result);
             if (result.success) {
                 this._days[dayIndicator].lessons.push(result.lesson);
                 this.forceUpdate();
@@ -244,10 +246,17 @@ class ScheduleArrangerSelector extends React.Component<ScheduleArrangerSelectorP
 }
 
 
+const areTimesOverlappingByDuration = (timeAStart: Time, durationA: number, timeBStart: Time, durationB: number) => {
+    const aStart = toMinutes(timeAStart);
+    const aEnd = aStart + durationA;
+    const bStart = toMinutes(timeBStart);
+    const bEnd = bStart + durationB;
 
-const areTimesOverlapping = (timeAStart: Time, timeAEnd: Time, timeBStart: Time, timeBEnd: Time): boolean =>
-    toMinutes(timeAStart) > toMinutes(timeBStart) && toMinutes(timeAStart) < toMinutes(timeBEnd)
-    || toMinutes(timeAEnd) > toMinutes(timeBStart) && toMinutes(timeAEnd) < toMinutes(timeBEnd)
-    || toMinutes(timeAStart) <= toMinutes(timeBStart) && toMinutes(timeAEnd) >= toMinutes(timeBEnd);
+    const left = aStart > bStart && aStart < bEnd;
+    const right = aEnd > bStart && aEnd < bEnd;
+    const over = aStart <= bStart && aEnd >= bEnd;
+
+    return left || right || over;
+}
 
 const toMinutes = (time: Time) => time.hour * 60 + time.minutes;
