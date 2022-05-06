@@ -1,8 +1,9 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.DataManagement.Staff
+﻿using SchoolAssistant.Infrastructure.Models.Shared.Json;
+
+namespace SchoolAssistant.Infrastructure.Models.DataManagement.Staff
 {
-    public class StaffListEntryJson
+    public class StaffListEntryJson : ListEntryJson
     {
-        public long id { get; set; }
         public string name { get; set; } = null!;
         public string specialization { get; set; } = null!;
     }

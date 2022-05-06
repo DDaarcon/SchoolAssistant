@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL.Models.Shared;
+using System.Linq.Expressions;
 
 namespace SchoolAssistant.DAL.Repositories
 {
@@ -15,9 +17,12 @@ namespace SchoolAssistant.DAL.Repositories
         Task<List<TDbEntity>> AsListAsync();
         IQueryable<TDbEntity> AsQueryable();
         bool Exists(long id);
+        bool Exists(Expression<Func<TDbEntity, bool>> predicate);
         Task<bool> ExistsAsync(long id);
+        Task<bool> ExistsAsync(Expression<Func<TDbEntity, bool>> predicate);
         TDbEntity? GetById(long id);
         ValueTask<TDbEntity?> GetByIdAsync(long id);
+        EntityEntry GetEntry(TDbEntity entity);
         void Remove(TDbEntity entity);
         void RemoveById(long id);
         void RemoveRange(IEnumerable<TDbEntity> entities);
@@ -136,9 +141,17 @@ namespace SchoolAssistant.DAL.Repositories
 
         public Task<bool> ExistsAsync(long id) => _Repo.AnyAsync(x => x.Id == id);
 
+        public bool Exists(Expression<Func<TDbEntity, bool>> predicate) => _Repo.Any(predicate);
+        public Task<bool> ExistsAsync(Expression<Func<TDbEntity, bool>> predicate) => _Repo.AnyAsync(predicate);
+
         #endregion
 
         #region Context methods
+
+        public EntityEntry GetEntry(TDbEntity entity)
+        {
+            return _context.Entry(entity);
+        }
 
         public void Save()
         {

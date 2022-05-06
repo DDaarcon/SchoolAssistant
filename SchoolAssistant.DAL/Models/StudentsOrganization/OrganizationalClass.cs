@@ -5,8 +5,15 @@ namespace SchoolAssistant.DAL.Models.StudentsOrganization
 {
     public class OrganizationalClass : SchoolClass
     {
-        public long SupervisorId { get; set; }
+        public int Grade { get; set; }
+        public string? Distinction { get; set; }
+        public string? Specialization { get; set; }
+
+        public long? SupervisorId { get; set; }
         [ForeignKey("SupervisorId")]
-        public virtual Teacher Supervisor { get; set; } = null!;
+        public virtual Teacher? Supervisor { get; set; }
+
+        [NotMapped]
+        public string Name => $"{Grade}{Distinction}";
     }
 }

@@ -4,6 +4,5 @@ export enum Category {
     Staff,
     Rooms,
     Classes,
-    Students,
-    Schedule
+    Students
 }

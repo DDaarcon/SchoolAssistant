@@ -9,6 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\data-management\classes.tsx" />
+    <Content Remove="wwwroot\js\data-management\enums.tsx" />
+    <Content Remove="wwwroot\js\data-management\main.tsx" />
+    <Content Remove="wwwroot\js\data-management\modal.tsx" />
+    <Content Remove="wwwroot\js\data-management\navigation.tsx" />
+    <Content Remove="wwwroot\js\data-management\register-records.tsx" />
+    <Content Remove="wwwroot\js\data-management\rooms.tsx" />
+    <Content Remove="wwwroot\js\data-management\shared-table.tsx" />
+    <Content Remove="wwwroot\js\data-management\staff.tsx" />
+    <Content Remove="wwwroot\js\data-management\students.tsx" />
+    <Content Remove="wwwroot\js\data-management\subjects.tsx" />
+    <Content Remove="wwwroot\js\data-management\table.tsx" />
+    <Content Remove="wwwroot\js\schedule\class-selector.tsx" />
+    <Content Remove="wwwroot\js\schedule\help-functions.tsx" />
+    <Content Remove="wwwroot\js\schedule\main.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-arranger-page.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-data-service.tsx" />
+    <Content Remove="wwwroot\js\schedule\schedule-types.ts" />
+    <Content Remove="wwwroot\js\shared\form-controls.tsx" />
+    <Content Remove="wwwroot\js\shared\loader.tsx" />
+    <Content Remove="wwwroot\js\shared\server-connection.tsx" />
+    <Content Remove="wwwroot\js\shared\validators.tsx" />
     <Content Remove="React\data-management\classes.tsx" />
     <Content Remove="React\data-management\enums.tsx" />
     <Content Remove="React\data-management\main.tsx" />
@@ -28,17 +52,17 @@
   <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.17.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.3" />
-    <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.2.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.3">
+    <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.17.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
     <PackageReference Include="React.AspNet" Version="5.2.12" />
   </ItemGroup>
 
@@ -51,6 +75,30 @@
   <ItemGroup>
     <TypeScriptCompile Include="React\expose-components.ts" />
     <TypeScriptCompile Include="types\index.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\register-records.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\rooms.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\class-selector.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\help-functions.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\main.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-page.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-data-service.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-types.ts" />
+    <TypeScriptCompile Include="wwwroot\js\shared\form-controls.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shared\modal.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\shared-table.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\staff.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\students.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\table.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\enums.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\main.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\navigation.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\data-management\subjects.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shared\loader.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shared\server-connection.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\shared\validators.tsx" />
     <TypeScriptCompile Include="React\data-management\classes.tsx" />
     <TypeScriptCompile Include="React\data-management\staff.tsx" />
     <TypeScriptCompile Include="React\data-management\table.tsx" />

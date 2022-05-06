@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Marks
 {
-    public class Mark : SemesterDbEntity
+    public class Mark : SchoolYearDbEntity
     {
         public long StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]

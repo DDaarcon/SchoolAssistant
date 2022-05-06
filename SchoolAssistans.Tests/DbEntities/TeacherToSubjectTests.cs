@@ -1,8 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
@@ -10,15 +13,32 @@ namespace SchoolAssistans.Tests.DbEntities
     {
 
         private IRepository<Teacher> _teacherRepo = null!;
+        private IRepository<Subject> _subjectRepo = null!;
 
         [OneTimeSetUp]
         public void Setup()
         {
             _teacherRepo = new Repository<Teacher>(TestDatabase.CreateContext(TestServices.Collection), null);
+            _subjectRepo = new Repository<Subject>(TestDatabase.Context, null);
+        }
+
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            TestDatabase.DisposeContext();
+        }
+
+        [SetUp]
+        public async Task SetupOne()
+        {
+            await TestDatabase.ClearDataAsync<TeacherToMainSubject>();
+            await TestDatabase.ClearDataAsync<TeacherToAdditionalSubject>();
+            await TestDatabase.ClearDataAsync<Subject>();
+            await TestDatabase.ClearDataAsync<Teacher>();
 
             SetUpRecords();
         }
-
         private void SetUpRecords()
         {
             var teacher1 = new Teacher
@@ -26,13 +46,13 @@ namespace SchoolAssistans.Tests.DbEntities
                 FirstName = "Joanna",
                 LastName = "Krupa"
             };
-            teacher1.AddMainSubject(new Subject
+            teacher1.SubjectOperations.AddNewlyCreatedMain(new Subject
             {
                 Name = "Modeling"
             });
-            teacher1.AddAdditionalSubject(new Subject
+            teacher1.SubjectOperations.AddNewlyCreatedAdditional(new Subject
             {
-                Name = "Being a bitch"
+                Name = "Being a not pleasable woman"
             });
 
             _teacherRepo.AddRange(new Teacher[]
@@ -43,60 +63,117 @@ namespace SchoolAssistans.Tests.DbEntities
             _teacherRepo.Save();
         }
 
-        [OneTimeTearDown]
-        public void TearDown()
+
+
+
+        [Test]
+        public async Task TeacherIsPresentAsync()
         {
-            TestDatabase.DisposeContext();
+            var teacher = await GetJoannaAsync();
+
+            Assert.IsNotNull(teacher);
         }
 
         [Test]
-        public void TeacherIsPresent()
+        public async Task MainSubjectIsPresentAsync()
         {
-            var teachers = _teacherRepo.AsList();
+            var teacher = await GetJoannaAsync();
 
-            Assert.True(teachers.Count == 1);
-            Assert.True(teachers[0].FirstName == "Joanna");
-            Assert.True(teachers[0].LastName == "Krupa");
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher!.MainSubjects is not null);
+            Assert.IsTrue(teacher.MainSubjects!.Any(x => x.Subject.Name == "Modeling"));
         }
 
         [Test]
-        public void MainSubjectIsPresent()
+        public async Task AdditionalSubjectIsPresentAsync()
         {
-            var teacher = _teacherRepo.AsList()[0];
+            var teacher = await GetJoannaAsync();
 
-            Assert.True(teacher.MainSubjects is not null);
-            Assert.True(teacher.MainSubjects!.Count() == 1);
-            Assert.True(teacher.MainSubjects.First().Name == "Modeling");
+            Assert.True(teacher!.AdditionalSubjects is not null);
+            Assert.True(teacher.AdditionalSubjects!.Any(x => x.Subject.Name == "Being a not pleasable woman"));
+        }
+
+        private Task<Teacher?> GetJoannaAsync()
+        {
+            return _teacherRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == "Joanna" && x.LastName == "Krupa");
         }
 
         [Test]
-        public void AdditionalSubjectIsPresent()
+        public async Task RemovingAdditionalSubjectAsync()
         {
-            var teacher = _teacherRepo.AsList()[0];
+            var teacher = new Teacher
+            {
+                FirstName = "Michael",
+                LastName = "Jackson"
+            };
 
-            Assert.True(teacher.AdditionalSubjects is not null);
-            Assert.True(teacher.AdditionalSubjects!.Count() == 1);
-            Assert.True(teacher.AdditionalSubjects.First().Name == "Being a bitch");
-        }
+            _teacherRepo.Add(teacher);
+            await _teacherRepo.SaveAsync();
 
-        [Test]
-        public void RemovingMainSubject()
-        {
-            var teacher = _teacherRepo.AsList()[0];
             var newSubject = new Subject { Name = "Judging" };
-            teacher.AddMainSubject(newSubject);
+            teacher.SubjectOperations.AddNewlyCreatedAdditional(newSubject);
 
-            _teacherRepo.Save();
-            teacher = _teacherRepo.GetById(teacher.Id);
+            await _teacherRepo.SaveAsync();
+            teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
-            Assert.True(teacher.MainSubjects is not null);
-            Assert.True(teacher.MainSubjects!.Count() == 2);
+            Assert.IsTrue(teacher!.AdditionalSubjects is not null);
+            Assert.IsTrue(teacher.AdditionalSubjects!.Count() == 1);
 
-            teacher.RemoveMainSubject(newSubject);
-            _teacherRepo.Save();
-            teacher = _teacherRepo.GetById(teacher.Id);
+            teacher.SubjectOperations.RemoveAdditional(newSubject);
+            await _subjectRepo.SaveAsync();
+            teacher = await _teacherRepo.GetByIdAsync(teacher.Id);
 
-            Assert.True(teacher.MainSubjects.Count() == 1);
+            Assert.IsTrue(teacher!.AdditionalSubjects.Count() == 0);
+        }
+
+        [Test]
+        public async Task AddingReferenceFromExistingTeacherToExistinSubjectAsync()
+        {
+            var subject = new Subject
+            {
+                Name = "Some subject"
+            };
+            _subjectRepo.Add(subject);
+            await _subjectRepo.SaveAsync();
+
+            var teacher = await _teacherRepo.AsQueryable().FirstAsync();
+
+            teacher.SubjectOperations.AddMain(subject);
+
+            _teacherRepo.Update(teacher);
+            await _teacherRepo.SaveAsync();
+
+            teacher = await _teacherRepo.AsQueryable().FirstAsync(x => x.Id == teacher.Id);
+
+            Assert.IsNotNull(teacher);
+            Assert.IsTrue(teacher.MainSubjects.Any(x => x.SubjectId == subject.Id));
+        }
+
+        [Test]
+        public async Task AddingNewTeacherWithReferenceToExistingSubjectAsync()
+        {
+            var subject = new Subject
+            {
+                Name = "Some subject other subject"
+            };
+            _subjectRepo.Add(subject);
+            await _subjectRepo.SaveAsync();
+
+            var teacher = new Teacher
+            {
+                FirstName = "John",
+                LastName = "Travolta"
+            };
+
+            teacher.SubjectOperations.AddMain(subject);
+
+            _teacherRepo.Add(teacher);
+            await _teacherRepo.SaveAsync();
+
+            var teacher2 = await _teacherRepo.AsQueryable().FirstOrDefaultAsync(x => x.FirstName == "John" && x.LastName == "Travolta");
+
+            Assert.IsNotNull(teacher2);
+            Assert.IsTrue(teacher2!.MainSubjects.Any(x => x.SubjectId == subject.Id));
         }
 
         [Test]
@@ -104,6 +181,7 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             var subjectNames = _teacherRepo.AsQueryable()
                 .SelectMany(x => x.MainSubjects)
+                .Select(x => x.Subject)
                 .ToList();
 
             Assert.IsTrue(subjectNames.Any(x => x.Name == "Modeling"));
@@ -114,9 +192,10 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             var subjectNames = _teacherRepo.AsQueryable()
                 .SelectMany(x => x.AdditionalSubjects)
+                .Select(x => x.Subject)
                 .ToList();
 
-            Assert.IsTrue(subjectNames.Any(x => x.Name == "Being a bitch"));
+            Assert.IsTrue(subjectNames.Any(x => x.Name == "Being a not pleasable woman"));
         }
 
     }

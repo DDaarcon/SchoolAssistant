@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SADbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString).UseLazyLoadingProxies());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 #endregion
@@ -77,7 +77,11 @@ else
 app.UseReact(config =>
 {
     //config
-    //   .AddScript("~/js/shared/loader.tsx");
+    //   .AddScript("~/js/shared/server-connection.tsx")
+    //   .AddScript("~/js/shared/loader.tsx")
+    //   .AddScript("~/js/shared/validators.tsx")
+    //   .AddScript("~/js/shared/form-controls.tsx")
+    //   .AddScript("~/js/shared/modal.tsx");
 
 
     //config
@@ -91,10 +95,30 @@ app.UseReact(config =>
     //    .AddScript("~/js/data-management/enums.tsx");
 
     config
+        //.AddScript("~/js/data-management/main.tsx")
+        //.AddScript("~/js/data-management/shared-table.tsx")
+        //.AddScript("~/js/data-management/table.tsx")
+        //.AddScript("~/js/data-management/rooms.tsx")
+        //.AddScript("~/js/data-management/students.tsx")
+        //.AddScript("~/js/data-management/register-records.tsx")
+        //.AddScript("~/js/data-management/subjects.tsx")
+        //.AddScript("~/js/data-management/staff.tsx")
+        //.AddScript("~/js/data-management/classes.tsx")
+        //.AddScript("~/js/data-management/navigation.tsx")
+        //.AddScript("~/js/data-management/enums.tsx");
         .SetReuseJavaScriptEngines(true)
         .SetLoadBabel(false)
         .SetLoadReact(false)
         .SetReactAppBuildPath("~/dist");
+
+    //config
+    //    .AddScript("~/js/schedule/schedule-arranger-timeline-components.tsx")
+    //    .AddScript("~/js/schedule/schedule-arranger-selector-components.tsx")
+    //    .AddScript("~/js/schedule/schedule-arranger-page.tsx")
+    //    .AddScript("~/js/schedule/schedule-data-service.tsx")
+    //    .AddScript("~/js/schedule/class-selector.tsx")
+    //    .AddScript("~/js/schedule/help-functions.tsx")
+    //    .AddScript("~/js/schedule/main.tsx");
 
 });
 
@@ -114,7 +138,8 @@ app.MapRazorPages();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 var seeder = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDefaultDataSeeder>();
-await seeder.SeedAllAsync();
+await seeder.SeedRolesAndAdminAsync();
+await seeder.SeedAppConfigAsync();
 
 #endregion
 

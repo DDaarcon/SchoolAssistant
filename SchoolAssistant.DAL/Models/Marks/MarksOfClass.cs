@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Marks
 {
-    public class MarksOfClass : SemesterDbEntity
+    public class MarksOfClass : SchoolYearDbEntity
     {
         public string? Description { get; set; }
         public int? Weight { get; set; }

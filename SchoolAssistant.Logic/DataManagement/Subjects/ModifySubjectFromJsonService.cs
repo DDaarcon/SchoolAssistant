@@ -74,7 +74,7 @@ namespace SchoolAssistant.Logic.DataManagement.Subjects
                 Name = _model.name!
             };
 
-            await _repo.AddAsync(subject);
+            _repo.Add(subject);
 
             await _repo.SaveAsync();
         }

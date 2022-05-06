@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Lessons
 {
-    public class PeriodicLesson : SemesterDbEntity
+    public class PeriodicLesson : SchoolYearDbEntity
     {
         public string CronPeriodicity { get; set; } = null!;
 
@@ -22,6 +22,7 @@ namespace SchoolAssistant.DAL.Models.Lessons
         public virtual OrganizationalClass? ParticipatingOrganizationalClass { get; set; }
 
         public long? ParticipatingSubjectClassId { get; set; }
+        [ForeignKey(nameof(ParticipatingSubjectClassId))]
         public virtual SubjectClass? ParticipatingSubjectClass { get; set; }
 
         public long LecturerId { get; set; }

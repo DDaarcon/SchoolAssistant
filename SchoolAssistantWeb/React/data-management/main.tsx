@@ -1,35 +1,40 @@
-﻿import * as React from "react";
-import ServerConnection from "../shared/server-connection";
-import { Category } from "./enums";
-import DMNavigationBar from "./navigation";
-
-type MainScreenProps = {
+﻿type MainScreenProps = {
 
 }
 type MainScreenState = {
     active?: Category;
-    pageComponent?: new (props: {}) => React.Component<{}>
+    pageComponent?: new (props: any) => React.Component<any>;
+    props?: any;
 }
 
-export const server = new ServerConnection("/DataManagement/DataManagement");
+type RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => void;
 
-export default class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
+const server = new ServerConnection("/DataManagement");
+
+class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
     state: MainScreenState = {
         active: undefined,
         pageComponent: undefined
     }
 
-    onBlockClick = (type: Category, pageComponent: new (props: {}) => React.Component) => {
+    redirect: RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => {
         this.setState({
             active: type,
-            pageComponent: pageComponent
+            pageComponent: pageComponent,
+            props: props
         });
     }
 
     renderPageContent() {
         if (this.state?.pageComponent) {
+            const props = this.state.props;
             const PageComponent = this.state.pageComponent;
-            return <PageComponent />
+            return (
+                <PageComponent
+                    onRedirect={this.redirect}
+                    {...props}
+                />
+            )
         }
         return <WelcomeScreen />
     }
@@ -37,11 +42,13 @@ export default class DataManagementMainScreen extends React.Component<MainScreen
     render() {
         return (
             <div className="data-management-main">
-                <DMNavigationBar onSelect={this.onBlockClick} active={this.state.active} />
+                <DMNavigationBar onSelect={this.redirect} active={this.state.active} />
 
                 <div className="dm-page-content">
                     {this.renderPageContent()}
                 </div>
+
+                <ModalSpace />
             </div>
         )
     }

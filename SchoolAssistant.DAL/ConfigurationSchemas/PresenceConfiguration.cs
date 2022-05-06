@@ -4,7 +4,7 @@ using SchoolAssistant.DAL.Models.Attendance;
 
 namespace SchoolAssistant.DAL.ConfigurationSchemas
 {
-    internal class PresenceConfiguration : SemesterDbEntityConfiguration<Presence>, IEntityTypeConfiguration<Presence>
+    internal class PresenceConfiguration : SchoolYearDbEntityConfiguration<Presence>, IEntityTypeConfiguration<Presence>
     {
         public override void Configure(EntityTypeBuilder<Presence> builder)
         {

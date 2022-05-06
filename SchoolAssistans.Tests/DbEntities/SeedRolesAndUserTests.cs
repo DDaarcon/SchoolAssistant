@@ -6,6 +6,7 @@ using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Repositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace SchoolAssistans.Tests.DbEntities
 
             RegisterIdentity();
 
-            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager);
+            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager, new AppConfigRepository(TestDatabase.Context, null));
         }
 
         private void RegisterIdentity()
@@ -42,7 +43,7 @@ namespace SchoolAssistans.Tests.DbEntities
         [Test]
         public async Task SeedDefaultRolesAndUsers()
         {
-            await _dataSeeder.SeedAllAsync();
+            await _dataSeeder.SeedRolesAndAdminAsync();
 
             var rolesEnum = Enum.GetValues<UserType>();
             var roles = _roleManager.Roles.ToList();

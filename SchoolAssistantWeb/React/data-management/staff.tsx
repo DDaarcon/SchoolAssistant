@@ -1,13 +1,4 @@
-﻿import * as React from "react";
-import Loader, { LoaderSize, LoaderType } from "../shared/loader";
-import { ResponseJson } from "../shared/server-connection";
-import { server } from "./main";
-import { SubjectData } from "./subjects";
-import { ColumnSetting, GroupedModificationComponentProps, GroupedTable, GroupedTableData, TableData } from "./table";
-//import * as Select from 'react-select';
-//import makeAnimated from 'react-select/animated';
-
-interface StaffPersonData extends TableData {
+﻿interface StaffPersonData extends TableData {
     name: string;
     specialization?: string;
 }
@@ -29,7 +20,7 @@ type StaffPageProps = {
 type StaffPageState = {
 
 }
-export default class StaffPage extends React.Component<StaffPageProps, StaffPageState> {
+class StaffPage extends React.Component<StaffPageProps, StaffPageState> {
 
     render() {
         return (
@@ -73,13 +64,13 @@ const StaffTable = (props: StaffTableProps) => {
 
 
 
-//const animatedmultiselectComponent = makeAnimated();
+
 
 type StaffPersonModificationComponentProps = GroupedModificationComponentProps;
 type StaffPersonModificationComponentState = {
     awaitingPersonData: boolean;
     data: StaffPersonDetailedData;
-    availableSubjects: SubjectData[];
+    availableSubjects: SubjectListEntry[];
 }
 class StaffPersonModificationComponent extends React.Component<StaffPersonModificationComponentProps, StaffPersonModificationComponentState> {
     constructor(props) {
@@ -95,8 +86,6 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
             availableSubjects: []
         }
 
-        globalThis.alert("jebać cie w ryj");
-
         if (this.props.recordId)
             this.fetchAsync();
 
@@ -105,24 +94,42 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
 
     private async fetchAsync() {
         let data = await server.getAsync<StaffPersonDetailedData>("StaffPersonDetails", {
-            id: this.props.recordId
+            id: this.props.recordId,
+            groupId: this.props.groupId
         });
 
         this.setState({ data, awaitingPersonData: false });
     }
 
     private async fetchSubjectsAsync() {
-        let availableSubjects = await server.getAsync<SubjectData[]>("AvailableSubjects");
+        let availableSubjects = await server.getAsync<SubjectListEntry[]>("AvailableSubjects");
 
         this.setState({ availableSubjects })
     }
 
     createOnTextChangeHandler: (property: keyof StaffPersonData) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
         return (event) => {
-            const stateUpdate = {};
-            stateUpdate[property] = event.target.value;
+            const value = event.target.value;
 
-            this.setState(stateUpdate);
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data[property] = value;
+                return { data };
+            });
+
+            this.props.onMadeAnyChange();
+        }
+    }
+
+    createOnSubjectsChangeHandler: (property: keyof StaffPersonData) => React.ChangeEventHandler<HTMLSelectElement> = (property) => {
+        return (event) => {
+            const values = Array.from(event.target.selectedOptions, option => parseInt(option.value));
+
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data[property] = values;
+                return { data };
+            });
 
             this.props.onMadeAnyChange();
         }
@@ -131,9 +138,9 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
     onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        let response = await server.postAsync<ResponseJson>("SubjectData", undefined, {
+        let response = await server.postAsync<ResponseJson>("StaffPersonData", undefined, {
             groupId: this.props.groupId,
-            ...this.state
+            ...this.state.data
         });
 
         if (response.success)
@@ -190,8 +197,9 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                         <select
                             className="form-select"
                             multiple
-                            id="main-subject-select"
+                            name="main-subejcts-input"
                             value={this.state.data.mainSubjectsIds?.map(x => `${x}`)}
+                            onChange={this.createOnSubjectsChangeHandler('mainSubjectsIds')}
                         >
                             {this.state.availableSubjects.map(x =>
                                 <option key={x.id}
@@ -201,6 +209,32 @@ class StaffPersonModificationComponent extends React.Component<StaffPersonModifi
                                 </option>
                             )}
                         </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="additional-subejcts-input">Dodatkowe przedmioty</label>
+                        <select
+                            className="form-select"
+                            multiple
+                            name="additional-subejcts-input"
+                            value={this.state.data.additionalSubjectsIds?.map(x => `${x}`)}
+                            onChange={this.createOnSubjectsChangeHandler('additionalSubjectsIds')}
+                        >
+                            {this.state.availableSubjects.map(x =>
+                                <option key={x.id}
+                                    value={x.id}
+                                >
+                                    {x.name}
+                                </option>
+                            )}
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <input
+                            type="submit"
+                            value="Zapisz"
+                            className="form-control"
+                        />
                     </div>
                 </form>
             </div>

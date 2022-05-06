@@ -5,7 +5,7 @@ using SchoolAssistant.DAL.Models.StudentsParents;
 
 namespace SchoolAssistant.DAL.Models.StudentsOrganization
 {
-    public abstract class SchoolClass : SemesterDbEntity
+    public abstract class SchoolClass : SchoolYearDbEntity
     {
         public virtual ICollection<Student> Students { get; set; } = new List<Student>();
         public virtual ICollection<MarksOfClass> Marks { get; set; } = new List<MarksOfClass>();

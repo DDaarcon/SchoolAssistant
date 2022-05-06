@@ -1,4 +1,5 @@
-﻿using SchoolAssistant.DAL.Models.Staff;
+﻿using SchoolAssistant.DAL.Models.LinkingTables;
+using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Staff;
@@ -61,7 +62,7 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
 
             if (String.IsNullOrWhiteSpace(_model.lastName))
             {
-                _response.message = "Należy podać imię";
+                _response.message = "Należy podać nazwisko";
                 return false;
             }
 
@@ -72,8 +73,23 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
                 return false;
             }
 
+            if (!ValidateDistinctMainAndAdditionalSubjects())
+            {
+                _response.message = "Jeden przedmiot nie może być głównym i dodatkowym";
+                return false;
+            }
+
             return true;
         }
+
+        private bool ValidateDistinctMainAndAdditionalSubjects()
+        {
+            if (_model.mainSubjectsIds is null || _model.additionalSubjectsIds is null || _model.additionalSubjectsIds.Length == 0)
+                return true;
+
+            return !_model.mainSubjectsIds.Any(x => _model.additionalSubjectsIds.Contains(x));
+        }
+
 
         private async Task UpdateAsync()
         {
@@ -103,25 +119,30 @@ namespace SchoolAssistant.Logic.DataManagement.Staff
 
             await AddNewSubjectsAsync();
 
-            await _teacherRepo.AddAsync(_teacher);
+            _teacherRepo.Add(_teacher);
 
             await _teacherRepo.SaveAsync();
         }
 
         private void RemoveAllOldSubjects()
         {
-            foreach (var subject in _teacher.MainSubjects)
-                _teacher.RemoveMainSubject(subject);
-            foreach (var subject in _teacher.AdditionalSubjects)
-                _teacher.RemoveAdditionalSubject(subject);
+            var mainSubjects = new TeacherToMainSubject[_teacher.MainSubjects.Count];
+            _teacher.MainSubjects.CopyTo(mainSubjects, 0);
+            foreach (var mainSubject in mainSubjects)
+                _teacher.SubjectOperations.RemoveMain(mainSubject.Subject);
+
+            var additionalSubjects = new TeacherToAdditionalSubject[_teacher.AdditionalSubjects.Count];
+            _teacher.AdditionalSubjects.CopyTo(additionalSubjects, 0);
+            foreach (var addSubject in additionalSubjects)
+                _teacher.SubjectOperations.RemoveAdditional(addSubject.Subject);
         }
 
         private async Task AddNewSubjectsAsync()
         {
             await foreach (var subject in GetSubjects(_model.mainSubjectsIds))
-                _teacher.AddMainSubject(subject);
+                _teacher.SubjectOperations.AddMain(subject);
             await foreach (var subject in GetSubjects(_model.additionalSubjectsIds))
-                _teacher.AddAdditionalSubject(subject);
+                _teacher.SubjectOperations.AddAdditional(subject);
         }
 
         private async IAsyncEnumerable<Subject?> GetSubjects(long[]? ids)

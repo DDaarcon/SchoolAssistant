@@ -4,7 +4,7 @@ using SchoolAssistant.DAL.Models.Marks;
 
 namespace SchoolAssistant.DAL.ConfigurationSchemas
 {
-    internal class MarkConfiguration : SemesterDbEntityConfiguration<Mark>, IEntityTypeConfiguration<Mark>
+    internal class MarkConfiguration : SchoolYearDbEntityConfiguration<Mark>, IEntityTypeConfiguration<Mark>
     {
         public override void Configure(EntityTypeBuilder<Mark> builder)
         {
