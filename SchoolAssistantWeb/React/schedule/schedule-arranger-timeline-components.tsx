@@ -1,4 +1,10 @@
-﻿type ScheduleDayColumnProps = {
+﻿import * as React from "react";
+import { displayTime, nameForDayOfWeek, sumTimes } from "./help-functions";
+import { scheduleArrangerConfig } from "./main";
+import { DayOfWeek } from "./schedule-arranger-page";
+import { PeriodicLessonTimetableEntry, Time } from "./schedule-types";
+
+type ScheduleDayColumnProps = {
     dayIndicator: DayOfWeek;
     lessons: PeriodicLessonTimetableEntry[];
 
@@ -10,7 +16,7 @@
 type ScheduleDayColumnState = {
     shadowFor?: Time;
 }
-class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, ScheduleDayColumnState> {
+export class ScheduleDayColumn extends React.Component<ScheduleDayColumnProps, ScheduleDayColumnState> {
     private _cells: JSX.Element[];
     private _iAmCallingHideShadow = false;
 
@@ -315,7 +321,7 @@ type ScheduleTimeColumnProps = {
 type ScheduleTimeColumnState = {
 
 }
-class ScheduleTimeColumn extends React.Component<ScheduleTimeColumnProps, ScheduleTimeColumnState> {
+export class ScheduleTimeColumn extends React.Component<ScheduleTimeColumnProps, ScheduleTimeColumnState> {
     private _timeLables: JSX.Element[];
 
     constructor(props) {

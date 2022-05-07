@@ -1,10 +1,15 @@
-﻿type ScheduleClassSelectorPageProps = {
+﻿import React = require("react");
+import { scheduleArrangerConfig, scheduleChangePageScreen, scheduleServer } from "./main";
+import ScheduleArrangerPage from "./schedule-arranger-page";
+import { ScheduleClassLessons, ScheduleClassSelectorEntry } from "./schedule-types";
+
+type ScheduleClassSelectorPageProps = {
     entries: ScheduleClassSelectorEntry[];
 }
 type ScheduleClassSelectorPageState = {
 
 }
-class ScheduleClassSelectorPage extends React.Component<ScheduleClassSelectorPageProps, ScheduleClassSelectorPageState> {
+export default class ScheduleClassSelectorPage extends React.Component<ScheduleClassSelectorPageProps, ScheduleClassSelectorPageState> {
 
     render() {
         return (

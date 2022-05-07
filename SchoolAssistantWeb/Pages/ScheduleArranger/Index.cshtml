@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
 }
 
-@Html.React("ScheduleArrangerMainScreen", new {
+@Html.React("Components.ScheduleArranger", new {
     config = Model.Config,
     classes = Model.Classes,
     subjects = Model.Subjects,
@@ -25,20 +25,5 @@
         const antiforgeryToken = '@token';
     </script>
 
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
-    <script src="~/js/shared/loader.tsx" asp-append-version="true"></script>
-    <script src="~/js/shared/modal.tsx" asp-append-version="true"></script>
-    <script src="~/js/shared/server-connection.tsx" asp-append-version="true"></script>
-    <script src="~/js/shared/validators.tsx" asp-append-version="true"></script>
-    <script src="~/js/shared/form-controls.tsx" asp-append-version="true"></script>
-
-    <script src="~/js/schedule/schedule-arranger-timeline-components.tsx" asp-append-version="true"></script>
-    <script src="~/js/schedule/schedule-arranger-selector-components.tsx" asp-append-version="true"></script>
-    <script src="~/js/schedule/schedule-arranger-page.tsx" asp-append-version="true"></script>
-    <script src="~/js/schedule/schedule-data-service.tsx" asp-append-version="true"></script>
-    <script src="~/js/schedule/class-selector.tsx" asp-append-version="true"></script>
-    <script src="~/js/schedule/help-functions.tsx" asp-append-version="true"></script>
-    <script src="~/js/schedule/main.tsx" asp-append-version="true"></script>
-    @Html.ReactInitJavaScript()
+    <script src="~/dist/schedule.bundle.js" asp-append-version="true"></script>
 }

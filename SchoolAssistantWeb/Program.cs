@@ -76,54 +76,17 @@ else
 // Initialise ReactJS.NET. Must be before static files.
 app.UseReact(config =>
 {
-    //config
-    //   .AddScript("~/js/shared/server-connection.tsx")
-    //   .AddScript("~/js/shared/loader.tsx")
-    //   .AddScript("~/js/shared/validators.tsx")
-    //   .AddScript("~/js/shared/form-controls.tsx")
-    //   .AddScript("~/js/shared/modal.tsx");
-
-
-    //config
-    //    .AddScript("~/js/shared/server-connection.tsx")
-    //    .AddScript("~/js/data-management/main.tsx")
-    //    .AddScript("~/js/data-management/table.tsx")
-    //    .AddScript("~/js/data-management/navigation.tsx")
-    //    .AddScript("~/js/data-management/subjects.tsx")
-    //    .AddScript("~/js/data-management/staff.tsx")
-    //    .AddScript("~/js/data-management/classes.tsx")
-    //    .AddScript("~/js/data-management/enums.tsx");
 
     config
-        //.AddScript("~/js/data-management/main.tsx")
-        //.AddScript("~/js/data-management/shared-table.tsx")
-        //.AddScript("~/js/data-management/table.tsx")
-        //.AddScript("~/js/data-management/rooms.tsx")
-        //.AddScript("~/js/data-management/students.tsx")
-        //.AddScript("~/js/data-management/register-records.tsx")
-        //.AddScript("~/js/data-management/subjects.tsx")
-        //.AddScript("~/js/data-management/staff.tsx")
-        //.AddScript("~/js/data-management/classes.tsx")
-        //.AddScript("~/js/data-management/navigation.tsx")
-        //.AddScript("~/js/data-management/enums.tsx");
         .SetReuseJavaScriptEngines(true)
         .SetLoadBabel(false)
         .SetLoadReact(false)
         .AddScriptWithoutTransform("~/dist/runtime.bundle.js")
-        .AddScriptWithoutTransform("~/dist/data_management.bundle.js")
-        .AddScriptWithoutTransform("~/dist/schedule.bundle.js")
-        .AddScriptWithoutTransform("~/dist/shared.bundle.js")
+        .AddScriptWithoutTransform("~/dist/vendor.bundle.js")
         .AddScriptWithoutTransform("~/dist/react_lib.bundle.js")
-        .AddScriptWithoutTransform("~/dist/vendor.bundle.js");
-
-    //config
-    //    .AddScript("~/js/schedule/schedule-arranger-timeline-components.tsx")
-    //    .AddScript("~/js/schedule/schedule-arranger-selector-components.tsx")
-    //    .AddScript("~/js/schedule/schedule-arranger-page.tsx")
-    //    .AddScript("~/js/schedule/schedule-data-service.tsx")
-    //    .AddScript("~/js/schedule/class-selector.tsx")
-    //    .AddScript("~/js/schedule/help-functions.tsx")
-    //    .AddScript("~/js/schedule/main.tsx");
+        .AddScriptWithoutTransform("~/dist/shared.bundle.js")
+        .AddScriptWithoutTransform("~/dist/data_management.bundle.js")
+        .AddScriptWithoutTransform("~/dist/schedule.bundle.js");
 
 });
 

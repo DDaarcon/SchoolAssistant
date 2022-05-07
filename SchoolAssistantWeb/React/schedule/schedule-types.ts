@@ -1,20 +1,22 @@
-﻿
+﻿import { ResponseJson } from "../shared/server-connection";
+import { DayOfWeek } from "./schedule-arranger-page";
 
-interface ScheduleClassLessons {
+
+export interface ScheduleClassLessons {
     data: ScheduleDayLessons[];
 }
 
-interface ScheduleDayLessons {
+export interface ScheduleDayLessons {
     dayIndicator: DayOfWeek;
     lessons: PeriodicLessonTimetableEntry[];
 }
 
-interface Time {
+export interface Time {
     hour: number;
     minutes: number;
 }
 
-interface PeriodicLessonTimetableEntry {
+export interface PeriodicLessonTimetableEntry {
     id?: number;
 
     time: Time;
@@ -25,18 +27,18 @@ interface PeriodicLessonTimetableEntry {
     room?: IdName;
 }
 
-interface IdName {
+export interface IdName {
     id: number;
     name: string;
 }
 
 
 
-interface AddLessonResponse extends ResponseJson {
+export interface AddLessonResponse extends ResponseJson {
     lesson?: PeriodicLessonTimetableEntry;
 }
 
-interface ScheduleArrangerConfig {
+export interface ScheduleArrangerConfig {
     defaultLessonDuration: number;
     startHour: number;
     endHour: number;
@@ -47,7 +49,7 @@ interface ScheduleArrangerConfig {
     classId?: number;
 }
 
-interface ScheduleClassSelectorEntry {
+export interface ScheduleClassSelectorEntry {
     id: number;
     name: string;
     specialization?: string;
@@ -57,26 +59,26 @@ interface ScheduleClassSelectorEntry {
 
 
 
-interface ScheduleOtherLessons {
+export interface ScheduleOtherLessons {
     teacher?: ScheduleDayLessons[];
     room?: ScheduleDayLessons[];
 }
 
 
-interface ScheduleLessonPrefab {
+export interface ScheduleLessonPrefab {
     subject: IdName;
     lecturer: IdName;
     room?: IdName;
 }
 
-interface ScheduleSubjectEntry extends IdName { }
-interface ScheduleTeacherEntry extends IdName {
+export interface ScheduleSubjectEntry extends IdName { }
+export interface ScheduleTeacherEntry extends IdName {
     shortName: string;
     mainSubjectIds: number[];
     additionalSubjectIds: number[];
     lessons?: ScheduleDayLessons[];
 }
-interface ScheduleRoomEntry extends IdName {
+export interface ScheduleRoomEntry extends IdName {
     floor: number;
     lessons?: ScheduleDayLessons[];
 }
@@ -88,7 +90,7 @@ interface ScheduleRoomEntry extends IdName {
 
 /** Shared by timeline and selector */
 
-interface ScheduleLessonModificationData {
+export interface ScheduleLessonModificationData {
     subjectId?: number;
     teacherId?: number;
     roomId?: number;

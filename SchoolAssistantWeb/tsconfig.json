@@ -9,5 +9,5 @@
     "types": [ "./types" ],
     "lib": [ "es2019", "dom" ]
   },
-  "include": [ "./React/*" ]
+  "include": [ "./React/**/*" ]
 }

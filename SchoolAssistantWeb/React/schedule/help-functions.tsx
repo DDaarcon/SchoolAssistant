@@ -1,4 +1,7 @@
-﻿const areTimesOverlappingByDuration = (timeAStart: Time, durationA: number, timeBStart: Time, durationB: number) => {
+﻿import { DayOfWeek } from "./schedule-arranger-page";
+import { Time } from "./schedule-types";
+
+export const areTimesOverlappingByDuration = (timeAStart: Time, durationA: number, timeBStart: Time, durationB: number) => {
     const aStart = toMinutes(timeAStart);
     const aEnd = aStart + durationA;
     const bStart = toMinutes(timeBStart);
@@ -11,9 +14,9 @@
     return left || right || over;
 }
 
-const toMinutes = (time: Time) => time.hour * 60 + time.minutes;
+export const toMinutes = (time: Time) => time.hour * 60 + time.minutes;
 
-const sumTimes = (timeA: Time, timeB: Time): Time => {
+export const sumTimes = (timeA: Time, timeB: Time): Time => {
     const summedMinutes = timeA.minutes + timeB.minutes;
     return {
         hour: timeA.hour + timeB.hour + Math.floor(summedMinutes / 60),
@@ -21,11 +24,11 @@ const sumTimes = (timeA: Time, timeB: Time): Time => {
     };
 }
 
-const displayTime = (time: Time) => `${time.hour}:${displayMinutes(time.minutes)}`;
-const displayMinutes = (minutes: number) => minutes < 10 ? `0${minutes}` : minutes.toString();
+export const displayTime = (time: Time) => `${time.hour}:${displayMinutes(time.minutes)}`;
+export const displayMinutes = (minutes: number) => minutes < 10 ? `0${minutes}` : minutes.toString();
 
 
-const nameForDayOfWeek = (day: DayOfWeek) => {
+export const nameForDayOfWeek = (day: DayOfWeek) => {
     switch (day) {
         case DayOfWeek.Monday: return "Poniedziałek";
         case DayOfWeek.Tuesday: return "Wtorek";

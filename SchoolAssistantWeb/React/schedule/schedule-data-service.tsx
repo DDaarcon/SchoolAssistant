@@ -1,4 +1,7 @@
-﻿class ScheduleArrangerDataService {
+﻿import { scheduleArrangerConfig, scheduleServer } from './main';
+import { ScheduleDayLessons, ScheduleLessonPrefab, ScheduleOtherLessons, ScheduleRoomEntry, ScheduleSubjectEntry, ScheduleTeacherEntry } from "./schedule-types";
+
+class ScheduleArrangerDataService {
     prefabs: ScheduleLessonPrefab[] = [];
 
     subjects?: ScheduleSubjectEntry[];
@@ -51,3 +54,4 @@
     }
 }
 const scheduleDataService = new ScheduleArrangerDataService;
+export default scheduleDataService;

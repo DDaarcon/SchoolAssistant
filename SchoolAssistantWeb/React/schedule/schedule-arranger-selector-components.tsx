@@ -1,4 +1,9 @@
-﻿/**
+﻿import * as React from "react";
+import { FormSelect } from "../shared/form-controls";
+import Validator from "../shared/validators";
+import scheduleDataService from "./schedule-data-service";
+import { IdName, ScheduleLessonModificationData, ScheduleLessonPrefab } from "./schedule-types";
+/**
  *  This file contains:
  *  
  *  ScheduleLessonPrefabTile - prefab template for selector component.
@@ -11,13 +16,14 @@
  * */
 
 
+
 type ScheduleLessonPrefabTileProps = {
     data: ScheduleLessonPrefab;
 }
 type ScheduleLessonPrefabTileState = {
 
 }
-class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileProps, ScheduleLessonPrefabTileState> {
+export class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileProps, ScheduleLessonPrefabTileState> {
 
     onStart: React.DragEventHandler<HTMLDivElement> = (event) => {
         event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
@@ -61,7 +67,7 @@ class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileP
 type ScheduleAddPrefabTileProps = {
     onClick: () => void;
 }
-const ScheduleAddPrefabTile = (props: ScheduleAddPrefabTileProps) => {
+export const ScheduleAddPrefabTile = (props: ScheduleAddPrefabTileProps) => {
     return (
         <div className="sa-add-lesson-prefab"
             onClick={props.onClick}
@@ -84,7 +90,7 @@ type ScheduleLessonModificationComponentProps = ScheduleLessonModificationData &
     submit: (info: ScheduleLessonModificationData) => void;
 }
 type ScheduleLessonModificationComponentState = ScheduleLessonModificationData & { }
-class ScheduleLessonModificationComponent extends React.Component<ScheduleLessonModificationComponentProps, ScheduleLessonModificationComponentState> {
+export class ScheduleLessonModificationComponent extends React.Component<ScheduleLessonModificationComponentProps, ScheduleLessonModificationComponentState> {
     private _validator = new Validator<ScheduleLessonModificationData>();
 
     private get _subjectFilteredTeachers(): ScheduleTeacherOptionEntry[] {
