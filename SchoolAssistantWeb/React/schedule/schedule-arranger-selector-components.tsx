@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { FormSelect } from "../shared/form-controls";
+import Select from "../shared/form-controls/select";
 import Validator from "../shared/validators";
 import scheduleDataService from "./schedule-data-service";
 import { IdName, ScheduleLessonModificationData, ScheduleLessonPrefab } from "./schedule-types";
@@ -150,7 +150,7 @@ export class ScheduleLessonModificationComponent extends React.Component<Schedul
     render() {
         return (
             <form onSubmit={this.onSubmit}>
-                <FormSelect
+                <Select
                     label="Przedmiot"
                     name="subject-input"
                     value={this.state.subjectId}
@@ -170,7 +170,7 @@ export class ScheduleLessonModificationComponent extends React.Component<Schedul
                     }
                 />
 
-                <FormSelect
+                <Select
                     label="Nauczyciel"
                     name="teacher-input"
                     value={this.state.teacherId}
@@ -191,7 +191,7 @@ export class ScheduleLessonModificationComponent extends React.Component<Schedul
                     }
                 />
 
-                <FormSelect
+                <Select
                     label="Pomieszczenie"
                     name="room-input"
                     value={this.state.roomId}
