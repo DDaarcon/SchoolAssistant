@@ -1,4 +1,12 @@
-﻿interface StaffPersonData extends TableData {
+﻿import React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { ResponseJson } from "../shared/server-connection";
+import { server } from "./main";
+import { ColumnSetting, GroupedModificationComponentProps, GroupedTableData, TableData } from "./shared-table";
+import { SubjectListEntry } from "./subjects";
+import { GroupedTable } from "./table";
+
+interface StaffPersonData extends TableData {
     name: string;
     specialization?: string;
 }
@@ -20,7 +28,7 @@ type StaffPageProps = {
 type StaffPageState = {
 
 }
-class StaffPage extends React.Component<StaffPageProps, StaffPageState> {
+export default class StaffPage extends React.Component<StaffPageProps, StaffPageState> {
 
     render() {
         return (

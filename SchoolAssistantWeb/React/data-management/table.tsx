@@ -1,29 +1,5 @@
-﻿interface TableData {
-    [index: string]: string | number;
-    id?: number;
-}
-
-interface GroupedTableData<TData extends TableData> {
-    id: string | number;
-    name?: string;
-    entries: TData[];
-}
-
-type ModificationComponentProps = {
-    recordId?: number;
-    reloadAsync: () => Promise<void>;
-    onMadeAnyChange: () => void;
-}
-
-type GroupedModificationComponentProps = ModificationComponentProps & {
-    groupId: string | number;
-}
-
-type ColumnSetting<TData extends TableData> = {
-    header: string;
-    prop: keyof TData;
-    style?: React.CSSProperties;
-}
+﻿import React from "react";
+import SharedTable, { confirmClosing, GroupedModificationComponentProps, GroupedTableData, ModificationComponentProps, SharedTableProps, SharedTableState, TableData } from "./shared-table";
 
 
 
@@ -36,7 +12,7 @@ type TableState<TData extends TableData> = SharedTableState<TData, TData> & {
     addingNew: boolean;
 }
 
-class Table<TData extends TableData> extends SharedTable<TData, ModificationComponentProps, TData, TableProps<TData>, TableState<TData>> {
+export class Table<TData extends TableData> extends SharedTable<TData, ModificationComponentProps, TData, TableProps<TData>, TableState<TData>> {
     constructor(props) {
         super(props);
 
@@ -125,7 +101,7 @@ type GroupedTableState<TData extends TableData> = SharedTableState<TData, Groupe
     };
     addingNewOfGroup?: string | number;
 }
-class GroupedTable<TData extends TableData> extends SharedTable<TData, GroupedModificationComponentProps, GroupedTableData<TData>, GroupedTableProps<TData>, GroupedTableState<TData>> {
+export class GroupedTable<TData extends TableData> extends SharedTable<TData, GroupedModificationComponentProps, GroupedTableData<TData>, GroupedTableProps<TData>, GroupedTableState<TData>> {
     constructor(props) {
         super(props);
 
@@ -223,153 +199,4 @@ class GroupedTable<TData extends TableData> extends SharedTable<TData, GroupedMo
             />
         );
     }
-}
-
-
-
-
-
-
-type TableRecordProps<
-    TData extends TableData,
-    TModificationComponentProps extends ModificationComponentProps | GroupedModificationComponentProps
-> = {
-    recordId?: number;
-    recordData: TData;
-    onOpenEdit?: (id: number, groupId?: string | number) => void;
-    displayProperties: (keyof TData)[];
-    modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
-    recordRowsComponent: new (props: RecordRowsProps) => React.Component<RecordRowsProps>;
-    informationRowComponent: (props: InformationRowProps<TData>) => JSX.Element;
-    modifying: boolean;
-    reloadAsync: () => Promise<void>;
-
-    isEven: boolean;
-    groupId?: string | number;
-}
-type TableRecordState = {
-
-}
-
-class TableRecord<
-    TData extends TableData,
-    TModificationComponentProps extends ModificationComponentProps | GroupedModificationComponentProps
-    >
-extends React.Component<TableRecordProps<TData, TModificationComponentProps>, TableRecordState>
-{
-    protected get InformationRowToUse() { return this.props.informationRowComponent; }
-    protected get RecordRowsToUse() { return this.props.recordRowsComponent; }
-    protected get ModificationComponentToUse() { return this.props.modificationComponent; }
-
-    private _madeAnyChange: boolean = false;
-
-    onClickedEditBtn = () => {
-        if (this._madeAnyChange) {
-            const confirmation = confirmClosing();
-            if (!confirmation) return;
-        }
-
-        this._madeAnyChange = false;
-        this.props.onOpenEdit?.(this.props.recordId, this.props.groupId);
-    }
-
-    onMadeAnyChange = () => {
-        this._madeAnyChange = true;
-    }
-
-    render() {
-        return (
-            <this.RecordRowsToUse
-                isEven={this.props.isEven}
-                openedModification={this.props.modifying}
-                columnsCount={this.props.displayProperties.length + 1}
-                dataRow={
-                    <this.InformationRowToUse
-                        recordData={this.props.recordData}
-                        recordDataKeys={this.props.displayProperties}
-                        onClickedEditBtn={this.onClickedEditBtn}
-                    />
-                }
-                modificationComponent={
-                    <this.ModificationComponentToUse
-                        recordId={this.props.recordId}
-                        reloadAsync={this.props.reloadAsync}
-                        onMadeAnyChange={this.onMadeAnyChange}
-                        //@ts-ignore
-                        groupId={this.props.groupId}
-                    />
-                }
-            />
-        )
-    }
-}
-
-
-
-
-
-type InformationRowProps<TData extends TableData> = {
-    recordDataKeys: (keyof TData)[];
-    recordData: TData;
-    onClickedEditBtn: React.MouseEventHandler<HTMLAnchorElement>;
-}
-const InformationRow = <TData extends TableData>(props: InformationRowProps<TData>) => {
-    return (
-        <>
-            {props.recordDataKeys.map((key, index) => <td key={index}>{props.recordData[key]}</td>)}
-            <td className="dm-edit-btn-cell">
-                <a onClick={props.onClickedEditBtn} href="#">
-                    Edytuj
-                </a>
-            </td>
-        </>
-    )
-}
-
-
-
-
-
-type RecordRowsProps = {
-    isEven: boolean;
-    openedModification: boolean;
-    columnsCount: number;
-    dataRow: JSX.Element;
-    modificationComponent: JSX.Element;
-}
-class RecordRows extends React.Component<RecordRowsProps> {
-    render() {
-
-        const modificationRow = this.props.openedModification
-            ? (
-                <td className="dm-modification-component-container"
-                    colSpan={this.props.columnsCount}
-                >
-                    {this.props.modificationComponent}
-                </td>
-            ) : <></>;
-
-        return (
-            <>
-                <tr className={
-                    (this.props.isEven ? "even-row" : "") +
-                    " data-row" +
-                    (this.props.openedModification ? "" : " single-standing-row")
-                }>
-                    {this.props.dataRow}
-                </tr>
-                <tr className={this.props.isEven ? "even-row" : ""}>
-                    {modificationRow}
-                </tr>
-                <tr className="separation-row">
-                    <td colSpan={this.props.columnsCount}> </td>
-                </tr>
-            </>
-        );
-    }
-}
-
-
-function confirmClosing() {
-    return confirm("Zakończyć edycję? Wprowadzone zmiany zostaną utracone");
 }

@@ -9,43 +9,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\data-management\classes.tsx" />
-    <Content Remove="wwwroot\js\data-management\enums.tsx" />
-    <Content Remove="wwwroot\js\data-management\main.tsx" />
-    <Content Remove="wwwroot\js\data-management\modal.tsx" />
-    <Content Remove="wwwroot\js\data-management\navigation.tsx" />
-    <Content Remove="wwwroot\js\data-management\register-records.tsx" />
-    <Content Remove="wwwroot\js\data-management\rooms.tsx" />
-    <Content Remove="wwwroot\js\data-management\shared-table.tsx" />
-    <Content Remove="wwwroot\js\data-management\staff.tsx" />
-    <Content Remove="wwwroot\js\data-management\students.tsx" />
-    <Content Remove="wwwroot\js\data-management\subjects.tsx" />
-    <Content Remove="wwwroot\js\data-management\table.tsx" />
-    <Content Remove="wwwroot\js\schedule\class-selector.tsx" />
-    <Content Remove="wwwroot\js\schedule\help-functions.tsx" />
-    <Content Remove="wwwroot\js\schedule\main.tsx" />
-    <Content Remove="wwwroot\js\schedule\schedule-arranger-page.tsx" />
-    <Content Remove="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
-    <Content Remove="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
-    <Content Remove="wwwroot\js\schedule\schedule-data-service.tsx" />
-    <Content Remove="wwwroot\js\schedule\schedule-types.ts" />
-    <Content Remove="wwwroot\js\shared\form-controls.tsx" />
-    <Content Remove="wwwroot\js\shared\loader.tsx" />
-    <Content Remove="wwwroot\js\shared\server-connection.tsx" />
-    <Content Remove="wwwroot\js\shared\validators.tsx" />
-    <Content Remove="React\data-management\classes.tsx" />
-    <Content Remove="React\data-management\enums.tsx" />
-    <Content Remove="React\data-management\main.tsx" />
-    <Content Remove="React\data-management\navigation.tsx" />
-    <Content Remove="React\data-management\staff.tsx" />
-    <Content Remove="React\data-management\subjects.tsx" />
-    <Content Remove="React\data-management\table.tsx" />
+    <Content Remove="React\schedule\class-selector.tsx" />
+    <Content Remove="React\schedule\help-functions.tsx" />
+    <Content Remove="React\schedule\main.tsx" />
+    <Content Remove="React\schedule\schedule-arranger-page.tsx" />
+    <Content Remove="React\schedule\schedule-arranger-selector-components.tsx" />
+    <Content Remove="React\schedule\schedule-arranger-timeline-components.tsx" />
+    <Content Remove="React\schedule\schedule-data-service.tsx" />
+    <Content Remove="React\schedule\schedule-types.ts" />
     <Content Remove="React\shared\loader.tsx" />
     <Content Remove="React\shared\server-connection.tsx" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="React\expose-components.ts" />
+    <None Remove="React\data-management.ts" />
+    <None Remove="React\react-lib.ts" />
+    <None Remove="React\schedule.ts" />
+    <None Remove="React\shared.ts" />
     <None Remove="types\index.d.ts" />
   </ItemGroup>
 
@@ -73,34 +53,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="React\expose-components.ts" />
+    <TypeScriptCompile Include="React\data-management.ts" />
+    <TypeScriptCompile Include="React\react-lib.ts" />
+    <TypeScriptCompile Include="React\schedule.ts" />
+    <TypeScriptCompile Include="React\shared.ts" />
     <TypeScriptCompile Include="types\index.d.ts" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\classes.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\register-records.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\rooms.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\class-selector.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\help-functions.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\main.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-selector-components.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-timeline-components.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-arranger-page.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-data-service.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\schedule\schedule-types.ts" />
-    <TypeScriptCompile Include="wwwroot\js\shared\form-controls.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shared\modal.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\shared-table.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\staff.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\students.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\table.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\enums.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\main.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\navigation.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\data-management\subjects.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shared\loader.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shared\server-connection.tsx" />
-    <TypeScriptCompile Include="wwwroot\js\shared\validators.tsx" />
     <TypeScriptCompile Include="React\data-management\classes.tsx" />
+    <TypeScriptCompile Include="React\data-management\register-records.tsx" />
+    <TypeScriptCompile Include="React\data-management\rooms.tsx" />
+    <TypeScriptCompile Include="React\schedule\class-selector.tsx" />
+    <TypeScriptCompile Include="React\schedule\help-functions.tsx" />
+    <TypeScriptCompile Include="React\schedule\main.tsx" />
+    <TypeScriptCompile Include="React\schedule\schedule-arranger-selector-components.tsx" />
+    <TypeScriptCompile Include="React\schedule\schedule-arranger-timeline-components.tsx" />
+    <TypeScriptCompile Include="React\schedule\schedule-arranger-page.tsx" />
+    <TypeScriptCompile Include="React\schedule\schedule-data-service.tsx" />
+    <TypeScriptCompile Include="React\schedule\schedule-types.ts" />
+    <TypeScriptCompile Include="React\data-management\shared-table.tsx" />
     <TypeScriptCompile Include="React\data-management\staff.tsx" />
+    <TypeScriptCompile Include="React\data-management\students.tsx" />
     <TypeScriptCompile Include="React\data-management\table.tsx" />
     <TypeScriptCompile Include="React\data-management\enums.tsx" />
     <TypeScriptCompile Include="React\data-management\main.tsx" />
@@ -118,7 +89,7 @@
 		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Command="node_modules/.bin/tsc" />
 	</Target>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 	  <Exec Command="npm run build" />
 	</Target>
 </Project>

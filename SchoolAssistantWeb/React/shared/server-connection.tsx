@@ -51,6 +51,6 @@ export type ResponseJson = {
     message: string | null;
 }
 
-type SaveResponseJson = ResponseJson & {
+export type SaveResponseJson = ResponseJson & {
     id?: number;
 }

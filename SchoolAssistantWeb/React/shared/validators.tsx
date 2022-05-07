@@ -14,7 +14,7 @@ type RulesForModel<T extends {}> = {
     [index in keyof T]?: Rules<T, index>;
 };
 
-class Validator<T extends {}> {
+export default class Validator<T extends {}> {
     private _model?: T;
     private _modelGetter?: () => T;
 

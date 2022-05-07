@@ -1,10 +1,22 @@
 ﻿const path = require('path');
-const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
-	entry: './React/expose-components.ts',
+	entry: {
+		data_management: {
+			import: './React/data-management.ts',
+			dependOn: [ 'shared' ]
+		},
+		schedule: {
+			import: './React/schedule.ts',
+			dependOn: [ 'shared' ]
+		},
+		shared: {
+			import: './React/shared.ts'
+		},
+		react_lib: './React/react-lib.ts'
+	},
 	output: {
-		filename: '[name].[contenthash:8].js',
+		filename: '[name].bundle.js',
 		globalObject: 'this',
 		path: path.resolve(__dirname, 'wwwroot/dist'),
 		publicPath: '/dist/'
@@ -27,36 +39,14 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.jsx?$/,
-				exclude: /node_modules/,
-				loader: 'babel-loader',
-			},
-			{
 				test: /\.tsx?$/,
 				use: 'ts-loader',
 				exclude: /node_modules/,
-            }
+			}
 		],
 	},
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
-	plugins: [
-		new ManifestPlugin({
-			fileName: 'asset-manifest.json',
-			generate: (seed, files) => {
-				const manifestFiles = files.reduce((manifest, file) => {
-					manifest[file.name] = file.path;
-					return manifest;
-				}, seed);
-
-				const entrypointFiles = files.filter(x => x.isInitial && !x.name.endsWith('.map')).map(x => x.path);
-
-				return {
-					files: manifestFiles,
-					entrypoints: entrypointFiles,
-				};
-			},
-		}),
-	]
+	devtool: "source-map"
 };

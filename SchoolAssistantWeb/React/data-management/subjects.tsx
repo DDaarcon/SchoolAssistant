@@ -1,4 +1,11 @@
-﻿interface SubjectListEntry extends TableData {
+﻿import React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { ResponseJson } from "../shared/server-connection";
+import { server } from "./main";
+import { ColumnSetting, ModificationComponentProps, TableData } from "./shared-table";
+import { Table } from "./table";
+
+export interface SubjectListEntry extends TableData {
     name: string;
 }
 
@@ -14,7 +21,7 @@ type SubjectsPageState = {
 
 }
 
-class SubjectsPage extends React.Component<SubjectsPageProps, SubjectsPageState> {
+export default class SubjectsPage extends React.Component<SubjectsPageProps, SubjectsPageState> {
 
     render() {
         return (

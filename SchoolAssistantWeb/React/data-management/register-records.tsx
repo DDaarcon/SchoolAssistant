@@ -1,5 +1,10 @@
-﻿
-interface StudentRegisterRecordDetails {
+﻿import React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { CommonModalProps, ModaledModificationComponentProps } from "../shared/modal";
+import { SaveResponseJson } from "../shared/server-connection";
+import { server } from "./main";
+
+export interface StudentRegisterRecordDetails {
     id?: number;
 
     firstName: string;
@@ -48,7 +53,7 @@ type StudentRegisterRecordMCState = {
         secondParent: boolean;
     }
 }
-class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCProps, StudentRegisterRecordMCState> {
+export class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCProps, StudentRegisterRecordMCState> {
     constructor(props) {
         super(props);
 

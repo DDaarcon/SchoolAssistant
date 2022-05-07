@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Head", required: false)
-
-    @Html.ReactGetStylePaths()
 </head>
 <body>
     @if (!hideNavbar)
@@ -64,9 +62,12 @@
     <script src="https://kit.fontawesome.com/7a31640d83.js" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <script src="~/dist/runtime.bundle.js" asp-append-version="true"></script>
+    <script src="~/dist/vendor.bundle.js" asp-append-version="true"></script>
+    <script src="~/dist/react_lib.bundle.js" asp-append-version="true"></script>
+    <script src="~/dist/shared.bundle.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    @Html.ReactGetScriptPaths()
     @Html.ReactInitJavaScript()
 </body>
 </html>

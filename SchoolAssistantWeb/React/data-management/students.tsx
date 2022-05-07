@@ -1,15 +1,24 @@
-﻿interface StudentListEntry extends TableData {
+﻿import React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import modalController from "../shared/modal";
+import { ResponseJson } from "../shared/server-connection";
+import { server } from "./main";
+import { StudentRegisterRecordDetails, StudentRegisterRecordMC } from "./register-records";
+import { ColumnSetting, GroupedModificationComponentProps, GroupedTableData, TableData } from "./shared-table";
+import { GroupedTable } from "./table";
+
+interface StudentListEntry extends TableData {
     name: string;
     numberInJournal: number;
 }
 
-interface StudentRegisterRecordListEntry {
+export interface StudentRegisterRecordListEntry {
     id: number;
     name: string;
     className?: string;
 }
 
-interface StudentDetails {
+export interface StudentDetails {
     id?: number;
 
     registerRecordId?: number;
@@ -21,7 +30,7 @@ interface StudentDetails {
 }
 
 
-interface StudentModificationData {
+export interface StudentModificationData {
     data: StudentDetails;
     registerRecords: StudentRegisterRecordListEntry[];
 }
@@ -29,7 +38,7 @@ interface StudentModificationData {
 
 
 
-type StudentsPageProps = {
+export type StudentsPageProps = {
     classId: number;
     className: string;
     classSpecialization?: string;
@@ -37,7 +46,7 @@ type StudentsPageProps = {
 type StudentsPageState = {
 
 }
-class StudentsPage extends React.Component<StudentsPageProps, StudentsPageState> {
+export default class StudentsPage extends React.Component<StudentsPageProps, StudentsPageState> {
     constructor(props) {
         super(props);
     }

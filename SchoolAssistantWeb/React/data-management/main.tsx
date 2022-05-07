@@ -1,4 +1,10 @@
-﻿type MainScreenProps = {
+﻿import React from 'react';
+import { ModalSpace } from '../shared/modal';
+import ServerConnection from '../shared/server-connection';
+import { Category } from './enums';
+import DMNavigationBar from './navigation';
+
+type MainScreenProps = {
 
 }
 type MainScreenState = {
@@ -7,11 +13,11 @@ type MainScreenState = {
     props?: any;
 }
 
-type RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => void;
+export type RedirectMethod = (type: Category, pageComponent: new (props: any) => React.Component, props?: any) => void;
 
-const server = new ServerConnection("/DataManagement");
+export const server = new ServerConnection("/DataManagement");
 
-class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
+export default class DataManagementMainScreen extends React.Component<MainScreenProps, MainScreenState> {
     state: MainScreenState = {
         active: undefined,
         pageComponent: undefined
@@ -56,7 +62,7 @@ class DataManagementMainScreen extends React.Component<MainScreenProps, MainScre
 
 const WelcomeScreen = () => {
     return (
-        <h4>Zarządzanie danymi</h4>
+        <h4>Zarządzanie danymi tttttt</h4>
     )
 }
 

@@ -363,4 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 **/React/**/*.js
+**/React/**/*.js.map
 **/wwwroot/dist

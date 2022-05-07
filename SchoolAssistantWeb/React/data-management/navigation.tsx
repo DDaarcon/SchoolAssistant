@@ -1,6 +1,7 @@
-﻿import * as React from "react";
+﻿import React from "react";
 import ClassesPage from "./classes";
 import { Category } from "./enums";
+import RoomsPage from "./rooms";
 import StaffPage from "./staff";
 import SubjectsPage from "./subjects";
 

@@ -1,4 +1,6 @@
-﻿type FormMultiselectProps = {
+﻿import React from "react";
+
+type FormMultiselectProps = {
     label: string;
     name: string;
     value: number[];
@@ -7,7 +9,7 @@
     hasErrors?: boolean;
     errorMessages: string[];
 }
-const FormMultiselect = (props: FormMultiselectProps) => {
+export const FormMultiselect = (props: FormMultiselectProps) => {
     return (
         <FormSelect
             label={props.label}
@@ -35,7 +37,7 @@ type FormSelectProps = {
     hasErrors?: boolean;
     errorMessages: string[];
 }
-const FormSelect = (props: FormSelectProps) => {
+export const FormSelect = (props: FormSelectProps) => {
     const hasErrors = props.hasErrors ?? props.errorMessages.length;
     return (
         <div className="form-group">
@@ -70,7 +72,7 @@ type FormInputProps = {
     hasErrors?: boolean;
     errorMessages: string[];
 }
-const FormInput = (props: FormInputProps) => {
+export const FormInput = (props: FormInputProps) => {
     const hasErrors = props.hasErrors ?? props.errorMessages.length;
     return (
         <div className="form-group">

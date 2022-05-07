@@ -1,4 +1,13 @@
-﻿interface ClassListEntry extends TableData {
+﻿import React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { ResponseJson } from "../shared/server-connection";
+import { Category } from "./enums";
+import { RedirectMethod, server } from "./main";
+import { ColumnSetting, InformationRowProps, ModificationComponentProps, TableData } from "./shared-table";
+import StudentsPage, { StudentsPageProps } from "./students";
+import { Table } from "./table";
+
+interface ClassListEntry extends TableData {
     name: string;
     specialization: string;
     amountOfStudents: number;
@@ -21,7 +30,7 @@ type ClassesPageState = {
 
 };
 
-class ClassesPage extends React.Component<ClassesPageProps, ClassesPageState> {
+export default class ClassesPage extends React.Component<ClassesPageProps, ClassesPageState> {
 
     moveToStudents = (studentsPageProps: StudentsPageProps) => {
         this.props.onRedirect(Category.Students, StudentsPage, studentsPageProps);

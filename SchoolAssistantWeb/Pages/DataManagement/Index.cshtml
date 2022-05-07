@@ -12,12 +12,14 @@
     <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
 }
 
-@Html.React("Components.DataManagementMain", new {})
+@Html.React("Components.DataManagement", new {})
 
 @section Scripts {
     <script>
         const antiforgeryToken = '@token';
     </script>
+
+    <script src="~/dist/data_management.bundle.js" asp-append-version="true"></script>
 
     @*<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>

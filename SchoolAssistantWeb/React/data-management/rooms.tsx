@@ -1,4 +1,11 @@
-﻿interface RoomListEntry extends TableData {
+﻿import React from "react";
+import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { ResponseJson } from "../shared/server-connection";
+import { server } from "./main";
+import { ColumnSetting, ModificationComponentProps, TableData } from "./shared-table";
+import { Table } from "./table";
+
+interface RoomListEntry extends TableData {
     name: string;
     floor: number;
 }
@@ -26,7 +33,7 @@ type RoomsPageState = {
 
 }
 
-class RoomsPage extends React.Component<RoomsPageProps, RoomsPageState> {
+export default class RoomsPage extends React.Component<RoomsPageProps, RoomsPageState> {
 
     render() {
         return (

@@ -109,7 +109,12 @@ app.UseReact(config =>
         .SetReuseJavaScriptEngines(true)
         .SetLoadBabel(false)
         .SetLoadReact(false)
-        .SetReactAppBuildPath("~/dist");
+        .AddScriptWithoutTransform("~/dist/runtime.bundle.js")
+        .AddScriptWithoutTransform("~/dist/data_management.bundle.js")
+        .AddScriptWithoutTransform("~/dist/schedule.bundle.js")
+        .AddScriptWithoutTransform("~/dist/shared.bundle.js")
+        .AddScriptWithoutTransform("~/dist/react_lib.bundle.js")
+        .AddScriptWithoutTransform("~/dist/vendor.bundle.js");
 
     //config
     //    .AddScript("~/js/schedule/schedule-arranger-timeline-components.tsx")

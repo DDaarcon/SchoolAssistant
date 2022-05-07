@@ -1,8 +1,11 @@
-﻿/*
+﻿
+import React from "react";
+import { ModificationComponentProps } from "../data-management/shared-table";
+
+/*
  *  Instance of ModalController (`modalController`) is used for ordering modal displays
  * 
  */
-
 type ModalPropsToPass<TModalProps extends CommonModalProps> = Omit<TModalProps, "assignedAtPresenter">;
 
 class ModalController {
@@ -79,6 +82,7 @@ class ModalController {
 }
 
 const modalController = new ModalController;
+export default modalController;
 
 
 
@@ -89,7 +93,7 @@ const modalController = new ModalController;
  * 
  * 
  */
-type CommonModalProps = {
+export type CommonModalProps = {
     assignedAtPresenter: {
         uniqueId?: number;
         close?: (uniqueId: number) => void;
@@ -134,7 +138,7 @@ type ModalProps = CommonModalProps & {
 type ModalState = {
 
 }
-class Modal extends React.Component<ModalProps, ModalState> {
+export class Modal extends React.Component<ModalProps, ModalState> {
 
     render() {
         return (
@@ -163,7 +167,7 @@ type ConfirmationModalProps = CommonModalProps & {
 type ConfirmationModalState = {
 
 }
-class ConfirmationModal extends React.Component<ConfirmationModalProps, ConfirmationModalState> {
+export class ConfirmationModal extends React.Component<ConfirmationModalProps, ConfirmationModalState> {
     onCloseConfirm = () => this.onCloseWith(this.props.onConfirm);
     onCloseDecline = () => this.onCloseWith(this.props.onDecline);
 
@@ -200,7 +204,7 @@ class ConfirmationModal extends React.Component<ConfirmationModalProps, Confirma
 
 
 
-type ModaledModificationComponentProps = ModificationComponentProps & {
+export type ModaledModificationComponentProps = ModificationComponentProps & {
 
 }
 
@@ -214,7 +218,7 @@ type ModificationComponentModalProps
 type ModificationComponentModalState = {
 
 }
-class ModificationComponentModal
+export class ModificationComponentModal
     <TModificationComponentProps extends ModaledModificationComponentProps>
     extends React.Component<ModificationComponentModalProps<TModificationComponentProps>, ModificationComponentModalState>
 {
@@ -254,7 +258,7 @@ class ModificationComponentModal
  *  Components below are responsible for displaying modals added via `modalController`
  */
 
-class ModalSpace extends React.Component {
+export class ModalSpace extends React.Component {
     private static _validSpaceAlreadyExists: boolean = false;
     private _thisSpaceIsValid: boolean = false;
 
