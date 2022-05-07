@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { ModalSpace } from '../shared/modal';
+import { ModalSpace } from '../shared/modals';
 import ServerConnection from '../shared/server-connection';
 import { Category } from './enums';
 import DMNavigationBar from './navigation';

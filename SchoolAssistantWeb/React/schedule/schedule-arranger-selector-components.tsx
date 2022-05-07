@@ -1,6 +1,6 @@
 ﻿import * as React from "react";
 import Select from "../shared/form-controls/select";
-import Validator from "../shared/validators";
+import Validator from "../shared/validator";
 import scheduleDataService from "./schedule-data-service";
 import { IdName, ScheduleLessonModificationData, ScheduleLessonPrefab } from "./schedule-types";
 /**

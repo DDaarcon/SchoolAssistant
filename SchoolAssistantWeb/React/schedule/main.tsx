@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { ModalSpace } from "../shared/modal";
+import { ModalSpace } from "../shared/modals";
 import ServerConnection from "../shared/server-connection";
 import scheduleDataService from './schedule-data-service';
 import { ScheduleArrangerConfig, ScheduleClassSelectorEntry, ScheduleRoomEntry, ScheduleSubjectEntry, ScheduleTeacherEntry } from "./schedule-types";

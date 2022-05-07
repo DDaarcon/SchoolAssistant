@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import Loader, { LoaderSize, LoaderType } from "../shared/loader";
-import { CommonModalProps, ModaledModificationComponentProps } from "../shared/modal";
+import { CommonModalProps } from "../shared/modals/shared-modal-body";
 import { SaveResponseJson } from "../shared/server-connection";
 import { server } from "./main";
 
@@ -42,8 +42,10 @@ interface StudentRegisterRecordModificationData {
 
 
 
-type StudentRegisterRecordMCProps = ModaledModificationComponentProps & CommonModalProps & {
+export type StudentRegisterRecordMCProps = {
+    recordId?: number;
     selectRecord: (id: number) => void;
+    reloadAsync: () => Promise<void>;
 }
 type StudentRegisterRecordMCState = {
     data: StudentRegisterRecordDetails;
@@ -53,7 +55,7 @@ type StudentRegisterRecordMCState = {
         secondParent: boolean;
     }
 }
-export class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCProps, StudentRegisterRecordMCState> {
+export class StudentRegisterRecordMC extends React.Component<StudentRegisterRecordMCProps & CommonModalProps, StudentRegisterRecordMCState> {
     constructor(props) {
         super(props);
 
@@ -105,8 +107,6 @@ export class StudentRegisterRecordMC extends React.Component<StudentRegisterReco
                 data[property] = (value as unknown) as never;
                 return { data };
             });
-
-            this.props.onMadeAnyChange();
         }
     }
 
@@ -124,8 +124,6 @@ export class StudentRegisterRecordMC extends React.Component<StudentRegisterReco
 
             return { data };
         });
-
-        this.props.onMadeAnyChange();
     }
 
 
@@ -138,7 +136,7 @@ export class StudentRegisterRecordMC extends React.Component<StudentRegisterReco
 
         if (response.success) {
             this.props.selectRecord(response.id);
-            await this.props.reloadAsync();
+            //await this.props.reloadAsync();
             this.props.assignedAtPresenter.close(this.props.assignedAtPresenter.uniqueId);
         }
         else
@@ -270,8 +268,6 @@ export class StudentRegisterRecordMC extends React.Component<StudentRegisterReco
 
                 return { data };
             });
-
-            this.props.onMadeAnyChange();
         }
     }
 
@@ -291,8 +287,6 @@ export class StudentRegisterRecordMC extends React.Component<StudentRegisterReco
 
                 return { data, addressSameAsChilds };
             });
-
-            this.props.onMadeAnyChange();
         }
     }
 

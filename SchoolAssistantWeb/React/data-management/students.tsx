@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import Loader, { LoaderSize, LoaderType } from "../shared/loader";
-import modalController from "../shared/modal";
+import { modalController } from "../shared/modals";
 import { ResponseJson } from "../shared/server-connection";
 import { server } from "./main";
-import { StudentRegisterRecordDetails, StudentRegisterRecordMC } from "./register-records";
+import { StudentRegisterRecordDetails, StudentRegisterRecordMC, StudentRegisterRecordMCProps } from "./register-records";
 import { ColumnSetting, GroupedModificationComponentProps, GroupedTableData, TableData } from "./shared-table";
 import { GroupedTable } from "./table";
 
@@ -247,10 +247,9 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
     }
 
     openStudentRegisterRecordMCForCreation = () => {
-        modalController.addModificationComponent({
+        modalController.addCustomComponent<StudentRegisterRecordMCProps>({
             modificationComponent: StudentRegisterRecordMC,
             modificationComponentProps: {
-                onMadeAnyChange: () => { },
                 reloadAsync: this.refetchRegisterRecords,
                 selectRecord: this.selectRecord
             },
@@ -262,11 +261,11 @@ class StudentModificationComponent extends React.Component<StudentModificationCo
 
     openStudentRegisterRecordMCForModification = () => {
         if (!this.state.data.registerRecordId) return;
-        modalController.addModificationComponent({
+
+        modalController.addCustomComponent<StudentRegisterRecordMCProps>({
             modificationComponent: StudentRegisterRecordMC,
             modificationComponentProps: {
                 recordId: this.state.data.registerRecordId,
-                onMadeAnyChange: () => { },
                 reloadAsync: this.refetchRegisterRecords,
                 selectRecord: this.selectRecord
             }

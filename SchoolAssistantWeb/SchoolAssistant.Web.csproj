@@ -30,6 +30,13 @@
     <None Remove="React\shared\form-controls\input.tsx" />
     <None Remove="React\shared\form-controls\multiselect.tsx" />
     <None Remove="React\shared\form-controls\select.tsx" />
+    <None Remove="React\shared\modals\confirmation-modal.tsx" />
+    <None Remove="React\shared\modals\custom-component-modal.tsx" />
+    <None Remove="React\shared\modals\modal-controller.tsx" />
+    <None Remove="React\shared\modals\modal-presenter.tsx" />
+    <None Remove="React\shared\modals\modal.tsx" />
+    <None Remove="React\shared\modals\shared-modal-body.tsx" />
+    <None Remove="React\shared\validator.ts" />
     <None Remove="types\index.d.ts" />
   </ItemGroup>
 
@@ -65,6 +72,13 @@
     <TypeScriptCompile Include="React\shared\form-controls\input.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\multiselect.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\select.tsx" />
+    <TypeScriptCompile Include="React\shared\modals\confirmation-modal.tsx" />
+    <TypeScriptCompile Include="React\shared\modals\modal-controller.tsx" />
+    <TypeScriptCompile Include="React\shared\modals\custom-component-modal.tsx" />
+    <TypeScriptCompile Include="React\shared\modals\modal-presenter.tsx" />
+    <TypeScriptCompile Include="React\shared\modals\modal.tsx" />
+    <TypeScriptCompile Include="React\shared\modals\shared-modal-body.tsx" />
+    <TypeScriptCompile Include="React\shared\validator.ts" />
     <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="React\data-management\classes.tsx" />
     <TypeScriptCompile Include="React\data-management\register-records.tsx" />

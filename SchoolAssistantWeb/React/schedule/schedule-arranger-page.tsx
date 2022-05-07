@@ -1,11 +1,11 @@
 ﻿import * as React from "react";
-import modalController from "../shared/modal";
 import { areTimesOverlappingByDuration } from "./help-functions";
 import { scheduleArrangerConfig, scheduleServer } from "./main";
 import scheduleDataService from "./schedule-data-service";
 import { AddLessonResponse, PeriodicLessonTimetableEntry, ScheduleClassLessons, ScheduleDayLessons, ScheduleLessonModificationData, ScheduleLessonPrefab, Time } from "./schedule-types";
 import { ScheduleAddPrefabTile, ScheduleLessonModificationComponent, ScheduleLessonPrefabTile } from './schedule-arranger-selector-components';
 import { ScheduleDayColumn, ScheduleTimeColumn } from './schedule-arranger-timeline-components';
+import { modalController } from "../shared/modals";
 
 export enum DayOfWeek {
     Sunday,

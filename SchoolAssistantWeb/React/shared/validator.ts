@@ -1,16 +1,16 @@
-﻿type ValidationFail<T> = {
+﻿export type ValidationFail<T> = {
     error?: 'null' | 'empty' | 'invalidDate' | string;
     on?: keyof T;
 }
 
-type Rules<T, TProp extends keyof T> = {
+export type Rules<T, TProp extends keyof T> = {
     notNull?: boolean | string;
     notEmpty?: boolean | string;
     validDate?: boolean | string;
     other?: ((model: T, prop: TProp) => ValidationFail<T>[] | ValidationFail<T> | undefined)[]
 }
 
-type RulesForModel<T extends {}> = {
+export type RulesForModel<T extends {}> = {
     [index in keyof T]?: Rules<T, index>;
 };
 
