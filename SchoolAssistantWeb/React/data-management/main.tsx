@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { ModalSpace } from '../shared/modals';
 import ServerConnection from '../shared/server-connection';
-import { Category } from './enums';
+import Category from './enums/category';
 import DMNavigationBar from './navigation';
 
 type MainScreenProps = {

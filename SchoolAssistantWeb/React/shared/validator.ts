@@ -7,7 +7,7 @@ export type Rules<T, TProp extends keyof T> = {
     notNull?: boolean | string;
     notEmpty?: boolean | string;
     validDate?: boolean | string;
-    other?: ((model: T, prop: TProp) => ValidationFail<T>[] | ValidationFail<T> | undefined)[]
+    other?: ((model: T, prop: TProp) => ValidationFail<T>[] | ValidationFail<T> | undefined)[] | ((model: T, prop: TProp) => ValidationFail<T>[] | ValidationFail<T> | undefined)
 }
 
 export type RulesForModel<T extends {}> = {
@@ -23,6 +23,11 @@ export default class Validator<T extends {}> {
     private _errors?: ValidationFail<T>[];
 
     get errors() { return this._errors ?? []; }
+
+    getErrorMsgsFor(prop: keyof T) {
+        return this.errors.filter(x => x.on == prop).map(x => x.error);
+    }
+
 
     forModel(model: T) {
         this._model = model;
@@ -65,15 +70,29 @@ export default class Validator<T extends {}> {
                 if (!this.validateDate(prop))
                     continue;
 
-            for (const otherRule of rules.other ?? []) {
-                const otherErrors = otherRule(this._model, prop);
-                if (!otherErrors)
-                    continue;
+            if (!rules.other)
+                continue;
 
-                if (otherErrors instanceof Array)
-                    this._errors.push(...otherErrors);
-                else
-                    this._errors.push(otherErrors);
+            if (rules.other instanceof Array) {
+                for (const otherRule of rules.other ?? []) {
+                    const otherErrors = otherRule(this._model, prop);
+                    if (!otherErrors)
+                        continue;
+
+                    if (otherErrors instanceof Array)
+                        this._errors.push(...otherErrors);
+                    else
+                        this._errors.push(otherErrors);
+                }
+            }
+            else {
+                const otherError = rules.other?.(this._model, prop);
+                if (otherError) {
+                    if (otherError instanceof Array)
+                        this._errors.push(...otherError);
+                    else
+                        this._errors.push(otherError);
+                }
             }
         }
 
@@ -90,7 +109,7 @@ export default class Validator<T extends {}> {
 
     private validateNotEmpty(prop: keyof T): boolean {
         const val = this._model[prop];
-        if (!val) return true;
+        if (val == undefined) return true;
 
         if (val['length']) return true;
 

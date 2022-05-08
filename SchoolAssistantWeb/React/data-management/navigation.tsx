@@ -1,9 +1,9 @@
 ﻿import React from "react";
-import ClassesPage from "./classes";
-import { Category } from "./enums";
-import RoomsPage from "./rooms";
-import StaffPage from "./staff";
-import SubjectsPage from "./subjects";
+import ClassesPage from "./classes/classes-page";
+import Category from "./enums/category";
+import RoomsPage from "./rooms/rooms-page";
+import StaffPage from "./staff/staff-page";
+import SubjectsPage from "./subjects/subjects-page";
 
 type BarProps = {
     active?: Category;
