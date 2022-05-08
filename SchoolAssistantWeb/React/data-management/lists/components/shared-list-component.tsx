@@ -29,7 +29,7 @@ export type SharedListState<
         loading: boolean;
     }
 
-export default abstract class SharedTable<
+export default abstract class SharedListComponent<
     TData extends ListEntry,
     TModificationComponentProps extends ModCompProps | SharedGroupModCompProps,
     TStoredData extends TData | GroupListEntry<TData>,

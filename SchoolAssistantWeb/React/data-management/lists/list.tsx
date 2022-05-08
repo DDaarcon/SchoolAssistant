@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import SharedTable, { SharedListProps, SharedListState } from "./components/shared-list-component";
+import SharedListComponent, { SharedListProps, SharedListState } from "./components/shared-list-component";
 import { confirmCloseMod } from "./help/confirm-close-mod";
 import ListEntry from "./interfaces/list-entry";
 import ModCompProps from "./interfaces/shared-mod-comp-props";
@@ -10,7 +10,7 @@ type ListState<TData extends ListEntry> = SharedListState<TData, TData> & {
     addingNew: boolean;
 }
 
-export default class List<TData extends ListEntry> extends SharedTable<TData, ModCompProps, TData, ListProps<TData>, ListState<TData>> {
+export default class List<TData extends ListEntry> extends SharedListComponent<TData, ModCompProps, TData, ListProps<TData>, ListState<TData>> {
     constructor(props) {
         super(props);
 

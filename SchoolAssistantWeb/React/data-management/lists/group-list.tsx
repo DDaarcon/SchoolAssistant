@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import SharedTable, { SharedListProps, SharedListState } from "./components/shared-list-component";
+import SharedListComponent, { SharedListProps, SharedListState } from "./components/shared-list-component";
 import { confirmCloseMod } from "./help/confirm-close-mod";
 import GroupListEntry from "./interfaces/group-list-entry";
 import ListEntry from "./interfaces/list-entry";
@@ -13,7 +13,7 @@ type GroupListState<TData extends ListEntry> = SharedListState<TData, GroupListE
     };
     addingNewOfGroup?: string | number;
 }
-export default class GroupedTable<TEntry extends ListEntry> extends SharedTable<TEntry, SharedGroupModCompProps, GroupListEntry<TEntry>, GroupListProps<TEntry>, GroupListState<TEntry>> {
+export default class GroupList<TEntry extends ListEntry> extends SharedListComponent<TEntry, SharedGroupModCompProps, GroupListEntry<TEntry>, GroupListProps<TEntry>, GroupListState<TEntry>> {
     constructor(props) {
         super(props);
 
@@ -52,8 +52,8 @@ export default class GroupedTable<TEntry extends ListEntry> extends SharedTable<
             <this.ListFundation
                 tbody={
                     <>
-                        {this.state.data?.map((group, i) =>
-                            <React.Fragment key={i}>
+                        {this.state.data?.map((group) =>
+                            <React.Fragment key={group.id}>
                                 {group.name != undefined
                                     ?
                                     <>
@@ -70,7 +70,7 @@ export default class GroupedTable<TEntry extends ListEntry> extends SharedTable<
 
                                 {group.entries?.map((entry, entryIndex) =>
                                     <this.ListEntryComponent
-                                        key={entry.id}
+                                        key={`${entry.id}${entryIndex}`}
                                         recordId={entry.id}
                                         groupId={group.id}
                                         recordData={entry}
