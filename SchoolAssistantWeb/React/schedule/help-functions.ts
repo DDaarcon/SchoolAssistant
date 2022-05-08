@@ -1,5 +1,6 @@
-﻿import { DayOfWeek } from "./schedule-arranger-page";
-import { Time } from "./schedule-types";
+﻿import { DayOfWeek } from "./enums/day-of-week";
+import { Time } from "./interfaces/shared";
+
 
 export const areTimesOverlappingByDuration = (timeAStart: Time, durationA: number, timeBStart: Time, durationB: number) => {
     const aStart = toMinutes(timeAStart);

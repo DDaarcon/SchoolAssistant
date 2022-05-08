@@ -1,84 +1,9 @@
-﻿import * as React from "react";
-import Select from "../shared/form-controls/select";
-import Validator from "../shared/validator";
-import scheduleDataService from "./schedule-data-service";
-import { IdName, ScheduleLessonModificationData, ScheduleLessonPrefab } from "./schedule-types";
-/**
- *  This file contains:
- *  
- *  ScheduleLessonPrefabTile - prefab template for selector component.
- *  
- *  ScheduleAddPrefabTile - button for opening modal, where prefabs are composed.
- * 
- *  ScheduleLessonModificationComponent - component injected into modal, here prefabs are constructed.
- *      
- * 
- * */
-
-
-
-type ScheduleLessonPrefabTileProps = {
-    data: ScheduleLessonPrefab;
-}
-type ScheduleLessonPrefabTileState = {
-
-}
-export class ScheduleLessonPrefabTile extends React.Component<ScheduleLessonPrefabTileProps, ScheduleLessonPrefabTileState> {
-
-    onStart: React.DragEventHandler<HTMLDivElement> = (event) => {
-        event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
-        dispatchEvent(new CustomEvent('dragBegan', {
-            detail: this.props.data
-        }));
-    }
-
-    onEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
-        dispatchEvent(new Event("hideLessonShadow"));
-        dispatchEvent(new Event("clearOtherLessons"));
-    }
-
-    render() {
-        return (
-            <div className="sa-lesson-prefab"
-                draggable
-                onDragStart={this.onStart}
-                onDragEnd={this.onEnd}
-            >
-                <span className="sa-lesson-prefab-subject">
-                    {this.props.data.subject.name}
-                </span>
-                <div className="sa-lesson-prefab-bottom">
-                    <div className="sa-lesson-prefab-lecturer">
-                        {this.props.data.lecturer.name}
-                    </div>
-                    <div className="sa-lesson-prefab-room">
-                        {this.props.data.room?.name}
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-
-
-
-
-type ScheduleAddPrefabTileProps = {
-    onClick: () => void;
-}
-export const ScheduleAddPrefabTile = (props: ScheduleAddPrefabTileProps) => {
-    return (
-        <div className="sa-add-lesson-prefab"
-            onClick={props.onClick}
-        >
-            <i className="fa-solid fa-plus"></i>
-        </div>
-    )
-}
-
-
-
+﻿import React from "react";
+import { Select } from "../../../shared/form-controls";
+import Validator from "../../../shared/validator";
+import { LessonModificationData } from "../../interfaces/lesson-modification-data";
+import { IdName } from "../../interfaces/shared";
+import scheduleDataService from "../../schedule-data-service";
 
 
 
@@ -86,12 +11,13 @@ interface ScheduleTeacherOptionEntry extends IdName {
     mainSubject: boolean;
 }
 
-type ScheduleLessonModificationComponentProps = ScheduleLessonModificationData & {
-    submit: (info: ScheduleLessonModificationData) => void;
+
+type LessonModificationComponentProps = LessonModificationData & {
+    submit: (info: LessonModificationData) => void;
 }
-type ScheduleLessonModificationComponentState = ScheduleLessonModificationData & { }
-export class ScheduleLessonModificationComponent extends React.Component<ScheduleLessonModificationComponentProps, ScheduleLessonModificationComponentState> {
-    private _validator = new Validator<ScheduleLessonModificationData>();
+type LessonModificationComponentState = LessonModificationData & {}
+export default class LessonModificationComponent extends React.Component<LessonModificationComponentProps, LessonModificationComponentState> {
+    private _validator = new Validator<LessonModificationData>();
 
     private get _subjectFilteredTeachers(): ScheduleTeacherOptionEntry[] {
         return [
@@ -121,7 +47,7 @@ export class ScheduleLessonModificationComponent extends React.Component<Schedul
         })
     }
 
-    createOnSelectChangeHandler: (property: keyof ScheduleLessonModificationComponentState) => React.ChangeEventHandler<HTMLSelectElement> = (property) =>
+    createOnSelectChangeHandler: (property: keyof LessonModificationComponentState) => React.ChangeEventHandler<HTMLSelectElement> = (property) =>
         (event) => {
             let value = event.target.value == ""
                 ? undefined

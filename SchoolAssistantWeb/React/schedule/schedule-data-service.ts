@@ -1,14 +1,19 @@
-﻿import { scheduleArrangerConfig, scheduleServer } from './main';
-import { ScheduleDayLessons, ScheduleLessonPrefab, ScheduleOtherLessons, ScheduleRoomEntry, ScheduleSubjectEntry, ScheduleTeacherEntry } from "./schedule-types";
+﻿import { DayLessons } from "./interfaces/day-lessons";
+import { LessonPrefab } from "./interfaces/lesson-prefab";
+import { OtherLessons } from "./interfaces/other-lessons";
+import { ScheduleRoomEntry } from "./interfaces/page-model-to-react/schedule-room-entry";
+import { ScheduleSubjectEntry } from "./interfaces/page-model-to-react/schedule-subject-entry";
+import { ScheduleTeacherEntry } from "./interfaces/page-model-to-react/schedule-teacher-entry";
+import { scheduleArrangerConfig, server } from "./main";
 
 class ScheduleArrangerDataService {
-    prefabs: ScheduleLessonPrefab[] = [];
+    prefabs: LessonPrefab[] = [];
 
     subjects?: ScheduleSubjectEntry[];
     teachers?: ScheduleTeacherEntry[];
     rooms?: ScheduleRoomEntry[];
 
-    addPrefab(prefab: ScheduleLessonPrefab) {
+    addPrefab(prefab: LessonPrefab) {
         this.prefabs.push(prefab);
 
         dispatchEvent(new CustomEvent('newPrefab', {
@@ -22,7 +27,7 @@ class ScheduleArrangerDataService {
 
 
 
-    getTeacherAndRoomLessons = async (teacherId: number, roomId: number, apply: (teacher?: ScheduleDayLessons[], room?: ScheduleDayLessons[]) => void) => {
+    getTeacherAndRoomLessons = async (teacherId: number, roomId: number, apply: (teacher?: DayLessons[], room?: DayLessons[]) => void) => {
         // find teacher and room in storage
         const teacher = this.teachers.find(x => x.id == teacherId);
         const room = this.rooms.find(x => x.id == roomId);
@@ -40,7 +45,7 @@ class ScheduleArrangerDataService {
         if (teacherLessons) teacherId = undefined;
         if (roomLessons) roomId = undefined;
 
-        var response = await scheduleServer.getAsync<ScheduleOtherLessons>("OtherLessons", {
+        var response = await server.getAsync<OtherLessons>("OtherLessons", {
             classId: scheduleArrangerConfig.classId,
             teacherId,
             roomId

@@ -2,17 +2,21 @@
 import { ModalSpace } from "../shared/modals";
 import ServerConnection from "../shared/server-connection";
 import scheduleDataService from './schedule-data-service';
-import { ScheduleArrangerConfig, ScheduleClassSelectorEntry, ScheduleRoomEntry, ScheduleSubjectEntry, ScheduleTeacherEntry } from "./schedule-types";
 import ScheduleClassSelectorPage from './class-selector';
+import { ScheduleArrangerConfig } from "./interfaces/page-model-to-react/schedule-arranger-config";
+import { ScheduleClassSelectorEntry } from "./interfaces/page-model-to-react/schedule-class-selector-entry";
+import { ScheduleSubjectEntry } from "./interfaces/page-model-to-react/schedule-subject-entry";
+import { ScheduleTeacherEntry } from "./interfaces/page-model-to-react/schedule-teacher-entry";
+import { ScheduleRoomEntry } from "./interfaces/page-model-to-react/schedule-room-entry";
 
 export let scheduleArrangerConfig: ScheduleArrangerConfig;
 export let scheduleChangePageScreen: (pageComponent: JSX.Element) => void;
-export const scheduleServer = new ServerConnection("/ScheduleArranger");
+export const server = new ServerConnection("/ScheduleArranger");
 
 
 
 
-type ScheduleArrangerMainScreenProps = {
+type MainScreenProps = {
     config: ScheduleArrangerConfig;
     classes: ScheduleClassSelectorEntry[];
     subjects: ScheduleSubjectEntry[];
@@ -20,10 +24,10 @@ type ScheduleArrangerMainScreenProps = {
     rooms: ScheduleRoomEntry[];
     classId?: number;
 }
-type ScheduleArrangerMainScreenState = {
+type MainScreenState = {
     pageComponent: JSX.Element;
 }
-export default class ScheduleArrangerMainScreen extends React.Component<ScheduleArrangerMainScreenProps, ScheduleArrangerMainScreenState> {
+export default class MainScreen extends React.Component<MainScreenProps, MainScreenState> {
     private _classSelectorComponent: JSX.Element;
 
     constructor(props) {

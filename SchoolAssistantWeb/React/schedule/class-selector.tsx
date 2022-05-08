@@ -1,7 +1,8 @@
 ﻿import React = require("react");
-import { scheduleArrangerConfig, scheduleChangePageScreen, scheduleServer } from "./main";
+import { ClassLessons } from "./interfaces/class-lessons";
+import { ScheduleClassSelectorEntry } from "./interfaces/page-model-to-react/schedule-class-selector-entry";
+import { scheduleArrangerConfig, scheduleChangePageScreen, server } from "./main";
 import ScheduleArrangerPage from "./schedule-arranger-page";
-import { ScheduleClassLessons, ScheduleClassSelectorEntry } from "./schedule-types";
 
 type ScheduleClassSelectorPageProps = {
     entries: ScheduleClassSelectorEntry[];
@@ -31,7 +32,7 @@ type ClassEntryProps = ScheduleClassSelectorEntry & {
 }
 const ClassEntry = (props: ClassEntryProps) => {
     const selectClass = () =>
-        scheduleServer.getAsync<ScheduleClassLessons>("ClassLessons", { classId: props.id })
+        server.getAsync<ClassLessons>("ClassLessons", { classId: props.id })
             .then((result) => {
                 if (result == null) return;
 
