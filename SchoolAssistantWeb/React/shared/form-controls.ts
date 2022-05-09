@@ -1,9 +1,12 @@
 ﻿import Input from './form-controls/input';
-import Select from './form-controls/select';
+import Select, { Option, OnChangeHandler, OnChangeIdHandler } from './form-controls/select';
 import Multiselect from './form-controls/multiselect';
 
 export {
     Input,
     Select,
-    Multiselect
+    Multiselect,
+    Option,
+    OnChangeHandler,
+    OnChangeIdHandler
 }

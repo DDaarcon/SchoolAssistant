@@ -1,5 +1,6 @@
 ﻿import React from "react";
-import { Input, Multiselect } from "../../shared/form-controls";
+import { MultiValue } from "react-select";
+import { Input, Multiselect, OnChangeIdHandler, Option } from "../../shared/form-controls";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
 import Validator from "../../shared/validator";
@@ -17,6 +18,16 @@ type StaffPersonModCompState = {
 }
 export default class StaffPersonModComp extends React.Component<StaffPersonModCompProps, StaffPersonModCompState> {
     private _validator = new Validator<StaffPersonDetails>();
+
+    private get _mainSubjectOptions() { return this.getSubjectOptions(this.state.data.mainSubjectsIds); }
+    private get _additionalSubjectOptions() { return this.getSubjectOptions(this.state.data.additionalSubjectsIds); }
+
+    private getSubjectOptions(from: number[]): MultiValue<Option<number>> {
+        return this.state.availableSubjects.filter(x => from.includes(x.id)).map(x => ({
+            label: x.name,
+            value: x.id
+        }));
+    }
 
     constructor(props) {
         super(props);
@@ -81,10 +92,8 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
         }
     }
 
-    createOnSubjectsChangeHandler: (property: keyof StaffPersonListEntry) => React.ChangeEventHandler<HTMLSelectElement> = (property) => {
-        return (event) => {
-            const values = Array.from(event.target.selectedOptions, option => parseInt(option.value));
-
+    createOnSubjectsChangeHandler: (property: keyof StaffPersonListEntry) => OnChangeIdHandler<number> = (property) => {
+        return (values) => {
             this.setState(prevState => {
                 const data = { ...prevState.data };
                 data[property] = values;
@@ -154,34 +163,24 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
                     <Multiselect
                         name="main-subejcts-input"
                         label="Główne przedmioty"
-                        value={this.state.data.mainSubjectsIds}
-                        onChange={this.createOnSubjectsChangeHandler('mainSubjectsIds')}
+                        value={this._mainSubjectOptions}
+                        onChangeId={this.createOnSubjectsChangeHandler('mainSubjectsIds')}
                         errorMessages={this._validator.getErrorMsgsFor('mainSubjectsIds')}
-                        options={
-                            this.state.availableSubjects.map(x =>
-                                <option key={x.id}
-                                    value={x.id}
-                                >
-                                    {x.name}
-                                </option>
-                            )
-                        }
+                        options={this.state.availableSubjects.map(x => ({
+                            label: x.name,
+                            value: x.id
+                        }))}
                     />
                     <Multiselect
                         name="additional-subejcts-input"
                         label="Dodatkowe przedmioty"
-                        value={this.state.data.additionalSubjectsIds}
-                        onChange={this.createOnSubjectsChangeHandler('additionalSubjectsIds')}
+                        value={this._additionalSubjectOptions}
+                        onChangeId={this.createOnSubjectsChangeHandler('additionalSubjectsIds')}
                         errorMessages={this._validator.getErrorMsgsFor('additionalSubjectsIds')}
-                        options={
-                            this.state.availableSubjects.map(x =>
-                                <option key={x.id}
-                                    value={x.id}
-                                >
-                                    {x.name}
-                                </option>
-                            )
-                        }
+                        options={this.state.availableSubjects.map(x => ({
+                            label: x.name,
+                            value: x.id
+                        }))}
                     />
 
                     <div className="form-group">

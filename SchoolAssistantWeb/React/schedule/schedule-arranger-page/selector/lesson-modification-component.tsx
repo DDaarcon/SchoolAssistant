@@ -1,5 +1,6 @@
 ﻿import React from "react";
-import { Select } from "../../../shared/form-controls";
+import { MultiValue } from "react-select";
+import { Select, Option } from "../../../shared/form-controls";
 import Validator from "../../../shared/validator";
 import { LessonModificationData } from "../../interfaces/lesson-modification-data";
 import { IdName } from "../../interfaces/shared";
@@ -47,15 +48,11 @@ export default class LessonModificationComponent extends React.Component<LessonM
         })
     }
 
-    createOnSelectChangeHandler: (property: keyof LessonModificationComponentState) => React.ChangeEventHandler<HTMLSelectElement> = (property) =>
-        (event) => {
-            let value = event.target.value == ""
-                ? undefined
-                : parseInt(event.target.value);
-
+    createOnSelectChangeHandler: (property: keyof LessonModificationComponentState) => ((value: Option<number>) => void) = (property) =>
+        (value) => {
             this.setState(prevState => {
                 const state = { ...prevState };
-                state[property] = value;
+                state[property] = value.value;
                 return state;
             });
         }
@@ -82,18 +79,10 @@ export default class LessonModificationComponent extends React.Component<LessonM
                     value={this.state.subjectId}
                     onChange={this.createOnSelectChangeHandler('subjectId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'subjectId').map(x => x.error)}
-                    options={
-                        <>
-                            <option value="">Wybierz</option>
-                            {scheduleDataService.subjects.map(x =>
-                                <option key={x.id}
-                                    value={x.id}
-                                >
-                                    {x.name}
-                                </option>
-                            )}
-                        </>
-                    }
+                    options={scheduleDataService.subjects.map(x => ({
+                        label: x.name,
+                        value: x.id
+                    }))}
                 />
 
                 <Select
@@ -102,19 +91,10 @@ export default class LessonModificationComponent extends React.Component<LessonM
                     value={this.state.teacherId}
                     onChange={this.createOnSelectChangeHandler('teacherId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'teacherId').map(x => x.error)}
-                    options={
-                        <>
-                            <option value="">Wybierz</option>
-                            {this._subjectFilteredTeachers.map(x =>
-                                <option className={x.mainSubject ? "sa-lesson-modify-teacher-main" : "sa-lesson-modify-teacher-addit"}
-                                    key={x.id}
-                                    value={x.id}
-                                >
-                                    {x.name}
-                                </option>
-                            )}
-                        </>
-                    }
+                    options={this._subjectFilteredTeachers.map(x => ({
+                        label: x.name,
+                        value: x.id
+                    })) }
                 />
 
                 <Select
@@ -123,18 +103,10 @@ export default class LessonModificationComponent extends React.Component<LessonM
                     value={this.state.roomId}
                     onChange={this.createOnSelectChangeHandler('roomId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'roomId').map(x => x.error)}
-                    options={
-                        <>
-                            <option value="">Wybierz</option>
-                            {scheduleDataService.rooms.map(x =>
-                                <option key={x.id}
-                                    value={x.id}
-                                >
-                                    {x.name}
-                                </option>
-                            )}
-                        </>
-                    }
+                    options={scheduleDataService.rooms.map(x => ({
+                        label: x.name,
+                        value: x.id
+                    })) }
                 />
 
                 <div className="form-group">

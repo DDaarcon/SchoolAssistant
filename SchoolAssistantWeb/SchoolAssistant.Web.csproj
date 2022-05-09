@@ -106,7 +106,6 @@
     <None Remove="React\shared\modals\modal.tsx" />
     <None Remove="React\shared\modals\shared-modal-body.tsx" />
     <None Remove="React\shared\validator.ts" />
-    <None Remove="types\index.d.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -222,7 +221,6 @@
     <TypeScriptCompile Include="React\shared\modals\modal.tsx" />
     <TypeScriptCompile Include="React\shared\modals\shared-modal-body.tsx" />
     <TypeScriptCompile Include="React\shared\validator.ts" />
-    <TypeScriptCompile Include="types\index.d.ts" />
     <TypeScriptCompile Include="React\schedule\class-selector.tsx" />
     <TypeScriptCompile Include="React\schedule\help-functions.ts" />
     <TypeScriptCompile Include="React\schedule\main.tsx" />
@@ -240,9 +238,5 @@
 
 	<Target Name="Typecheck" AfterTargets="AfterBuild">
 		<Exec WorkingDirectory="$(MSBuildProjectDirectory)" Command="node_modules/.bin/tsc" />
-	</Target>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="npm run build" />
 	</Target>
 </Project>

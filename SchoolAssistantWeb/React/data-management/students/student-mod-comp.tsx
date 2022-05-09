@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Input, Select } from "../../shared/form-controls";
+import { Input, Select, Option } from "../../shared/form-controls";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { modalController } from "../../shared/modals";
 import { ResponseJson } from "../../shared/server-connection";
@@ -85,20 +85,16 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
         }
     }
 
-    onRegisterRecordChangeHandler: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-        let value = event.target.value == ""
-            ? undefined
-            : parseInt(event.target.value);
-
+    onRegisterRecordChangeHandler: (value: Option<number>) => void = (value) => {
         const setRecord = () => {
             this.setState(prevState => {
                 const data = { ...prevState.data };
-                data.registerRecordId = value;
+                data.registerRecordId = value.value;
                 return { data };
             });
         }
 
-        const selected = this.state.registerRecords.find(x => x.id == value);
+        const selected = this.state.registerRecords.find(x => x.id == value.value);
 
         if (selected?.className != undefined) {
             modalController.addConfirmation({
@@ -195,18 +191,10 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
                         label="Dane ucznia"
                         value={this.state.data.registerRecordId}
                         onChange={this.onRegisterRecordChangeHandler}
-                        options={
-                            <>
-                                <option value="">Wybierz</option>
-                                {this.state.registerRecords.map(x =>
-                                    <option key={x.id}
-                                        value={x.id}
-                                    >
-                                        {x.name}
-                                    </option>
-                                )}
-                            </>
-                        }
+                        options={this.state.registerRecords.map(x => ({
+                            label: x.name,
+                            value: x.id
+                        })) }
                         errorMessages={this._validator.getErrorMsgsFor('registerRecordId')}
                     />
 
