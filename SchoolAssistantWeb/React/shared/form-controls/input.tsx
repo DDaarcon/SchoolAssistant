@@ -11,16 +11,17 @@ type InputProps = {
     hasErrors?: boolean;
     errorMessages?: string[];
     disabled?: boolean;
-    className?: string;
+    containerClassName?: string;
+    inputClassName?: string;
     placeholder?: string;
 }
 const Input = (props: InputProps) => {
     const hasErrors = props.hasErrors ?? props.errorMessages?.length ?? false;
     return (
-        <div className="form-group">
+        <div className={"form-group my-form-group " + (props.containerClassName ?? '')}>
             <label htmlFor={props.name}>{props.label}</label>
             <input
-                className={"form-select" + (hasErrors ? ' is-invalid' : '') + " " + props.className}
+                className={"form-control" + (hasErrors ? ' is-invalid' : '') + " " + (props.inputClassName ?? '')}
                 type={props.type}
                 name={props.name}
                 value={props.value}

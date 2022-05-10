@@ -23,7 +23,7 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
     private get _additionalSubjectOptions() { return this.getSubjectOptions(this.state.data.additionalSubjectsIds); }
 
     private getSubjectOptions(from: number[]): MultiValue<Option<number>> {
-        return this.state.availableSubjects.filter(x => from.includes(x.id)).map(x => ({
+        return this.state.availableSubjects.filter(x => from?.includes(x.id)).map(x => ({
             label: x.name,
             value: x.id
         }));

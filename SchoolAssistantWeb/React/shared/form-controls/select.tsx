@@ -23,6 +23,9 @@ type SelectProps<TValue extends number | string, TOption extends Option<TValue>>
     hasErrors?: boolean;
     errorMessages: string[];
     multiple?: boolean;
+
+    containerClassName?: string;
+    inputClassName?: string;
 }
 export default class Select<TValue extends number | string> extends React.Component<SelectProps<TValue, Option<TValue>>> {
     private get _hasErrors() { return this.props.hasErrors ?? this.props.errorMessages.length; };
@@ -55,10 +58,10 @@ export default class Select<TValue extends number | string> extends React.Compon
         const value = this.prepareValue();
 
         return (
-            <div className="form-group">
+            <div className={"form-group my-form-group " + (this.props.containerClassName ?? '')}>
                 <label htmlFor={this.props.name}>{this.props.label}</label>
                 <RSelect<Option<TValue>>
-                    className={"form-select" + (this._hasErrors ? ' is-invalid' : '')}
+                    className={(this._hasErrors ? ' is-invalid' : '') + (this.props.containerClassName ?? '')}
                     name={this.props.name}
                     value={value}
                     onChange={this.onChange}
