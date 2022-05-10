@@ -14,6 +14,12 @@ type GroupListState<TData extends ListEntry> = SharedListState<TData, GroupListE
     addingNewOfGroup?: string | number;
 }
 export default class GroupList<TEntry extends ListEntry> extends SharedListComponent<TEntry, SharedGroupModCompProps, GroupListEntry<TEntry>, GroupListProps<TEntry>, GroupListState<TEntry>> {
+
+    protected closeAllModCompState: <TKey extends keyof SharedListState<TEntry, GroupListEntry<TEntry>> | "editedRecord" | "addingNewOfGroup">() => Pick<GroupListState<TEntry>, TKey> =
+        //@ts-ignore
+        () => ({ editedRecord: undefined, addingNewOfGroup: undefined });
+    
+
     constructor(props) {
         super(props);
 
@@ -25,7 +31,7 @@ export default class GroupList<TEntry extends ListEntry> extends SharedListCompo
     openOrCloseModification = (id: number, groupId?: string | number) => {
         if (id == this.state.editedRecord?.id
             && groupId == this.state.editedRecord?.groupId)
-            this.setState({ editedRecord: undefined, addingNewOfGroup: undefined });
+            this.setState(this.closeAllModCompState);
         else
             this.setState({ editedRecord: { id, groupId }, addingNewOfGroup: undefined });
     }
@@ -39,7 +45,7 @@ export default class GroupList<TEntry extends ListEntry> extends SharedListCompo
 
             this._madeAnyChange = false;
             if (groupId == this.state.addingNewOfGroup)
-                this.setState({ editedRecord: undefined, addingNewOfGroup: undefined });
+                this.setState(this.closeAllModCompState);
             else
                 this.setState({ editedRecord: undefined, addingNewOfGroup: groupId });
         }

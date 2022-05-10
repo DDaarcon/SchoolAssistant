@@ -11,6 +11,12 @@ type ListState<TData extends ListEntry> = SharedListState<TData, TData> & {
 }
 
 export default class List<TData extends ListEntry> extends SharedListComponent<TData, ModCompProps, TData, ListProps<TData>, ListState<TData>> {
+
+    protected closeAllModCompState: <TKey extends keyof SharedListState<TData, TData> | "editedRecordId" | "addingNew">() => Pick<ListState<TData>, TKey> =
+        //@ts-ignore
+        () => ({ editedRecordId: undefined, addingNew: false });
+    
+    
     constructor(props) {
         super(props);
 
@@ -22,7 +28,7 @@ export default class List<TData extends ListEntry> extends SharedListComponent<T
 
     openOrCloseModification = (id: number) => {
         if (id == this.state.editedRecordId)
-            this.setState({ editedRecordId: undefined, addingNew: false });
+            this.setState(this.closeAllModCompState);
         else
             this.setState({ editedRecordId: id, addingNew: false });
     }

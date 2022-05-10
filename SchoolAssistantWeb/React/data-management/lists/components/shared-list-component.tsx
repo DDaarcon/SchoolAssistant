@@ -57,7 +57,7 @@ export default abstract class SharedListComponent<
     }
 
     loadAsync = async () => {
-        this.setState({ loading: true });
+        this.setState({ ...this.closeAllModCompState(), loading: true });
         const newData = await this.props.loadDataAsync();
         this.setState({
             data: newData,
@@ -112,4 +112,6 @@ export default abstract class SharedListComponent<
     }
 
     public abstract render(): JSX.Element;
+
+    protected abstract closeAllModCompState: <TKey extends keyof TState>() => Pick<TState, TKey>;
 }
