@@ -4,6 +4,7 @@ import Category from "./enums/category";
 import RoomsPage from "./rooms/rooms-page";
 import StaffPage from "./staff/staff-page";
 import SubjectsPage from "./subjects/subjects-page";
+import './navigation.css';
 
 type BarProps = {
     active?: Category;

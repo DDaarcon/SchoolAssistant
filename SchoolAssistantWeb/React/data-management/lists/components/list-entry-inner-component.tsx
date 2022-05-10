@@ -4,7 +4,7 @@ export type ListEntryInnerProps = {
     isEven: boolean;
     openedModification: boolean;
     columnsCount: number;
-    dataRow: JSX.Element;
+    entryInfoComponent: JSX.Element;
     modificationComponent: JSX.Element;
 }
 export default class ListEntryInnerComponent extends React.Component<ListEntryInnerProps> {
@@ -26,7 +26,7 @@ export default class ListEntryInnerComponent extends React.Component<ListEntryIn
                     " data-row" +
                     (this.props.openedModification ? "" : " single-standing-row")
                 }>
-                    {this.props.dataRow}
+                    {this.props.entryInfoComponent}
                 </tr>
                 <tr className={this.props.isEven ? "even-row" : ""}>
                     {modificationRow}

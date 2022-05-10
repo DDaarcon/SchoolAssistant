@@ -52,7 +52,7 @@ export default class List<TData extends ListEntry> extends SharedListComponent<T
                                     recordData={data}
                                     modificationComponent={this.ModificationComponent}
                                     listEntryInnerComponent={this.ListEntryInnerComponent}
-                                    entryInfoComponent={this.EntryInfoComponent}
+                                    customButtons={this.props.customButtons}
                                     modifying={recordId == this.state?.editedRecordId}
                                     displayProperties={displayProperties}
                                     onOpenEdit={this.openOrCloseModification}
@@ -64,12 +64,14 @@ export default class List<TData extends ListEntry> extends SharedListComponent<T
                         <this.ListEntryInnerComponent
                             isEven={this.state.data?.length % 2 == 1}
                             openedModification={this.state.addingNew}
-                            columnsCount={this.props.columnsSetting.length + 1}
-                            dataRow={
-                                <td colSpan={this.props.columnsSetting.length + 1}>
-                                    <a onClick={this.openOrCloseAddingNew} href="#">
+                            columnsCount={this.columnsCount}
+                            entryInfoComponent={
+                                <td className={"dm-ei-row-cell"} colSpan={this.columnsCount}>
+                                    <button className={"dm-ei-row-button"}
+                                        onClick={this.openOrCloseAddingNew}
+                                    >
                                         Dodaj
-                                    </a>
+                                    </button>
                                 </td>
                             }
                             modificationComponent={

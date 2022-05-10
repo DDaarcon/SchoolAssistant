@@ -30,6 +30,7 @@
     <None Remove="React\data-management\lists\components\list-entry-inner-component.tsx" />
     <None Remove="React\data-management\lists\group-list.tsx" />
     <None Remove="React\data-management\lists\help\confirm-close-mod.tsx" />
+    <None Remove="React\data-management\lists\interfaces\custom-row-button.ts" />
     <None Remove="React\data-management\lists\list.tsx" />
     <None Remove="React\data-management\lists\shared-list-component.ts" />
     <None Remove="React\data-management\rooms\interfaces\room-details.ts" />
@@ -146,6 +147,7 @@
     <TypeScriptCompile Include="React\data-management\lists\components\shared-list-component.tsx" />
     <TypeScriptCompile Include="React\data-management\lists\group-list.tsx" />
     <TypeScriptCompile Include="React\data-management\lists\help\confirm-close-mod.tsx" />
+    <TypeScriptCompile Include="React\data-management\lists\interfaces\custom-row-button.ts" />
     <TypeScriptCompile Include="React\data-management\lists\list.tsx" />
     <TypeScriptCompile Include="React\data-management\rooms\interfaces\room-details.ts" />
     <TypeScriptCompile Include="React\data-management\rooms\interfaces\room-list-entry.ts" />

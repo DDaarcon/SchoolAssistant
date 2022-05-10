@@ -31,29 +31,23 @@ const ClassesList = (props: ClassesListProps) => {
         return response;
     }
 
-    const entryInfoComponent = (irProps: EntryInfoProps<ClassListEntry>) =>
-        <>
-            {irProps.recordDataKeys.map((key, index) => <td key={index}>{irProps.recordData[key]}</td>)}
-            <td className="dm-edit-btn-cell">
-                <a onClick={() => props.onMoveToStudents({
-                    classId: irProps.recordData.id,
-                    className: irProps.recordData.name,
-                    classSpecialization: irProps.recordData.specialization
-                })} href="#">
-                    Uczniowie
-                </a>
-                <a onClick={irProps.onClickedEditBtn} href="#">
-                    Edytuj
-                </a>
-            </td>
-        </>
-
     return (
         <List<ClassListEntry>
             columnsSetting={columnsSetting}
             loadDataAsync={loadAsync}
             modificationComponent={ClassModComp}
-            customEntryInfoComponent={entryInfoComponent}
+            customButtons={[{
+                label: "Uczniowie",
+                action: (entry) => props.onMoveToStudents({
+                    classId: entry.id,
+                    className: entry.name,
+                    classSpecialization: entry.specialization
+                }),
+                columnStyle: {
+                    width: '1%',
+                    minWidth: 150
+                }
+            }]}
         />
     )
 }

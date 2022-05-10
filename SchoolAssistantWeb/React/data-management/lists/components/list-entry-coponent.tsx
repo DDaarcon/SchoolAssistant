@@ -1,39 +1,40 @@
 ﻿import React from "react";
 import { confirmCloseMod } from "../help/confirm-close-mod";
+import CustomRowButton from "../interfaces/custom-row-button";
 import ListEntry from "../interfaces/list-entry";
 import { SharedGroupModCompProps } from "../interfaces/shared-group-mod-comp-props";
 import ModCompProps from "../interfaces/shared-mod-comp-props";
-import { EntryInfoProps } from "./entry-info-component";
+import EntryInfoComponent from "./entry-info-component";
 import { ListEntryInnerProps } from "./list-entry-inner-component";
 
 export type ListEntryProps<
-    TData extends ListEntry,
+    TEntry extends ListEntry,
     TModificationComponentProps extends ModCompProps | SharedGroupModCompProps
     > = {
         recordId?: number;
-        recordData: TData;
+        recordData: TEntry;
+        displayProperties: (keyof TEntry)[];
         onOpenEdit?: (id: number, groupId?: string | number) => void;
-        displayProperties: (keyof TData)[];
-        modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
-        listEntryInnerComponent: new (props: ListEntryInnerProps) => React.Component<ListEntryInnerProps>;
-        entryInfoComponent: (props: EntryInfoProps<TData>) => JSX.Element;
         modifying: boolean;
         reloadAsync: () => Promise<void>;
 
         isEven: boolean;
         groupId?: string | number;
+
+        modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
+        listEntryInnerComponent: new (props: ListEntryInnerProps) => React.Component<ListEntryInnerProps>;
+        customButtons?: CustomRowButton<TEntry>[]
     }
 type TableRecordState = {
 
 }
 
 export default class ListEntryComponent<
-    TData extends ListEntry,
+    TEntry extends ListEntry,
     TModificationComponentProps extends ModCompProps | SharedGroupModCompProps
     >
-    extends React.Component<ListEntryProps<TData, TModificationComponentProps>, TableRecordState>
+    extends React.Component<ListEntryProps<TEntry, TModificationComponentProps>, TableRecordState>
 {
-    protected get EntryInfoComponent() { return this.props.entryInfoComponent; }
     protected get ListEntryInnerComponent() { return this.props.listEntryInnerComponent; }
     protected get ModificationComponent() { return this.props.modificationComponent; }
 
@@ -54,16 +55,25 @@ export default class ListEntryComponent<
     }
 
     render() {
+        const buttons = this.props.customButtons?.map(x => x) ?? [];
+        buttons.push({
+            label: "Edytuj",
+            buttonClassName: "dm-entry-info-row-button-cell",
+            cellClassName: "dm-entry-info-row-button",
+            action: this.onClickedEditBtn
+        });
+
         return (
             <this.ListEntryInnerComponent
                 isEven={this.props.isEven}
                 openedModification={this.props.modifying}
-                columnsCount={this.props.displayProperties.length + 1}
-                dataRow={
-                    <this.EntryInfoComponent
+                columnsCount={(this.props.displayProperties?.length ?? 0) + (this.props.customButtons?.length ?? 0) + 1}
+                entryInfoComponent={
+                    <EntryInfoComponent
                         recordData={this.props.recordData}
                         recordDataKeys={this.props.displayProperties}
                         onClickedEditBtn={this.onClickedEditBtn}
+                        buttons={buttons}
                     />
                 }
                 modificationComponent={

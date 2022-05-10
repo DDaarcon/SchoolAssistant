@@ -76,23 +76,25 @@ export default class GroupList<TEntry extends ListEntry> extends SharedListCompo
                                         recordData={entry}
                                         modificationComponent={this.ModificationComponent}
                                         listEntryInnerComponent={this.ListEntryInnerComponent}
-                                        entryInfoComponent={this.EntryInfoComponent}
                                         modifying={entry.id == this.state?.editedRecord?.id && group.id == this.state?.editedRecord?.groupId}
                                         displayProperties={displayProperties}
                                         onOpenEdit={this.openOrCloseModification}
                                         reloadAsync={this.loadAsync}
                                         isEven={entryIndex % 2 == 1}
+                                        customButtons={this.props.customButtons}
                                     />
                                 )}
                                 <this.ListEntryInnerComponent
                                     isEven={group.entries?.length % 2 == 1}
                                     openedModification={this.state.addingNewOfGroup == group.id}
-                                    columnsCount={this.props.columnsSetting.length + 1}
-                                    dataRow={
-                                        <td colSpan={this.props.columnsSetting.length + 1}>
-                                            <a onClick={this.createOpenOrCloseAddingNewHandler(group.id)} href="#">
+                                    columnsCount={this.columnsCount}
+                                    entryInfoComponent={
+                                        <td className={"dm-ei-row-cell"} colSpan={this.columnsCount}>
+                                            <button className={"dm-ei-row-button"}
+                                                onClick={this.createOpenOrCloseAddingNewHandler(group.id)}
+                                            >
                                                 Dodaj
-                                            </a>
+                                            </button>
                                         </td>
                                     }
                                     modificationComponent={
