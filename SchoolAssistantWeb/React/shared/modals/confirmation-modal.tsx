@@ -28,18 +28,22 @@ export default class ConfirmationModal extends React.Component<ConfirmationModal
             >
                 <h3>{this.props.header}</h3>
                 <p>{this.props.text}</p>
-                <button
-                    type="button"
-                    onClick={this.onCloseConfirm}
-                >
-                    Ok
-                </button>
-                <button
-                    type="button"
-                    onClick={this.onCloseDecline}
-                >
-                    Anuluj
-                </button>
+                <div className="confirmation-modal-buttons">
+                    <button
+                        className="confirmation-modal-confirm-btn"
+                        type="button"
+                        onClick={this.onCloseConfirm}
+                    >
+                        Ok
+                    </button>
+                    <button
+                        className="confirmation-modal-decline-btn"
+                        type="button"
+                        onClick={this.onCloseDecline}
+                    >
+                        Anuluj
+                    </button>
+                </div>
             </ModalBody>
         )
     }

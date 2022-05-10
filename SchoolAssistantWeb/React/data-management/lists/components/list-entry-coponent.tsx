@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { confirmCloseMod } from "../help/confirm-close-mod";
+import confirmCloseMod  from "../help/confirm-close-mod";
 import CustomRowButton from "../interfaces/custom-row-button";
 import ListEntry from "../interfaces/list-entry";
 import { SharedGroupModCompProps } from "../interfaces/shared-group-mod-comp-props";
@@ -40,9 +40,9 @@ export default class ListEntryComponent<
 
     private _madeAnyChange: boolean = false;
 
-    onClickedEditBtn = () => {
+    onClickedEditBtn = async () => {
         if (this._madeAnyChange) {
-            const confirmation = confirmCloseMod();
+            const confirmation = await confirmCloseMod();
             if (!confirmation) return;
         }
 

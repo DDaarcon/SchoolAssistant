@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import SharedListComponent, { SharedListProps, SharedListState } from "./components/shared-list-component";
-import { confirmCloseMod } from "./help/confirm-close-mod";
+import confirmCloseMod from "./help/confirm-close-mod";
 import GroupListEntry from "./interfaces/group-list-entry";
 import ListEntry from "./interfaces/list-entry";
 import { SharedGroupModCompProps } from "./interfaces/shared-group-mod-comp-props";
@@ -31,9 +31,9 @@ export default class GroupList<TEntry extends ListEntry> extends SharedListCompo
     }
 
     createOpenOrCloseAddingNewHandler = (groupId: string | number) => {
-        return () => {
+        return async () => {
             if (this._madeAnyChange) {
-                const confirmation = confirmCloseMod();
+                const confirmation = await confirmCloseMod();
                 if (!confirmation) return;
             }
 

@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import SharedListComponent, { SharedListProps, SharedListState } from "./components/shared-list-component";
-import { confirmCloseMod } from "./help/confirm-close-mod";
+import confirmCloseMod from "./help/confirm-close-mod";
 import ListEntry from "./interfaces/list-entry";
 import ModCompProps from "./interfaces/shared-mod-comp-props";
 
@@ -27,9 +27,9 @@ export default class List<TData extends ListEntry> extends SharedListComponent<T
             this.setState({ editedRecordId: id, addingNew: false });
     }
 
-    openOrCloseAddingNew = () => {
+    openOrCloseAddingNew = async () => {
         if (this._madeAnyChange) {
-            const confirmation = confirmCloseMod();
+            const confirmation = await confirmCloseMod();
             if (!confirmation) return;
         }
 
