@@ -6,8 +6,8 @@ module.exports = {
 			import: './React/data-management.ts',
 			dependOn: [ 'shared' ]
 		},
-		schedule: {
-			import: './React/schedule.ts',
+		schedule_arranger: {
+			import: './React/schedule-arranger.ts',
 			dependOn: [ 'shared' ]
 		},
 		shared: {

@@ -11,7 +11,7 @@ export type OnChangeHandler<TValue extends number | string> =
     (value: Option<TValue> | MultiValue<Option<TValue>>) => void;
 
 export type OnChangeIdHandler<TValue extends number | string> =
-    (value: TValue | MultiValue<TValue) => void;
+    (value: TValue | MultiValue<TValue>) => void;
 
 type SelectProps<TValue extends number | string, TOption extends Option<TValue>> = {
     label: string;
