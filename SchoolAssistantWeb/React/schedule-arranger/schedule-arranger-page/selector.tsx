@@ -6,7 +6,7 @@ import { LessonPrefab } from "../interfaces/lesson-prefab";
 import { LessonTimelineEntry } from "../interfaces/lesson-timeline-entry";
 import scheduleDataService from "../schedule-data-service";
 import AddLessonPrefabTile from "./selector/add-lesson-prefab-tile";
-import LessonModificationComponent from "./selector/lesson-modification-component";
+import LessonModificationComponent from "./selector/lesson-prefab-mod-comp";
 import LessonPrefabTile from "./selector/lesson-prefab-tile";
 
 type ScheduleArrangerSelectorProps = {

@@ -1,5 +1,4 @@
 ﻿import React from "react";
-import { MultiValue } from "react-select";
 import { Select, Option } from "../../../shared/form-controls";
 import Validator from "../../../shared/validator";
 import { LessonModificationData } from "../../interfaces/lesson-modification-data";
@@ -13,11 +12,11 @@ interface ScheduleTeacherOptionEntry extends IdName {
 }
 
 
-type LessonModificationComponentProps = LessonModificationData & {
+type LessonPrefabModCompProps = LessonModificationData & {
     submit: (info: LessonModificationData) => void;
 }
-type LessonModificationComponentState = LessonModificationData & {}
-export default class LessonModificationComponent extends React.Component<LessonModificationComponentProps, LessonModificationComponentState> {
+type LessonPrefabModCompState = LessonModificationData & {}
+export default class LessonPrefabModComp extends React.Component<LessonPrefabModCompProps, LessonPrefabModCompState> {
     private _validator = new Validator<LessonModificationData>();
 
     private get _subjectFilteredTeachers(): ScheduleTeacherOptionEntry[] {
@@ -48,7 +47,7 @@ export default class LessonModificationComponent extends React.Component<LessonM
         })
     }
 
-    createOnSelectChangeHandler: (property: keyof LessonModificationComponentState) => ((value: Option<number>) => void) = (property) =>
+    createOnSelectChangeHandler: (property: keyof LessonPrefabModCompState) => ((value: Option<number>) => void) = (property) =>
         (value) => {
             this.setState(prevState => {
                 const state = { ...prevState };

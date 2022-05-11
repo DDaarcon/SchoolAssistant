@@ -10,6 +10,7 @@ type GenericLessonTileProps = {
     customDuration?: number;
     className?: string;
     children: React.ReactNode;
+    onPress?: () => void;
 }
 type GenericLessonTileState = {
 
@@ -37,6 +38,7 @@ export default class GenericLessonTile extends React.Component<GenericLessonTile
         return (
             <button className={`sa-lesson-tile ${scheduleDataService.isTileDragged ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
                 style={style}
+                onClick={this.props.onPress}
             >
                 {this.props.children}
             </button>
