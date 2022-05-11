@@ -1,6 +1,8 @@
 ﻿import React from "react";
 import { Time } from "../../interfaces/shared";
 import { scheduleArrangerConfig } from "../../main";
+import './lesson-tiles.css';
+import './other-lesson-tiles.css';
 
 type GenericLessonTileProps = {
     time: Time;

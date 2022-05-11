@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { LessonPrefab } from "../../interfaces/lesson-prefab";
+import './lesson-prefab.css';
 
 type ScheduleLessonPrefabTileProps = {
     data: LessonPrefab;

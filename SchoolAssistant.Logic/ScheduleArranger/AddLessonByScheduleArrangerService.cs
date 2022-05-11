@@ -116,7 +116,6 @@ namespace SchoolAssistant.Logic.ScheduleArranger
                 .Where(x =>
                     x.ParticipatingOrganizationalClassId == _model.classId
                     || x.LecturerId == _model.lecturerId
-                    || x.SubjectId == _model.subjectId
                     || x.RoomId == _model.roomId)
                 .ToListAsync();
             var lessonsThatDay = lessons.Where(x => x.GetDayOfWeek() == _model.day);

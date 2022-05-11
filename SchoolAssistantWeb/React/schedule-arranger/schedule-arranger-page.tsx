@@ -2,6 +2,7 @@
 import ScheduleArrangerTimeline from './schedule-arranger-page/timeline'
 import ScheduleArrangerSelector from "./schedule-arranger-page/selector";
 import { ClassLessons } from "./interfaces/class-lessons";
+import './schedule-arranger-page/schedule-arranger-page.css';
 
 type ScheduleArrangerPageProps = {
     classData: ClassLessons;
