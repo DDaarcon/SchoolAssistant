@@ -5,7 +5,7 @@ import Select, { OnChangeHandler, OnChangeIdHandler, Option } from "./select";
 type MultiselectProps<TValue extends number | string, TOption extends Option<TValue>> = {
     label: string;
     name: string;
-    value?: MultiValue<TOption>;
+    value?: MultiValue<TValue> | MultiValue<TOption>;
     onChange?: OnChangeHandler<TValue>;
     onChangeId?: OnChangeIdHandler<TValue>;
     options: Options<TOption>;

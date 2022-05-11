@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import ClassInfoPanel from "./components/class-info-panel";
 import StudentsList from "./student-list";
+import './students.css';
 
 export type StudentsPageProps = {
     classId: number;

@@ -1,18 +1,19 @@
-﻿
-/* Students */
-.dm-students-class-info-panel {
+﻿.dm-students-class-info-panel {
     width: 100%;
     height: 100px;
 }
+
 .dm-students-class-info-panel div {
     display: inline;
 }
+
 .dm-cip-name {
     width: 100px;
     font-size: 4em;
     padding-left: 10px;
     padding-right: 20px;
 }
+
 .dm-cip-spec {
     font-size: 2em;
 }

@@ -113,8 +113,8 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
         }
 
         let response = await server.postAsync<ResponseJson>("StaffPersonData", undefined, {
-            groupId: this.props.groupId,
-            ...this.state.data
+            ...this.state.data,
+            groupId: this.props.groupId
         });
 
         if (response.success)

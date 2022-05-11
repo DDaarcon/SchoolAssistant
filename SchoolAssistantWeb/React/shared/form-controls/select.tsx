@@ -16,7 +16,7 @@ export type OnChangeIdHandler<TValue extends number | string> =
 type SelectProps<TValue extends number | string, TOption extends Option<TValue>> = {
     label: string;
     name: string;
-    value?: TValue | TOption | MultiValue<TOption>;
+    value?: TValue | TOption | MultiValue<TValue> | MultiValue<TOption>;
     onChange?: OnChangeHandler<TValue>;
     onChangeId?: OnChangeIdHandler<TValue>;
     options: Options<TOption>;
@@ -41,7 +41,7 @@ export default class Select<TValue extends number | string> extends React.Compon
     private prepareOneValue(value: TValue | Option<TValue>): Option<TValue>{
         const valueType = typeof value;
         if (valueType == 'number' || valueType == 'string') {
-            return { value: value as TValue, label: "" };
+            return { value: value as TValue, label: this.props.options.find(x => x.value == value)?.label };
         }
         return value as Option<TValue>;
     }
