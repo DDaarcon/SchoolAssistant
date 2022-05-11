@@ -13,6 +13,8 @@
 
 .dm-list tbody tr.data-row td {
     border-top-width: 2.5px;
+    border-radius: 3px;
+    border-left-width: 1px;
 }
 
 .dm-list tbody tr.single-standing-row td {
@@ -85,7 +87,7 @@
 }
 
 .dm-ei-row-cell {
-    border-left-width: 2.5px;
+    border-left-width: 2.5px !important;
     border-bottom-width: 2.5px;
 }
 

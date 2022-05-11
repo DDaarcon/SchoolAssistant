@@ -378,7 +378,7 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
                     type="text"
                 />
                 <Input
-                    className="form-check-input"
+                    inputClassName="form-check-input"
                     name={`${parentProp}-address-same-as-childs-input`}
                     label="Adres taki sam jak ucznia"
                     checked={this.state.addressSameAsChilds[parentProp]}
