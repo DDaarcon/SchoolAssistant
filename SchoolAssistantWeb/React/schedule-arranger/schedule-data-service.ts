@@ -25,7 +25,7 @@ class ScheduleArrangerDataService {
     getTeacherName = (id: number) => this.teachers.find(x => x.id == id).shortName;
     getRoomName = (id: number) => this.rooms.find(x => x.id == id).name;
 
-
+    isTileDragged: boolean = false;
 
     getTeacherAndRoomLessons = async (teacherId: number, roomId: number, apply: (teacher?: DayLessons[], room?: DayLessons[]) => void) => {
         // find teacher and room in storage

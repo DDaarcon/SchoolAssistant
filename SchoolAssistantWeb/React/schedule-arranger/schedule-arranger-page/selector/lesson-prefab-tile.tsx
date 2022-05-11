@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { LessonPrefab } from "../../interfaces/lesson-prefab";
+import scheduleDataService from "../../schedule-data-service";
 import './lesson-prefab.css';
 
 type ScheduleLessonPrefabTileProps = {
@@ -12,12 +13,14 @@ export default class LessonPrefabTile extends React.Component<ScheduleLessonPref
 
     onStart: React.DragEventHandler<HTMLDivElement> = (event) => {
         event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
+        scheduleDataService.isTileDragged = true;
         dispatchEvent(new CustomEvent('dragBegan', {
             detail: this.props.data
         }));
     }
 
     onEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
+        scheduleDataService.isTileDragged = false;
         dispatchEvent(new Event("hideLessonShadow"));
         dispatchEvent(new Event("clearOtherLessons"));
     }

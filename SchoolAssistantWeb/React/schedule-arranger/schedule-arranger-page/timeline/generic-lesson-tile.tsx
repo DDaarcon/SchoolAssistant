@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import { Time } from "../../interfaces/shared";
 import { scheduleArrangerConfig } from "../../main";
+import scheduleDataService from "../../schedule-data-service";
 import './lesson-tiles.css';
 import './other-lesson-tiles.css';
 
@@ -34,11 +35,11 @@ export default class GenericLessonTile extends React.Component<GenericLessonTile
         }
 
         return (
-            <div className={`sa-lesson-tile ${this.props.className}`}
+            <button className={`sa-lesson-tile ${scheduleDataService.isTileDragged ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
                 style={style}
             >
                 {this.props.children}
-            </div>
+            </button>
         )
     }
 }
