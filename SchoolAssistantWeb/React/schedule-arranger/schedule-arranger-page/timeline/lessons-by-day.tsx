@@ -18,9 +18,11 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
         modalController.addCustomComponent({
             modificationComponent: LessonModComp,
             modificationComponentProps: {
-
+                lesson
             },
-            style
+            style: {
+                width: '60%'
+            }
         })
     }
 
