@@ -1,13 +1,24 @@
-﻿export type ValidationFail<T> = {
+﻿type ValidationMethod<T> = (model: T, prop: keyof T) => ValidationFail<T>[] | ValidationFail<T> | undefined;
+
+type SubValidators<T> = {
+    [index in keyof T]?: Validator<T[index]>;
+}
+
+
+export type ValidationFail<T> = {
     error?: 'null' | 'empty' | 'invalidDate' | string;
     on?: keyof T;
 }
+
+
+
 
 export type Rules<T, TProp extends keyof T> = {
     notNull?: boolean | string;
     notEmpty?: boolean | string;
     validDate?: boolean | string;
-    other?: ((model: T, prop: TProp) => ValidationFail<T>[] | ValidationFail<T> | undefined)[] | ((model: T, prop: TProp) => ValidationFail<T>[] | ValidationFail<T> | undefined)
+    other?: ValidationMethod<T>[] | ValidationMethod<T>
+    subValidator?: (getModel: () => T, prop: TProp) => RulesForModel<T[TProp]>;
 }
 
 export type RulesForModel<T extends {}> = {
@@ -21,12 +32,15 @@ export default class Validator<T extends {}> {
     private _rules?: RulesForModel<T>;
 
     private _errors?: ValidationFail<T>[];
+    private _subValidators: SubValidators<T> = {};
 
     get errors() { return this._errors ?? []; }
 
     getErrorMsgsFor(prop: keyof T) {
         return this.errors.filter(x => x.on == prop).map(x => x.error);
     }
+
+    get subValidators() { return this._subValidators; }
 
 
     forModel(model: T) {
@@ -41,6 +55,7 @@ export default class Validator<T extends {}> {
 
     setRules(rules: RulesForModel<T>) {
         this._rules = rules;
+        this._subValidators = {};
     }
 
     validate(): boolean {
@@ -58,42 +73,20 @@ export default class Validator<T extends {}> {
 
             const rules = this._rules[prop];
 
-            if (rules.notNull)
-                if (!this.validateNotNull(prop))
-                    continue;
-
-            if (rules.notEmpty)
-                if (!this.validateNotEmpty(prop))
-                    continue;
-
-            if (rules.validDate)
-                if (!this.validateDate(prop))
-                    continue;
-
-            if (!rules.other)
+            if (rules.notNull && !this.validateNotNull(prop))
                 continue;
 
-            if (rules.other instanceof Array) {
-                for (const otherRule of rules.other ?? []) {
-                    const otherErrors = otherRule(this._model, prop);
-                    if (!otherErrors)
-                        continue;
+            if (rules.notEmpty && !this.validateNotEmpty(prop))
+                continue;
 
-                    if (otherErrors instanceof Array)
-                        this._errors.push(...otherErrors);
-                    else
-                        this._errors.push(otherErrors);
-                }
-            }
-            else {
-                const otherError = rules.other?.(this._model, prop);
-                if (otherError) {
-                    if (otherError instanceof Array)
-                        this._errors.push(...otherError);
-                    else
-                        this._errors.push(otherError);
-                }
-            }
+            if (rules.validDate && !this.validateDate(prop))
+                continue;
+
+            if (rules.other)
+                this.validateOther(prop, rules.other);
+
+            if (rules.subValidator)
+                this.useSubValidator(prop, rules.subValidator);
         }
 
         return this._errors.length == 0;
@@ -127,6 +120,46 @@ export default class Validator<T extends {}> {
         this.addError(prop, 'invalidDate', 'validDate');
         return false;
     }
+
+
+
+    private validateOther(prop: keyof T, other: ValidationMethod<T>[] | ValidationMethod<T>) {
+        if (other instanceof Array) {
+            for (const otherRule of other ?? []) {
+                const otherErrors = otherRule(this._model, prop);
+                if (!otherErrors)
+                    continue;
+
+                if (otherErrors instanceof Array)
+                    this._errors.push(...otherErrors);
+                else
+                    this._errors.push(otherErrors);
+            }
+        }
+        else {
+            const otherError = other?.(this._model, prop);
+            if (otherError) {
+                if (otherError instanceof Array)
+                    this._errors.push(...otherError);
+                else
+                    this._errors.push(otherError);
+            }
+        }
+    }
+
+    private useSubValidator(prop: keyof T, getRules: (getModel: () => T, prop: keyof T) => RulesForModel<T[keyof T]>) {
+        if (!this._subValidators[prop]) {
+            this._subValidators[prop] = new Validator<T[keyof T]>();
+            this._subValidators[prop].setRules(
+                getRules(() => this._model, prop)
+            )
+        }
+
+        this._subValidators[prop].forModel(this._model[prop]);
+        this._subValidators[prop].validate();
+    }
+
+
 
     private addError<TProp extends keyof T>(prop: TProp, defaultMsg: string, rulesProp?: keyof Rules<T, TProp>) {
         let error;
