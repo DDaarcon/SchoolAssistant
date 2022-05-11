@@ -118,7 +118,6 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
             !isNaN(x) && (with0th || x != 0) && (with6th || x != 6)) as DayOfWeek[];
 
     render() {
-        console.log(this.state.roomBusyLessons);
         return (
             <div className="schedule-arranger-timeline">
 

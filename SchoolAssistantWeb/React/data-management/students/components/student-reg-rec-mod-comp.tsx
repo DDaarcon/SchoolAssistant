@@ -64,7 +64,7 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
                         return undefined;
 
                     this._firstParentValidator = this._parentValidator;
-                    this._firstParentValidator.forModel(model[prop]);
+                    this._firstParentValidator.forModel(model[prop] as ParentRegisterSubecordDetails);
                     return this._firstParentValidator.validate()
                         ? undefined
                         : {
@@ -79,7 +79,7 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
                         return undefined;
 
                     this._secondParentValidator = this._parentValidator;
-                    this._secondParentValidator.forModel(model[prop]);
+                    this._secondParentValidator.forModel(model[prop] as ParentRegisterSubecordDetails);
                     return this._secondParentValidator.validate()
                         ? undefined
                         : {

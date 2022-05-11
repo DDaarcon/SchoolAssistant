@@ -74,6 +74,7 @@
     <None Remove="React\schedule-arranger\interfaces\lesson-modification-data.ts" />
     <None Remove="React\schedule-arranger\interfaces\lesson-prefab.ts" />
     <None Remove="React\schedule-arranger\interfaces\lesson-timeline-entry.ts" />
+    <None Remove="React\schedule-arranger\interfaces\lesson.ts" />
     <None Remove="React\schedule-arranger\interfaces\other-lessons.ts" />
     <None Remove="React\schedule-arranger\interfaces\page-model-to-react\schedule-arranger-config.ts" />
     <None Remove="React\schedule-arranger\interfaces\page-model-to-react\schedule-class-selector-entry.ts" />
@@ -100,6 +101,7 @@
     <None Remove="React\shared.ts" />
     <None Remove="React\shared\form-controls\default-error-msg.ts" />
     <None Remove="React\shared\form-controls\input.tsx" />
+    <None Remove="React\shared\form-controls\mod-comp-base.tsx" />
     <None Remove="React\shared\form-controls\multiselect.tsx" />
     <None Remove="React\shared\form-controls\select.tsx" />
     <None Remove="React\shared\modals\confirmation-modal.tsx" />
@@ -191,6 +193,7 @@
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\lesson-modification-data.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\lesson-prefab.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\lesson-timeline-entry.ts" />
+    <TypeScriptCompile Include="React\schedule-arranger\interfaces\lesson.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\other-lessons.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\class-lessons.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\page-model-to-react\schedule-arranger-config.ts" />
@@ -218,6 +221,7 @@
     <TypeScriptCompile Include="React\shared.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\default-error-msg.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\input.tsx" />
+    <TypeScriptCompile Include="React\shared\form-controls\mod-comp-base.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\multiselect.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\select.tsx" />
     <TypeScriptCompile Include="React\shared\modals\confirmation-modal.tsx" />

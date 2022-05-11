@@ -29,7 +29,7 @@
     width: 120%;
     left: -10%;
     background-color: #befa86ee;
-    z-index: 100;
+    z-index: 5;
     transition: width 1s, left 1s, background-color 1s;
     transition-delay: 0.25s;
 }

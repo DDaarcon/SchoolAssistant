@@ -21,7 +21,7 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
                 lesson
             },
             style: {
-                width: '60%'
+                width: '700px'
             }
         })
     }
