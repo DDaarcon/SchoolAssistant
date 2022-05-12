@@ -58,3 +58,7 @@ body {
 .dashboard-item-green {
     background-color: #ebffed;
 }
+
+label {
+    font-size: 0.9em;
+}

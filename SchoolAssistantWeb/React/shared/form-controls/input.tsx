@@ -17,19 +17,29 @@ type InputProps = {
 }
 const Input = (props: InputProps) => {
     const hasErrors = props.hasErrors ?? props.errorMessages?.length ?? false;
+
+    const label = (
+        <label htmlFor={props.name}>{props.label}</label>);
+
+    const input = (
+        <input
+            className={"form-control" + (hasErrors ? ' is-invalid' : '') + " " + (props.inputClassName ?? '')}
+            type={props.type}
+            name={props.name}
+            value={props.value}
+            onChange={props.onChange}
+            disabled={props.disabled}
+            checked={props.checked}
+            placeholder={props.placeholder}
+        />);
+
+
     return (
         <div className={"form-group my-form-group " + (props.containerClassName ?? '')}>
-            <label htmlFor={props.name}>{props.label}</label>
-            <input
-                className={"form-control" + (hasErrors ? ' is-invalid' : '') + " " + (props.inputClassName ?? '')}
-                type={props.type}
-                name={props.name}
-                value={props.value}
-                onChange={props.onChange}
-                disabled={props.disabled}
-                checked={props.checked}
-                placeholder={props.placeholder}
-            />
+            {props.type != 'checkbox'
+                ? <>{label}{input}</>
+                : <>{input}{label}</>
+            }
             {hasErrors ? (
                 <div className="invalid-feedback">
                     {props.errorMessages?.map(x => defaultErrorMessage(x)).join(' ')}
