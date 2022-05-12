@@ -9,6 +9,6 @@ namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
 {
     public class AddLessonResponseJson : ResponseJson
     {
-        public PeriodicLessonTimetableEntryJson? lesson { get; set; }
+        public ScheduleLessonTimetableEntryJson? lesson { get; set; }
     }
 }

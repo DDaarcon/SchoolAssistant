@@ -1,8 +1,10 @@
 ﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
 {
-    public class ScheduleDayLessonsJson
+    public class ScheduleDayLessonsJson : ScheduleDayLessonsJson<ScheduleLessonTimetableEntryJson> { }
+    public class ScheduleDayLessonsJson<TLesson>
+        where TLesson : ScheduleLessonTimetableEntryJson
     {
         public DayOfWeek dayIndicator { get; set; }
-        public PeriodicLessonTimetableEntryJson[] lessons { get; set; } = null!;
+        public TLesson[] lessons { get; set; } = null!;
     }
 }

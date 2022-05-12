@@ -33,7 +33,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
                     .Select(x => new ScheduleDayLessonsJson
                     {
                         dayIndicator = x.Key,
-                        lessons = x.Select(l => new PeriodicLessonTimetableEntryJson
+                        lessons = x.Select(l => new ScheduleLessonTimetableEntryJson
                         {
                             id = l.Id,
                             time = new TimeJson(l.GetTime() ?? TimeOnly.MinValue),

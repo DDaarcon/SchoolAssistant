@@ -1,10 +1,10 @@
 ﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
 {
-    public class PeriodicLessonTimetableEntryJson
+    public class ScheduleLessonTimetableEntryJson
     {
         public long? id { get; set; }
 
-        public TimeJson time { get; set; }
+        public TimeJson time { get; set; } = null!;
         public int? customDuration { get; set; }
 
         public IdNameJson subject { get; set; } = null!;

@@ -162,7 +162,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 
         private async Task PrepareDataInResponse()
         {
-            _response.lesson = new PeriodicLessonTimetableEntryJson
+            _response.lesson = new ScheduleLessonTimetableEntryJson
             {
                 id = _entity.Id,
                 customDuration = _entity.CustomDuration,

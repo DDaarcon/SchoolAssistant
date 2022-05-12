@@ -17,6 +17,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
 
+        private OrganizationalClass? _orgClass;
 
         public FetchOtherLessonsForScheduleArrangerService(
             IRepositoryBySchoolYear<PeriodicLesson> lessonRepo,
@@ -28,11 +29,11 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 
         public async Task<ScheduleOtherLessonsJson?> ForAsync(long classId, long? teacherId, long? roomId)
         {
-            var orgClass = await _orgClassRepo.GetByIdAsync(classId);
-            if (orgClass is null)
+            _orgClass = await _orgClassRepo.GetByIdAsync(classId);
+            if (_orgClass is null)
                 return null;
 
-            var query = _lessonRepo.AsQueryableByYear.ByYearOf(orgClass);
+            var query = _lessonRepo.AsQueryableByYear.ByYearOf(_orgClass);
 
             var queryTeacher = query
                 .Where(x => x.ParticipatingOrganizationalClassId != classId
@@ -49,15 +50,15 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             };
         }
 
-        private async Task<ScheduleDayLessonsJson[]> QueryToJsonArrayAsync(IQueryable<PeriodicLesson> query)
+        private async Task<ScheduleDayLessonsJson<LessonJson>[]> QueryToJsonArrayAsync(IQueryable<PeriodicLesson> query)
         {
             var lessons = await query.ToListAsync();
 
             return lessons.GroupBy(g => g.GetDayOfWeek())
-                    .Select(x => new ScheduleDayLessonsJson
+                    .Select(x => new ScheduleDayLessonsJson<LessonJson>
                     {
                         dayIndicator = x.Key,
-                        lessons = x.Select(l => new PeriodicLessonTimetableEntryJson
+                        lessons = x.Select(l => new LessonJson
                         {
                             id = l.Id,
                             time = new TimeJson(l.GetTime() ?? TimeOnly.MinValue),
@@ -77,6 +78,16 @@ namespace SchoolAssistant.Logic.ScheduleArranger
                                 id = l.RoomId,
                                 name = l.Room.DisplayName
                             },
+                            orgClass = l.ParticipatingOrganizationalClass is not null ?new IdNameJson
+                            {
+                                id = l.ParticipatingOrganizationalClassId!.Value,
+                                name = l.ParticipatingOrganizationalClass.Name
+                            } : null,
+                            subjClass = l.ParticipatingSubjectClass is not null ? new IdNameJson
+                            {
+                                id = l.ParticipatingSubjectClassId!.Value,
+                                name = l.ParticipatingSubjectClass.Name
+                            } : null,
                         }).ToArray()
                     }).ToArray();
         }
