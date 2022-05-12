@@ -23,7 +23,7 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
                 day: this.props.day
             },
             style: {
-                width: '700px'
+                width: '800px'
             }
         })
     }

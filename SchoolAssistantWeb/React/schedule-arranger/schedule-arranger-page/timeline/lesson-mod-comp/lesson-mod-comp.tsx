@@ -24,8 +24,15 @@ type LessonModCompState = {
     overlappingLessons?: Lesson[];
 }
 export default class LessonModComp extends ModCompBase<LessonEditModel, LessonModCompProps & CommonModalProps, LessonModCompState> {
-
     private _dayOptions: Option<number>[];
+
+    private get _errorMessage() {
+        return this.state.overlappingLessons?.length
+            ? "Zajęcia kolidują z innymi"
+            : this._validator.errors.length
+                ? "Błędy w formularzu"
+                : undefined;
+    }
 
     constructor(props) {
         super(props);
@@ -175,6 +182,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
 
                     </div>
                     <div className="lmc-right-panel">
+                        <h4>Kolidujące zajęcia</h4>
                         <div className="lmc-overlap-container">
                             {this.state.overlappingLessons?.map(lesson => (
                                 <OverlappingLessonPad
@@ -187,8 +195,9 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                         <div className="lmc-right-bottom">
                             <button
                                 className="lmc-save-btn"
+                                disabled={this._errorMessage != undefined}
                             >
-                                Zapisz
+                                {this._errorMessage ?? "Zapisz"}
                             </button>
                         </div>
                     </div>
@@ -225,14 +234,20 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         const newState = { ...this.state };
         stateSetMethod(newState);
 
-        const overlapping = await dataService.getOverlappingLessonsAsync({
-            day: newState.data.day,
-            time: newState.data.time,
-            customDuration: newState.defaultDuration ? undefined : newState.data.customDuration,
-            teacherId: newState.data.lecturerId,
-            roomId: newState.data.roomId
-        }, this.state.data.id);
+        const modifyStateMethods = [stateSetMethod];
 
-        this.setStateFn(x => x.overlappingLessons = overlapping, stateSetMethod);
+        if (this._validator.validate()) {
+            const overlapping = await dataService.getOverlappingLessonsAsync({
+                day: newState.data.day,
+                time: newState.data.time,
+                customDuration: newState.defaultDuration ? undefined : newState.data.customDuration,
+                teacherId: newState.data.lecturerId,
+                roomId: newState.data.roomId
+            }, this.state.data.id);
+
+            modifyStateMethods.push(x => x.overlappingLessons = overlapping);
+        }
+
+        this.setStateFn(...modifyStateMethods);
     }
 }
