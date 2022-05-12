@@ -1,17 +1,18 @@
 ﻿import React from "react"
-import { getEnumValues } from "../../../shared/enum-help";
-import { Select, Option, OnChangeIdHandler, Input } from "../../../shared/form-controls";
-import ModCompBase, { ModifyMethod } from "../../../shared/form-controls/mod-comp-base";
-import { CommonModalProps } from "../../../shared/modals/shared-modal-body";
-import { DayOfWeek } from "../../enums/day-of-week";
-import { displayMinutes, nameForDayOfWeek } from "../../help-functions";
-import { Lesson } from "../../interfaces/lesson";
-import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
-import { Time } from "../../interfaces/shared";
-import { scheduleArrangerConfig } from "../../main";
-import dataService from "../../schedule-data-service";
-import LessonEditModel from "./interfaces/lesson-edit-model";
+import { getEnumValues } from "../../../../shared/enum-help";
+import { Select, Option, OnChangeIdHandler, Input } from "../../../../shared/form-controls";
+import ModCompBase, { ModifyMethod } from "../../../../shared/form-controls/mod-comp-base";
+import { CommonModalProps } from "../../../../shared/modals/shared-modal-body";
+import { DayOfWeek } from "../../../enums/day-of-week";
+import { displayMinutes, nameForDayOfWeek } from "../../../help-functions";
+import { Lesson } from "../../../interfaces/lesson";
+import { LessonTimelineEntry } from "../../../interfaces/lesson-timeline-entry";
+import { Time } from "../../../interfaces/shared";
+import { scheduleArrangerConfig } from "../../../main";
+import dataService from "../../../schedule-data-service";
+import LessonEditModel from "./../interfaces/lesson-edit-model";
 import './lesson-mod-comp.css';
+import OverlappingLessonPad from "./overlapping-lesson-pad";
 
 type LessonModCompProps = CommonModalProps & {
     day: DayOfWeek;
@@ -175,7 +176,12 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                     </div>
                     <div className="lmc-right-panel">
                         <div className="lmc-overlap-container">
-                            {this.state.overlappingLessons?.map(x => x.lecturer.name}
+                            {this.state.overlappingLessons?.map(lesson => (
+                                <OverlappingLessonPad
+                                    key={lesson.id}
+                                    lesson={lesson}
+                                />
+                            ))}
                         </div>
 
                         <div className="lmc-right-bottom">

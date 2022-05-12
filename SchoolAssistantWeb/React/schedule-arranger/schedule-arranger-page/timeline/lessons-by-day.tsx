@@ -4,7 +4,7 @@ import { DayOfWeek } from "../../enums/day-of-week";
 import { displayTime } from "../../help-functions";
 import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import GenericLessonTile from "./generic-lesson-tile";
-import LessonModComp from "./lesson-mod-comp";
+import LessonModComp from "./lesson-mod-comp/lesson-mod-comp";
 
 type LessonsByDayProps = {
     day: DayOfWeek;

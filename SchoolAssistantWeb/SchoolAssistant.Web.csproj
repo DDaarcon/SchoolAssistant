@@ -92,6 +92,7 @@
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\generic-lesson-tile.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\interfaces\lesson-edit-model.ts" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\lesson-mod-comp.tsx" />
+    <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\lesson-mod-comp\overlapping-lesson-pad.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\lesson-placing-shadow.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\lessons-by-day.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\room-busy-lessons.tsx" />
@@ -212,7 +213,8 @@
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\day-label.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\generic-lesson-tile.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\interfaces\lesson-edit-model.ts" />
-    <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\lesson-mod-comp.tsx" />
+    <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\lesson-mod-comp\lesson-mod-comp.tsx" />
+    <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\lesson-mod-comp\overlapping-lesson-pad.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\lesson-placing-shadow.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\lessons-by-day.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\room-busy-lessons.tsx" />
