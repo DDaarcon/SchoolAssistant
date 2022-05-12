@@ -6,6 +6,7 @@ namespace SchoolAssistant.DAL.Models.StudentsOrganization
 {
     public class SubjectClass : SchoolClass
     {
+        public string Name { get; set; } = null!;
         public long SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
         public virtual Subject Subject { get; set; } = null!;
