@@ -11,8 +11,6 @@ type ScheduleArrangerPageState = {
 
 }
 export default class ScheduleArrangerPage extends React.Component<ScheduleArrangerPageProps, ScheduleArrangerPageState> {
-
-
     render() {
         return (
             <div className="schedule-arranger-page">

@@ -45,6 +45,7 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
         scheduleArrangerConfig = this.props.config;
         scheduleChangePageScreen = this.changeScreen;
 
+        dataService.classes = this.props.classes;
         dataService.subjects = this.props.subjects;
         dataService.teachers = this.props.teachers;
         dataService.rooms = this.props.rooms;

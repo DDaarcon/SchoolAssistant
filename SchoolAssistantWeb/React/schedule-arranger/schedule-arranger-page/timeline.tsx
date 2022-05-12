@@ -72,7 +72,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
     initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
         const data: LessonPrefab = event.detail;
 
-        await dataService.getTeacherAndRoomLessons(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
+        await dataService.getTeacherAndRoomLessonsAsync(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
     }
 
 

@@ -1,9 +1,8 @@
 ﻿import React from "react"
-import { getEnumNames, getEnumValues } from "../../../shared/enum-help";
+import { getEnumValues } from "../../../shared/enum-help";
 import { Select, Option, OnChangeIdHandler, Input } from "../../../shared/form-controls";
-import ModCompBase from "../../../shared/form-controls/mod-comp-base";
-import { CommonModalProps } from "../../../shared/modals/shared-modal-body"
-import Validator from "../../../shared/validator";
+import ModCompBase, { ModifyMethod } from "../../../shared/form-controls/mod-comp-base";
+import { CommonModalProps } from "../../../shared/modals/shared-modal-body";
 import { DayOfWeek } from "../../enums/day-of-week";
 import { displayMinutes, nameForDayOfWeek } from "../../help-functions";
 import { Lesson } from "../../interfaces/lesson";
@@ -12,6 +11,7 @@ import { Time } from "../../interfaces/shared";
 import { scheduleArrangerConfig } from "../../main";
 import dataService from "../../schedule-data-service";
 import LessonEditModel from "./interfaces/lesson-edit-model";
+import './lesson-mod-comp.css';
 
 type LessonModCompProps = CommonModalProps & {
     day: DayOfWeek;
@@ -43,6 +43,8 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         }
 
         this._validator.setRules({
+            day: { notNull: true },
+            time: { notNull: true },
             subjectId: { notNull: true },
             lecturerId: { notNull: true },
             roomId: { notNull: true }
@@ -54,34 +56,34 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         }))
     }
 
-    changeTime: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    changeTimeAsync: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         const value = event.target.value;
 
-        this.setStateFnData(data => data.time = this.timeFromInput(value));
+        await this.findOverlappingLessonsAndSetStateAsync(state => state.data.time = this.timeFromInput(value));
     }
 
-    changeCustomDuration: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    changeCustomDuration: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         const value = event.target.value;
 
-        this.setStateFnData(data => data.customDuration = parseInt(value));
+        await this.findOverlappingLessonsAndSetStateAsync(state => state.data.customDuration = parseInt(value));
     }
 
-    changeUseDefaultDuration: React.ChangeEventHandler<HTMLInputElement> = event => {
+    changeUseDefaultDuration: React.ChangeEventHandler<HTMLInputElement> = async event => {
         const value = event.target.checked;
 
-        this.setStateFn(state => state.defaultDuration = value);
+        await this.findOverlappingLessonsAndSetStateAsync(state => state.defaultDuration = value);
     }
 
-    changeDay: OnChangeIdHandler<number> = value => {
+    changeDay: OnChangeIdHandler<number> = async value => {
         if (value instanceof Array) return;
 
         if (this.validateDay(value))
-            this.setStateFn(state => state.data.day = value);
+            await this.findOverlappingLessonsAndSetStateAsync(state => state.data.day = value);
     }
 
     createOnSelectChangeHandler: (property: 'subjectId' | 'lecturerId' | 'roomId') => OnChangeIdHandler<number> = (property) =>
-        (value) => {
-            this.setStateFnData(data => data[property] = value as number);
+        async value => {
+            await this.findOverlappingLessonsAndSetStateAsync(state => state.data[property] = value as number);
         }
 
     submitAsync: React.FormEventHandler<HTMLFormElement> = async (e) => {
@@ -94,80 +96,97 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     render() {
         return (
             <form onSubmit={this.submitAsync}>
+                <div className="lesson-mod-comp-layout">
+                    <div className="lmc-inputs">
 
-                <Input
-                    label="Godzina rozpoczęcia"
-                    name="time-input"
-                    value={this.timeToInput(this.state.data.time)}
-                    errorMessages={this._validator.getErrorMsgsFor('time')}
-                    onChange={this.changeTime}
-                    type="time"
-                />
+                        <Input
+                            label="Godzina rozpoczęcia"
+                            name="time-input"
+                            value={this.timeToInput(this.state.data.time)}
+                            errorMessages={this._validator.getErrorMsgsFor('time')}
+                            onChange={this.changeTimeAsync}
+                            type="time"
+                        />
 
-                <Select
-                    label="Dzień"
-                    name="day-input"
-                    value={this.state.data.day}
-                    errorMessages={this._validator.getErrorMsgsFor('day')}
-                    onChangeId={this.changeDay}
-                    options={this._dayOptions}
-                />
+                        <Select
+                            label="Dzień"
+                            name="day-input"
+                            value={this.state.data.day}
+                            errorMessages={this._validator.getErrorMsgsFor('day')}
+                            onChangeId={this.changeDay}
+                            options={this._dayOptions}
+                        />
 
-                <Input
-                    label="Czas trwania"
-                    name="duration-input"
-                    value={this.state.data.customDuration ?? scheduleArrangerConfig.defaultLessonDuration}
-                    errorMessages={this._validator.getErrorMsgsFor('customDuration')}
-                    onChange={this.changeCustomDuration}
-                    disabled={this.state.defaultDuration}
-                    type="number"
-                />
+                        <Input
+                            label="Czas trwania"
+                            name="duration-input"
+                            value={this.state.data.customDuration ?? scheduleArrangerConfig.defaultLessonDuration}
+                            errorMessages={this._validator.getErrorMsgsFor('customDuration')}
+                            onChange={this.changeCustomDuration}
+                            disabled={this.state.defaultDuration}
+                            type="number"
+                        />
 
-                <Input
-                    inputClassName="form-check-input"
-                    label={`Domyślny czas trwania (${scheduleArrangerConfig.defaultLessonDuration} minut)`}
-                    name="default-duration-input"
-                    checked={this.state.defaultDuration}
-                    onChange={this.changeUseDefaultDuration}
-                    type="checkbox"
-                />
+                        <Input
+                            inputClassName="form-check-input"
+                            label={`Domyślny czas trwania (${scheduleArrangerConfig.defaultLessonDuration} minut)`}
+                            name="default-duration-input"
+                            checked={this.state.defaultDuration}
+                            onChange={this.changeUseDefaultDuration}
+                            type="checkbox"
+                        />
 
-                <Select
-                    label="Przedmiot"
-                    name="subject-input"
-                    value={this.state.data.subjectId}
-                    onChangeId={this.createOnSelectChangeHandler('subjectId')}
-                    options={dataService.subjects.map(x => ({
-                        label: x.name,
-                        value: x.id
-                    }))}
-                    errorMessages={this._validator.getErrorMsgsFor('subjectId')}
-                />
+                        <Select
+                            label="Przedmiot"
+                            name="subject-input"
+                            value={this.state.data.subjectId}
+                            onChangeId={this.createOnSelectChangeHandler('subjectId')}
+                            options={dataService.subjects.map(x => ({
+                                label: x.name,
+                                value: x.id
+                            }))}
+                            errorMessages={this._validator.getErrorMsgsFor('subjectId')}
+                        />
 
-                <Select
-                    label="Nauczyciel"
-                    name="lecturer-input"
-                    value={this.state.data.lecturerId}
-                    onChangeId={this.createOnSelectChangeHandler('lecturerId')}
-                    options={dataService.teachers.map(x => ({
-                        label: x.name,
-                        value: x.id
-                    }))}
-                    errorMessages={this._validator.getErrorMsgsFor('lecturerId')}
-                />
+                        <Select
+                            label="Nauczyciel"
+                            name="lecturer-input"
+                            value={this.state.data.lecturerId}
+                            onChangeId={this.createOnSelectChangeHandler('lecturerId')}
+                            options={dataService.teachers.map(x => ({
+                                label: x.name,
+                                value: x.id
+                            }))}
+                            errorMessages={this._validator.getErrorMsgsFor('lecturerId')}
+                        />
 
-                <Select
-                    label="Pomieszczenie"
-                    name="room-input"
-                    value={this.state.data.roomId}
-                    onChangeId={this.createOnSelectChangeHandler('roomId')}
-                    options={dataService.rooms.map(x => ({
-                        label: x.name,
-                        value: x.id
-                    }))}
-                    errorMessages={this._validator.getErrorMsgsFor('roomId')}
-                />
+                        <Select
+                            label="Pomieszczenie"
+                            name="room-input"
+                            value={this.state.data.roomId}
+                            onChangeId={this.createOnSelectChangeHandler('roomId')}
+                            options={dataService.rooms.map(x => ({
+                                label: x.name,
+                                value: x.id
+                            }))}
+                            errorMessages={this._validator.getErrorMsgsFor('roomId')}
+                        />
 
+                    </div>
+                    <div className="lmc-right-panel">
+                        <div className="lmc-overlap-container">
+                            {this.state.overlappingLessons?.map(x => x.lecturer.name}
+                        </div>
+
+                        <div className="lmc-right-bottom">
+                            <button
+                                className="lmc-save-btn"
+                            >
+                                Zapisz
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </form>
         )
     }
@@ -196,7 +215,15 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     }
 
 
-    private getOverlappingLessons() {
+    private async findOverlappingLessonsAndSetStateAsync(stateSetMethod?: ModifyMethod<LessonModCompState>) {
+        const overlapping = await dataService.getOverlappingLessonsAsync({
+            day: this.state.data.day,
+            time: this.state.data.time,
+            customDuration: this.state.defaultDuration ? undefined : this.state.data.customDuration,
+            teacherId: this.state.data.lecturerId,
+            roomId: this.state.data.roomId
+        });
 
-}
+        this.setStateFn(x => x.overlappingLessons = overlapping, stateSetMethod);
+    }
 }

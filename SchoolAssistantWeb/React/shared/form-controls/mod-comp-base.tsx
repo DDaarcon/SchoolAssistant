@@ -1,6 +1,8 @@
 ﻿import React from "react"
 import Validator from "../validator";
 
+export type ModifyMethod<TData> = (state: TData) => void;
+
 type ModCompBaseProps = {
 
 }
@@ -17,15 +19,19 @@ export default abstract class ModCompBase<TData, TProps extends ModCompBaseProps
         this._validator.forModelGetter(() => this.state.data);
     }
 
-    protected setStateFn(
-        modifyMethod: (state: TState) => void)
+
+    protected setStateFn(...modifyMethod: ModifyMethod<TState>[])
     {
         this.setState(prevState => {
             const state = { ...prevState };
-            modifyMethod(state);
+
+            (modifyMethod as Array<ModifyMethod<TState>>)
+                .forEach(method => method ? method(state) : undefined);
+
             return state;
         });
     }
+
 
     protected setStateFnData(
         modifyMethod: (data: TData) => void)
