@@ -6,7 +6,7 @@ import { DayLessons } from '../interfaces/day-lessons';
 import { LessonPrefab } from '../interfaces/lesson-prefab';
 import { Time } from '../interfaces/shared';
 import { scheduleArrangerConfig, server } from '../main';
-import scheduleDataService from '../schedule-data-service';
+import dataService from '../schedule-data-service';
 import DayColumn from './timeline/day-column';
 import TimeColumn from './timeline/time-column';
 
@@ -19,30 +19,16 @@ type ScheduleArrangerTimelineState = {
     roomBusyLessons?: DayLessons[];
 }
 export default class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
-    private _days: DayLessons[];
-
+    
     constructor(props) {
         super(props);
 
         this.state = {};
 
-        this._assignDaysFromProps();
+        dataService.assignDaysFromProps(this.props.data);
 
         addEventListener('dragBegan', (event: CustomEvent) => this.initiateShowingOtherLessonsShadows(event));
         addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
-    }
-
-    private _assignDaysFromProps() {
-        this._days = [];
-        for (const dayOfWeekIt in DayOfWeek) {
-            if (isNaN(dayOfWeekIt as unknown as number)) continue;
-
-            const dayOfWeek = dayOfWeekIt as unknown as DayOfWeek;
-            this._days.push(
-                this.props.data.find(x => x.dayIndicator == dayOfWeek)
-                ?? { dayIndicator: dayOfWeek, lessons: [] }
-            );
-        }
     }
 
     onDropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
@@ -50,7 +36,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
         const prefab: LessonPrefab | undefined = JSON.parse(data.getData("prefab"));
 
-        const lessons = this._days[dayIndicator];
+        const lessons = dataService.lessons[dayIndicator];
         if (!lessons) return;
 
         for (const lesson of lessons.lessons ?? []) {
@@ -75,7 +61,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
         }).then(result => {
             console.log(result);
             if (result.success) {
-                this._days[dayIndicator].lessons.push(result.lesson);
+                dataService.lessons[dayIndicator].lessons.push(result.lesson);
                 this.forceUpdate();
             }
         })
@@ -86,7 +72,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
     initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
         const data: LessonPrefab = event.detail;
 
-        await scheduleDataService.getTeacherAndRoomLessons(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
+        await dataService.getTeacherAndRoomLessons(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
     }
 
 
@@ -127,7 +113,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
                     <DayColumn
                         key={day}
                         dayIndicator={day}
-                        lessons={this._days.find(x => x.dayIndicator == day)?.lessons ?? []}
+                        lessons={dataService.lessons.find(x => x.dayIndicator == day)?.lessons ?? []}
                         teacherBusyLessons={this.state.teacherBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
                         roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
                         dropped={this.onDropped}

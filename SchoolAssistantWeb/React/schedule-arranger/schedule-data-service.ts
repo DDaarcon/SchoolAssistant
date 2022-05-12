@@ -1,4 +1,5 @@
-﻿import { DayLessons } from "./interfaces/day-lessons";
+﻿import { DayOfWeek } from "./enums/day-of-week";
+import { DayLessons } from "./interfaces/day-lessons";
 import { Lesson } from "./interfaces/lesson";
 import { LessonPrefab } from "./interfaces/lesson-prefab";
 import { OtherLessons } from "./interfaces/other-lessons";
@@ -9,6 +10,8 @@ import { scheduleArrangerConfig, server } from "./main";
 
 class ScheduleArrangerDataService {
     prefabs: LessonPrefab[] = [];
+
+    lessons?: DayLessons[];
 
     subjects?: ScheduleSubjectEntry[];
     teachers?: ScheduleTeacherEntry[];
@@ -58,6 +61,21 @@ class ScheduleArrangerDataService {
             apply(teacher.lessons, room.lessons);
         }
     }
+
+
+    assignDaysFromProps(days: DayLessons[]) {
+        this.lessons = [];
+        for (const dayOfWeekIt in DayOfWeek) {
+            if (isNaN(dayOfWeekIt as unknown as number)) continue;
+
+            const dayOfWeek = dayOfWeekIt as unknown as DayOfWeek;
+            this.lessons.push(
+                days.find(x => x.dayIndicator == dayOfWeek)
+                ?? { dayIndicator: dayOfWeek, lessons: [] }
+            );
+        }
+    }
+
 }
-const scheduleDataService = new ScheduleArrangerDataService;
-export default scheduleDataService;
+const dataService = new ScheduleArrangerDataService;
+export default dataService;

@@ -3,7 +3,7 @@ import { Select, Option } from "../../../shared/form-controls";
 import Validator from "../../../shared/validator";
 import { LessonModificationData } from "../../interfaces/lesson-modification-data";
 import { IdName } from "../../interfaces/shared";
-import scheduleDataService from "../../schedule-data-service";
+import dataService from "../../schedule-data-service";
 
 
 
@@ -21,10 +21,10 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
 
     private get _subjectFilteredTeachers(): ScheduleTeacherOptionEntry[] {
         return [
-            ...scheduleDataService.teachers
+            ...dataService.teachers
                 .filter(x => x.mainSubjectIds.includes(this.state.subjectId))
                 .map(x => ({ id: x.id, name: x.name, mainSubject: true })),
-            ...scheduleDataService.teachers
+            ...dataService.teachers
                 .filter(x => !x.mainSubjectIds.includes(this.state.subjectId) && x.additionalSubjectIds.includes(this.state.subjectId))
                 .map(x => ({ id: x.id, name: x.name, mainSubject: false }))
         ]
@@ -78,7 +78,7 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
                     value={this.state.subjectId}
                     onChange={this.createOnSelectChangeHandler('subjectId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'subjectId').map(x => x.error)}
-                    options={scheduleDataService.subjects.map(x => ({
+                    options={dataService.subjects.map(x => ({
                         label: x.name,
                         value: x.id
                     }))}
@@ -102,7 +102,7 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
                     value={this.state.roomId}
                     onChange={this.createOnSelectChangeHandler('roomId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'roomId').map(x => x.error)}
-                    options={scheduleDataService.rooms.map(x => ({
+                    options={dataService.rooms.map(x => ({
                         label: x.name,
                         value: x.id
                     })) }

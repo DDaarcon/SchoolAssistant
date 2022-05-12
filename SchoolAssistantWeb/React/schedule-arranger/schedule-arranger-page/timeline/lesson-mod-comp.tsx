@@ -10,7 +10,7 @@ import { Lesson } from "../../interfaces/lesson";
 import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import { Time } from "../../interfaces/shared";
 import { scheduleArrangerConfig } from "../../main";
-import scheduleDataService from "../../schedule-data-service";
+import dataService from "../../schedule-data-service";
 import LessonEditModel from "./interfaces/lesson-edit-model";
 
 type LessonModCompProps = CommonModalProps & {
@@ -137,7 +137,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                     name="subject-input"
                     value={this.state.data.subjectId}
                     onChangeId={this.createOnSelectChangeHandler('subjectId')}
-                    options={scheduleDataService.subjects.map(x => ({
+                    options={dataService.subjects.map(x => ({
                         label: x.name,
                         value: x.id
                     }))}
@@ -149,7 +149,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                     name="lecturer-input"
                     value={this.state.data.lecturerId}
                     onChangeId={this.createOnSelectChangeHandler('lecturerId')}
-                    options={scheduleDataService.teachers.map(x => ({
+                    options={dataService.teachers.map(x => ({
                         label: x.name,
                         value: x.id
                     }))}
@@ -161,7 +161,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                     name="room-input"
                     value={this.state.data.roomId}
                     onChangeId={this.createOnSelectChangeHandler('roomId')}
-                    options={scheduleDataService.rooms.map(x => ({
+                    options={dataService.rooms.map(x => ({
                         label: x.name,
                         value: x.id
                     }))}

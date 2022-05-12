@@ -4,7 +4,7 @@ import { DayLessons } from "../interfaces/day-lessons";
 import { LessonModificationData } from "../interfaces/lesson-modification-data";
 import { LessonPrefab } from "../interfaces/lesson-prefab";
 import { LessonTimelineEntry } from "../interfaces/lesson-timeline-entry";
-import scheduleDataService from "../schedule-data-service";
+import dataService from "../schedule-data-service";
 import AddLessonPrefabTile from "./selector/add-lesson-prefab-tile";
 import LessonModificationComponent from "./selector/lesson-prefab-mod-comp";
 import LessonPrefabTile from "./selector/lesson-prefab-tile";
@@ -38,7 +38,7 @@ export default class ScheduleArrangerSelector extends React.Component<ScheduleAr
             validPrefabs.push(prefab);
         }
 
-        scheduleDataService.prefabs = validPrefabs;
+        dataService.prefabs = validPrefabs;
     }
 
     private lessonToPrefab = (lesson: LessonTimelineEntry): LessonPrefab => ({
@@ -60,17 +60,17 @@ export default class ScheduleArrangerSelector extends React.Component<ScheduleAr
     private addPrefab = (info: LessonModificationData) => {
         modalController.closeById(this._addPrefabModalId);
 
-        scheduleDataService.addPrefab({
-            subject: { id: info.subjectId, name: scheduleDataService.getSubjectName(info.subjectId) },
-            lecturer: { id: info.teacherId, name: scheduleDataService.getTeacherName(info.teacherId) },
-            room: { id: info.roomId, name: scheduleDataService.getRoomName(info.roomId) }
+        dataService.addPrefab({
+            subject: { id: info.subjectId, name: dataService.getSubjectName(info.subjectId) },
+            lecturer: { id: info.teacherId, name: dataService.getTeacherName(info.teacherId) },
+            room: { id: info.roomId, name: dataService.getRoomName(info.roomId) }
         });
     }
 
     render() {
         return (
             <div className="schedule-arranger-selector">
-                {scheduleDataService.prefabs.map((prefab, index) => (
+                {dataService.prefabs.map((prefab, index) => (
                     <LessonPrefabTile
                         key={index}
                         data={prefab}

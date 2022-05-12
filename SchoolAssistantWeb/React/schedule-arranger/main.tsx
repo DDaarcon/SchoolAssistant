@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { ModalSpace } from "../shared/modals";
 import ServerConnection from "../shared/server-connection";
-import scheduleDataService from './schedule-data-service';
+import dataService from './schedule-data-service';
 import ScheduleClassSelectorPage from './class-selector';
 import { ScheduleArrangerConfig } from "./interfaces/page-model-to-react/schedule-arranger-config";
 import { ScheduleClassSelectorEntry } from "./interfaces/page-model-to-react/schedule-class-selector-entry";
@@ -45,9 +45,9 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
         scheduleArrangerConfig = this.props.config;
         scheduleChangePageScreen = this.changeScreen;
 
-        scheduleDataService.subjects = this.props.subjects;
-        scheduleDataService.teachers = this.props.teachers;
-        scheduleDataService.rooms = this.props.rooms;
+        dataService.subjects = this.props.subjects;
+        dataService.teachers = this.props.teachers;
+        dataService.rooms = this.props.rooms;
     }
 
     changeScreen = (pageComponent: JSX.Element) => {
