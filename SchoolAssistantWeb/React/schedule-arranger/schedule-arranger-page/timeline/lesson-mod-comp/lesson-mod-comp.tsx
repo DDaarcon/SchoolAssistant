@@ -222,13 +222,16 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
 
 
     private async findOverlappingLessonsAndSetStateAsync(stateSetMethod?: ModifyMethod<LessonModCompState>) {
+        const newState = { ...this.state };
+        stateSetMethod(newState);
+
         const overlapping = await dataService.getOverlappingLessonsAsync({
-            day: this.state.data.day,
-            time: this.state.data.time,
-            customDuration: this.state.defaultDuration ? undefined : this.state.data.customDuration,
-            teacherId: this.state.data.lecturerId,
-            roomId: this.state.data.roomId
-        });
+            day: newState.data.day,
+            time: newState.data.time,
+            customDuration: newState.defaultDuration ? undefined : newState.data.customDuration,
+            teacherId: newState.data.lecturerId,
+            roomId: newState.data.roomId
+        }, this.state.data.id);
 
         this.setStateFn(x => x.overlappingLessons = overlapping, stateSetMethod);
     }
