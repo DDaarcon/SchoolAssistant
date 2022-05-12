@@ -99,6 +99,7 @@
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\time-column.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\timeline-cell.tsx" />
     <None Remove="React\shared.ts" />
+    <None Remove="React\shared\enum-help.ts" />
     <None Remove="React\shared\form-controls\default-error-msg.ts" />
     <None Remove="React\shared\form-controls\input.tsx" />
     <None Remove="React\shared\form-controls\mod-comp-base.tsx" />
@@ -219,6 +220,7 @@
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\time-column.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\timeline-cell.tsx" />
     <TypeScriptCompile Include="React\shared.ts" />
+    <TypeScriptCompile Include="React\shared\enum-help.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\default-error-msg.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\input.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\mod-comp-base.tsx" />

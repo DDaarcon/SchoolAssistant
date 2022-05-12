@@ -1,9 +1,12 @@
 ﻿import React from "react"
+import { getEnumNames, getEnumValues } from "../../../shared/enum-help";
 import { Select, Option, OnChangeIdHandler, Input } from "../../../shared/form-controls";
 import ModCompBase from "../../../shared/form-controls/mod-comp-base";
 import { CommonModalProps } from "../../../shared/modals/shared-modal-body"
 import Validator from "../../../shared/validator";
-import { displayMinutes } from "../../help-functions";
+import { DayOfWeek } from "../../enums/day-of-week";
+import { displayMinutes, nameForDayOfWeek } from "../../help-functions";
+import { Lesson } from "../../interfaces/lesson";
 import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import { Time } from "../../interfaces/shared";
 import { scheduleArrangerConfig } from "../../main";
@@ -11,13 +14,17 @@ import scheduleDataService from "../../schedule-data-service";
 import LessonEditModel from "./interfaces/lesson-edit-model";
 
 type LessonModCompProps = CommonModalProps & {
+    day: DayOfWeek;
     lesson: LessonTimelineEntry;
 }
 type LessonModCompState = {
     data: LessonEditModel;
     defaultDuration: boolean;
+    overlappingLessons?: Lesson[];
 }
 export default class LessonModComp extends ModCompBase<LessonEditModel, LessonModCompProps & CommonModalProps, LessonModCompState> {
+
+    private _dayOptions: Option<number>[];
 
     constructor(props) {
         super(props);
@@ -25,6 +32,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         this.state = {
             data: {
                 id: this.props.lesson.id,
+                day: this.props.day,
                 time: this.props.lesson.time,
                 customDuration: this.props.lesson.customDuration,
                 subjectId: this.props.lesson.subject.id,
@@ -39,6 +47,11 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
             lecturerId: { notNull: true },
             roomId: { notNull: true }
         });
+
+        this._dayOptions = getEnumValues(DayOfWeek).map(x => ({
+            value: x,
+            label: nameForDayOfWeek(x)
+        }))
     }
 
     changeTime: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -57,6 +70,13 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         const value = event.target.checked;
 
         this.setStateFn(state => state.defaultDuration = value);
+    }
+
+    changeDay: OnChangeIdHandler<number> = value => {
+        if (value instanceof Array) return;
+
+        if (this.validateDay(value))
+            this.setStateFn(state => state.data.day = value);
     }
 
     createOnSelectChangeHandler: (property: 'subjectId' | 'lecturerId' | 'roomId') => OnChangeIdHandler<number> = (property) =>
@@ -82,6 +102,15 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                     errorMessages={this._validator.getErrorMsgsFor('time')}
                     onChange={this.changeTime}
                     type="time"
+                />
+
+                <Select
+                    label="Dzień"
+                    name="day-input"
+                    value={this.state.data.day}
+                    errorMessages={this._validator.getErrorMsgsFor('day')}
+                    onChangeId={this.changeDay}
+                    options={this._dayOptions}
                 />
 
                 <Input
@@ -144,7 +173,12 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     }
 
 
+    private validateDay(day: number): boolean {
+        if (!getEnumValues(DayOfWeek).includes(day))
+            return false;
 
+        return true;
+    }
 
     private timeFromInput(display: string): Time {
         const numbers = display.split(':').map(x => parseInt(x));
@@ -160,4 +194,9 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     private timeToInput(time: Time): string {
         return `${displayMinutes(time.hour)}:${displayMinutes(time.minutes)}`;
     }
+
+
+    private getOverlappingLessons() {
+
+}
 }

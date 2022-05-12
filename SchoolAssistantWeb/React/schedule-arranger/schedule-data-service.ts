@@ -1,4 +1,5 @@
 ﻿import { DayLessons } from "./interfaces/day-lessons";
+import { Lesson } from "./interfaces/lesson";
 import { LessonPrefab } from "./interfaces/lesson-prefab";
 import { OtherLessons } from "./interfaces/other-lessons";
 import { ScheduleRoomEntry } from "./interfaces/page-model-to-react/schedule-room-entry";
@@ -27,7 +28,7 @@ class ScheduleArrangerDataService {
 
     isTileDragged: boolean = false;
 
-    getTeacherAndRoomLessons = async (teacherId: number, roomId: number, apply: (teacher?: DayLessons[], room?: DayLessons[]) => void) => {
+    getTeacherAndRoomLessons = async (teacherId: number, roomId: number, apply: (teacher?: DayLessons<Lesson>[], room?: DayLessons<Lesson>[]) => void) => {
         // find teacher and room in storage
         const teacher = this.teachers.find(x => x.id == teacherId);
         const room = this.rooms.find(x => x.id == roomId);

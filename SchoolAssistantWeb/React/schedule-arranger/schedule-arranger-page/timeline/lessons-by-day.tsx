@@ -1,13 +1,14 @@
 ﻿import React from "react";
 import { modalController } from "../../../shared/modals";
+import { DayOfWeek } from "../../enums/day-of-week";
 import { displayTime } from "../../help-functions";
 import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import GenericLessonTile from "./generic-lesson-tile";
 import LessonModComp from "./lesson-mod-comp";
 
 type LessonsByDayProps = {
+    day: DayOfWeek;
     lessons: LessonTimelineEntry[];
-
 }
 type LessonsByDayState = {
 
@@ -18,7 +19,8 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
         modalController.addCustomComponent({
             modificationComponent: LessonModComp,
             modificationComponentProps: {
-                lesson
+                lesson,
+                day: this.props.day
             },
             style: {
                 width: '700px'

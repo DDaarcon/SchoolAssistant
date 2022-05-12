@@ -93,7 +93,10 @@ export default class DayColumn extends React.Component<DayColumnProps, DayColumn
                 <RoomBusyLessons lessons={this.props.roomBusyLessons} />
                 <TeacherBusyLessons lessons={this.props.teacherBusyLessons} />
                 <LessonPlacingShadow time={this.state.shadowFor} />
-                <LessonsByDay lessons={this.props.lessons} />
+                <LessonsByDay
+                    lessons={this.props.lessons}
+                    day={this.props.dayIndicator}
+                />
                 {this._cells}
             </div>
         )
