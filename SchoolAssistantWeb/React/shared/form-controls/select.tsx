@@ -1,6 +1,7 @@
 ﻿import * as React from "react";
 import defaultErrorMessage from './default-error-msg';
-import RSelect, { MultiValue, Options } from 'react-select';
+import RSelect, { CSSObjectWithLabel, MultiValue, OptionProps, Options, StylesConfig } from 'react-select';
+import { StylesConfigFunction } from "react-select/dist/declarations/src/styles";
 
 export interface Option<TValue extends number | string>{
     value: TValue;
@@ -26,6 +27,7 @@ type SelectProps<TValue extends number | string, TOption extends Option<TValue>>
 
     containerClassName?: string;
     inputClassName?: string;
+    optionStyle?: (props: OptionProps<Option<TValue>>) => CSSObjectWithLabel;
 }
 export default class Select<TValue extends number | string> extends React.Component<SelectProps<TValue, Option<TValue>>> {
     private get _hasErrors() { return this.props.hasErrors ?? this.props.errorMessages.length; };
@@ -54,6 +56,13 @@ export default class Select<TValue extends number | string> extends React.Compon
             this.props.onChangeId?.(values.value);
     }
 
+    private _styles: StylesConfig<Option<TValue>> = {
+        option: (provided, props) => ({
+            ...provided,
+            ...(this.props.optionStyle?.(props) ?? {})
+        })
+    }
+
     render() {
         const value = this.prepareValue();
 
@@ -68,6 +77,7 @@ export default class Select<TValue extends number | string> extends React.Compon
                     options={this.props.options}
                     //@ts-ignore
                     isMulti={this.props.multiple}
+                    styles={this._styles}
                 />
                 {this._hasErrors ? (
                     <div className="invalid-feedback">

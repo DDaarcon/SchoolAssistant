@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { MultiValue, Options } from 'react-select';
+import { CSSObjectWithLabel, MultiValue, OptionProps, Options } from 'react-select';
 import Select, { OnChangeHandler, OnChangeIdHandler, Option } from "./select";
 
 type MultiselectProps<TValue extends number | string, TOption extends Option<TValue>> = {
@@ -10,7 +10,8 @@ type MultiselectProps<TValue extends number | string, TOption extends Option<TVa
     onChangeId?: OnChangeIdHandler<TValue>;
     options: Options<TOption>;
     hasErrors?: boolean;
-    errorMessages: string[];
+    errorMessages?: string[];
+    optionStyle?: (props: OptionProps<Option<TValue>>) => CSSObjectWithLabel;
 }
 const Multiselect = <TValue extends number | string>(props: MultiselectProps<TValue, Option<TValue>>) => {
     return (
@@ -24,6 +25,7 @@ const Multiselect = <TValue extends number | string>(props: MultiselectProps<TVa
             hasErrors={props.hasErrors}
             errorMessages={props.errorMessages}
             multiple={true}
+            optionStyle={props.optionStyle}
         />
     )
 }
