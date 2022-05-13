@@ -27,6 +27,13 @@
     border-radius: 5px;
     background-color: #e5ffbe;
     padding: 3px;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.lmc-save-btn:disabled {
+    background-color: #ffd1d1;
+    color: #5c5c5c;
+    transition: background-color 0.5s, color 0.5s;
 }
 
 .lmc-overlap-pad {

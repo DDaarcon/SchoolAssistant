@@ -46,13 +46,23 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                 subjectId: this.props.lesson.subject.id,
                 lecturerId: this.props.lesson.lecturer.id,
                 roomId: this.props.lesson.room.id,
+                classId: scheduleArrangerConfig.classId
             },
             defaultDuration: this.props.lesson.customDuration == undefined
         }
 
         this._validator.setRules({
             day: { notNull: true },
-            time: { notNull: true },
+            time: {
+                notNull: true, other: (model, prop) => {
+                    return this.validateTime(model[prop])
+                        ? undefined
+                        : {
+                            error: `Termin nie mieści się w ustalonym zakresie (${scheduleArrangerConfig.startHour}:00 - ${scheduleArrangerConfig.endHour}:00)`,
+                            on: prop
+                        }
+                }
+            },
             subjectId: { notNull: true },
             lecturerId: { notNull: true },
             roomId: { notNull: true }
@@ -206,6 +216,12 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         )
     }
 
+    private validateTime(time: Time) {
+        const minutes = time.hour * 60 + time.minutes;
+
+        return !(time.hour < scheduleArrangerConfig.startHour
+            || minutes > scheduleArrangerConfig.endHour * 60);
+    }
 
     private validateDay(day: number): boolean {
         if (!getEnumValues(DayOfWeek).includes(day))
@@ -213,6 +229,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
 
         return true;
     }
+
 
     private timeFromInput(display: string): Time {
         const numbers = display.split(':').map(x => parseInt(x));

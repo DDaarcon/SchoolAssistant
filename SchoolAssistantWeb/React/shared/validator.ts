@@ -1,13 +1,13 @@
-﻿type ValidationMethod<T> = (model: T, prop: keyof T) => ValidationFail<T>[] | ValidationFail<T> | undefined;
+﻿type ValidationMethod<T, TProp extends keyof T> = (model: T, prop: TProp) => ValidationFail<TProp>[] | ValidationFail<TProp> | undefined;
 
 type SubValidators<T> = {
     [index in keyof T]?: Validator<T[index]>;
 }
 
 
-export type ValidationFail<T> = {
+export type ValidationFail<TProp> = {
     error?: 'null' | 'empty' | 'invalidDate' | string;
-    on?: keyof T;
+    on?: TProp;
 }
 
 
@@ -17,7 +17,7 @@ export type Rules<T, TProp extends keyof T> = {
     notNull?: boolean | string;
     notEmpty?: boolean | string;
     validDate?: boolean | string;
-    other?: ValidationMethod<T>[] | ValidationMethod<T>
+    other?: ValidationMethod<T, TProp>[] | ValidationMethod<T, TProp>
     subValidator?: (getModel: () => T, prop: TProp) => RulesForModel<T[TProp]>;
 }
 
@@ -31,7 +31,7 @@ export default class Validator<T extends {}> {
 
     private _rules?: RulesForModel<T>;
 
-    private _errors?: ValidationFail<T>[];
+    private _errors?: ValidationFail<keyof T>[];
     private _subValidators: SubValidators<T> = {};
 
     get errors() { return this._errors ?? []; }
@@ -123,7 +123,7 @@ export default class Validator<T extends {}> {
 
 
 
-    private validateOther(prop: keyof T, other: ValidationMethod<T>[] | ValidationMethod<T>) {
+    private validateOther(prop: keyof T, other: ValidationMethod<T, keyof T>[] | ValidationMethod<T, keyof T>) {
         if (other instanceof Array) {
             for (const otherRule of other ?? []) {
                 const otherErrors = otherRule(this._model, prop);

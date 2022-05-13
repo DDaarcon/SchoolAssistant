@@ -7,22 +7,22 @@ using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.General.PeriodicLessons
 {
-    public interface IValidateJsonModelsService
+    public interface IValidatePeriodicLessonJsonsService
     {
         Task<bool> ValidateOverlapping(IValidateLessonJson model);
         Task<bool> ValidateTime(TimeJson time, int? customDuration);
     }
 
     [Injectable]
-    public class ValidateJsonModelsService : IValidateJsonModelsService
+    public class ValidatePeriodicLessonJsonsService : IValidatePeriodicLessonJsonsService
     {
         private readonly IAppConfigRepository _configRepo;
-        private readonly IRepositoryBySchoolYear<OrganizationalClass> _orgClassRepo;
+        private readonly IRepository<OrganizationalClass> _orgClassRepo;
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo;
 
-        public ValidateJsonModelsService(
+        public ValidatePeriodicLessonJsonsService(
             IAppConfigRepository configRepo,
-            IRepositoryBySchoolYear<OrganizationalClass> orgClassRepo,
+            IRepository<OrganizationalClass> orgClassRepo,
             IRepositoryBySchoolYear<PeriodicLesson> lessonRepo)
         {
             _configRepo = configRepo;
@@ -56,6 +56,7 @@ namespace SchoolAssistant.Logic.General.PeriodicLessons
                     x.ParticipatingOrganizationalClassId == model.classId
                     || x.LecturerId == model.lecturerId
                     || x.RoomId == model.roomId)
+                .Where(x => x.Id != model.id)
                 .ToListAsync();
             var lessonsThatDay = lessons.Where(x => x.GetDayOfWeek() == model.day);
 

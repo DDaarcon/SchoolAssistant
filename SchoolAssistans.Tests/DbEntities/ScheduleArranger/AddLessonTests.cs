@@ -7,6 +7,7 @@ using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
 using SchoolAssistant.Logic;
+using SchoolAssistant.Logic.General.PeriodicLessons;
 using SchoolAssistant.Logic.ScheduleArranger;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         private IAddLessonBySchedArrService _addLessonService = null!;
 
         private IAppConfigRepository _configRepo = null!;
-        private IRepository<OrganizationalClass> _orgClassRepo = null!;
+        private IRepositoryBySchoolYear<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepository<Room> _roomRepo = null!;
         private IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo = null!;
@@ -51,18 +52,20 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         protected override void SetupServices()
         {
             _configRepo = new AppConfigRepository(_Context, null);
-            _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
+            _orgClassRepo = new RepositoryBySchoolYear<OrganizationalClass>(_Context, null, _schoolYearRepo);
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _roomRepo = new Repository<Room>(_Context, null);
             _lessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
 
+            var validateSvc = new ValidatePeriodicLessonJsonsService(_configRepo, _orgClassRepo, _lessonRepo);
+
             _addLessonService = new AddLessonBySchedArrService(
-                _configRepo,
                 _orgClassRepo,
                 new Repository<Subject>(_Context, null),
                 _teacherRepo,
                 _roomRepo,
-                _lessonRepo);
+                _lessonRepo,
+                validateSvc);
         }
 
 

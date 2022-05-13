@@ -18,29 +18,25 @@ namespace SchoolAssistant.Logic.ScheduleArranger
     [Injectable]
     public class AddLessonBySchedArrService : IAddLessonBySchedArrService
     {
-        private readonly IAppConfigRepository _configRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
         private readonly IRepository<Subject> _subjectRepo;
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepository<Room> _roomRepo;
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _lessonsRepo;
-        private readonly IValidateJsonModelsService _validateModelsSvc;
+        private readonly IValidatePeriodicLessonJsonsService _validateModelsSvc;
 
-        private OrganizationalClass _orgClass = null!;
         private PeriodicLesson _entity = null!;
         private AddLessonRequestJson _model = null!;
         private AddLessonResponseJson _response = null!;
 
         public AddLessonBySchedArrService(
-            IAppConfigRepository configRepo,
             IRepository<OrganizationalClass> orgClassRepo,
             IRepository<Subject> subjectRepo,
             IRepository<Teacher> teacherRepo,
             IRepository<Room> roomRepo,
             IRepositoryBySchoolYear<PeriodicLesson> lessonsRepo,
-            IValidateJsonModelsService validateModelsSvc)
+            IValidatePeriodicLessonJsonsService validateModelsSvc)
         {
-            _configRepo = configRepo;
             _orgClassRepo = orgClassRepo;
             _subjectRepo = subjectRepo;
             _teacherRepo = teacherRepo;
@@ -105,13 +101,15 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 
         private async Task CreateAsync()
         {
+            var orgClass = (await _orgClassRepo.GetByIdAsync(_model.classId))!;
+
             _entity = new PeriodicLesson
             {
-                SchoolYearId = _orgClass.SchoolYearId,
+                SchoolYearId = orgClass.SchoolYearId,
                 CronPeriodicity = CronExpressionsHelper.Weekly(_model.time.hour, _model.time.minutes, _model.day),
                 CustomDuration = _model.customDuration,
                 LecturerId = _model.lecturerId,
-                ParticipatingOrganizationalClass = _orgClass,
+                ParticipatingOrganizationalClass = orgClass,
                 RoomId = _model.roomId,
                 SubjectId = _model.subjectId
             };
