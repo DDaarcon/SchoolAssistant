@@ -8,7 +8,7 @@ using SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
-    public interface IFetchScheduleArrangerDataService
+    public interface IFetchSchedArrDataService
     {
         Task<ScheduleClassSelectorEntryJson[]> FetchClassesForCurrentYearAsync();
         Task<ScheduleRoomEntryJson[]> FetchRoomsAsync();
@@ -17,14 +17,14 @@ namespace SchoolAssistant.Logic.ScheduleArranger
     }
 
     [Injectable]
-    public class FetchScheduleArrangerDataService : IFetchScheduleArrangerDataService
+    public class FetchSchedArrDataService : IFetchSchedArrDataService
     {
         private readonly IRepositoryBySchoolYear<OrganizationalClass> _orgClassRepo;
         private readonly IRepository<Subject> _subjectRepo;
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepository<Room> _roomRepo;
 
-        public FetchScheduleArrangerDataService(
+        public FetchSchedArrDataService(
             IRepositoryBySchoolYear<OrganizationalClass> orgClassRepo,
             IRepository<Subject> subjectRepo,
             IRepository<Teacher> teacherRepo,

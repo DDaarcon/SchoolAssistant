@@ -1,22 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SchoolAssistant.DAL.Models.Lessons;
+﻿using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Logic.General.PeriodicLessons;
 using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
-    public interface IAddLessonByScheduleArrangerService
+    public interface IAddLessonBySchedArrService
     {
         Task<AddLessonResponseJson> AddToClassAsync(AddLessonRequestJson model);
     }
 
     [Injectable]
-    public class AddLessonByScheduleArrangerService : IAddLessonByScheduleArrangerService
+    public class AddLessonBySchedArrService : IAddLessonBySchedArrService
     {
         private readonly IAppConfigRepository _configRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
@@ -24,19 +24,21 @@ namespace SchoolAssistant.Logic.ScheduleArranger
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepository<Room> _roomRepo;
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _lessonsRepo;
+        private readonly IValidateJsonModelsService _validateModelsSvc;
 
         private OrganizationalClass _orgClass = null!;
         private PeriodicLesson _entity = null!;
         private AddLessonRequestJson _model = null!;
         private AddLessonResponseJson _response = null!;
 
-        public AddLessonByScheduleArrangerService(
+        public AddLessonBySchedArrService(
             IAppConfigRepository configRepo,
             IRepository<OrganizationalClass> orgClassRepo,
             IRepository<Subject> subjectRepo,
             IRepository<Teacher> teacherRepo,
             IRepository<Room> roomRepo,
-            IRepositoryBySchoolYear<PeriodicLesson> lessonsRepo)
+            IRepositoryBySchoolYear<PeriodicLesson> lessonsRepo,
+            IValidateJsonModelsService validateModelsSvc)
         {
             _configRepo = configRepo;
             _orgClassRepo = orgClassRepo;
@@ -44,6 +46,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             _teacherRepo = teacherRepo;
             _roomRepo = roomRepo;
             _lessonsRepo = lessonsRepo;
+            _validateModelsSvc = validateModelsSvc;
         }
 
 
@@ -73,7 +76,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             if (!Enum.IsDefined(_model.day))
                 return ValidationFail("Błąd! Podano niezdefiniowany dzień");
 
-            if (!await ValidateTime())
+            if (!await _validateModelsSvc.ValidateTime(_model.time, _model.customDuration))
                 return ValidationFail("Wybrano nieodpowiednią godzinę dla zajęć");
 
             if (!await _orgClassRepo.ExistsAsync(_model.classId))
@@ -88,54 +91,11 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             if (!await _roomRepo.ExistsAsync(_model.roomId))
                 return ValidationFail("Błąd! Sala, w której odbywać się mają zajęcia, nie istnieje");
 
-            if (!await ValidateOverlappingWithOther())
+            if (!await _validateModelsSvc.ValidateOverlapping(_model))
                 return ValidationFail("Zajęcia kolidują z innymi");
 
             return true;
         }
-
-        private async Task<bool> ValidateTime()
-        {
-            var minHour = await _configRepo.ScheduleStartHour.GetAsync() ?? 0;
-            var maxHour = await _configRepo.ScheduleEndhour.GetAsync() ?? 24;
-            var duration = _model.customDuration ?? await _configRepo.DefaultLessonDuration.GetAsync() ?? 45;
-            var lessonEndHour = _model.time.hour + (_model.time.minutes + duration) / 60;
-
-            return _model.time.minutes >= 0 && _model.time.minutes < 60
-                && _model.time.hour >= minHour
-                && (lessonEndHour < maxHour
-                    || (lessonEndHour == maxHour
-                        && (_model.time.minutes + duration) % 60 == 0));
-        }
-
-        private async Task<bool> ValidateOverlappingWithOther()
-        {
-            _orgClass = (await _orgClassRepo.GetByIdAsync(_model.classId))!;
-
-            var lessons = await _lessonsRepo.AsQueryableByYear.ByYearOf(_orgClass)
-                .Where(x =>
-                    x.ParticipatingOrganizationalClassId == _model.classId
-                    || x.LecturerId == _model.lecturerId
-                    || x.RoomId == _model.roomId)
-                .ToListAsync();
-            var lessonsThatDay = lessons.Where(x => x.GetDayOfWeek() == _model.day);
-
-            var defaultDuration = await _configRepo.DefaultLessonDuration.GetAsync() ?? 45;
-
-            foreach (var lesson in lessonsThatDay)
-            {
-                var lessonStart = lesson.GetTime()!.Value;
-                var lessonDur = lesson.CustomDuration ?? defaultDuration;
-
-                var newStart = new TimeOnly(_model.time.hour, _model.time.minutes);
-                var newDur = _model.customDuration ?? defaultDuration;
-                if (TimeHelper.AreOverlapping(lessonStart, lessonDur, newStart, newDur))
-                    return false;
-            }
-
-            return true;
-        }
-
 
         private bool ValidationFail(string errorMsg)
         {

@@ -8,13 +8,13 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 {
     public class ScheduleArrangerModel : PageModel
     {
-        private readonly IFetchScheduleArrangerConfigService _fetchConfigService;
-        private readonly IFetchScheduleArrangerDataService _fetchDataService;
+        private readonly IFetchSchedArrConfigService _fetchConfigService;
+        private readonly IFetchSchedArrDataService _fetchDataService;
 
-        private readonly IFetchClassLessonsForScheduleArrangerService _fetchLessonsSvc;
-        private readonly IAddLessonByScheduleArrangerService _addLessonSvc;
+        private readonly IFetchClassLessonsForSchedArrService _fetchLessonsSvc;
+        private readonly IAddLessonBySchedArrService _addLessonSvc;
 
-        private readonly IFetchOtherLessonsForScheduleArrangerService _fetchOtherLessonsSvc;
+        private readonly IFetchOtherLessonsForSchedArrService _fetchOtherLessonsSvc;
 
         public ScheduleArrangerConfigJson Config { get; private set; } = null!;
         public ScheduleClassSelectorEntryJson[] Classes { get; private set; } = null!;
@@ -24,11 +24,11 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
 
         public ScheduleArrangerModel(
-            IFetchScheduleArrangerConfigService fetchConfigService,
-            IFetchScheduleArrangerDataService fetchDataService,
-            IFetchClassLessonsForScheduleArrangerService fetchLessonsService,
-            IAddLessonByScheduleArrangerService addLessonService,
-            IFetchOtherLessonsForScheduleArrangerService fetchOtherLessonsService)
+            IFetchSchedArrConfigService fetchConfigService,
+            IFetchSchedArrDataService fetchDataService,
+            IFetchClassLessonsForSchedArrService fetchLessonsService,
+            IAddLessonBySchedArrService addLessonService,
+            IFetchOtherLessonsForSchedArrService fetchOtherLessonsService)
         {
             _fetchConfigService = fetchConfigService;
             _fetchDataService = fetchDataService;

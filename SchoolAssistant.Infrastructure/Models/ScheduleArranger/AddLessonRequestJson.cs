@@ -1,6 +1,6 @@
 ﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
 {
-    public class AddLessonRequestJson
+    public class AddLessonRequestJson : IValidateLessonJson
     {
         public long classId { get; set; }
         public DayOfWeek day { get; set; }
@@ -9,5 +9,7 @@
         public long subjectId { get; set; }
         public long lecturerId { get; set; }
         public long roomId { get; set; }
+
+        public long? id => null;
     }
 }

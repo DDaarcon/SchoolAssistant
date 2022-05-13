@@ -17,7 +17,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         IRepository<OrganizationalClass> _orgClassRepo = null!;
         IRepository<Teacher> _teacherRepo = null!;
 
-        IFetchOtherLessonsForScheduleArrangerService _fetchLessonsService = null!;
+        IFetchOtherLessonsForSchedArrService _fetchLessonsService = null!;
 
         OrganizationalClass _orgClassWithSchedule = null!;
         OrganizationalClass _orgClass = null!;
@@ -42,7 +42,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _teacherRepo = new Repository<Teacher>(_Context, null);
 
-            _fetchLessonsService = new FetchOtherLessonsForScheduleArrangerService(_lessonRepo, _orgClassRepo);
+            _fetchLessonsService = new FetchOtherLessonsForSchedArrService(_lessonRepo, _orgClassRepo);
         }
 
 

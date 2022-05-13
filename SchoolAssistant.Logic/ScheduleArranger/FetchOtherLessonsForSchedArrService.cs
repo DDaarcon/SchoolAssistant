@@ -6,20 +6,20 @@ using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
-    public interface IFetchOtherLessonsForScheduleArrangerService
+    public interface IFetchOtherLessonsForSchedArrService
     {
         Task<ScheduleOtherLessonsJson?> ForAsync(long classId, long? teacherId, long? roomId);
     }
 
     [Injectable]
-    public class FetchOtherLessonsForScheduleArrangerService : IFetchOtherLessonsForScheduleArrangerService
+    public class FetchOtherLessonsForSchedArrService : IFetchOtherLessonsForSchedArrService
     {
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
 
         private OrganizationalClass? _orgClass;
 
-        public FetchOtherLessonsForScheduleArrangerService(
+        public FetchOtherLessonsForSchedArrService(
             IRepositoryBySchoolYear<PeriodicLesson> lessonRepo,
             IRepository<OrganizationalClass> orgClassRepo)
         {

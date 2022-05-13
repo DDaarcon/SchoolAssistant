@@ -14,7 +14,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 {
     public class FetchLessonsTests
     {
-        private IFetchClassLessonsForScheduleArrangerService _fetchLessonsService = null!;
+        private IFetchClassLessonsForSchedArrService _fetchLessonsService = null!;
 
         private ISchoolYearRepository _schoolYearRepository = null!;
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
@@ -56,7 +56,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
             _teacherRepo = new Repository<Teacher>(TestDatabase.Context, null);
             _lessonRepo = new Repository<PeriodicLesson>(TestDatabase.Context, null);
 
-            _fetchLessonsService = new FetchClassLessonsForScheduleArrangerService(_orgClassRepo);
+            _fetchLessonsService = new FetchClassLessonsForSchedArrService(_orgClassRepo);
         }
 
         private Task<SchoolYear> _Year => _schoolYearRepository.GetOrCreateCurrentAsync();

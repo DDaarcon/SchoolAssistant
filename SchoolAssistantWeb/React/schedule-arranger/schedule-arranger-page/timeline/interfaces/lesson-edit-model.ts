@@ -9,4 +9,5 @@ export default interface LessonEditModel {
     subjectId: number;
     lecturerId: number;
     roomId: number;
+    classId: number;
 }

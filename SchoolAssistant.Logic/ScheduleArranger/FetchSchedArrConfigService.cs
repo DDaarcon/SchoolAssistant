@@ -3,17 +3,17 @@ using SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
-    public interface IFetchScheduleArrangerConfigService
+    public interface IFetchSchedArrConfigService
     {
         Task<ScheduleArrangerConfigJson> FetchAsync();
     }
 
     [Injectable]
-    public class FetchScheduleArrangerConfigService : IFetchScheduleArrangerConfigService
+    public class FetchSchedArrConfigService : IFetchSchedArrConfigService
     {
         private readonly IAppConfigRepository _configRepo;
 
-        public FetchScheduleArrangerConfigService(
+        public FetchSchedArrConfigService(
             IAppConfigRepository configRepo)
         {
             _configRepo = configRepo;
