@@ -13,7 +13,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 {
     public interface IEditLessonBySchedArrService
     {
-
+        Task<ResponseJson> EditAsync(LessonEditModelJson model);
     }
 
     [Injectable]

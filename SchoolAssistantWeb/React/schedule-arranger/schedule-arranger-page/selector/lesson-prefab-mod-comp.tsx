@@ -7,28 +7,12 @@ import dataService from "../../schedule-data-service";
 
 
 
-interface ScheduleTeacherOptionEntry extends IdName {
-    mainSubject: boolean;
-}
-
-
 type LessonPrefabModCompProps = LessonModificationData & {
     submit: (info: LessonModificationData) => void;
 }
 type LessonPrefabModCompState = LessonModificationData & {}
 export default class LessonPrefabModComp extends React.Component<LessonPrefabModCompProps, LessonPrefabModCompState> {
     private _validator = new Validator<LessonModificationData>();
-
-    private get _subjectFilteredTeachers(): ScheduleTeacherOptionEntry[] {
-        return [
-            ...dataService.teachers
-                .filter(x => x.mainSubjectIds.includes(this.state.subjectId))
-                .map(x => ({ id: x.id, name: x.name, mainSubject: true })),
-            ...dataService.teachers
-                .filter(x => !x.mainSubjectIds.includes(this.state.subjectId) && x.additionalSubjectIds.includes(this.state.subjectId))
-                .map(x => ({ id: x.id, name: x.name, mainSubject: false }))
-        ]
-    }
 
     constructor(props) {
         super(props);
@@ -90,7 +74,7 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
                     value={this.state.teacherId}
                     onChange={this.createOnSelectChangeHandler('teacherId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'teacherId').map(x => x.error)}
-                    options={this._subjectFilteredTeachers.map(x => ({
+                    options={dataService.getTeachersBySubject(this.state.subjectId).map(x => ({
                         label: x.name,
                         value: x.id
                     })) }

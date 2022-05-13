@@ -82,6 +82,7 @@
     <None Remove="React\schedule-arranger\interfaces\page-model-to-react\schedule-subject-entry.ts" />
     <None Remove="React\schedule-arranger\interfaces\page-model-to-react\schedule-teacher-entry.ts" />
     <None Remove="React\schedule-arranger\interfaces\shared.ts" />
+    <None Remove="React\schedule-arranger\interfaces\teacher-option-entry.ts" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\selector.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\selector\add-lesson-prefab-tile.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\selector\lesson-prefab-mod-comp.tsx" />
@@ -99,6 +100,7 @@
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\teacher-busy-lessons.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\time-column.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\timeline-cell.tsx" />
+    <None Remove="React\schedule-arranger\services\teachers-by-subject-svc.ts" />
     <None Remove="React\shared.ts" />
     <None Remove="React\shared\enum-help.ts" />
     <None Remove="React\shared\form-controls\default-error-msg.ts" />
@@ -204,6 +206,7 @@
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\page-model-to-react\schedule-subject-entry.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\page-model-to-react\schedule-teacher-entry.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\interfaces\shared.ts" />
+    <TypeScriptCompile Include="React\schedule-arranger\interfaces\teacher-option-entry.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\selector.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\selector\add-lesson-prefab-tile.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\selector\lesson-prefab-mod-comp.tsx" />
@@ -221,6 +224,7 @@
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\teacher-busy-lessons.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\time-column.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\timeline-cell.tsx" />
+    <TypeScriptCompile Include="React\schedule-arranger\services\teachers-by-subject-svc.ts" />
     <TypeScriptCompile Include="React\shared.ts" />
     <TypeScriptCompile Include="React\shared\enum-help.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\default-error-msg.ts" />

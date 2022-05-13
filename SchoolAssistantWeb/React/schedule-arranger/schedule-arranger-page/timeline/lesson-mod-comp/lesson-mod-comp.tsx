@@ -1,4 +1,5 @@
 ﻿import React from "react"
+import { OptionProps } from "react-select";
 import { getEnumValues } from "../../../../shared/enum-help";
 import { Select, Option, OnChangeIdHandler, Input } from "../../../../shared/form-controls";
 import ModCompBase, { ModifyMethod } from "../../../../shared/form-controls/mod-comp-base";
@@ -8,6 +9,7 @@ import { displayMinutes, nameForDayOfWeek } from "../../../help-functions";
 import { Lesson } from "../../../interfaces/lesson";
 import { LessonTimelineEntry } from "../../../interfaces/lesson-timeline-entry";
 import { Time } from "../../../interfaces/shared";
+import TeacherOptionEntry from "../../../interfaces/teacher-option-entry";
 import { scheduleArrangerConfig } from "../../../main";
 import dataService from "../../../schedule-data-service";
 import LessonEditModel from "./../interfaces/lesson-edit-model";
@@ -171,11 +173,17 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                             name="lecturer-input"
                             value={this.state.data.lecturerId}
                             onChangeId={this.createOnSelectChangeHandler('lecturerId')}
-                            options={dataService.teachers.map(x => ({
+                            options={dataService.getTeachersBySubject(this.state.data.subjectId).map(x => ({
                                 label: x.name,
-                                value: x.id
+                                value: x.id,
+                                isMainTeacher: x.isMainTeacher
                             }))}
                             errorMessages={this._validator.getErrorMsgsFor('lecturerId')}
+                            optionStyle={(props) => ({
+                                backgroundColor: props.data.isMainTeacher && !props.isSelected
+                                    ? undefined
+                                    : '#fffa62'
+                            })}
                         />
 
                         <Select

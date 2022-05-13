@@ -13,6 +13,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         private readonly IFetchClassLessonsForSchedArrService _fetchLessonsSvc;
         private readonly IAddLessonBySchedArrService _addLessonSvc;
+        private readonly IEditLessonBySchedArrService _editLessonSvc;
 
         private readonly IFetchOtherLessonsForSchedArrService _fetchOtherLessonsSvc;
 
@@ -28,13 +29,15 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             IFetchSchedArrDataService fetchDataService,
             IFetchClassLessonsForSchedArrService fetchLessonsService,
             IAddLessonBySchedArrService addLessonService,
-            IFetchOtherLessonsForSchedArrService fetchOtherLessonsService)
+            IFetchOtherLessonsForSchedArrService fetchOtherLessonsService,
+            IEditLessonBySchedArrService editLessonSvc)
         {
             _fetchConfigService = fetchConfigService;
             _fetchDataService = fetchDataService;
             _fetchLessonsSvc = fetchLessonsService;
             _addLessonSvc = addLessonService;
             _fetchOtherLessonsSvc = fetchOtherLessonsService;
+            _editLessonSvc = editLessonSvc;
         }
 
 
@@ -54,16 +57,26 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             return new JsonResult(model);
         }
 
+
+
         public async Task<JsonResult> OnPostLessonAsync([FromBody] AddLessonRequestJson model)
         {
             var result = await _addLessonSvc.AddToClassAsync(model);
             return new JsonResult(result);
         }
+        public async Task<JsonResult> OnPostLessonModificationAsync([FromBody] LessonEditModelJson model)
+        {
+            var result = await _editLessonSvc.EditAsync(model);
+            return new JsonResult(result);
+        }
+
+
 
         public async Task<JsonResult> OnGetOtherLessonsAsync(long classId, long? teacherId, long? roomId)
         {
             var result = await _fetchOtherLessonsSvc.ForAsync(classId, teacherId, roomId);
             return new JsonResult(result);
         }
+
     }
 }

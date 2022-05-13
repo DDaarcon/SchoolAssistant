@@ -27,9 +27,9 @@ type SelectProps<TValue extends number | string, TOption extends Option<TValue>>
 
     containerClassName?: string;
     inputClassName?: string;
-    optionStyle?: (props: OptionProps<Option<TValue>>) => CSSObjectWithLabel;
+    optionStyle?: (props: OptionProps<TOption>) => CSSObjectWithLabel;
 }
-export default class Select<TValue extends number | string> extends React.Component<SelectProps<TValue, Option<TValue>>> {
+export default class Select<TValue extends number | string, TOption extends Option<TValue>> extends React.Component<SelectProps<TValue, TOption>> {
     private get _hasErrors() { return this.props.hasErrors ?? this.props.errorMessages.length; };
 
 
@@ -56,7 +56,7 @@ export default class Select<TValue extends number | string> extends React.Compon
             this.props.onChangeId?.(values.value);
     }
 
-    private _styles: StylesConfig<Option<TValue>> = {
+    private _styles: StylesConfig<TOption> = {
         option: (provided, props) => ({
             ...provided,
             ...(this.props.optionStyle?.(props) ?? {})

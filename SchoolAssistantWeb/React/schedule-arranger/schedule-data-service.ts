@@ -10,6 +10,7 @@ import { ScheduleSubjectEntry } from "./interfaces/page-model-to-react/schedule-
 import { ScheduleTeacherEntry } from "./interfaces/page-model-to-react/schedule-teacher-entry";
 import { Time } from "./interfaces/shared";
 import { scheduleArrangerConfig, server } from "./main";
+import TeachersBySubjectSvc from "./services/teachers-by-subject-svc";
 
 class ScheduleArrangerDataService {
     prefabs: LessonPrefab[] = [];
@@ -90,6 +91,12 @@ class ScheduleArrangerDataService {
             x.time,
             x.customDuration ?? scheduleArrangerConfig.defaultLessonDuration
         ));
+    }
+
+
+    getTeachersBySubject(subjectId: number) {
+        const svc = new TeachersBySubjectSvc(this.teachers);
+        return svc.getFor(subjectId);
     }
 
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {
