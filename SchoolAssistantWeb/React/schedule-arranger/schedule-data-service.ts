@@ -100,11 +100,8 @@ class ScheduleArrangerDataService {
     }
 
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {
-        let fetchTeacher = false, fetchRoom = false;
-        if (teacher)
-            fetchTeacher = teacher.lessons == undefined;
-        if (room)
-            fetchRoom = teacher.lessons == undefined;
+        const fetchTeacher = teacher != undefined && teacher?.lessons == undefined,
+            fetchRoom = room != undefined && room?.lessons == undefined;
 
         if (!fetchTeacher && !fetchRoom) return false;
 
