@@ -78,7 +78,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
                                 id = l.RoomId,
                                 name = l.Room.DisplayName
                             },
-                            orgClass = l.ParticipatingOrganizationalClass is not null ?new IdNameJson
+                            orgClass = l.ParticipatingOrganizationalClass is not null ? new IdNameJson
                             {
                                 id = l.ParticipatingOrganizationalClassId!.Value,
                                 name = l.ParticipatingOrganizationalClass.Name

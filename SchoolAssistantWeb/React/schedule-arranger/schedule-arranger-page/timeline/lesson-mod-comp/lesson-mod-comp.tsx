@@ -1,7 +1,6 @@
 ﻿import React from "react"
-import { OptionProps } from "react-select";
 import { getEnumValues } from "../../../../shared/enum-help";
-import { Select, Option, OnChangeIdHandler, Input } from "../../../../shared/form-controls";
+import { Select, Option, OnChangeIdHandler, Input, OnChangeHandler } from "../../../../shared/form-controls";
 import ModCompBase, { ModifyMethod } from "../../../../shared/form-controls/mod-comp-base";
 import { CommonModalProps } from "../../../../shared/modals/shared-modal-body";
 import { DayOfWeek } from "../../../enums/day-of-week";
@@ -9,12 +8,17 @@ import { displayMinutes, nameForDayOfWeek } from "../../../help-functions";
 import { Lesson } from "../../../interfaces/lesson";
 import { LessonTimelineEntry } from "../../../interfaces/lesson-timeline-entry";
 import { Time } from "../../../interfaces/shared";
-import TeacherOptionEntry from "../../../interfaces/teacher-option-entry";
 import { scheduleArrangerConfig } from "../../../main";
 import dataService from "../../../schedule-data-service";
 import LessonEditModel from "./../interfaces/lesson-edit-model";
 import './lesson-mod-comp.css';
 import OverlappingLessonPad from "./overlapping-lesson-pad";
+
+
+type LecturerOption = Option<number> & {
+    isMainTeacher: boolean;
+
+}
 
 type LessonModCompProps = CommonModalProps & {
     day: DayOfWeek;
@@ -79,32 +83,52 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     changeTimeAsync: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         const value = event.target.value;
 
-        await this.findOverlappingLessonsAndSetStateAsync(state => state.data.time = this.timeFromInput(value));
+        await this.refreshAsync(state => state.data.time = this.timeFromInput(value));
     }
 
     changeCustomDuration: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
         const value = event.target.value;
 
-        await this.findOverlappingLessonsAndSetStateAsync(state => state.data.customDuration = parseInt(value));
+        await this.refreshAsync(state => state.data.customDuration = parseInt(value));
     }
 
     changeUseDefaultDuration: React.ChangeEventHandler<HTMLInputElement> = async event => {
         const value = event.target.checked;
 
-        await this.findOverlappingLessonsAndSetStateAsync(state => state.defaultDuration = value);
+        await this.refreshAsync(state => state.defaultDuration = value);
     }
 
     changeDay: OnChangeIdHandler<number> = async value => {
         if (value instanceof Array) return;
 
         if (this.validateDay(value))
-            await this.findOverlappingLessonsAndSetStateAsync(state => state.data.day = value);
+            await this.refreshAsync(state => state.data.day = value);
     }
 
-    createOnSelectChangeHandler: (property: 'subjectId' | 'lecturerId' | 'roomId') => OnChangeIdHandler<number> = (property) =>
-        async value => {
-            await this.findOverlappingLessonsAndSetStateAsync(state => state.data[property] = value as number);
-        }
+    changeSubject: OnChangeIdHandler<number> = async (value) => {
+        await this.refreshAsync(state => {
+            if (value != state.data.subjectId)
+                state.data.lecturerId = undefined;
+            state.data.subjectId = value as number;
+        })
+    }
+
+    changeLecturer: OnChangeHandler<LecturerOption> = async (value) => {
+        if (value instanceof Array)
+            value = value[0];
+
+        const id = value.value;
+        const isMainTeacher = value.isMainTeacher;
+        await this.refreshAsync(state => state.data.lecturerId = id,
+            () => {
+                if (!isMainTeacher)
+                    this._validator.addWarning('lecturerId', "Wybrany nauzcyciel należy do dodatkowych z danego przedmiotu");
+            });
+    }
+
+    changeRoom: OnChangeIdHandler<number> = async (value) => {
+        await this.refreshAsync(state => state.data.roomId = value as number);
+    }
 
     submitAsync: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
@@ -160,7 +184,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                             label="Przedmiot"
                             name="subject-input"
                             value={this.state.data.subjectId}
-                            onChangeId={this.createOnSelectChangeHandler('subjectId')}
+                            onChangeId={this.changeSubject}
                             options={dataService.subjects.map(x => ({
                                 label: x.name,
                                 value: x.id
@@ -172,17 +196,18 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                             label="Nauczyciel"
                             name="lecturer-input"
                             value={this.state.data.lecturerId}
-                            onChangeId={this.createOnSelectChangeHandler('lecturerId')}
-                            options={dataService.getTeachersBySubject(this.state.data.subjectId).map(x => ({
+                            onChange={this.changeLecturer}
+                            options={dataService.getTeachersBySubject(this.state.data.subjectId).map<LecturerOption>(x => ({
                                 label: x.name,
                                 value: x.id,
                                 isMainTeacher: x.isMainTeacher
                             }))}
                             errorMessages={this._validator.getErrorMsgsFor('lecturerId')}
+                            warningMessages={this._validator.getWarningMsgsFor('lecturerId')}
                             optionStyle={(props) => ({
-                                backgroundColor: props.data.isMainTeacher && !props.isSelected
-                                    ? undefined
-                                    : '#fffa62'
+                                backgroundColor: !props.data.isMainTeacher && !props.isSelected
+                                    ? '#fffa62'
+                                    : '#ffffff'
                             })}
                         />
 
@@ -190,7 +215,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                             label="Pomieszczenie"
                             name="room-input"
                             value={this.state.data.roomId}
-                            onChangeId={this.createOnSelectChangeHandler('roomId')}
+                            onChangeId={this.changeRoom}
                             options={dataService.rooms.map(x => ({
                                 label: x.name,
                                 value: x.id
@@ -255,11 +280,11 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     }
 
 
-    private async findOverlappingLessonsAndSetStateAsync(stateSetMethod?: ModifyMethod<LessonModCompState>) {
+    private async refreshAsync(modifyStateMethod?: ModifyMethod<LessonModCompState>, beforeRerender?: () => void) {
         const newState = { ...this.state };
-        stateSetMethod(newState);
+        modifyStateMethod(newState);
 
-        const modifyStateMethods = [stateSetMethod];
+        const modifyStateMethods = [modifyStateMethod];
 
         if (this._validator.validate()) {
             const overlapping = await dataService.getOverlappingLessonsAsync({
@@ -273,6 +298,9 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
             modifyStateMethods.push(x => x.overlappingLessons = overlapping);
         }
 
-        this.setStateFn(...modifyStateMethods);
+        beforeRerender?.();
+
+        if (modifyStateMethods.some(x => x))
+            this.setStateFn(...modifyStateMethods);
     }
 }

@@ -7,6 +7,7 @@ type SubValidators<T> = {
 
 export type ValidationFail<TProp> = {
     error?: 'null' | 'empty' | 'invalidDate' | string;
+    warning?: string;
     on?: TProp;
 }
 
@@ -31,13 +32,32 @@ export default class Validator<T extends {}> {
 
     private _rules?: RulesForModel<T>;
 
-    private _errors?: ValidationFail<keyof T>[];
+    private _errors: ValidationFail<keyof T>[] = [];
     private _subValidators: SubValidators<T> = {};
 
-    get errors() { return this._errors ?? []; }
+    get errors() { return this._errors.filter(x => x.error); }
+    get warnings() { return this._errors.filter(x => x.warning); }
+
+    addError(prop: keyof T, msg: string) {
+        this._errors.push({
+            on: prop,
+            error: msg
+        });
+    }
+
+    addWarning(prop: keyof T, msg: string) {
+        this._errors.push({
+            on: prop,
+            warning: msg
+        });
+    }
 
     getErrorMsgsFor(prop: keyof T) {
         return this.errors.filter(x => x.on == prop).map(x => x.error);
+    }
+
+    getWarningMsgsFor(prop: keyof T) {
+        return this.warnings.filter(x => x.on == prop).map(x => x.warning);
     }
 
     get subValidators() { return this._subValidators; }
@@ -96,7 +116,7 @@ export default class Validator<T extends {}> {
         if (this._model[prop] != undefined && this._model[prop] != null)
             return true;
 
-        this.addError(prop, 'null', 'notNull');
+        this.addErrorInner(prop, 'null', 'notNull');
         return false;
     }
 
@@ -106,7 +126,7 @@ export default class Validator<T extends {}> {
 
         if (val['length']) return true;
 
-        this.addError(prop, 'empty', 'notEmpty');
+        this.addErrorInner(prop, 'empty', 'notEmpty');
         return false;
     }
 
@@ -117,7 +137,7 @@ export default class Validator<T extends {}> {
         if (val instanceof Date) return true;
         if (typeof val === 'string' || !isNaN(Date.parse(val as unknown as string))) return true;
 
-        this.addError(prop, 'invalidDate', 'validDate');
+        this.addErrorInner(prop, 'invalidDate', 'validDate');
         return false;
     }
 
@@ -161,7 +181,7 @@ export default class Validator<T extends {}> {
 
 
 
-    private addError<TProp extends keyof T>(prop: TProp, defaultMsg: string, rulesProp?: keyof Rules<T, TProp>) {
+    private addErrorInner<TProp extends keyof T>(prop: TProp, defaultMsg: string, rulesProp?: keyof Rules<T, TProp>) {
         let error;
         if (typeof this._rules[prop][rulesProp] === 'string')
             error = this._rules[prop][rulesProp];

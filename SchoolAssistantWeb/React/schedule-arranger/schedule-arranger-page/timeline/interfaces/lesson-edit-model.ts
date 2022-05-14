@@ -7,7 +7,7 @@ export default interface LessonEditModel {
     day: DayOfWeek;
     customDuration?: number;
     subjectId: number;
-    lecturerId: number;
+    lecturerId?: number;
     roomId: number;
     classId: number;
 }

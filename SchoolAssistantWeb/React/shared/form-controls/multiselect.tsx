@@ -6,11 +6,12 @@ type MultiselectProps<TValue extends number | string, TOption extends Option<TVa
     label: string;
     name: string;
     value?: MultiValue<TValue> | MultiValue<TOption>;
-    onChange?: OnChangeHandler<TValue>;
+    onChange?: OnChangeHandler<TOption>;
     onChangeId?: OnChangeIdHandler<TValue>;
     options: Options<TOption>;
     hasErrors?: boolean;
     errorMessages?: string[];
+    warningMessages?: string[];
     optionStyle?: <TInnerOption extends Option<TValue>>(props: OptionProps<TInnerOption>) => CSSObjectWithLabel;
 }
 const Multiselect = <TValue extends number | string>(props: MultiselectProps<TValue, Option<TValue>>) => {
@@ -24,6 +25,7 @@ const Multiselect = <TValue extends number | string>(props: MultiselectProps<TVa
             options={props.options}
             hasErrors={props.hasErrors}
             errorMessages={props.errorMessages}
+            warningMessages={props.warningMessages}
             multiple={true}
             optionStyle={props.optionStyle}
         />
