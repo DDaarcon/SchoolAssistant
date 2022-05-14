@@ -109,21 +109,22 @@ class ScheduleArrangerDataService {
         return undefined;
     }
 
-    async removeLessonAsync(id: number) {
+    async removeLessonAndGetResultAsync(id: number) {
         const { day, lesson } = this.getLessonById(id);
         if (!lesson) return true;
 
         const confirm = await new Promise<boolean>(resolve => {
             modalController.addConfirmation({
                 header: "Usuwanie zajęć",
-                text: "Czy na pewno chcesz usunąć te zajęcia?",
+                text: `Czy na pewno chcesz usunąć zajęcia z przedmiotu '${lesson.subject.name}'?`,
                 onConfirm: () => resolve(true),
                 onDecline: () => resolve(false)
             });
         });
-        console.log("debug point");
 
 
+
+        return confirm;
     }
 
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {

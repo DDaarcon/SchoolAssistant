@@ -143,10 +143,17 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
 
         if (response.success) {
             this.props.editStoredLesson(this.state.data);
-            this.props.assignedAtPresenter.close()
+            this.props.assignedAtPresenter.close();
         }
     }
 
+    removeLesson = () => {
+        dataService.removeLessonAndGetResultAsync(this.state.data.id)
+            .then(result => {
+                if (result)
+                    this.props.assignedAtPresenter.close();
+            });
+    }
 
     render() {
         return (
@@ -257,8 +264,9 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                                 {this._errorMessage ?? "Zapisz"}
                             </button>
                             <button
+                                type="button"
                                 className="lmc-remove-btn"
-                                onClick={ }
+                                onClick={this.removeLesson}
                             >
                                 Usuń zajęcia
                             </button>

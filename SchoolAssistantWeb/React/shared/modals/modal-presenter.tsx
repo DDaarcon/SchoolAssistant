@@ -72,7 +72,7 @@ export default class ModalPresenter extends React.Component<{}, ModalPresenterSt
                             onClick={this.removeLastModal}
                         ></div>
 
-                        {this.state.modals}
+                        {this.state.modals.map(x => x.component)}
                     </div>
                 </div>
             </>
