@@ -54,7 +54,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             if (!await ValidateAsync())
                 return _response;
 
-            await CreateAsync();
+            await UpdateAsync();
 
             return _response;
         }
@@ -103,7 +103,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             return false;
         }
 
-        private async Task CreateAsync()
+        private async Task UpdateAsync()
         {
             var orgClass = (await _orgClassRepo.GetByIdAsync(_model!.classId))!;
 
@@ -117,7 +117,6 @@ namespace SchoolAssistant.Logic.ScheduleArranger
             _entity.RoomId = _model.roomId;
             _entity.SubjectId = _model.subjectId;
 
-            _lessonRepo.Add(_entity);
             await _lessonRepo.SaveAsync();
         }
     }

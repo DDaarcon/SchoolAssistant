@@ -8,6 +8,7 @@ import { Time } from '../interfaces/shared';
 import { scheduleArrangerConfig, server } from '../main';
 import dataService from '../schedule-data-service';
 import DayColumn from './timeline/day-column';
+import LessonEditModel from './timeline/interfaces/lesson-edit-model';
 import TimeColumn from './timeline/time-column';
 
 type ScheduleArrangerTimelineProps = {
@@ -31,7 +32,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
         addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
     }
 
-    onDropped = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+    addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
         this.hideOtherLessonsShadows();
 
         const prefab: LessonPrefab | undefined = JSON.parse(data.getData("prefab"));
@@ -61,6 +62,40 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
         })
     }
 
+
+    editLesson = (model: LessonEditModel) => {
+        const { day, lesson } = dataService.getLessonById(model.id);
+        if (!lesson)
+            return;
+
+        if (day != model.day) {
+            const oldDayLessons = dataService.lessons.find(x => x.dayIndicator == day);
+            oldDayLessons.lessons.splice(oldDayLessons.lessons.indexOf(lesson), 1);
+
+            dataService.lessons.find(x => x.dayIndicator == model.day).lessons.push(lesson);
+        }
+
+        lesson.time = model.time;
+        lesson.customDuration = model.customDuration;
+
+        if (lesson.lecturer.id != model.lecturerId)
+            lesson.lecturer = {
+                id: model.lecturerId,
+                name: dataService.teachers.find(x => x.id == model.lecturerId).shortName
+            };
+        if (lesson.room.id != model.roomId)
+            lesson.room = {
+                id: model.roomId,
+                name: dataService.rooms.find(x => x.id == model.roomId).name
+            };
+        if (lesson.subject.id != model.subjectId)
+            lesson.subject = {
+                id: model.subjectId,
+                name: dataService.subjects.find(x => x.id == model.subjectId).name
+            };
+
+        this.forceUpdate();
+    }
 
 
     initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
@@ -110,8 +145,8 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
                         lessons={dataService.lessons.find(x => x.dayIndicator == day)?.lessons ?? []}
                         teacherBusyLessons={this.state.teacherBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
                         roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
-                        addLesson={this.onDropped}
-                        
+                        addLesson={this.addLesson}
+                        editStoredLesson={this.editLesson}
                     />
                 ))}
 

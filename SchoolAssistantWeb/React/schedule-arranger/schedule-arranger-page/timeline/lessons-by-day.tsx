@@ -4,11 +4,13 @@ import { DayOfWeek } from "../../enums/day-of-week";
 import { displayTime } from "../../help-functions";
 import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import GenericLessonTile from "./generic-lesson-tile";
+import LessonEditModel from "./interfaces/lesson-edit-model";
 import LessonModComp from "./lesson-mod-comp/lesson-mod-comp";
 
 type LessonsByDayProps = {
     day: DayOfWeek;
     lessons: LessonTimelineEntry[];
+    editStoredLesson: (model: LessonEditModel) => void;
 }
 type LessonsByDayState = {
 
@@ -20,7 +22,8 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
             modificationComponent: LessonModComp,
             modificationComponentProps: {
                 lesson,
-                day: this.props.day
+                day: this.props.day,
+                editStoredLesson: this.props.editStoredLesson
             },
             style: {
                 width: '800px'

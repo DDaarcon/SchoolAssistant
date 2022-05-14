@@ -18,12 +18,12 @@ import OverlappingLessonPad from "./overlapping-lesson-pad";
 
 type LecturerOption = Option<number> & {
     isMainTeacher: boolean;
-
 }
 
 type LessonModCompProps = CommonModalProps & {
     day: DayOfWeek;
     lesson: LessonTimelineEntry;
+    editStoredLesson: (model: LessonEditModel) => void;
 }
 type LessonModCompState = {
     data: LessonEditModel;
@@ -142,6 +142,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         const response = await server.postAsync<ResponseJson>("LessonModification", {}, this.state.data);
 
         if (response.success) {
+            this.props.editStoredLesson(this.state.data);
             this.props.assignedAtPresenter.close(this.props.assignedAtPresenter.uniqueId)
         }
     }

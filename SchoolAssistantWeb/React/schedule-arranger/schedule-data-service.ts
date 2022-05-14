@@ -99,6 +99,15 @@ class ScheduleArrangerDataService {
         return svc.getFor(subjectId);
     }
 
+    getLessonById(id: number) {
+        for (const lessons of this.lessons) {
+            const lesson = lessons.lessons.find(x => x.id == id);
+            if (lesson)
+                return { day: lessons.dayIndicator, lesson }
+        }
+        return undefined;
+    }
+
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {
         const fetchTeacher = teacher != undefined && teacher?.lessons == undefined,
             fetchRoom = room != undefined && room?.lessons == undefined;

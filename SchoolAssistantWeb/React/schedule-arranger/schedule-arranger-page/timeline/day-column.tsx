@@ -19,7 +19,7 @@ type DayColumnProps = {
     roomBusyLessons?: LessonTimelineEntry[];
 
     addLesson: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
-    editLesson: (model: LessonEditModel) => void;
+    editStoredLesson: (model: LessonEditModel) => void;
 }
 type DayColumnState = {
     shadowFor?: Time;
@@ -98,6 +98,7 @@ export default class DayColumn extends React.Component<DayColumnProps, DayColumn
                 <LessonsByDay
                     lessons={this.props.lessons}
                     day={this.props.dayIndicator}
+                    editStoredLesson={this.props.editStoredLesson}
                 />
                 {this._cells}
             </div>
