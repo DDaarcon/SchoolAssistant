@@ -3,12 +3,13 @@ import { getEnumValues } from "../../../../shared/enum-help";
 import { Select, Option, OnChangeIdHandler, Input, OnChangeHandler } from "../../../../shared/form-controls";
 import ModCompBase, { ModifyMethod } from "../../../../shared/form-controls/mod-comp-base";
 import { CommonModalProps } from "../../../../shared/modals/shared-modal-body";
+import { ResponseJson } from "../../../../shared/server-connection";
 import { DayOfWeek } from "../../../enums/day-of-week";
 import { displayMinutes, nameForDayOfWeek } from "../../../help-functions";
 import { Lesson } from "../../../interfaces/lesson";
 import { LessonTimelineEntry } from "../../../interfaces/lesson-timeline-entry";
 import { Time } from "../../../interfaces/shared";
-import { scheduleArrangerConfig } from "../../../main";
+import { scheduleArrangerConfig, server } from "../../../main";
 import dataService from "../../../schedule-data-service";
 import LessonEditModel from "./../interfaces/lesson-edit-model";
 import './lesson-mod-comp.css';
@@ -122,7 +123,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         await this.refreshAsync(state => state.data.lecturerId = id,
             () => {
                 if (!isMainTeacher)
-                    this._validator.addWarning('lecturerId', "Wybrany nauzcyciel należy do dodatkowych z danego przedmiotu");
+                    this._validator.addWarning('lecturerId', "Wybrany nauczyciel należy do dodatkowych z danego przedmiotu");
             });
     }
 
@@ -133,7 +134,16 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
     submitAsync: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
 
+        if (!this._validator.validate()) {
+            this.forceUpdate();
+            return;
+        }
 
+        const response = await server.postAsync<ResponseJson>("LessonModification", {}, this.state.data);
+
+        if (response.success) {
+            this.props.assignedAtPresenter.close(this.props.assignedAtPresenter.uniqueId)
+        }
     }
 
 
@@ -205,9 +215,12 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                             errorMessages={this._validator.getErrorMsgsFor('lecturerId')}
                             warningMessages={this._validator.getWarningMsgsFor('lecturerId')}
                             optionStyle={(props) => ({
-                                backgroundColor: !props.data.isMainTeacher && !props.isSelected
-                                    ? '#fffa62'
-                                    : '#ffffff'
+                                backgroundColor: props.isSelected
+                                    ? '#c9fbff'
+                                    : props.data.isMainTeacher
+                                        ? '#ffffff'
+                                        : '#fffa62',
+                                color: '#000000'
                             })}
                         />
 
@@ -284,23 +297,21 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
         const newState = { ...this.state };
         modifyStateMethod(newState);
 
-        const modifyStateMethods = [modifyStateMethod];
-
+        let lessons: Lesson[];
         if (this._validator.validate()) {
-            const overlapping = await dataService.getOverlappingLessonsAsync({
+            lessons = await dataService.getOverlappingLessonsAsync({
                 day: newState.data.day,
                 time: newState.data.time,
                 customDuration: newState.defaultDuration ? undefined : newState.data.customDuration,
                 teacherId: newState.data.lecturerId,
                 roomId: newState.data.roomId
             }, this.state.data.id);
-
-            modifyStateMethods.push(x => x.overlappingLessons = overlapping);
         }
+        else
+            lessons = [];
 
         beforeRerender?.();
 
-        if (modifyStateMethods.some(x => x))
-            this.setStateFn(...modifyStateMethods);
+        this.setStateFn(state => state.overlappingLessons = lessons, modifyStateMethod);
     }
 }

@@ -1,8 +1,7 @@
 ﻿import React from "react";
-import { Select, Option } from "../../../shared/form-controls";
-import Validator from "../../../shared/validator";
+import { Select, Option, OnChangeIdHandler } from "../../../shared/form-controls";
+import ModCompBase from "../../../shared/form-controls/mod-comp-base";
 import { LessonModificationData } from "../../interfaces/lesson-modification-data";
-import { IdName } from "../../interfaces/shared";
 import dataService from "../../schedule-data-service";
 
 
@@ -10,20 +9,22 @@ import dataService from "../../schedule-data-service";
 type LessonPrefabModCompProps = LessonModificationData & {
     submit: (info: LessonModificationData) => void;
 }
-type LessonPrefabModCompState = LessonModificationData & {}
-export default class LessonPrefabModComp extends React.Component<LessonPrefabModCompProps, LessonPrefabModCompState> {
-    private _validator = new Validator<LessonModificationData>();
+type LessonPrefabModCompState = {
+    data: LessonModificationData;
+}
+export default class LessonPrefabModComp extends ModCompBase<LessonModificationData, LessonPrefabModCompProps, LessonPrefabModCompState> {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            subjectId: this.props.subjectId,
-            teacherId: this.props.teacherId,
-            roomId: this.props.roomId
+            data: {
+                subjectId: this.props.subjectId,
+                teacherId: this.props.teacherId,
+                roomId: this.props.roomId
+            }
         }
 
-        this._validator.forModelGetter(() => this.state);
         this._validator.setRules({
             subjectId: { notNull: true },
             teacherId: { notNull: true },
@@ -31,14 +32,18 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
         })
     }
 
-    createOnSelectChangeHandler: (property: keyof LessonPrefabModCompState) => ((value: Option<number>) => void) = (property) =>
+    createOnSelectChangeHandler: (property: keyof LessonModificationData) => OnChangeIdHandler<number> = (property) =>
         (value) => {
-            this.setState(prevState => {
-                const state = { ...prevState };
-                state[property] = value.value;
-                return state;
-            });
+            this.setStateFnData(data => data[property] = value as number);
         }
+
+    changeSubject: OnChangeIdHandler<number> = value => {
+        this.setStateFnData(data => {
+            if (value != data.subjectId)
+                data.teacherId = undefined;
+            data.subjectId = value as number;
+        })
+    }
 
 
     onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -50,7 +55,7 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
             return;
         }
 
-        this.props.submit(this.state);
+        this.props.submit(this.state.data);
     }
 
     render() {
@@ -59,8 +64,8 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
                 <Select
                     label="Przedmiot"
                     name="subject-input"
-                    value={this.state.subjectId}
-                    onChange={this.createOnSelectChangeHandler('subjectId')}
+                    value={this.state.data.subjectId}
+                    onChangeId={this.changeSubject}
                     errorMessages={this._validator.errors.filter(x => x.on == 'subjectId').map(x => x.error)}
                     options={dataService.subjects.map(x => ({
                         label: x.name,
@@ -71,10 +76,10 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
                 <Select
                     label="Nauczyciel"
                     name="teacher-input"
-                    value={this.state.teacherId}
-                    onChange={this.createOnSelectChangeHandler('teacherId')}
+                    value={this.state.data.teacherId}
+                    onChangeId={this.createOnSelectChangeHandler('teacherId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'teacherId').map(x => x.error)}
-                    options={dataService.getTeachersBySubject(this.state.subjectId).map(x => ({
+                    options={dataService.getTeachersBySubject(this.state.data.subjectId).map(x => ({
                         label: x.name,
                         value: x.id
                     })) }
@@ -83,8 +88,8 @@ export default class LessonPrefabModComp extends React.Component<LessonPrefabMod
                 <Select
                     label="Pomieszczenie"
                     name="room-input"
-                    value={this.state.roomId}
-                    onChange={this.createOnSelectChangeHandler('roomId')}
+                    value={this.state.data.roomId}
+                    onChangeId={this.createOnSelectChangeHandler('roomId')}
                     errorMessages={this._validator.errors.filter(x => x.on == 'roomId').map(x => x.error)}
                     options={dataService.rooms.map(x => ({
                         label: x.name,

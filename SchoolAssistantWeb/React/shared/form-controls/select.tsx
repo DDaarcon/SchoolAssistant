@@ -35,6 +35,9 @@ export default class Select<TValue extends number | string, TOption extends Opti
 
 
     private prepareValue() {
+        if (this.props.value == null || this.props.value == undefined)
+            return null;
+
         if (this.props.value instanceof Array)
             return this.props.value.map((v) => this.prepareOneValue(v));
 

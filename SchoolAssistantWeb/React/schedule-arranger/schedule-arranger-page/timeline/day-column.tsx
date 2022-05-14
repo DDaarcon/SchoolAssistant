@@ -4,6 +4,7 @@ import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import { Time } from "../../interfaces/shared";
 import { scheduleArrangerConfig } from "../../main";
 import DayLabel from "./day-label";
+import LessonEditModel from "./interfaces/lesson-edit-model";
 import LessonPlacingShadow from "./lesson-placing-shadow";
 import LessonsByDay from "./lessons-by-day";
 import RoomBusyLessons from "./room-busy-lessons";
@@ -17,7 +18,8 @@ type DayColumnProps = {
     teacherBusyLessons?: LessonTimelineEntry[];
     roomBusyLessons?: LessonTimelineEntry[];
 
-    dropped: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
+    addLesson: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
+    editLesson: (model: LessonEditModel) => void;
 }
 type DayColumnState = {
     shadowFor?: Time;
@@ -54,7 +56,7 @@ export default class DayColumn extends React.Component<DayColumnProps, DayColumn
                 key={i}
                 dayIndicator={this.props.dayIndicator}
                 cellIndex={i}
-                dropped={this.props.dropped}
+                dropped={this.props.addLesson}
                 entered={this.onEntered}
                 time={cellTime}
             />);
@@ -62,9 +64,9 @@ export default class DayColumn extends React.Component<DayColumnProps, DayColumn
 
 
 
-    dropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+    addLesson = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
         this.hideLessonShadow();
-        this.props.dropped(dayIndicator, cellIndex, time, data);
+        this.props.addLesson(dayIndicator, cellIndex, time, data);
     }
 
     onEntered = (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
