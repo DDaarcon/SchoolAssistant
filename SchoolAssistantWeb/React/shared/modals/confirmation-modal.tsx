@@ -12,12 +12,17 @@ type ConfirmationModalState = {
 
 }
 export default class ConfirmationModal extends React.Component<ConfirmationModalProps, ConfirmationModalState> {
+    constructor(props) {
+        super(props);
+        this.props.assignedAtPresenter.onClose = this.onCloseDecline;
+    }
+
     onCloseConfirm = () => this.onCloseWith(this.props.onConfirm);
     onCloseDecline = () => this.onCloseWith(this.props.onDecline);
 
     onCloseWith = (action?: () => void) => {
         action?.();
-        this.props.assignedAtPresenter?.close(this.props.assignedAtPresenter.uniqueId);
+        this.props.assignedAtPresenter?.close();
     }
 
     render() {

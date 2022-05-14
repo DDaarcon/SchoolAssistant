@@ -143,7 +143,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
 
         if (response.success) {
             this.props.editStoredLesson(this.state.data);
-            this.props.assignedAtPresenter.close(this.props.assignedAtPresenter.uniqueId)
+            this.props.assignedAtPresenter.close()
         }
     }
 
@@ -255,6 +255,12 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                                 disabled={this._errorMessage != undefined}
                             >
                                 {this._errorMessage ?? "Zapisz"}
+                            </button>
+                            <button
+                                className="lmc-remove-btn"
+                                onClick={ }
+                            >
+                                Usuń zajęcia
                             </button>
                         </div>
                     </div>

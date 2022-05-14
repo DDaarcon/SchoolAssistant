@@ -3,7 +3,8 @@
 export type CommonModalProps = {
     assignedAtPresenter: {
         uniqueId?: number;
-        close?: (uniqueId: number) => void;
+        close?: () => void;
+        onClose?: () => void;
     }
 }
 
@@ -15,7 +16,7 @@ type ModalBodyProps = CommonModalProps & {
 }
 export const ModalBody: (props: ModalBodyProps) => JSX.Element = (props) => {
     const close = () => {
-        props.assignedAtPresenter?.close(props.assignedAtPresenter.uniqueId);
+        props.assignedAtPresenter?.close();
     }
 
     return (

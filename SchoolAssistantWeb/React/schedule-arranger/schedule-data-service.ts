@@ -1,4 +1,5 @@
-﻿import { DayOfWeek } from "./enums/day-of-week";
+﻿import { modalController } from "../shared/modals";
+import { DayOfWeek } from "./enums/day-of-week";
 import { areTimesOverlappingByDuration } from "./help-functions";
 import { DayLessons } from "./interfaces/day-lessons";
 import { Lesson } from "./interfaces/lesson";
@@ -106,6 +107,23 @@ class ScheduleArrangerDataService {
                 return { day: lessons.dayIndicator, lesson }
         }
         return undefined;
+    }
+
+    async removeLessonAsync(id: number) {
+        const { day, lesson } = this.getLessonById(id);
+        if (!lesson) return true;
+
+        const confirm = await new Promise<boolean>(resolve => {
+            modalController.addConfirmation({
+                header: "Usuwanie zajęć",
+                text: "Czy na pewno chcesz usunąć te zajęcia?",
+                onConfirm: () => resolve(true),
+                onDecline: () => resolve(false)
+            });
+        });
+        console.log("debug point");
+
+
     }
 
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {

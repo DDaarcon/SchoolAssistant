@@ -84,15 +84,18 @@
     grid-row-end: bottom;
     text-align: center;
 }
-.lmc-op-btn {
+.lmc-op-more {
     grid-column-start: infoEnd;
     grid-column-end: end;
     grid-row-start: top;
     grid-row-end: bottom;
+    justify-content: center;
+}
+
+.lmc-op-more-btn {
     font-size: 1.8em;
-    text-align: center;
+    width: 100%;
     padding: 0;
     background-color: transparent;
     border: 0;
 }
-

@@ -2,7 +2,10 @@
 import { CommonModalProps } from "./shared-modal-body";
 
 type ModalPresenterState = {
-    modals: React.ReactElement<CommonModalProps>[];
+    modals: {
+        component: React.ReactElement<CommonModalProps>;
+        onClose?: () => void;
+    }[];
 }
 export default class ModalPresenter extends React.Component<{}, ModalPresenterState> {
 
@@ -17,11 +20,13 @@ export default class ModalPresenter extends React.Component<{}, ModalPresenterSt
     addModal(modal: React.ReactElement<CommonModalProps>, uniqueId: number) {
         if (modal.props && modal.props.assignedAtPresenter) {
             modal.props.assignedAtPresenter.uniqueId = uniqueId;
-            modal.props.assignedAtPresenter.close = this.removeModalById;
+            modal.props.assignedAtPresenter.close = () => this.removeModalById(uniqueId);
         }
         this.setState(state => {
             return {
-                modals: [...state.modals, modal]
+                modals: [...state.modals, {
+                    component: modal
+                }]
             }
         });
     }
@@ -36,11 +41,22 @@ export default class ModalPresenter extends React.Component<{}, ModalPresenterSt
 
     removeModalById = (uniqueId: number) => {
         this.setState(state => {
-            const filtered = state.modals.filter(x => x.props.assignedAtPresenter?.uniqueId != uniqueId);
-            return {
-                modals: filtered
-            }
+            const index = state.modals.findIndex(x => x.component.props.assignedAtPresenter.uniqueId == uniqueId);
+            if (index == -1)
+                return state;
+
+            const modal = state.modals.splice(index, 1)[0];
+            modal.onClose?.();
+
+            return state;
         });
+    }
+
+    setOnCloseAction = (uniqueId: number, onClose?: () => void) => {
+        const modal = this.state.modals?.find(x => x.component.props.assignedAtPresenter?.uniqueId == uniqueId);
+        if (!modal) return;
+
+        modal.onClose = onClose;
     }
 
     render() {
