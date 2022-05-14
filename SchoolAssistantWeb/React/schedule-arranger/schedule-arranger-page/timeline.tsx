@@ -31,24 +31,18 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
         addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
     }
 
-    onDropped = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+    onDropped = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
         this.hideOtherLessonsShadows();
 
         const prefab: LessonPrefab | undefined = JSON.parse(data.getData("prefab"));
 
-        const lessons = dataService.lessons[dayIndicator];
-        if (!lessons) return;
-
-        for (const lesson of lessons.lessons ?? []) {
-            const overlaps = areTimesOverlappingByDuration(
-                lesson.time,
-                lesson.customDuration ?? scheduleArrangerConfig.defaultLessonDuration,
-                time,
-                scheduleArrangerConfig.defaultLessonDuration
-            );
-
-            if (overlaps) return;
-        }
+        const lessons = await dataService.getOverlappingLessonsAsync({
+            day: dayIndicator,
+            time,
+            teacherId: prefab?.lecturer.id,
+            roomId: prefab?.room.id
+        });
+        if (lessons.length) return;
 
         server.postAsync<AddLessonResponse>("Lesson", {}, {
             classId: scheduleArrangerConfig.classId,
@@ -116,7 +110,8 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
                         lessons={dataService.lessons.find(x => x.dayIndicator == day)?.lessons ?? []}
                         teacherBusyLessons={this.state.teacherBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
                         roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
-                        dropped={this.onDropped}
+                        addLesson={this.onDropped}
+                        
                     />
                 ))}
 
