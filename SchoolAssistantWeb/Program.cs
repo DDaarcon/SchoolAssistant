@@ -86,7 +86,8 @@ app.UseReact(config =>
         .AddScriptWithoutTransform("~/dist/react_lib.bundle.js")
         .AddScriptWithoutTransform("~/dist/shared.bundle.js")
         .AddScriptWithoutTransform("~/dist/data_management.bundle.js")
-        .AddScriptWithoutTransform("~/dist/schedule_arranger.bundle.js");
+        .AddScriptWithoutTransform("~/dist/schedule_arranger.bundle.js")
+        .AddScriptWithoutTransform("~/dist/schedule_display.bundle.js");
 
 });
 

@@ -101,6 +101,9 @@
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\time-column.tsx" />
     <None Remove="React\schedule-arranger\schedule-arranger-page\timeline\timeline-cell.tsx" />
     <None Remove="React\schedule-arranger\services\teachers-by-subject-svc.ts" />
+    <None Remove="React\schedule-display.ts" />
+    <None Remove="React\schedule-display\enums\day-of-week.ts" />
+    <None Remove="React\schedule-display\schedule.tsx" />
     <None Remove="React\shared.ts" />
     <None Remove="React\shared\enum-help.ts" />
     <None Remove="React\shared\form-controls\default-error-msg.ts" />
@@ -121,16 +124,17 @@
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.17.4" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.17.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.5" />
+    <PackageReference Include="Microsoft.ClearScript.V8.ICUData" Version="7.2.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.4" />
     <PackageReference Include="React.AspNet" Version="5.2.12" />
   </ItemGroup>
 
@@ -225,6 +229,9 @@
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\time-column.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\schedule-arranger-page\timeline\timeline-cell.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\services\teachers-by-subject-svc.ts" />
+    <TypeScriptCompile Include="React\schedule-display.ts" />
+    <TypeScriptCompile Include="React\schedule-display\enums\day-of-week.ts" />
+    <TypeScriptCompile Include="React\schedule-display\schedule.tsx" />
     <TypeScriptCompile Include="React\shared.ts" />
     <TypeScriptCompile Include="React\shared\enum-help.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\default-error-msg.ts" />

@@ -1,4 +1,5 @@
 ﻿import * as React from "react";
+import './loader.css';
 
 export enum LoaderType {
     DivWholeSpace,

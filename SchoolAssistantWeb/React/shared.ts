@@ -1,7 +1,10 @@
-﻿import * as Form from './shared/form-controls';
-import Validator from './shared/validator';
-import * as Modals from './shared/modals';
-import * as Loader from './shared/loader';
-import * as Server from './shared/server-connection';
-import * as EnumHelp from './shared/enum-help';
+﻿import * as I from './shared/form-controls';
+import II from './shared/validator';
+import * as III from './shared/modals';
+import * as IV from './shared/loader';
+import * as V from './shared/server-connection';
+import * as VI from './shared/enum-help';
 
+export {
+    I, II, III, IV, V, VI
+}

@@ -5,11 +5,15 @@ module.exports = {
 	entry: {
 		data_management: {
 			import: './React/data-management.ts',
-			dependOn: [ 'shared' ]
+			dependOn: [ 'react_lib', 'shared' ]
 		},
 		schedule_arranger: {
 			import: './React/schedule-arranger.ts',
-			dependOn: [ 'shared' ]
+			dependOn: ['react_lib', 'shared' ]
+		},
+		schedule_display: {
+			import: './React/schedule-display.ts',
+			dependOn: ['react_lib', 'shared']
 		},
 		shared: {
 			import: './React/shared.ts'

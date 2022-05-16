@@ -165,7 +165,7 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
         if (response.success) {
             this.props.selectRecord(response.id);
             //await this.props.reloadAsync();
-            this.props.assignedAtPresenter.close(this.props.assignedAtPresenter.uniqueId);
+            this.props.assignedAtPresenter.close();
         }
         else
             console.debug(response);
