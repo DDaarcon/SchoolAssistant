@@ -21,8 +21,13 @@
     flex-grow: 1;
 }
 
+.lmc-right-bottom {
+    display: flex;
+    gap: 15px;
+}
+
 .lmc-save-btn {
-    width: 100%;
+    flex: 2;
     border: 3px outset #daf4d5;
     border-radius: 5px;
     background-color: #e5ffbe;
@@ -34,6 +39,14 @@
     background-color: #ffd1d1;
     color: #5c5c5c;
     border: 2px outset #ff0000;
+}
+
+.lmc-remove-btn {
+    flex: 1;
+    border: 3px outset #ea7373;
+    border-radius: 5px;
+    background-color: #ffd1d1;
+    padding: 3px;
 }
 
 .lmc-overlap-pad {

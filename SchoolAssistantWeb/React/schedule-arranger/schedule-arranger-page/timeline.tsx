@@ -30,6 +30,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
         addEventListener('dragBegan', (event: CustomEvent) => this.initiateShowingOtherLessonsShadows(event));
         addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
+        addEventListener('timeline-lessons-rerender', this.rerender);
     }
 
     addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
@@ -64,32 +65,32 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
 
     editLesson = (model: LessonEditModel) => {
-        const { day, lesson } = dataService.getLessonById(model.id);
-        if (!lesson)
+        const dayAndLesson = dataService.getLessonById(model.id);
+        if (!dayAndLesson)
             return;
 
-        if (day != model.day) {
-            const oldDayLessons = dataService.lessons.find(x => x.dayIndicator == day);
-            oldDayLessons.lessons.splice(oldDayLessons.lessons.indexOf(lesson), 1);
+        if (dayAndLesson.day != model.day) {
+            const oldDayLessons = dataService.lessons.find(x => x.dayIndicator == dayAndLesson.day);
+            oldDayLessons.lessons.splice(oldDayLessons.lessons.indexOf(dayAndLesson.lesson), 1);
 
-            dataService.lessons.find(x => x.dayIndicator == model.day).lessons.push(lesson);
+            dataService.lessons.find(x => x.dayIndicator == model.day).lessons.push(dayAndLesson.lesson);
         }
 
-        lesson.time = model.time;
-        lesson.customDuration = model.customDuration;
+        dayAndLesson.lesson.time = model.time;
+        dayAndLesson.lesson.customDuration = model.customDuration;
 
-        if (lesson.lecturer.id != model.lecturerId)
-            lesson.lecturer = {
+        if (dayAndLesson.lesson.lecturer.id != model.lecturerId)
+            dayAndLesson.lesson.lecturer = {
                 id: model.lecturerId,
                 name: dataService.teachers.find(x => x.id == model.lecturerId).shortName
             };
-        if (lesson.room.id != model.roomId)
-            lesson.room = {
+        if (dayAndLesson.lesson.room.id != model.roomId)
+            dayAndLesson.lesson.room = {
                 id: model.roomId,
                 name: dataService.rooms.find(x => x.id == model.roomId).name
             };
-        if (lesson.subject.id != model.subjectId)
-            lesson.subject = {
+        if (dayAndLesson.lesson.subject.id != model.subjectId)
+            dayAndLesson.lesson.subject = {
                 id: model.subjectId,
                 name: dataService.subjects.find(x => x.id == model.subjectId).name
             };
@@ -153,4 +154,6 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
             </div>
         )
     }
+
+    private rerender = () => this.forceUpdate();
 }

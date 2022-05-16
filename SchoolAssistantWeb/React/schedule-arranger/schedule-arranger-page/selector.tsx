@@ -1,4 +1,6 @@
-﻿import React from "react";
+﻿import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from '@fullcalendar/daygrid';
+import React from "react";
 import { modalController } from "../../shared/modals";
 import { DayLessons } from "../interfaces/day-lessons";
 import { LessonModificationData } from "../interfaces/lesson-modification-data";
@@ -70,6 +72,23 @@ export default class ScheduleArrangerSelector extends React.Component<ScheduleAr
     render() {
         return (
             <div className="schedule-arranger-selector">
+                <FullCalendar
+                    plugins={[dayGridPlugin]}
+                    locale: '@locale',
+                headerToolbar: false,
+                initialView: 'timeGridWeek',
+                dayHeaderFormat: {
+                    weekday: 'short'
+            },
+                hiddenDays: [@string.Join(", ", hiddenDays)],
+                weekNumbers:  false,
+                slotMinTime: '@Model.Earliest.ToString(@"hh\:mm\:ss")',
+                slotMaxTime: '@Model.Latest.ToString(@"hh\:mm\:ss")',
+                slotLabelFormat: {
+                    hour: 'numeric',
+                omitZeroMinute: true
+            }
+                />
                 {dataService.prefabs.map((prefab, index) => (
                     <LessonPrefabTile
                         key={index}

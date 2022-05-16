@@ -1,4 +1,5 @@
 ﻿import { modalController } from "../shared/modals";
+import { ResponseJson } from "../shared/server-connection";
 import { DayOfWeek } from "./enums/day-of-week";
 import { areTimesOverlappingByDuration } from "./help-functions";
 import { DayLessons } from "./interfaces/day-lessons";
@@ -110,21 +111,30 @@ class ScheduleArrangerDataService {
     }
 
     async removeLessonAndGetResultAsync(id: number) {
-        const { day, lesson } = this.getLessonById(id);
-        if (!lesson) return true;
+        const dayAndLesson = this.getLessonById(id);
+        if (!dayAndLesson) return true;
 
-        const confirm = await new Promise<boolean>(resolve => {
+        if (!await new Promise<boolean>(resolve => {
             modalController.addConfirmation({
                 header: "Usuwanie zajęć",
-                text: `Czy na pewno chcesz usunąć zajęcia z przedmiotu '${lesson.subject.name}'?`,
+                text: `Czy na pewno chcesz usunąć zajęcia z przedmiotu '${dayAndLesson.lesson.subject.name}'?`,
                 onConfirm: () => resolve(true),
                 onDecline: () => resolve(false)
             });
+        }))
+            return false;
+
+        const response = await server.postAsync<ResponseJson>("DeleteLesson", {
+            id: dayAndLesson.lesson.id
         });
 
+        if (response.success) {
+            this.lessons[dayAndLesson.day].lessons.splice(this.lessons[dayAndLesson.day].lessons.indexOf(dayAndLesson.lesson), 1);
+            dispatchEvent(new Event("timeline-lessons-rerender"));
+        }
+        else console.log(response.message)
 
-
-        return confirm;
+        return response.success;
     }
 
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {

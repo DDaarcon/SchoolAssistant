@@ -252,6 +252,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
                                 <OverlappingLessonPad
                                     key={lesson.id}
                                     lesson={lesson}
+                                    refreshAsync={() => this.refreshAsync()}
                                 />
                             ))}
                         </div>
@@ -310,7 +311,7 @@ export default class LessonModComp extends ModCompBase<LessonEditModel, LessonMo
 
     private async refreshAsync(modifyStateMethod?: ModifyMethod<LessonModCompState>, beforeRerender?: () => void) {
         const newState = { ...this.state };
-        modifyStateMethod(newState);
+        modifyStateMethod?.(newState);
 
         let lessons: Lesson[];
         if (this._validator.validate()) {

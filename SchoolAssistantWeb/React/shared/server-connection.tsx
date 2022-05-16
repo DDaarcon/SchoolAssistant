@@ -1,18 +1,12 @@
 ﻿export default class ServerConnection {
     constructor(
-        private _baseUrl: string)
-    {
-
-    }
+        private _baseUrl: string) { }
 
     async getAsync<TResponse>(handler: string, params?: {}) {
         let response = await fetch(this.prepareUrl(handler, params), {
             method: 'GET'
         });
-
-        let responseJson = (await response.json()) as TResponse;
-
-        return responseJson;
+        return this.parseResponseAsync<TResponse>(response);
     }
 
     async postAsync<TResponse>(handler: string, params?: {}, body?: {}) {
@@ -25,10 +19,7 @@
             },
             body: JSON.stringify(body)
         });
-
-        let responseJson = (await response.json()) as TResponse;
-
-        return responseJson;
+        return this.parseResponseAsync<TResponse>(response);
     }
 
     private prepareUrl(handler: string, params?: {}) {
@@ -43,6 +34,10 @@
         }
 
         return `${this._baseUrl}${queryStr}`;
+    }
+
+    private async parseResponseAsync<TResponse>(result: Response) {
+        return (await result.json()) as TResponse;
     }
 }
 

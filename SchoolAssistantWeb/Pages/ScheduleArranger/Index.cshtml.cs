@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact;
+using SchoolAssistant.Infrastructure.Models.Shared.Json;
+using SchoolAssistant.Logic.General.PeriodicLessons;
 using SchoolAssistant.Logic.ScheduleArranger;
 
 namespace SchoolAssistant.Web.Pages.ScheduleArranger
@@ -14,6 +16,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
         private readonly IFetchClassLessonsForSchedArrService _fetchLessonsSvc;
         private readonly IAddLessonBySchedArrService _addLessonSvc;
         private readonly IEditLessonBySchedArrService _editLessonSvc;
+        private readonly IRemovePeriodicLessonService _removeLessonSvc;
 
         private readonly IFetchOtherLessonsForSchedArrService _fetchOtherLessonsSvc;
 
@@ -30,7 +33,8 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             IFetchClassLessonsForSchedArrService fetchLessonsService,
             IAddLessonBySchedArrService addLessonService,
             IFetchOtherLessonsForSchedArrService fetchOtherLessonsService,
-            IEditLessonBySchedArrService editLessonSvc)
+            IEditLessonBySchedArrService editLessonSvc,
+            IRemovePeriodicLessonService removeLessonSvc)
         {
             _fetchConfigService = fetchConfigService;
             _fetchDataService = fetchDataService;
@@ -38,6 +42,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             _addLessonSvc = addLessonService;
             _fetchOtherLessonsSvc = fetchOtherLessonsService;
             _editLessonSvc = editLessonSvc;
+            _removeLessonSvc = removeLessonSvc;
         }
 
 
@@ -70,6 +75,14 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
             return new JsonResult(result);
         }
 
+        public async Task<JsonResult> OnPostDeleteLessonAsync(long id)
+        {
+            var success = await _removeLessonSvc.ValidateIdAndRemoveAsync(id);
+            return new JsonResult(new ResponseJson
+            {
+                message = success ? null : "Nie znaleziono lekcji"
+            });
+        }
 
 
         public async Task<JsonResult> OnGetOtherLessonsAsync(long classId, long? teacherId, long? roomId)
