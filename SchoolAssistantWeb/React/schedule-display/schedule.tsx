@@ -1,18 +1,13 @@
 ﻿import FullCalendar from "@fullcalendar/react"
 import timeGridPlugin from '@fullcalendar/timegrid';
 import React from "react";
-import DayOfWeek from "./enums/day-of-week";
+import ScheduleConfig from "./interfaces/schedule-config";
+import ScheduleEvent from "./interfaces/schedule-event";
 import './schedule.css';
-
-interface ScheduleConfig {
-    locale?: string;
-    hiddenDays: DayOfWeek[];
-    startTime: string;
-    endTime: string;
-}
 
 type ScheduleProps = {
     config: ScheduleConfig;
+    events: ScheduleEvent[];
 }
 type ScheduleState = { }
 export default class Schedule extends React.Component<ScheduleProps, ScheduleState> {
@@ -35,6 +30,7 @@ export default class Schedule extends React.Component<ScheduleProps, ScheduleSta
                 hiddenDays={this.props.config.hiddenDays ?? []}
                 slotMinTime={this.props.config.startTime}
                 slotMaxTime={this.props.config.endTime}
+                events={this.props.events}
             />
         )
     }
