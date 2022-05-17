@@ -44,9 +44,21 @@ namespace SchoolAssistans.Tests.Helpers
         {
             var date = new DateTime(1970, 1, 1, 0, 0, 0, 100);
 
-            var millisec = date.GetMillisecondsJS();
+            var millisec = date.GetMillisecondsJs();
 
             Assert.AreEqual(millisec, 100d);
+        }
+
+
+        [Test]
+        public void Should_get_js_milliseconds_UTC()
+        {
+            var date = new DateTime(1970, 1, 1, 0, 0, 0, 100);
+
+            var millisec = date.GetMillisecondsJsUTC();
+
+            // might fail
+            Assert.AreEqual(millisec, 100 - 1 * 60 * 60 * 1000);
         }
     }
 }

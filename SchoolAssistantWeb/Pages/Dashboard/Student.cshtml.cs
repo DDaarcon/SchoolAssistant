@@ -43,8 +43,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
                 {
                     id = 1.ToString(),
                     title = "Jêzyk polski",
-                    start = new DateTime(2022, 5, 17, 10, 50, 0).GetMillisecondsJS(),
-                    end = new DateTime(2022, 5, 17, 11, 35, 0).GetMillisecondsJS(),
+                    start = new DateTime(2022, 5, 17, 10, 50, 0).GetMillisecondsJsUTC(),
+                    end = new DateTime(2022, 5, 17, 11, 35, 0).GetMillisecondsJsUTC(),
                     @class = "1d",
                     lecturer = "T. Milecki",
                     room = "Sala nr 5",
@@ -54,8 +54,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
                 {
                     id = 2.ToString(),
                     title = "Jêzyk angielski",
-                    start = new DateTime(2022, 5, 18, 12, 50, 0).GetMillisecondsJS(),
-                    end = new DateTime(2022, 5, 18, 13, 35, 0).GetMillisecondsJS(),
+                    start = new DateTime(2022, 5, 18, 12, 50, 0).GetMillisecondsJsUTC(),
+                    end = new DateTime(2022, 5, 18, 13, 35, 0).GetMillisecondsJsUTC(),
                     @class = "1d",
                     lecturer = "T. Wielicki",
                     room = "Sala nr 4",
