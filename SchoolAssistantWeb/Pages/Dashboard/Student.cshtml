@@ -15,7 +15,10 @@ Student dashboard
 
 <div class="dashboard">
     <div class="dashboard-item dashboard-item-green">
-        @Html.React("Components.Schedule", new {})
+        @Html.React("Components.Schedule", new {
+            config = Model.ScheduleConfig,
+            events = Model.ScheduleEvents
+        })
     </div>
     <div class="dashboard-item dashboard-item-cyan">
         <partial name="Components/_MarksOverview" for="MarksOverview" />

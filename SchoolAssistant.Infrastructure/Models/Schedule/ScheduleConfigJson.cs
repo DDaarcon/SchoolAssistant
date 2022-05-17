@@ -6,8 +6,8 @@ namespace SchoolAssistant.Infrastructure.Models.Schedule
     {
         public string locale { get; set; } = null!;
         public DayOfWeek[] hiddenDays { get; set; } = null!;
-        public string startTime { get; set; } = null!;
-        public string endTime { get; set; } = null!;
+        public int startHour { get; set; }
+        public int endHour { get; set; }
         public ScheduleViewerType @for { get; set; }
     }
 }

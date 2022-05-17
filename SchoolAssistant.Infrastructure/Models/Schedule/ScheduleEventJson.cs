@@ -4,8 +4,8 @@
     {
         public string id { get; set; } = null!;
         public string title { get; set; } = null!;
-        public long startTime { get; set; }
-        public long endTime { get; set; }
+        public double start { get; set; }
+        public double end { get; set; }
         public string @class { get; set; } = null!;
         public string lecturer { get; set; } = null!;
         public string room { get; set; } = null!;

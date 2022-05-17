@@ -1,8 +1,8 @@
 ﻿export default interface ScheduleEvent {
     id: string;
     title: string;
-    start: Date;
-    end: Date;
+    start: number;
+    end: number;
     lecturer: string;
     room: string;
     class: string;

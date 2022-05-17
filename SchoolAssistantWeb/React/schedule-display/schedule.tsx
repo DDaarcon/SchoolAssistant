@@ -28,9 +28,12 @@ export default class Schedule extends React.Component<ScheduleProps, ScheduleSta
                     omitZeroMinute: true
                 }}
                 hiddenDays={this.props.config.hiddenDays ?? []}
-                slotMinTime={this.props.config.startTime}
-                slotMaxTime={this.props.config.endTime}
+                slotMinTime={{ hour: this.props.config.startHour }}
+                slotMaxTime={{ hour: this.props.config.endHour }}
                 events={this.props.events}
+                eventDidMount={info => {
+                    console.log(info.event.start);
+                }}
             />
         )
     }
