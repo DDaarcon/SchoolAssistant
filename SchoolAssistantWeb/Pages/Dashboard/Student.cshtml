@@ -7,6 +7,7 @@
 }
 
 @section Head{
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/dist/schedule_display.css" asp-append-version="true"/>
 }
 
@@ -14,13 +15,13 @@
 Student dashboard
 
 <div class="dashboard">
-    <div class="dashboard-item dashboard-item-green">
+    <div class="dashboard-item dashboard-item-green dashboard-schedule">
         @Html.React("Components.Schedule", new {
             config = Model.ScheduleConfig,
             events = Model.ScheduleEvents
-        })
+        }, containerClass: "schedule-view")
     </div>
-    <div class="dashboard-item dashboard-item-cyan">
+    <div class="dashboard-item dashboard-item-cyan dashboard-marks-overview">
         <partial name="Components/_MarksOverview" for="MarksOverview" />
     </div>
     <div class="dashboard-item dashboard-item-cyan">

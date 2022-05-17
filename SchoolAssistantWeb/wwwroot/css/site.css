@@ -34,31 +34,6 @@ body {
 }
 
 
-/* Dashboard (if grows too much - to separate file) */
-
-.dashboard {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: flex-start;
-    row-gap: 40px;
-}
-
-.dashboard-item {
-    flex-basis: 400px;
-    min-height: 350px;
-    border-radius: 10px;
-}
-
-.dashboard-item-cyan {
-    background-color: #e6fffb;
-}
-
-.dashboard-item-green {
-    background-color: #ebffed;
-}
-
 label {
     font-size: 0.9em;
 }

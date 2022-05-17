@@ -11,12 +11,20 @@ type ScheduleProps = {
 }
 type ScheduleState = { }
 export default class Schedule extends React.Component<ScheduleProps, ScheduleState> {
+    constructor(props) {
+        super(props);
+
+        this.ref = React.createRef<FullCalendar>();
+    }
+
+    private ref: React.RefObject<FullCalendar>;
 
     render() {
         return (
             <FullCalendar
+                ref={this.ref}
                 plugins={[timeGridPlugin]}
-                locale={this.props.config.locale ?? 'pl'}
+                locale={this.props.config.locale}
                 headerToolbar={false}
                 initialView='timeGridWeek'
                 dayHeaderFormat={{
@@ -30,10 +38,14 @@ export default class Schedule extends React.Component<ScheduleProps, ScheduleSta
                 hiddenDays={this.props.config.hiddenDays ?? []}
                 slotMinTime={{ hour: this.props.config.startHour }}
                 slotMaxTime={{ hour: this.props.config.endHour }}
+                allDaySlot={false}
                 events={this.props.events}
                 eventDidMount={info => {
                     console.log(info.event.start);
                 }}
+                nowIndicator={true}
+                contentHeight="auto"
+                height="100%"
             />
         )
     }

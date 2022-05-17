@@ -1,17 +1,6 @@
-﻿#schedule {
-    width: 500px;
-}
-
-.fc-timegrid tbody tr:nth-child(1),
-.fc-timegrid tbody tr:nth-child(2) {
-    display: none;
-}
-
-.fc-theme-standard th,
-.fc-theme-standard td,
-.fc .fc-scrollgrid,
-.fc .fc-timegrid-slot {
-    border: none !important;
+﻿.fc td,
+.fc th {
+    border: 0 !important;
 }
 
 .fc .fc-scroller {
