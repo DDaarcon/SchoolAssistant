@@ -38,5 +38,15 @@ namespace SchoolAssistans.Tests.Helpers
             Assert.IsTrue(start.Equals(new DateTime(2022, 4, 3, 0, 0, 0)));
             Assert.IsTrue(end.Equals(new DateTime(2022, 4, 9, 23, 59, 59)));
         }
+
+        [Test]
+        public void Should_get_js_milliseconds()
+        {
+            var date = new DateTime(1970, 1, 1, 0, 0, 0, 100);
+
+            var millisec = date.GetMillisecondsJS();
+
+            Assert.AreEqual(millisec, 100d);
+        }
     }
 }

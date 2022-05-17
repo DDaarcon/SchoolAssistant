@@ -17,5 +17,12 @@
 
             return (start, end);
         }
+
+        public static double GetMillisecondsJS(this DateTime date)
+        {
+            return date
+                .Subtract(new DateTime(1970, 1, 1, 0, 0, 0))
+                .TotalMilliseconds;
+        }
     }
 }
