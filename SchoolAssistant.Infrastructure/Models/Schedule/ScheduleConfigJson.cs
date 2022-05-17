@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SchoolAssistant.Infrastructure.Enums.Schedule;
 
 namespace SchoolAssistant.Infrastructure.Models.Schedule
 {
@@ -12,5 +8,6 @@ namespace SchoolAssistant.Infrastructure.Models.Schedule
         public DayOfWeek[] hiddenDays { get; set; } = null!;
         public string startTime { get; set; } = null!;
         public string endTime { get; set; } = null!;
+        public ScheduleViewerType @for { get; set; }
     }
 }
