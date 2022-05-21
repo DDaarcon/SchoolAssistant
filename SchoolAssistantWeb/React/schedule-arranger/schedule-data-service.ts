@@ -1,10 +1,10 @@
 ﻿import DayOfWeek from "../schedule-shared/enums/day-of-week";
 import { areTimesOverlappingByDuration } from "../schedule-shared/help/time-functions";
 import DayLessons from "../schedule-shared/interfaces/day-lessons";
+import Lesson from "../schedule-shared/interfaces/lesson";
 import Time from "../schedule-shared/interfaces/shared/time";
 import { modalController } from "../shared/modals";
 import { ResponseJson } from "../shared/server-connection";
-import Lesson from "./interfaces/lesson";
 import LessonPrefab from "./interfaces/lesson-prefab";
 import OtherLessons from "./interfaces/other-lessons";
 import ScheduleClassSelectorEntry from "./interfaces/page-model-to-react/schedule-class-selector-entry";

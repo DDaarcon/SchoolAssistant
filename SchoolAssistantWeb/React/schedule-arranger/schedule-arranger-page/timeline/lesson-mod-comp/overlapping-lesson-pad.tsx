@@ -1,6 +1,6 @@
 ﻿import React from "react"
 import { displayTime } from "../../../../schedule-shared/help/time-functions";
-import Lesson from "../../../interfaces/lesson";
+import Lesson from "../../../../schedule-shared/interfaces/lesson";
 import dataService from "../../../schedule-data-service";
 
 type OverlappingLessonPadProps = {

@@ -2,6 +2,7 @@
 import DayOfWeek from "../../../../schedule-shared/enums/day-of-week";
 import { displayMinutes } from "../../../../schedule-shared/help/time-functions";
 import { nameForDayOfWeek } from "../../../../schedule-shared/help/weekdays-function";
+import Lesson from "../../../../schedule-shared/interfaces/lesson";
 import LessonTimelineEntry from "../../../../schedule-shared/interfaces/lesson-timeline-entry";
 import Time from "../../../../schedule-shared/interfaces/shared/time";
 import { getEnumValues } from "../../../../shared/enum-help";
@@ -9,7 +10,6 @@ import { Select, Option, OnChangeIdHandler, Input, OnChangeHandler } from "../..
 import ModCompBase, { ModifyMethod } from "../../../../shared/form-controls/mod-comp-base";
 import { CommonModalProps } from "../../../../shared/modals/shared-modal-body";
 import { ResponseJson } from "../../../../shared/server-connection";
-import Lesson from "../../../interfaces/lesson";
 import { scheduleArrangerConfig, server } from "../../../main";
 import dataService from "../../../schedule-data-service";
 import LessonEditModel from "./../interfaces/lesson-edit-model";
