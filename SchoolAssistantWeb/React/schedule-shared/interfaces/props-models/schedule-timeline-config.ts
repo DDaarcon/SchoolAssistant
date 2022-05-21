@@ -4,4 +4,6 @@
 
     startHour: number;
     endHour: number;
+
+    defaultLessonDuration: number;
 }
