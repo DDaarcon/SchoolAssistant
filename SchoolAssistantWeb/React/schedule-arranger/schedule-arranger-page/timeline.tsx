@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import TimeColumn from '../../schedule-shared/components/time-column';
 import DayOfWeek from '../../schedule-shared/enums/day-of-week';
 import DayLessons from '../../schedule-shared/interfaces/day-lessons';
 import LessonTimelineEntry from '../../schedule-shared/interfaces/lesson-timeline-entry';
@@ -44,6 +45,14 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
                 roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
                 addLesson={this.addLesson}
                 editStoredLesson={this.editLesson}
+            />
+        )
+    }
+
+    protected override getTimeColumnComponent(): JSX.Element {
+        return (
+            <TimeColumn
+                config={this.props.config}
             />
         )
     }

@@ -35,17 +35,20 @@ export default abstract class ScheduleTimelineBase
 
     protected getDayColumnComponent?(day: DayOfWeek): JSX.Element;
 
+    protected getTimeColumnComponent?(): JSX.Element;
+
     protected className: string;
+    protected containerElement: HTMLDivElement;
 
     render() {
         if (!this.getDayColumnComponent) throw new Error("Overriding `getDayColumnComponent` is mandatory");
 
         return (
-            <div className={"schedule-timeline " + this.className}>
+            <div className={"schedule-timeline " + this.className}
+                ref={ref => this.containerElement = ref}
+            >
 
-                <TimeColumn
-                    config={this.props.config}
-                />
+                {this.getTimeColumnComponent?.()}
 
                 {this.getDaysOfWeekIterable().map(day => this.getDayColumnComponent!(day))}
             </div>

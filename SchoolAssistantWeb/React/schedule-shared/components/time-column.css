@@ -1,0 +1,11 @@
+﻿.sched-time-column {
+    position: relative !important;
+    flex-basis: 65px;
+    border-right: 1px solid;
+}
+
+.sched-time-label {
+    position: absolute !important;
+    border-top: 1px solid darkgrey;
+    width: 100%;
+}
