@@ -2,18 +2,21 @@
 import TimeColumn from './components/time-column';
 import DayOfWeek from './enums/day-of-week';
 import DayLessons from './interfaces/day-lessons';
+import LessonTimelineEntry from './interfaces/lesson-timeline-entry';
 import ScheduleTimelineConfig from './interfaces/props-models/schedule-timeline-config';
 import './timeline-base.css';
 
-export type ScheduleTimelineBaseProps = {
-    data: DayLessons[];
-    config: ScheduleTimelineConfig;
-    className?: string;
+export type ScheduleTimelineBaseProps<TConfig extends ScheduleTimelineConfig, TLesson extends LessonTimelineEntry> = {
+    data: DayLessons<TLesson>[];
+    config: TConfig;
 }
 export type ScheduleTimelineBaseState = {}
+
 export default abstract class ScheduleTimelineBase
-    <TProps extends ScheduleTimelineBaseProps,
-     TState extends ScheduleTimelineBaseState> extends React.Component<TProps, TState> {
+    <TProps extends ScheduleTimelineBaseProps<TConfig, TLesson>,
+    TState extends ScheduleTimelineBaseState,
+    TConfig extends ScheduleTimelineConfig,
+    TLesson extends LessonTimelineEntry> extends React.Component<TProps, TState> {
 
     constructor(props) {
         super(props);

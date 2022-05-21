@@ -6,41 +6,25 @@ import Time from "../interfaces/shared/time";
 import DayLabel from "./day-column/day-label";
 import './day-column-base.css';
 
-export type DayColumnBaseProps = {
+export type DayColumnBaseProps<TConfig extends ScheduleTimelineConfig, TLesson extends LessonTimelineEntry> = {
     dayIndicator: DayOfWeek;
-    config: ScheduleTimelineConfig;
-    lessons: LessonTimelineEntry[];
+    config: TConfig;
+    lessons: TLesson[];
 }
 export type DayColumnBaseState = {}
 
 export default abstract class DayColumnBase
-    <TProps extends DayColumnBaseProps,
-     TState extends DayColumnBaseState> extends React.Component<TProps, TState> {
+    <TProps extends DayColumnBaseProps<TConfig, TLesson>,
+    TState extends DayColumnBaseState,
+    TConfig extends ScheduleTimelineConfig,
+    TLesson extends LessonTimelineEntry> extends React.Component<TProps, TState> {
 
-    private _cells: JSX.Element[];
+    protected _cells: JSX.Element[];
 
     constructor(props) {
         super(props);
 
         this.state = this.getInitialState();
-    }
-
-
-    protected instantiateCells() {
-        if (!this.getTimelineCellComponent) throw new Error("Overriding method `getTimelineCellComponent` is required for calling `instantiateCells`");
-
-        const cellsPerHour = 60 / this.props.config.cellDuration;
-        const count = (this.props.config.endHour - this.props.config.startHour) * cellsPerHour;
-
-        const cellTimes = Array.from({ length: count }, (_, i): Time => {
-            const minutesFromMidnight = (this.props.config.startHour * 60) + this.props.config.cellDuration * i;
-            return {
-                hour: Math.floor(minutesFromMidnight / 60),
-                minutes: minutesFromMidnight % 60
-            };
-        })
-
-        this._cells = cellTimes.map((cellTime, i) => this.getTimelineCellComponent(cellTime, i));
     }
 
     protected getInitialState(): TState {

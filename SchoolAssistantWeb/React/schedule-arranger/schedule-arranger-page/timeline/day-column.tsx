@@ -3,6 +3,7 @@ import DayColumnBase, { DayColumnBaseProps, DayColumnBaseState } from "../../../
 import DayOfWeek from "../../../schedule-shared/enums/day-of-week";
 import LessonTimelineEntry from "../../../schedule-shared/interfaces/lesson-timeline-entry";
 import Time from "../../../schedule-shared/interfaces/shared/time";
+import ScheduleArrangerConfig from "../../interfaces/page-model-to-react/schedule-arranger-config";
 import LessonEditModel from "./interfaces/lesson-edit-model";
 import LessonPlacingShadow from "./lesson-placing-shadow";
 import LessonsByDay from "./lessons-by-day";
@@ -10,7 +11,7 @@ import RoomBusyLessons from "./room-busy-lessons";
 import TeacherBusyLessons from "./teacher-busy-lessons";
 import TimelineCell from "./timeline-cell";
 
-type DayColumnProps = DayColumnBaseProps & {
+type DayColumnProps = DayColumnBaseProps<ScheduleArrangerConfig, LessonTimelineEntry> & {
     teacherBusyLessons?: LessonTimelineEntry[];
     roomBusyLessons?: LessonTimelineEntry[];
 
@@ -21,7 +22,7 @@ type DayColumnState = DayColumnBaseState & {
     shadowFor?: Time;
 }
 
-export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnState> {
+export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnState, ScheduleArrangerConfig, LessonTimelineEntry> {
 
     private _iAmCallingHideShadow = false;
 
@@ -30,6 +31,23 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
 
         addEventListener('hideLessonShadow', () => this.hideLessonShadow());
         this.instantiateCells();
+    }
+
+    private instantiateCells() {
+        if (!this.getTimelineCellComponent) throw new Error("Overriding method `getTimelineCellComponent` is required for calling `instantiateCells`");
+
+        const cellsPerHour = 60 / this.props.config.cellDuration;
+        const count = (this.props.config.endHour - this.props.config.startHour) * cellsPerHour;
+
+        const cellTimes = Array.from({ length: count }, (_, i): Time => {
+            const minutesFromMidnight = (this.props.config.startHour * 60) + this.props.config.cellDuration * i;
+            return {
+                hour: Math.floor(minutesFromMidnight / 60),
+                minutes: minutesFromMidnight % 60
+            };
+        })
+
+        this._cells = cellTimes.map((cellTime, i) => this.getTimelineCellComponent(cellTime, i));
     }
 
     protected override getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
@@ -50,7 +68,7 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
         return (
             <TimelineCell
                 key={index}
-                config={this.props.config}
+                height={this.props.config.cellHeight}
                 dayIndicator={this.props.dayIndicator}
                 cellIndex={index}
                 dropped={this.props.addLesson}

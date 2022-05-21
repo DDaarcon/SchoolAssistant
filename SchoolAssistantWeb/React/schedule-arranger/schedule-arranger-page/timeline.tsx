@@ -1,23 +1,25 @@
 ﻿import React from 'react';
 import DayOfWeek from '../../schedule-shared/enums/day-of-week';
 import DayLessons from '../../schedule-shared/interfaces/day-lessons';
+import LessonTimelineEntry from '../../schedule-shared/interfaces/lesson-timeline-entry';
 import Time from '../../schedule-shared/interfaces/shared/time';
 import ScheduleTimelineBase, { ScheduleTimelineBaseProps, ScheduleTimelineBaseState } from '../../schedule-shared/timeline-base';
 import { AddLessonResponse } from '../interfaces/add-lesson-response';
 import LessonPrefab from '../interfaces/lesson-prefab';
+import ScheduleArrangerConfig from '../interfaces/page-model-to-react/schedule-arranger-config';
 import { scheduleArrangerConfig, server } from '../main';
 import dataService from '../schedule-data-service';
 import DayColumn from './timeline/day-column';
 import LessonEditModel from './timeline/interfaces/lesson-edit-model';
 
-type ScheduleArrangerTimelineProps = ScheduleTimelineBaseProps & {
+type ScheduleArrangerTimelineProps = ScheduleTimelineBaseProps<ScheduleArrangerConfig, LessonTimelineEntry> & {
 
 }
 type ScheduleArrangerTimelineState = ScheduleTimelineBaseState & {
     teacherBusyLessons?: DayLessons[];
     roomBusyLessons?: DayLessons[];
 }
-export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
+export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState, ScheduleArrangerConfig, LessonTimelineEntry> {
 
     constructor(props) {
         super(props);
@@ -31,7 +33,7 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
         this.className = "schedule-arranger-timeline";
     }
 
-    protected getDayColumnComponent(day: DayOfWeek): JSX.Element {
+    protected override getDayColumnComponent(day: DayOfWeek): JSX.Element {
         return (
             <DayColumn
                 key={day}
