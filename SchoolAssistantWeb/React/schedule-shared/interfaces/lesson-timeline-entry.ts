@@ -1,6 +1,7 @@
-﻿import { IdName, Time } from "./shared";
+﻿import IdName from "./shared/id-name";
+import Time from "./shared/time";
 
-export interface LessonTimelineEntry {
+export default interface LessonTimelineEntry {
     id?: number;
 
     time: Time;

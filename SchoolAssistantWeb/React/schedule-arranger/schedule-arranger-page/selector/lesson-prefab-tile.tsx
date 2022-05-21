@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { LessonPrefab } from "../../interfaces/lesson-prefab";
+import LessonPrefab from "../../interfaces/lesson-prefab";
 import dataService from "../../schedule-data-service";
 import './lesson-prefab.css';
 

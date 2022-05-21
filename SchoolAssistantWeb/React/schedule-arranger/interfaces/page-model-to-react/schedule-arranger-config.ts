@@ -1,10 +1,6 @@
-﻿export interface ScheduleArrangerConfig {
+﻿import ScheduleTimelineConfig from "../../../schedule-shared/interfaces/props-models/schedule-timeline-config";
+
+export default interface ScheduleArrangerConfig extends ScheduleTimelineConfig {
     defaultLessonDuration: number;
-    startHour: number;
-    endHour: number;
-
-    cellDuration: number;
-    cellHeight: number;
-
     classId?: number;
 }

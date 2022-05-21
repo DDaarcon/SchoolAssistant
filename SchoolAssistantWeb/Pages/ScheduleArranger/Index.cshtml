@@ -7,6 +7,7 @@
 }
 
 @section Head {
+    <link rel="stylesheet" href="~/dist/schedule_shared.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/dist/schedule_arranger.css" asp-append-version="true"/>
 }
 
@@ -23,5 +24,6 @@
         const antiforgeryToken = '@token';
     </script>
 
+    <script src="~/dist/schedule_shared.bundle.js" asp-append-version="true"></script>
     <script src="~/dist/schedule_arranger.bundle.js" asp-append-version="true"></script>
 }

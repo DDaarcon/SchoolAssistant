@@ -1,5 +1,5 @@
-﻿import { DayLessons } from "./day-lessons";
+﻿import DayLessons from "../../schedule-shared/interfaces/day-lessons";
 
-export interface ClassLessons {
+export default interface ClassLessons {
     data: DayLessons[];
 }

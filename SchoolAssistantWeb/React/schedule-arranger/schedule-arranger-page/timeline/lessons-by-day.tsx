@@ -1,8 +1,8 @@
 ﻿import React from "react";
+import DayOfWeek from "../../../schedule-shared/enums/day-of-week";
+import { displayTime } from "../../../schedule-shared/help/time-functions";
+import LessonTimelineEntry from "../../../schedule-shared/interfaces/lesson-timeline-entry";
 import { modalController } from "../../../shared/modals";
-import { DayOfWeek } from "../../enums/day-of-week";
-import { displayTime } from "../../help-functions";
-import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
 import GenericLessonTile from "./generic-lesson-tile";
 import LessonEditModel from "./interfaces/lesson-edit-model";
 import LessonModComp from "./lesson-mod-comp/lesson-mod-comp";

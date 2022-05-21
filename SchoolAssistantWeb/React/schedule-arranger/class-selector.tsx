@@ -1,6 +1,6 @@
 ﻿import React = require("react");
-import { ClassLessons } from "./interfaces/class-lessons";
-import { ScheduleClassSelectorEntry } from "./interfaces/page-model-to-react/schedule-class-selector-entry";
+import ClassLessons from "./interfaces/class-lessons";
+import ScheduleClassSelectorEntry from "./interfaces/page-model-to-react/schedule-class-selector-entry";
 import { scheduleArrangerConfig, scheduleChangePageScreen, server } from "./main";
 import ScheduleArrangerPage from "./schedule-arranger-page";
 import './class-selector.css';

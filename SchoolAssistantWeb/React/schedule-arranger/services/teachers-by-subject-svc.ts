@@ -1,4 +1,4 @@
-﻿import { ScheduleTeacherEntry } from "../interfaces/page-model-to-react/schedule-teacher-entry";
+﻿import ScheduleTeacherEntry from "../interfaces/page-model-to-react/schedule-teacher-entry";
 import TeacherOptionEntry from "../interfaces/teacher-option-entry";
 
 export default class TeachersBySubjectSvc {

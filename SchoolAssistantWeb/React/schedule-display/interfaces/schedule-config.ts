@@ -1,10 +1,9 @@
-﻿import DayOfWeek from "../enums/day-of-week";
+﻿import DayOfWeek from "../../schedule-shared/enums/day-of-week";
+import ScheduleTimelineConfig from "../../schedule-shared/interfaces/props-models/schedule-timeline-config";
 import ScheduleViewerType from "../enums/schedule-viewer-type";
 
-export default interface ScheduleConfig {
+export default interface ScheduleConfig extends ScheduleTimelineConfig {
     locale?: string;
     hiddenDays: DayOfWeek[];
-    startHour: number;
-    endHour: number;
     for: ScheduleViewerType;
 }

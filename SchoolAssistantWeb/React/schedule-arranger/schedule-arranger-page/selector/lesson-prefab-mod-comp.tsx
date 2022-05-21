@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Select, Option, OnChangeIdHandler } from "../../../shared/form-controls";
 import ModCompBase from "../../../shared/form-controls/mod-comp-base";
-import { LessonModificationData } from "../../interfaces/lesson-modification-data";
+import LessonModificationData from "../../interfaces/lesson-modification-data";
 import dataService from "../../schedule-data-service";
 
 

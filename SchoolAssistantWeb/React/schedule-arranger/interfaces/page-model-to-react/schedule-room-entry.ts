@@ -1,8 +1,8 @@
-﻿import { DayLessons } from "../day-lessons";
-import { Lesson } from "../lesson";
-import { IdName } from "../shared";
+﻿import DayLessons from "../../../schedule-shared/interfaces/day-lessons";
+import IdName from "../../../schedule-shared/interfaces/shared/id-name";
+import Lesson from "../lesson";
 
-export interface ScheduleRoomEntry extends IdName {
+export default interface ScheduleRoomEntry extends IdName {
     floor: number;
     lessons?: DayLessons<Lesson>[];
 }

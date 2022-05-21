@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import { displayTime, sumTimes } from "../../help-functions";
-import { Time } from "../../interfaces/shared";
+import { displayTime, sumTimes } from "../../../schedule-shared/help/time-functions";
+import Time from "../../../schedule-shared/interfaces/shared/time";
 import { scheduleArrangerConfig } from "../../main";
 import GenericLessonTile from "./generic-lesson-tile";
 

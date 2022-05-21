@@ -1,14 +1,15 @@
 ﻿import React from "react"
+import DayOfWeek from "../../../../schedule-shared/enums/day-of-week";
+import { displayMinutes } from "../../../../schedule-shared/help/time-functions";
+import { nameForDayOfWeek } from "../../../../schedule-shared/help/weekdays-function";
+import LessonTimelineEntry from "../../../../schedule-shared/interfaces/lesson-timeline-entry";
+import Time from "../../../../schedule-shared/interfaces/shared/time";
 import { getEnumValues } from "../../../../shared/enum-help";
 import { Select, Option, OnChangeIdHandler, Input, OnChangeHandler } from "../../../../shared/form-controls";
 import ModCompBase, { ModifyMethod } from "../../../../shared/form-controls/mod-comp-base";
 import { CommonModalProps } from "../../../../shared/modals/shared-modal-body";
 import { ResponseJson } from "../../../../shared/server-connection";
-import { DayOfWeek } from "../../../enums/day-of-week";
-import { displayMinutes, nameForDayOfWeek } from "../../../help-functions";
-import { Lesson } from "../../../interfaces/lesson";
-import { LessonTimelineEntry } from "../../../interfaces/lesson-timeline-entry";
-import { Time } from "../../../interfaces/shared";
+import Lesson from "../../../interfaces/lesson";
 import { scheduleArrangerConfig, server } from "../../../main";
 import dataService from "../../../schedule-data-service";
 import LessonEditModel from "./../interfaces/lesson-edit-model";

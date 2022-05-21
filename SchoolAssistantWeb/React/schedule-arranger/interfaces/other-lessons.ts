@@ -1,6 +1,6 @@
-﻿import { DayLessons } from "./day-lessons";
+﻿import DayLessons from "../../schedule-shared/interfaces/day-lessons";
 
-export interface OtherLessons {
+export default interface OtherLessons {
     teacher?: DayLessons[];
     room?: DayLessons[];
 }

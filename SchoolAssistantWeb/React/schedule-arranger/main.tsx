@@ -3,11 +3,11 @@ import { ModalSpace } from "../shared/modals";
 import ServerConnection from "../shared/server-connection";
 import dataService from './schedule-data-service';
 import ScheduleClassSelectorPage from './class-selector';
-import { ScheduleArrangerConfig } from "./interfaces/page-model-to-react/schedule-arranger-config";
-import { ScheduleClassSelectorEntry } from "./interfaces/page-model-to-react/schedule-class-selector-entry";
-import { ScheduleSubjectEntry } from "./interfaces/page-model-to-react/schedule-subject-entry";
-import { ScheduleTeacherEntry } from "./interfaces/page-model-to-react/schedule-teacher-entry";
-import { ScheduleRoomEntry } from "./interfaces/page-model-to-react/schedule-room-entry";
+import ScheduleArrangerConfig from "./interfaces/page-model-to-react/schedule-arranger-config";
+import ScheduleClassSelectorEntry from "./interfaces/page-model-to-react/schedule-class-selector-entry";
+import ScheduleSubjectEntry from "./interfaces/page-model-to-react/schedule-subject-entry";
+import ScheduleTeacherEntry from "./interfaces/page-model-to-react/schedule-teacher-entry";
+import ScheduleRoomEntry from "./interfaces/page-model-to-react/schedule-room-entry";
 
 export let scheduleArrangerConfig: ScheduleArrangerConfig;
 export let scheduleChangePageScreen: (pageComponent: JSX.Element) => void;

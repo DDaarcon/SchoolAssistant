@@ -1,7 +1,7 @@
-﻿import { LessonTimelineEntry } from "./lesson-timeline-entry";
-import { IdName } from "./shared";
+﻿import LessonTimelineEntry from "../../schedule-shared/interfaces/lesson-timeline-entry";
+import IdName from "../../schedule-shared/interfaces/shared/id-name";
 
-export interface Lesson extends LessonTimelineEntry {
+export default interface Lesson extends LessonTimelineEntry {
     orgClass?: IdName;
     subjClass?: IdName;
 }

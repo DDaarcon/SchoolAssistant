@@ -1,37 +1,51 @@
 ﻿import React from 'react';
-import { DayOfWeek } from '../enums/day-of-week';
-import { areTimesOverlappingByDuration } from '../help-functions';
+import DayOfWeek from '../../schedule-shared/enums/day-of-week';
+import DayLessons from '../../schedule-shared/interfaces/day-lessons';
+import Time from '../../schedule-shared/interfaces/shared/time';
+import ScheduleTimelineBase, { ScheduleTimelineBaseProps, ScheduleTimelineBaseState } from '../../schedule-shared/timeline-base';
 import { AddLessonResponse } from '../interfaces/add-lesson-response';
-import { DayLessons } from '../interfaces/day-lessons';
-import { LessonPrefab } from '../interfaces/lesson-prefab';
-import { Time } from '../interfaces/shared';
+import LessonPrefab from '../interfaces/lesson-prefab';
 import { scheduleArrangerConfig, server } from '../main';
 import dataService from '../schedule-data-service';
 import DayColumn from './timeline/day-column';
 import LessonEditModel from './timeline/interfaces/lesson-edit-model';
-import TimeColumn from './timeline/time-column';
 
-type ScheduleArrangerTimelineProps = {
-    data: DayLessons[];
+type ScheduleArrangerTimelineProps = ScheduleTimelineBaseProps & {
 
 }
-type ScheduleArrangerTimelineState = {
+type ScheduleArrangerTimelineState = ScheduleTimelineBaseState & {
     teacherBusyLessons?: DayLessons[];
     roomBusyLessons?: DayLessons[];
 }
-export default class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
-    
+export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
+
     constructor(props) {
         super(props);
-
-        this.state = {};
 
         dataService.assignDaysFromProps(this.props.data);
 
         addEventListener('dragBegan', (event: CustomEvent) => this.initiateShowingOtherLessonsShadows(event));
         addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
         addEventListener('timeline-lessons-rerender', this.rerender);
+
+        this.className = "schedule-arranger-timeline";
     }
+
+    protected getDayColumnComponent(day: DayOfWeek): JSX.Element {
+        return (
+            <DayColumn
+                key={day}
+                dayIndicator={day}
+                config={this.props.config}
+                lessons={dataService.lessons.find(x => x.dayIndicator == day)?.lessons ?? []}
+                teacherBusyLessons={this.state.teacherBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
+                roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
+                addLesson={this.addLesson}
+                editStoredLesson={this.editLesson}
+            />
+        )
+    }
+
 
     addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
         this.hideOtherLessonsShadows();
@@ -55,10 +69,11 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
             lecturerId: prefab.lecturer.id,
             roomId: prefab.room.id
         }).then(result => {
-            console.log(result);
+
             if (result.success) {
                 dataService.lessons[dayIndicator].lessons.push(result.lesson);
-                this.forceUpdate();
+
+                this.rerender();
             }
         })
     }
@@ -95,8 +110,10 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
                 name: dataService.subjects.find(x => x.id == model.subjectId).name
             };
 
-        this.forceUpdate();
+        this.rerender();
     }
+
+
 
 
     initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
@@ -125,34 +142,6 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
             teacherBusyLessons: undefined,
             roomBusyLessons: undefined
         })
-    }
-
-
-
-    private getDaysOfWeekIterable = (with6th: boolean = false, with0th: boolean = false) =>
-        Object.values(DayOfWeek).map(x => parseInt(x as unknown as string)).filter(x =>
-            !isNaN(x) && (with0th || x != 0) && (with6th || x != 6)) as DayOfWeek[];
-
-    render() {
-        return (
-            <div className="schedule-arranger-timeline">
-
-                <TimeColumn />
-
-                {this.getDaysOfWeekIterable().map(day => (
-                    <DayColumn
-                        key={day}
-                        dayIndicator={day}
-                        lessons={dataService.lessons.find(x => x.dayIndicator == day)?.lessons ?? []}
-                        teacherBusyLessons={this.state.teacherBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
-                        roomBusyLessons={this.state.roomBusyLessons?.find(x => x.dayIndicator == day)?.lessons}
-                        addLesson={this.addLesson}
-                        editStoredLesson={this.editLesson}
-                    />
-                ))}
-
-            </div>
-        )
     }
 
     private rerender = () => this.forceUpdate();

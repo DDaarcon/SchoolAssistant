@@ -1,6 +1,4 @@
-﻿import { DayOfWeek } from "./enums/day-of-week";
-import { Time } from "./interfaces/shared";
-
+﻿import Time from "../interfaces/shared/time";
 
 export const areTimesOverlappingByDuration = (timeAStart: Time, durationA: number, timeBStart: Time, durationB: number) => {
     const aStart = toMinutes(timeAStart);
@@ -27,17 +25,3 @@ export const sumTimes = (timeA: Time, timeB: Time): Time => {
 
 export const displayTime = (time: Time) => `${time.hour}:${displayMinutes(time.minutes)}`;
 export const displayMinutes = (minutes: number) => minutes < 10 ? `0${minutes}` : minutes.toString();
-
-
-export const nameForDayOfWeek = (day: DayOfWeek) => {
-    switch (day) {
-        case DayOfWeek.Monday: return "Poniedziałek";
-        case DayOfWeek.Tuesday: return "Wtorek";
-        case DayOfWeek.Wednesday: return "Środa";
-        case DayOfWeek.Thursday: return "Czwartek";
-        case DayOfWeek.Friday: return "Piątek";
-        case DayOfWeek.Saturday: return "Sobota";
-        case DayOfWeek.Sunday: return "Niedziela";
-        default: return '';
-    }
-}

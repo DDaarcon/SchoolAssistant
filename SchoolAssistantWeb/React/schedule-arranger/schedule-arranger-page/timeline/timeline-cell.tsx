@@ -1,22 +1,16 @@
 ﻿import React from "react";
-import { DayOfWeek } from "../../enums/day-of-week";
-import { Time } from "../../interfaces/shared";
-import { scheduleArrangerConfig } from "../../main";
+import TimelineCellBase, { TimelineCellBaseProps, TimelineCellBaseState } from "../../../schedule-shared/components/day-column/timeline-cell-base";
+import DayOfWeek from "../../../schedule-shared/enums/day-of-week";
+import Time from "../../../schedule-shared/interfaces/shared/time";
 
-type TimelineCellProps = {
-    dayIndicator: DayOfWeek;
-    cellIndex: number;
-    time: Time;
-
+type TimelineCellProps = TimelineCellBaseProps & {
     dropped: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
     entered: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
 }
-type TimelineCellState = {
+type TimelineCellState = TimelineCellBaseState & {
 
 }
-export default class TimelineCell extends React.Component<TimelineCellProps, TimelineCellState> {
-    private get _wholeHour() { return this.props.time.minutes == 0; }
-
+export default class TimelineCell extends TimelineCellBase<TimelineCellProps, TimelineCellState> {
     onDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
         this.props.dropped(
             this.props.dayIndicator,
@@ -37,22 +31,12 @@ export default class TimelineCell extends React.Component<TimelineCellProps, Tim
             this.props.time
         );
     }
-    render() {
-        let style: React.CSSProperties = {
-            height: scheduleArrangerConfig.cellHeight
-        }
 
-        return (
-            <div className={"sa-schedule-cell" + (this._wholeHour ? " sa-schedule-cell-whole-hour" : "")}
-                style={style}
-                onDrop={this.onDrop}
-                onDragOver={this.onDragOver}
-                onDragEnter={this.onDragEnter}
-            >
-                {this._wholeHour
-                    ? <div className="sa-whole-hour-line"></div>
-                    : undefined}
-            </div>
-        )
+    protected override getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
+        return {
+            onDrop: this.onDrop,
+            onDragOver: this.onDragOver,
+            onDragEnter: this.onDragEnter
+        }
     }
 }

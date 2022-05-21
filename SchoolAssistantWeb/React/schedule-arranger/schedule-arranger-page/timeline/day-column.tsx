@@ -1,9 +1,8 @@
 ﻿import React from "react";
-import { DayOfWeek } from "../../enums/day-of-week";
-import { LessonTimelineEntry } from "../../interfaces/lesson-timeline-entry";
-import { Time } from "../../interfaces/shared";
-import { scheduleArrangerConfig } from "../../main";
-import DayLabel from "./day-label";
+import DayColumnBase, { DayColumnBaseProps, DayColumnBaseState } from "../../../schedule-shared/components/day-column-base";
+import DayOfWeek from "../../../schedule-shared/enums/day-of-week";
+import LessonTimelineEntry from "../../../schedule-shared/interfaces/lesson-timeline-entry";
+import Time from "../../../schedule-shared/interfaces/shared/time";
 import LessonEditModel from "./interfaces/lesson-edit-model";
 import LessonPlacingShadow from "./lesson-placing-shadow";
 import LessonsByDay from "./lessons-by-day";
@@ -11,57 +10,62 @@ import RoomBusyLessons from "./room-busy-lessons";
 import TeacherBusyLessons from "./teacher-busy-lessons";
 import TimelineCell from "./timeline-cell";
 
-type DayColumnProps = {
-    dayIndicator: DayOfWeek;
-    lessons: LessonTimelineEntry[];
-
+type DayColumnProps = DayColumnBaseProps & {
     teacherBusyLessons?: LessonTimelineEntry[];
     roomBusyLessons?: LessonTimelineEntry[];
 
     addLesson: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
     editStoredLesson: (model: LessonEditModel) => void;
 }
-type DayColumnState = {
+type DayColumnState = DayColumnBaseState & {
     shadowFor?: Time;
 }
-export default class DayColumn extends React.Component<DayColumnProps, DayColumnState> {
-    private _cells: JSX.Element[];
+
+export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnState> {
+
     private _iAmCallingHideShadow = false;
 
     constructor(props) {
         super(props);
 
-        this.state = {};
-
         addEventListener('hideLessonShadow', () => this.hideLessonShadow());
-
         this.instantiateCells();
     }
 
-
-    instantiateCells = () => {
-        const cellsPerHour = 60 / scheduleArrangerConfig.cellDuration;
-        const count = (scheduleArrangerConfig.endHour - scheduleArrangerConfig.startHour) * cellsPerHour;
-
-        const cellTimes = Array.from({ length: count }, (_, i): Time => {
-            const minutesFromMidnight = (scheduleArrangerConfig.startHour * 60) + scheduleArrangerConfig.cellDuration * i;
-            return {
-                hour: Math.floor(minutesFromMidnight / 60),
-                minutes: minutesFromMidnight % 60
-            };
-        })
-
-        this._cells = cellTimes.map((cellTime, i) =>
+    protected override getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
+        return {
+            onDragEnd: this.hideLessonShadow
+        }
+    }
+    protected override getLessonsDisplayComponent(): JSX.Element {
+        return (
+            <LessonsByDay
+                lessons={this.props.lessons}
+                day={this.props.dayIndicator}
+                editStoredLesson={this.props.editStoredLesson}
+            />
+        )
+    }
+    protected override getTimelineCellComponent(time: Time, index: number): JSX.Element {
+        return (
             <TimelineCell
-                key={i}
+                key={index}
+                config={this.props.config}
                 dayIndicator={this.props.dayIndicator}
-                cellIndex={i}
+                cellIndex={index}
                 dropped={this.props.addLesson}
                 entered={this.onEntered}
-                time={cellTime}
-            />);
+                time={time}
+            />
+        )
     }
-
+    protected override getAdditionalComponents(): JSX.Element | JSX.Element[] {
+        return [
+            <RoomBusyLessons lessons={this.props.roomBusyLessons} key="rooms" />,
+            <TeacherBusyLessons lessons={this.props.teacherBusyLessons} key="teachers" />,
+            <LessonPlacingShadow time={this.state.shadowFor} key="thisClass" />
+        ]
+    }
 
 
     addLesson = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
@@ -82,26 +86,5 @@ export default class DayColumn extends React.Component<DayColumnProps, DayColumn
     hideLessonShadow = () => {
         if (this.state.shadowFor && !this._iAmCallingHideShadow)
             this.setState({ shadowFor: undefined });
-    }
-
-
-
-    render() {
-        return (
-            <div className="sa-schedule-day-column"
-                onDragEnd={this.hideLessonShadow}
-            >
-                <DayLabel day={this.props.dayIndicator} />
-                <RoomBusyLessons lessons={this.props.roomBusyLessons} />
-                <TeacherBusyLessons lessons={this.props.teacherBusyLessons} />
-                <LessonPlacingShadow time={this.state.shadowFor} />
-                <LessonsByDay
-                    lessons={this.props.lessons}
-                    day={this.props.dayIndicator}
-                    editStoredLesson={this.props.editStoredLesson}
-                />
-                {this._cells}
-            </div>
-        )
     }
 }

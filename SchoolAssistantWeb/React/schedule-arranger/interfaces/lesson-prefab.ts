@@ -1,6 +1,6 @@
-﻿import { IdName } from "./shared";
+﻿import IdName from "../../schedule-shared/interfaces/shared/id-name";
 
-export interface LessonPrefab {
+export default interface LessonPrefab {
     subject: IdName;
     lecturer: IdName;
     room?: IdName;

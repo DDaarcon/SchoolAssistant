@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Time } from "../../interfaces/shared";
+import Time from "../../../schedule-shared/interfaces/shared/time";
 import { scheduleArrangerConfig } from "../../main";
 import dataService from "../../schedule-data-service";
 import './lesson-tiles.css';

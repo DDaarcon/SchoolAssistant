@@ -9,11 +9,15 @@ module.exports = {
 		},
 		schedule_arranger: {
 			import: './React/schedule-arranger.ts',
-			dependOn: ['react_lib', 'shared' ]
+			dependOn: [ 'react_lib', 'shared', 'schedule_shared' ]
 		},
 		schedule_display: {
 			import: './React/schedule-display.ts',
-			dependOn: ['react_lib', 'shared']
+			dependOn: [ 'react_lib', 'shared', 'schedule_shared' ]
+		},
+		schedule_shared: {
+			import: './React/schedule-shared.ts',
+			dependOn: [ 'react_lib', 'shared' ]
 		},
 		shared: {
 			import: './React/shared.ts'

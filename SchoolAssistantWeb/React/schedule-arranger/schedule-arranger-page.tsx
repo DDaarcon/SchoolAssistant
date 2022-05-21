@@ -1,8 +1,9 @@
 ﻿import * as React from "react";
 import ScheduleArrangerTimeline from './schedule-arranger-page/timeline'
 import ScheduleArrangerSelector from "./schedule-arranger-page/selector";
-import { ClassLessons } from "./interfaces/class-lessons";
+import ClassLessons from "./interfaces/class-lessons";
 import './schedule-arranger-page/schedule-arranger-page.css';
+import { scheduleArrangerConfig } from "./main";
 
 type ScheduleArrangerPageProps = {
     classData: ClassLessons;
@@ -19,6 +20,7 @@ export default class ScheduleArrangerPage extends React.Component<ScheduleArrang
                 />
 
                 <ScheduleArrangerTimeline
+                    config={scheduleArrangerConfig}
                     data={this.props.classData.data}
                 />
             </div>

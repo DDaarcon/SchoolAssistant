@@ -1,9 +1,9 @@
 ﻿import React from "react";
+import DayLessons from "../../schedule-shared/interfaces/day-lessons";
+import LessonTimelineEntry from "../../schedule-shared/interfaces/lesson-timeline-entry";
 import { modalController } from "../../shared/modals";
-import { DayLessons } from "../interfaces/day-lessons";
-import { LessonModificationData } from "../interfaces/lesson-modification-data";
-import { LessonPrefab } from "../interfaces/lesson-prefab";
-import { LessonTimelineEntry } from "../interfaces/lesson-timeline-entry";
+import LessonModificationData from "../interfaces/lesson-modification-data";
+import LessonPrefab from "../interfaces/lesson-prefab";
 import dataService from "../schedule-data-service";
 import AddLessonPrefabTile from "./selector/add-lesson-prefab-tile";
 import LessonModificationComponent from "./selector/lesson-prefab-mod-comp";

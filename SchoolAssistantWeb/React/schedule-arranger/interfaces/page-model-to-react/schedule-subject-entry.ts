@@ -1,3 +1,3 @@
-﻿import { IdName } from "../shared";
+﻿import IdName from "../../../schedule-shared/interfaces/shared/id-name";
 
-export interface ScheduleSubjectEntry extends IdName { }
+export default interface ScheduleSubjectEntry extends IdName { }
