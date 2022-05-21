@@ -1,13 +1,1 @@
-﻿.fc td,
-.fc th {
-    border: 0 !important;
-}
-
-.fc .fc-scroller {
-    overflow-y: auto !important;
-}
-
-.fc ::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
-}
+﻿

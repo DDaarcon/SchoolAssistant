@@ -1,7 +1,11 @@
-﻿.sched-timeline-day-label {
+﻿:root {
+    --schedule-day-label-offset: 30px;
+}
+
+.sched-timeline-day-label {
     position: absolute;
     width: 100%;
     text-align: center;
-    top: -30px;
+    top: calc(-1 * var(--schedule-day-label-offset));
     font-size: 1.2em;
 }

@@ -40,5 +40,5 @@
 }
 
 .schedule-view {
-    height: 100%;
+    height: calc(100% - var(--schedule-day-label-offset));
 }
