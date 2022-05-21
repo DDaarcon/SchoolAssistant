@@ -64,7 +64,7 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
             />
         )
     }
-    protected override getTimelineCellComponent(time: Time, index: number): JSX.Element {
+    protected getTimelineCellComponent(time: Time, index: number): JSX.Element {
         return (
             <TimelineCell
                 key={index}

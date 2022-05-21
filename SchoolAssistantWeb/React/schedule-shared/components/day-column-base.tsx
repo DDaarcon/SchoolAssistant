@@ -2,7 +2,6 @@
 import DayOfWeek from "../enums/day-of-week";
 import LessonTimelineEntry from "../interfaces/lesson-timeline-entry";
 import ScheduleTimelineConfig from "../interfaces/props-models/schedule-timeline-config";
-import Time from "../interfaces/shared/time";
 import DayLabel from "./day-column/day-label";
 import './day-column-base.css';
 
@@ -34,7 +33,6 @@ export default abstract class DayColumnBase
     protected getContainerProps?(): React.HTMLAttributes<HTMLDivElement> | undefined;
 
     protected getLessonsDisplayComponent?(): JSX.Element;
-    protected getTimelineCellComponent?(time: Time, index: number): JSX.Element;
     protected getAdditionalComponents?(): JSX.Element[] | JSX.Element | undefined;
 
     render() {
@@ -49,7 +47,7 @@ export default abstract class DayColumnBase
 
                 {this.getLessonsDisplayComponent?.()}
 
-                {this._cells}
+                {this._cells ?? []}
 
             </div>
         )
