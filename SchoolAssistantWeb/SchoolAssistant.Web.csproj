@@ -106,7 +106,6 @@
     <None Remove="React\schedule-display\components\timeline.tsx" />
     <None Remove="React\schedule-display\enums\schedule-viewer-type.ts" />
     <None Remove="React\schedule-display\interfaces\schedule-config.ts" />
-    <None Remove="React\schedule-display\interfaces\schedule-event.ts" />
     <None Remove="React\schedule-display\schedule.tsx" />
     <None Remove="React\schedule-shared.ts" />
     <None Remove="React\schedule-shared\components\day-column-base.tsx" />
@@ -253,7 +252,6 @@
     <TypeScriptCompile Include="React\schedule-display\components\timeline.tsx" />
     <TypeScriptCompile Include="React\schedule-display\enums\schedule-viewer-type.ts" />
     <TypeScriptCompile Include="React\schedule-display\interfaces\schedule-config.ts" />
-    <TypeScriptCompile Include="React\schedule-display\interfaces\schedule-event.ts" />
     <TypeScriptCompile Include="React\schedule-display\schedule.tsx" />
     <TypeScriptCompile Include="React\schedule-shared.ts" />
     <TypeScriptCompile Include="React\schedule-shared\components\day-column-base.tsx" />
