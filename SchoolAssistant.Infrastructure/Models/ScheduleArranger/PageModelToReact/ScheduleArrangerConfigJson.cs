@@ -1,11 +1,9 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact
-{
-    public class ScheduleArrangerConfigJson
-    {
-        public int defaultLessonDuration { get; set; }
-        public int startHour { get; set; }
-        public int endHour { get; set; }
+﻿using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 
+namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact
+{
+    public class ScheduleArrangerConfigJson : ScheduleTimelineConfigJson
+    {
         public int cellDuration { get; set; }
         public int cellHeight { get; set; }
 

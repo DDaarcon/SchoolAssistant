@@ -1,4 +1,4 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.Schedule
+﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleDisplay
 {
     public class ScheduleModel
     {

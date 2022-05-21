@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.Infrastructure.Enums.Schedule;
 using SchoolAssistant.Infrastructure.Models.MarksOverview;
-using SchoolAssistant.Infrastructure.Models.Schedule;
+using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
@@ -33,6 +33,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
                 locale = "pl",
                 hiddenDays = new DayOfWeek[] { DayOfWeek.Sunday, DayOfWeek.Saturday },
                 @for = ScheduleViewerType.Student,
+                defaultLessonDuration = 45,
                 startHour = 8,
                 endHour = 20
             };
