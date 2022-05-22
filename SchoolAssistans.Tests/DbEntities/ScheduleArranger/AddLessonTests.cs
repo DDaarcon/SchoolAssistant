@@ -6,6 +6,7 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.General.PeriodicLessons;
 using SchoolAssistant.Logic.ScheduleArranger;
