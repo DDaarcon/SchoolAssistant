@@ -148,6 +148,7 @@
     <None Remove="React\users-management\users-catalog.tsx" />
     <None Remove="React\users-management\users-catalog\controls.tsx" />
     <None Remove="React\users-management\users-catalog\controls\users-type-controls.tsx" />
+    <None Remove="React\users-management\users-catalog\interfaces\fetch-users-list-request.ts" />
     <None Remove="React\users-management\users-catalog\interfaces\student-user-list-entry.ts" />
     <None Remove="React\users-management\users-catalog\interfaces\user-list-entry.ts" />
     <None Remove="React\users-management\users-catalog\users-list.tsx" />
@@ -319,6 +320,7 @@
     <TypeScriptCompile Include="React\users-management\users-catalog.tsx" />
     <TypeScriptCompile Include="React\users-management\users-catalog\controls.tsx" />
     <TypeScriptCompile Include="React\users-management\users-catalog\controls\users-type-controls.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\interfaces\fetch-users-list-request.ts" />
     <TypeScriptCompile Include="React\users-management\users-catalog\interfaces\student-user-list-entry.ts" />
     <TypeScriptCompile Include="React\users-management\users-catalog\interfaces\user-list-entry.ts" />
     <TypeScriptCompile Include="React\users-management\users-catalog\users-list.tsx" />

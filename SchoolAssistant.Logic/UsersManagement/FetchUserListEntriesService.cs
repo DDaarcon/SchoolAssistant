@@ -7,7 +7,7 @@ namespace SchoolAssistant.Logic.UsersManagement
 {
     public interface IFetchUserListEntriesService
     {
-        Task<UserListEntryJson[]> FetchAsync(FetchUsersListModel model);
+        Task<UserListEntryJson[]> FetchAsync(FetchUsersListRequestJson model);
     }
 
     [Injectable]
@@ -15,7 +15,7 @@ namespace SchoolAssistant.Logic.UsersManagement
     {
         private readonly IUserRepository _userRepo;
 
-        private FetchUsersListModel _model = null!;
+        private FetchUsersListRequestJson _model = null!;
         private IEnumerable<UserPersonModel> _users = null!;
 
         private IUserListEntriesHelper _helper = null!;
@@ -26,7 +26,7 @@ namespace SchoolAssistant.Logic.UsersManagement
             _userRepo = userRepo;
         }
 
-        public async Task<UserListEntryJson[]> FetchAsync(FetchUsersListModel model)
+        public async Task<UserListEntryJson[]> FetchAsync(FetchUsersListRequestJson model)
         {
             _model = model;
             if (!ValidateModel()) return new UserListEntryJson[0];
@@ -46,21 +46,21 @@ namespace SchoolAssistant.Logic.UsersManagement
         private bool ValidateModel()
         {
             if (_model == null) return false;
-            if (!Enum.IsDefined(typeof(UserTypeForManagement), _model.OfType)) return false;
+            if (!Enum.IsDefined(typeof(UserTypeForManagement), _model.ofType)) return false;
             return true;
         }
 
         private void RemoveNegativeSkipAndTake()
         {
-            if (_model.Skip.HasValue && _model.Skip.Value <= 0)
-                _model.Skip = null;
-            if (_model.Take.HasValue && _model.Take.Value <= 0)
-                _model.Take = null;
+            if (_model.skip.HasValue && _model.skip.Value <= 0)
+                _model.skip = null;
+            if (_model.take.HasValue && _model.take.Value <= 0)
+                _model.take = null;
         }
 
         private void CreateHelper()
         {
-            _helper = _model.OfType switch
+            _helper = _model.ofType switch
             {
                 UserTypeForManagement.Student => new StudentUsersListEntriesHelper(),
                 UserTypeForManagement.Teacher => new TeacherUsersListEntriesHelper(),
@@ -93,10 +93,10 @@ namespace SchoolAssistant.Logic.UsersManagement
 
         private void SkipAndTake()
         {
-            if (_model.Skip.HasValue)
-                _users = _users.Skip(_model.Skip.Value);
-            if (_model.Take.HasValue)
-                _users = _users.Take(_model.Take.Value);
+            if (_model.skip.HasValue)
+                _users = _users.Skip(_model.skip.Value);
+            if (_model.take.HasValue)
+                _users = _users.Take(_model.take.Value);
         }
 
         private UserListEntryJson[] SelectEntries()

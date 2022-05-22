@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.UsersManagement;
@@ -19,11 +20,17 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
 
         public async Task OnGetAsync()
         {
-            Users = await _fetchEntriesSvc.FetchAsync(new FetchUsersListModel
+            Users = await _fetchEntriesSvc.FetchAsync(new FetchUsersListRequestJson
             {
-                Take = 40,
-                OfType = Infrastructure.Enums.Users.UserTypeForManagement.Teacher
+                take = 40,
+                ofType = Infrastructure.Enums.Users.UserTypeForManagement.Teacher
             });
+        }
+
+        public async Task<JsonResult> OnGetUserListEntriesAsync(FetchUsersListRequestJson model)
+        {
+            var users = await _fetchEntriesSvc.FetchAsync(model);
+            return new JsonResult(users);
         }
     }
 }

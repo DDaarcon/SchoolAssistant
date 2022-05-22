@@ -63,9 +63,9 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_fetch_all_student_users()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                OfType = UserTypeForManagement.Student
+                ofType = UserTypeForManagement.Student
             });
 
             Assert.IsNotNull(res);
@@ -83,9 +83,9 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_fetch_all_teacher_users()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                OfType = UserTypeForManagement.Teacher
+                ofType = UserTypeForManagement.Teacher
             });
 
             Assert.IsNotNull(res);
@@ -101,11 +101,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_fetch_next_10_student_users()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                Skip = 10,
-                Take = 10,
-                OfType = UserTypeForManagement.Student
+                skip = 10,
+                take = 10,
+                ofType = UserTypeForManagement.Student
             });
 
             var test = _studentUsers
@@ -127,11 +127,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_fetch_next_10_teacher_users()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                Skip = 10,
-                Take = 10,
-                OfType = UserTypeForManagement.Teacher
+                skip = 10,
+                take = 10,
+                ofType = UserTypeForManagement.Teacher
             });
 
             var test = _teacherUsers
@@ -153,10 +153,10 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_fetch_first_10_student_users()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                Take = 10,
-                OfType = UserTypeForManagement.Student
+                take = 10,
+                ofType = UserTypeForManagement.Student
             });
 
             var test = _studentUsers
@@ -177,10 +177,10 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_fetch_first_10_teacher_users()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                Take = 10,
-                OfType = UserTypeForManagement.Teacher
+                take = 10,
+                ofType = UserTypeForManagement.Teacher
             });
 
             var test = _teacherUsers
@@ -201,11 +201,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_ignore_negative_numbers()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                Skip = -5,
-                Take = -10,
-                OfType = UserTypeForManagement.Teacher
+                skip = -5,
+                take = -10,
+                ofType = UserTypeForManagement.Teacher
             });
 
             Assert.IsNotNull(res);
@@ -221,9 +221,9 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         [Test]
         public async Task Should_return_empty_for_invalid_type()
         {
-            var res = await _fetchService.FetchAsync(new FetchUsersListModel
+            var res = await _fetchService.FetchAsync(new FetchUsersListRequestJson
             {
-                OfType = (UserTypeForManagement)999
+                ofType = (UserTypeForManagement)999
             });
 
             Assert.IsNotNull(res);
