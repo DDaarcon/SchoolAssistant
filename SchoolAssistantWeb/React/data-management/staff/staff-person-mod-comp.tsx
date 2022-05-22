@@ -1,10 +1,10 @@
 ﻿import React from "react";
 import { MultiValue } from "react-select";
 import { Input, Multiselect, OnChangeIdHandler, Option } from "../../shared/form-controls";
+import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
 import Validator from "../../shared/validator";
-import { SharedGroupModCompProps } from "../lists/interfaces/shared-group-mod-comp-props";
 import { server } from "../main";
 import SubjectListEntry from "../subjects/interfaces/subject-list-entry";
 import StaffPersonDetails from "./interfaces/staff-person-details";

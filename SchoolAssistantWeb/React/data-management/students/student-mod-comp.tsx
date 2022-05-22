@@ -1,10 +1,10 @@
 ﻿import React from "react";
 import { Input, Select, Option } from "../../shared/form-controls";
+import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { modalController } from "../../shared/modals";
 import { ResponseJson } from "../../shared/server-connection";
 import Validator from "../../shared/validator";
-import { SharedGroupModCompProps } from "../lists/interfaces/shared-group-mod-comp-props";
 import { server } from "../main";
 import StudentRegisterRecordModComp, { StudentRegisterRecordModCompProps } from "./components/student-reg-rec-mod-comp";
 import StudentDetails from "./interfaces/student-details";

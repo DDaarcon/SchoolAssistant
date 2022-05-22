@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import { Input } from "../../shared/form-controls";
+import ModCompProps from "../../shared/lists/interfaces/shared-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
 import Validator from "../../shared/validator";
-import ModCompProps from "../lists/interfaces/shared-mod-comp-props";
 import { server } from "../main";
 import SubjectListEntry from "./interfaces/subject-list-entry";
 

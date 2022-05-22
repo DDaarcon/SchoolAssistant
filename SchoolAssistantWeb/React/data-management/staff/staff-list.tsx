@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { GroupList } from "../../shared/lists";
 import ColumnSetting from "../../shared/lists/interfaces/column-setting";
 import GroupListEntry from "../../shared/lists/interfaces/group-list-entry";
 import { server } from "../main";
