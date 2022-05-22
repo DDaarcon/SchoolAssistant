@@ -4,11 +4,11 @@ using SchoolAssistant.DAL.Models.StudentsParents;
 
 namespace SchoolAssistant.DAL.ConfigurationSchemas
 {
-    internal class ParentConfiguration : SchoolYearDbEntityConfiguration<Parent>, IEntityTypeConfiguration<Parent>
+    internal class ParentConfiguration : IEntityTypeConfiguration<Parent>
     {
-        public override void Configure(EntityTypeBuilder<Parent> builder)
+        public void Configure(EntityTypeBuilder<Parent> builder)
         {
-            base.Configure(builder);
+
         }
     }
 }

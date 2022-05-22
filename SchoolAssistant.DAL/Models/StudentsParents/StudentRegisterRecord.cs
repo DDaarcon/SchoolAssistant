@@ -16,6 +16,7 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
         public string PersonalID { get; set; } = null!;
 
         public string Address { get; set; } = null!;
+        public string? Email { get; set; }
 
         public ParentRegisterSubrecord FirstParent { get; set; } = null!;
         public ParentRegisterSubrecord? SecondParent { get; set; }

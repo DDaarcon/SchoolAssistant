@@ -1,14 +1,10 @@
-﻿using SchoolAssistant.DAL.Models.Shared;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using SchoolAssistant.DAL.Models.LinkingTables;
+using SchoolAssistant.DAL.Models.Shared;
 
 namespace SchoolAssistant.DAL.Models.StudentsParents
 {
-    public class Parent : SchoolYearDbEntity
+    public class Parent : DbEntity
     {
-        public bool IsSecondParent { get; set; }
-
-        public long ChildInfoId { get; set; }
-        [ForeignKey(nameof(ChildInfoId))]
-        public virtual StudentRegisterRecord ChildInfo { get; set; } = null!;
+        public virtual ICollection<ParentToChild> Children { get; set; } = new List<ParentToChild>();
     }
 }

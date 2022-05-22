@@ -12,10 +12,14 @@ namespace SchoolAssistant.DAL.Models.AppStructure
 
         public long? StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
-        public virtual Student? Student { get; set; }
+        public virtual StudentRegisterRecord? Student { get; set; }
 
         public long? TeacherId { get; set; }
         [ForeignKey(nameof(TeacherId))]
         public virtual Teacher? Teacher { get; set; }
+
+        public long? ParentId { get; set; }
+        [ForeignKey(nameof(ParentId))]
+        public virtual Parent? Parent { get; set; }
     }
 }
