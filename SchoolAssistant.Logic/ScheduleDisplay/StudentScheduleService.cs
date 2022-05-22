@@ -2,15 +2,15 @@
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
-using SchoolAssistant.Infrastructure.Models.Schedule;
+using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.Schedule
 {
     public interface IStudentScheduleService
     {
-        Task<ScheduleModel?> GetModel(long studentId);
-        ScheduleModel? GetModel(Student student);
+        Task<ScheduleEventJson[]?> GetModelAsync(long studentId);
+        ScheduleEventJson[]? GetModel(Student student);
     }
 
     [Injectable]
@@ -33,7 +33,7 @@ namespace SchoolAssistant.Logic.Schedule
             _studentRepo = studentRepo;
         }
 
-        public async Task<ScheduleModel?> GetModel(long studentId)
+        public async Task<ScheduleEventJson[]?> GetModelAsync(long studentId)
         {
             var student = await _studentRepo.GetByIdAsync(studentId);
             if (student is null)
@@ -42,7 +42,7 @@ namespace SchoolAssistant.Logic.Schedule
             return GetModel(student);
         }
 
-        public ScheduleModel? GetModel(Student student)
+        public ScheduleEventJson[]? GetModel(Student student)
         {
             _student = student;
 
@@ -54,7 +54,7 @@ namespace SchoolAssistant.Logic.Schedule
 
             FillModel();
 
-            return _model;
+            return null;
         }
 
         private void FetchLessons()

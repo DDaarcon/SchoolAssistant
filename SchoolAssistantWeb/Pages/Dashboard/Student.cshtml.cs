@@ -1,42 +1,38 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
-using SchoolAssistant.Infrastructure.Enums.Schedule;
 using SchoolAssistant.Infrastructure.Models.MarksOverview;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Logic.Help;
+using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
     public class StudentModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
 
         private User _user = null!;
 
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
         public ScheduleEventJson[] ScheduleEvents { get; set; } = null!;
+
         public MarksOverviewModel MarksOverview { get; set; } = new MarksOverviewModel();
 
         public StudentModel(
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IFetchSchedDisplayConfigService fetchScheduleConfigSvc)
         {
             _userManager = userManager;
+            _fetchScheduleConfigSvc = fetchScheduleConfigSvc;
         }
 
         public async Task OnGetAsync()
         {
             _user = await _userManager.GetUserAsync(User);
 
-            ScheduleConfig = new()
-            {
-                locale = "pl",
-                hiddenDays = new DayOfWeek[] { DayOfWeek.Sunday, DayOfWeek.Saturday },
-                @for = ScheduleViewerType.Student,
-                defaultLessonDuration = 45,
-                startHour = 8,
-                endHour = 20
-            };
+            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
 
             ScheduleEvents = new ScheduleEventJson[]
             {
