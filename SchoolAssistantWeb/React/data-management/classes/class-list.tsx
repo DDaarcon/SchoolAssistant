@@ -31,7 +31,7 @@ const ClassesList = (props: ClassesListProps) => {
     }
 
     return (
-        <List<ClassListEntry>
+        <List
             columnsSetting={columnsSetting}
             loadDataAsync={loadAsync}
             modificationComponent={ClassModComp}

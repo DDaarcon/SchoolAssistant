@@ -33,6 +33,7 @@
     <None Remove="React\shared\lists\help\confirm-close-mod.tsx" />
     <None Remove="React\shared\lists\interfaces\custom-row-button.ts" />
     <None Remove="React\shared\lists\list.tsx" />
+    <None Remove="React\shared\lists\readonly-list.tsx" />
     <None Remove="React\shared\lists\shared-list-component.ts" />
     <None Remove="React\data-management\rooms\interfaces\room-details.ts" />
     <None Remove="React\data-management\rooms\interfaces\room-list-entry.ts" />
@@ -139,6 +140,20 @@
     <None Remove="React\shared\modals\modal.tsx" />
     <None Remove="React\shared\modals\shared-modal-body.tsx" />
     <None Remove="React\shared\validator.ts" />
+    <None Remove="React\users-management.ts" />
+    <None Remove="React\users-management\help\user-type-functions.ts" />
+    <None Remove="React\users-management\interfaces\user-type-for-management.ts" />
+    <None Remove="React\users-management\server.ts" />
+    <None Remove="React\users-management\settings.ts" />
+    <None Remove="React\users-management\users-catalog.tsx" />
+    <None Remove="React\users-management\users-catalog\controls.tsx" />
+    <None Remove="React\users-management\users-catalog\controls\users-type-controls.tsx" />
+    <None Remove="React\users-management\users-catalog\interfaces\student-user-list-entry.ts" />
+    <None Remove="React\users-management\users-catalog\interfaces\user-list-entry.ts" />
+    <None Remove="React\users-management\users-catalog\users-list.tsx" />
+    <None Remove="React\users-management\users-catalog\users-lists\student-users-list.tsx" />
+    <None Remove="React\users-management\users-catalog\users-lists\teacher-users-list.tsx" />
+    <None Remove="React\users-management\users-catalog\users-lists\users-list-base.tsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -280,6 +295,7 @@
     <TypeScriptCompile Include="React\shared\form-controls\multiselect.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\select.tsx" />
     <TypeScriptCompile Include="React\shared\lists.ts" />
+    <TypeScriptCompile Include="React\shared\lists\readonly-list.tsx" />
     <TypeScriptCompile Include="React\shared\modals\confirmation-modal.tsx" />
     <TypeScriptCompile Include="React\shared\modals\modal-controller.tsx" />
     <TypeScriptCompile Include="React\shared\modals\custom-component-modal.tsx" />
@@ -295,9 +311,24 @@
     <TypeScriptCompile Include="React\data-management\navigation.tsx" />
     <TypeScriptCompile Include="React\shared\loader.tsx" />
     <TypeScriptCompile Include="React\shared\server-connection.tsx" />
+    <TypeScriptCompile Include="React\users-management.ts" />
+    <TypeScriptCompile Include="React\users-management\help\user-type-functions.ts" />
+    <TypeScriptCompile Include="React\users-management\enums\user-type-for-management.ts" />
+    <TypeScriptCompile Include="React\users-management\server.ts" />
+    <TypeScriptCompile Include="React\users-management\settings.ts" />
+    <TypeScriptCompile Include="React\users-management\users-catalog.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\controls.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\controls\users-type-controls.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\interfaces\student-user-list-entry.ts" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\interfaces\user-list-entry.ts" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\users-list.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\users-lists\student-users-list.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\users-lists\teacher-users-list.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\users-lists\users-list-base.tsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="React\users-management\interfaces\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 </Project>

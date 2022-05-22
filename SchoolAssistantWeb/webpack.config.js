@@ -7,6 +7,10 @@ module.exports = {
 			import: './React/data-management.ts',
 			dependOn: [ 'react_lib', 'shared' ]
 		},
+		users_management: {
+			import: './React/users-management.ts',
+			dependOn: [ 'react_lib', 'shared' ]
+		},
 		schedule_arranger: {
 			import: './React/schedule-arranger.ts',
 			dependOn: [ 'react_lib', 'shared', 'schedule_shared' ]

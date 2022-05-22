@@ -9,7 +9,7 @@ import { ListEntryInnerProps } from "./list-entry-inner-component";
 
 export type ListEntryProps<
     TEntry extends ListEntry,
-    TModificationComponentProps extends ModCompProps | SharedGroupModCompProps
+    TModificationComponentProps extends ModCompProps | SharedGroupModCompProps | void
     > = {
         recordId?: number;
         recordData: TEntry;
@@ -21,7 +21,7 @@ export type ListEntryProps<
         isEven: boolean;
         groupId?: string | number;
 
-        modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
+        modificationComponent?: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
         listEntryInnerComponent: new (props: ListEntryInnerProps) => React.Component<ListEntryInnerProps>;
         customButtons?: CustomRowButton<TEntry>[]
     }

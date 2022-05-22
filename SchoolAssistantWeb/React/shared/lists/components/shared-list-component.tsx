@@ -12,10 +12,10 @@ import '../lists.css';
 
 export type SharedListProps<
     TEntry extends ListEntry,
-    TModificationComponentProps extends ModCompProps | SharedGroupModCompProps,
+    TModificationComponentProps extends ModCompProps | SharedGroupModCompProps | void,
     TStoredData extends TEntry | GroupListEntry<TEntry>
     > = {
-        modificationComponent: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
+        modificationComponent?: new (props: TModificationComponentProps) => React.Component<TModificationComponentProps>;
         customListEntryComponent?: new (props: ListEntryProps<TEntry, TModificationComponentProps>) => React.Component<ListEntryProps<TEntry, TModificationComponentProps>>;
         customListEntryInnerComponent?: new (props: ListEntryInnerProps) => React.Component<ListEntryInnerProps>;
         columnsSetting: ColumnSetting<TEntry>[];
@@ -32,7 +32,7 @@ export type SharedListState<
 
 export default abstract class SharedListComponent<
     TEntry extends ListEntry,
-    TModificationComponentProps extends ModCompProps | SharedGroupModCompProps,
+    TModificationComponentProps extends ModCompProps | SharedGroupModCompProps | void,
     TStoredData extends TEntry | GroupListEntry<TEntry>,
     TProps extends SharedListProps<TEntry, TModificationComponentProps, TStoredData>,
     TState extends SharedListState<TEntry, TStoredData>
@@ -49,7 +49,8 @@ export default abstract class SharedListComponent<
 
 
     async componentDidMount() {
-        await this.loadAsync();
+        if (!this.state.data)
+            await this.loadAsync();
     }
 
     onMadeAnyChange = () => {
