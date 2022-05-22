@@ -1,4 +1,5 @@
 ﻿using SchoolAssistant.DAL.Help;
+using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.LinkingTables;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
@@ -15,6 +16,8 @@ namespace SchoolAssistant.DAL.Models.Staff
         public virtual OrganizationalClass Pupils { get; set; } = null!;
 
         public virtual ICollection<PeriodicLesson> Schedule { get; set; } = new List<PeriodicLesson>();
+
+        public virtual User? User { get; set; }
 
 
         [NotMapped]

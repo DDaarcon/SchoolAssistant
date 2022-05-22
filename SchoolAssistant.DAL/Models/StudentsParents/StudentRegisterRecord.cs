@@ -1,4 +1,5 @@
 ﻿using SchoolAssistant.DAL.Interfaces;
+using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Shared;
 
 namespace SchoolAssistant.DAL.Models.StudentsParents
@@ -22,5 +23,7 @@ namespace SchoolAssistant.DAL.Models.StudentsParents
         public ParentRegisterSubrecord? SecondParent { get; set; }
 
         public virtual ICollection<Student> StudentInstances { get; set; } = new List<Student>();
+
+        public virtual User? User { get; set; }
     }
 }
