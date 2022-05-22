@@ -1,0 +1,32 @@
+﻿@page
+@model SchoolAssistant.Web.Pages.UsersManagement.UsersManagementModel
+@{
+}
+
+@section Head {
+    <link rel="stylesheet" href="~/css/users-management/list.css" asp-append-version="true"/>
+}
+
+<table id="users-list">
+    <thead>
+        <tr>
+            <th>Nazwisko</th>
+            <th>Imię</th>
+            <th>Nazwa użytkownika</th>
+            <th>Email</th>
+            <th>Typ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.LastName</td>
+                <td>@user.FirstName</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.TypeName</td>
+            </tr>
+        }
+    </tbody>
+</table>
