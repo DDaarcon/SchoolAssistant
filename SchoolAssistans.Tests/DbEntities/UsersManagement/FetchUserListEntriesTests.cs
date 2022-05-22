@@ -56,7 +56,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             _studentRecordRepo = new Repository<StudentRegisterRecord>(_Context, null);
             _subjectRepo = new Repository<Subject>(_Context, null);
             _teacherRepo = new Repository<Teacher>(_Context, null);
-            _fetchService = new FetchUserListEntriesService();
+            _fetchService = new FetchUserListEntriesService(_userRepo);
         }
 
         [Test]
@@ -236,6 +236,15 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             {
                 OfType = (UserTypeForManagement)999
             });
+
+            Assert.IsNotNull(res);
+            Assert.AreEqual(0, res!.Length);
+        }
+
+        [Test]
+        public async Task Should_return_empty_for_missing_model()
+        {
+            var res = await _fetchService.FetchAsync(null!);
 
             Assert.IsNotNull(res);
             Assert.AreEqual(0, res!.Length);

@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Lessons;
@@ -482,7 +483,7 @@ namespace SchoolAssistans.Tests.DbEntities
                 .RuleFor(x => x.Email, f => f.Internet.Email(teacher.FirstName, teacher.LastName))
                 .Generate();
 
-            user.Type = UserType.Student;
+            user.Type = UserType.Teacher;
             user.TeacherId = teacher.Id;
 
             await userRepo.Manager.CreateAsync(user);
@@ -498,7 +499,7 @@ namespace SchoolAssistans.Tests.DbEntities
         {
             var users = new List<User>();
 
-            var teachers = await _XRandom_Teachers(teacherRepo, Math.Min(amount, 13));
+            var teachers = await _XRandom_Teachers(teacherRepo, amount);
 
             foreach (var teacher in teachers)
             {
@@ -507,17 +508,23 @@ namespace SchoolAssistans.Tests.DbEntities
                .RuleFor(x => x.Email, f => f.Internet.Email(teacher.FirstName, teacher.LastName))
                .Generate();
 
-                user.Type = UserType.Student;
+                user.Type = UserType.Teacher;
                 user.TeacherId = teacher.Id;
 
-                await userRepo.Manager.CreateAsync(user);
-
-                user.Teacher = teacher;
+                try
+                {
+                    await userRepo.Manager.CreateAsync(user);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 users.Add(user);
             }
 
-            return users;
+            var ids = users.Select(x => x.Id);
+            return await userRepo.AsQueryable().Where(x => ids.Contains(x.Id)).ToListAsync();
         }
 
         #endregion
