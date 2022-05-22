@@ -1,4 +1,6 @@
 ﻿using Bogus;
+using SchoolAssistant.DAL.Enums;
+using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.SchoolYears;
@@ -9,6 +11,7 @@ using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
@@ -92,6 +95,16 @@ namespace SchoolAssistans.Tests.DbEntities
             .RuleFor(x => x.Name, f => f.PickRandom(_RoomNames))
             .RuleFor(x => x.Number, f => f.Random.Int(1, 30))
             .RuleFor(x => x.Floor, f => f.Random.Int(0, 3));
+
+
+
+
+        private static Faker<User> _UserFaker => new Faker<User>()
+            .RuleFor(x => x.UserName, f => f.Internet.UserName())
+            .RuleFor(x => x.Email, f => f.Internet.Email())
+            .RuleFor(x => x.EmailConfirmed, true);
+
+
 
 
         #region OrganizationalClasses
@@ -333,6 +346,20 @@ namespace SchoolAssistans.Tests.DbEntities
             return subjects;
         }
 
+        private static IEnumerable<Subject>? _OnceCreatedSubjects;
+        public static async Task<IEnumerable<Subject>> GetOrCreateUniqueSubjects(
+            IRepository<Subject> subjectRepo)
+        {
+            if (_OnceCreatedSubjects is null
+                || !_OnceCreatedSubjects.Any()
+                || _OnceCreatedSubjects.Any(x => subjectRepo.GetEntry(x).State == Microsoft.EntityFrameworkCore.EntityState.Detached))
+            {
+                _OnceCreatedSubjects = await Subjects(subjectRepo, 10);
+            }
+
+            return _OnceCreatedSubjects;
+        }
+
         #endregion
 
         #region Teachers
@@ -410,7 +437,90 @@ namespace SchoolAssistans.Tests.DbEntities
 
         #endregion
 
+        #region Users
 
+        public static async Task<User> UserWithRandomStudent(
+            IUserRepository userRepo)
+        {
+            var studentRecord = _StudentRegisterRecordFaker.Generate();
+
+            var user = _UserFaker
+                .RuleFor(x => x.UserName, f => f.Internet.UserName(studentRecord.FirstName, studentRecord.LastName))
+                .RuleFor(x => x.Email, f => f.Internet.Email(studentRecord.FirstName, studentRecord.LastName))
+                .Generate();
+
+            user.Type = UserType.Student;
+            user.Student = studentRecord;
+
+            await userRepo.Manager.CreateAsync(user);
+
+            return user;
+        }
+
+        public static async Task<IList<User>> UsersWithRandomStudents(
+            IUserRepository userRepo,
+            int amount)
+        {
+            var users = new List<User>();
+
+            while (0 < amount--)
+            {
+                users.Add(await UserWithRandomStudent(userRepo));
+            }
+
+            return users;
+        }
+
+        public static async Task<User> UserWithRandomTeacher(
+            IUserRepository userRepo,
+            IRepository<Teacher> teacherRepo)
+        {
+            var teacher = await Teacher(teacherRepo);
+
+            var user = _UserFaker
+                .RuleFor(x => x.UserName, f => f.Internet.UserName(teacher.FirstName, teacher.LastName))
+                .RuleFor(x => x.Email, f => f.Internet.Email(teacher.FirstName, teacher.LastName))
+                .Generate();
+
+            user.Type = UserType.Student;
+            user.TeacherId = teacher.Id;
+
+            await userRepo.Manager.CreateAsync(user);
+
+            user.Teacher = teacher;
+            return user;
+        }
+
+        public static async Task<IList<User>> UsersWithRandomTeachers(
+            IUserRepository userRepo,
+            IRepository<Teacher> teacherRepo,
+            int amount)
+        {
+            var users = new List<User>();
+
+            var teachers = await _XRandom_Teachers(teacherRepo, Math.Min(amount, 13));
+
+            foreach (var teacher in teachers)
+            {
+                var user = _UserFaker
+               .RuleFor(x => x.UserName, f => f.Internet.UserName(teacher.FirstName, teacher.LastName))
+               .RuleFor(x => x.Email, f => f.Internet.Email(teacher.FirstName, teacher.LastName))
+               .Generate();
+
+                user.Type = UserType.Student;
+                user.TeacherId = teacher.Id;
+
+                await userRepo.Manager.CreateAsync(user);
+
+                user.Teacher = teacher;
+
+                users.Add(user);
+            }
+
+            return users;
+        }
+
+        #endregion
 
 
 
