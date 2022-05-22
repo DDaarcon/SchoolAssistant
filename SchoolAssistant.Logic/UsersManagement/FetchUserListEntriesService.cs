@@ -9,7 +9,7 @@ namespace SchoolAssistant.Logic.UsersManagement
 {
     public interface IFetchUserListEntriesService
     {
-        Task<UserListEntryModel[]?> FetchAsync(FetchUsersListModel model);
+        Task<UserListEntryModel[]> FetchAsync(FetchUsersListModel model);
     }
 
     [Injectable]
@@ -26,7 +26,7 @@ namespace SchoolAssistant.Logic.UsersManagement
             _userRepo = userRepo;
         }
 
-        public async Task<UserListEntryModel[]?> FetchAsync(FetchUsersListModel model)
+        public async Task<UserListEntryModel[]> FetchAsync(FetchUsersListModel model)
         {
             _model = model;
             if (model == null) return new UserListEntryModel[0];

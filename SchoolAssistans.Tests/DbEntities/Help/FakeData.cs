@@ -19,6 +19,8 @@ namespace SchoolAssistans.Tests.DbEntities
 {
     public class FakeData
     {
+        // TODO: creating Parent entities and connecting them to Users
+
         private static readonly string[] _SubjectNames = new string[] {
             "Art", "Music", "Drama", "Latin", "Sport Science", "Design Technology", "Computer Science", "Biology", "Chemistry", "Physics",
             "History", "Geography", "Economics"
