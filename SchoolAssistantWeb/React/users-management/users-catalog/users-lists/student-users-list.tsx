@@ -1,8 +1,8 @@
 ﻿import ColumnSetting from "../../../shared/lists/interfaces/column-setting";
 import UserTypeForManagement from "../../enums/user-type-for-management";
-import server from "../../server";
 import FetchUsersListRequest from "../interfaces/fetch-users-list-request";
 import StudentUserListEntry from "../interfaces/student-user-list-entry";
+import serverCatalog from "../server-catalog";
 import UsersListBase from "./users-list-base";
 
 
@@ -21,7 +21,7 @@ export default class StudentUsersList extends UsersListBase<StudentUserListEntry
         const params: FetchUsersListRequest = {
             ofType: UserTypeForManagement.Student
         };
-        let response = await server.getAsync<StudentUserListEntry[]>("UserListEntries", params);
+        let response = await serverCatalog.getAsync<StudentUserListEntry[]>("UserListEntries", params);
         return response;
     }
 

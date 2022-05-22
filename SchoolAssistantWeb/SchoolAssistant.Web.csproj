@@ -143,7 +143,7 @@
     <None Remove="React\users-management.ts" />
     <None Remove="React\users-management\help\user-type-functions.ts" />
     <None Remove="React\users-management\interfaces\user-type-for-management.ts" />
-    <None Remove="React\users-management\server.ts" />
+    <None Remove="React\users-management\server-catalog.ts" />
     <None Remove="React\users-management\settings.ts" />
     <None Remove="React\users-management\users-catalog.tsx" />
     <None Remove="React\users-management\users-catalog\controls.tsx" />
@@ -315,7 +315,7 @@
     <TypeScriptCompile Include="React\users-management.ts" />
     <TypeScriptCompile Include="React\users-management\help\user-type-functions.ts" />
     <TypeScriptCompile Include="React\users-management\enums\user-type-for-management.ts" />
-    <TypeScriptCompile Include="React\users-management\server.ts" />
+    <TypeScriptCompile Include="React\users-management\users-catalog\server-catalog.ts" />
     <TypeScriptCompile Include="React\users-management\settings.ts" />
     <TypeScriptCompile Include="React\users-management\users-catalog.tsx" />
     <TypeScriptCompile Include="React\users-management\users-catalog\controls.tsx" />
