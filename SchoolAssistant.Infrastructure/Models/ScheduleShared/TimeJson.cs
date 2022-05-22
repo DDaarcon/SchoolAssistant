@@ -1,4 +1,4 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
+﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleShared
 {
     public class TimeJson
     {

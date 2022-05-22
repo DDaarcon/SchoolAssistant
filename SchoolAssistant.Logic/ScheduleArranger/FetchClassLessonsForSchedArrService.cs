@@ -1,6 +1,7 @@
 ﻿using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
 {
@@ -33,7 +34,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
                     .Select(x => new ScheduleDayLessonsJson
                     {
                         dayIndicator = x.Key,
-                        lessons = x.Select(l => new ScheduleLessonTimetableEntryJson
+                        lessons = x.Select(l => new LessonTimetableEntryJson
                         {
                             id = l.Id,
                             time = new TimeJson(l.GetTime() ?? TimeOnly.MinValue),

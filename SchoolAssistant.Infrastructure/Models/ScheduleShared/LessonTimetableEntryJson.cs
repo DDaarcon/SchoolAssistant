@@ -1,6 +1,6 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
+﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleShared
 {
-    public class ScheduleLessonTimetableEntryJson
+    public class LessonTimetableEntryJson
     {
         public long? id { get; set; }
 

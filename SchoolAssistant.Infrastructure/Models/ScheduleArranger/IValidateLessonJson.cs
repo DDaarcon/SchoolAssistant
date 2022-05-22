@@ -1,4 +1,6 @@
-﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
+﻿using SchoolAssistant.Infrastructure.Models.ScheduleShared;
+
+namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
 {
     public interface IValidateLessonJson
     {

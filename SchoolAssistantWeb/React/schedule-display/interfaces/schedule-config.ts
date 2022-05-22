@@ -3,7 +3,6 @@ import ScheduleTimelineConfig from "../../schedule-shared/interfaces/props-model
 import ScheduleViewerType from "../enums/schedule-viewer-type";
 
 export default interface ScheduleConfig extends ScheduleTimelineConfig {
-    locale?: string;
     hiddenDays: DayOfWeek[];
     for: ScheduleViewerType;
 }

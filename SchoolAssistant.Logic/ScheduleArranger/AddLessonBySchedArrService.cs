@@ -5,6 +5,7 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.General.PeriodicLessons;
 using SchoolAssistant.Logic.Help;
 
@@ -120,7 +121,7 @@ namespace SchoolAssistant.Logic.ScheduleArranger
 
         private async Task PrepareDataInResponse()
         {
-            _response.lesson = new ScheduleLessonTimetableEntryJson
+            _response.lesson = new LessonTimetableEntryJson
             {
                 id = _entity.Id,
                 customDuration = _entity.CustomDuration,

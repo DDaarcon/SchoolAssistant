@@ -3,6 +3,7 @@ using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
+using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.General.PeriodicLessons
