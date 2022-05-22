@@ -3,6 +3,7 @@ import DayColumnBase, { DayColumnBaseProps, DayColumnBaseState } from "../../sch
 import Lesson from "../../schedule-shared/interfaces/lesson";
 import Time from "../../schedule-shared/interfaces/shared/time";
 import ScheduleConfig from "../interfaces/schedule-config";
+import SETTINGS from "../settings";
 import LessonsByDay from "./lessons-by-day";
 import TimelineCell from "./timeline-cell";
 
@@ -13,8 +14,7 @@ type DayColumnState = DayColumnBaseState;
 
 export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnState, ScheduleConfig, Lesson> {
 
-    private readonly CELLS_PER_HOUR = 1;
-    private get _cellDuration() { return 60 / this.CELLS_PER_HOUR; }
+    private get _cellDuration() { return 60 / SETTINGS.CellsPerHour; }
 
     private _cellHeight: number;
 
@@ -27,7 +27,7 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
     private instantiateCells() {
         if (!this.getTimelineCellComponent) throw new Error("Overriding method `getTimelineCellComponent` is required for calling `instantiateCells`");
 
-        const count = (this.props.config.endHour - this.props.config.startHour) * this.CELLS_PER_HOUR;
+        const count = (this.props.config.endHour - this.props.config.startHour) * SETTINGS.CellsPerHour;
         this._cellHeight = this.props.scheduleHeight / count;
 
         const cellTimes = Array.from({ length: count }, (_, i): Time => {
@@ -47,6 +47,7 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
                 lessons={this.props.lessons}
                 day={this.props.dayIndicator}
                 config={this.props.config}
+                cellHeight={this._cellHeight}
             />
         )
     }

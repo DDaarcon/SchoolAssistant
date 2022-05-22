@@ -11,6 +11,7 @@ type LessonsByDayProps = {
     day: DayOfWeek;
     lessons: Lesson[];
     config: ScheduleConfig;
+    cellHeight: number;
 }
 type LessonsByDayState = {
 
@@ -31,6 +32,7 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
                         key={`${lesson.time.hour}${lesson.time.minutes}`}
                         config={this.props.config}
                         lesson={lesson}
+                        cellHeight={this.props.cellHeight}
                     />
                 )}
             </>

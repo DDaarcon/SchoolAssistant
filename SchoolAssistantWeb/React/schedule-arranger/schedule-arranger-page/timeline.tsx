@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import TimeColumn from '../../schedule-shared/components/time-column';
 import DayOfWeek from '../../schedule-shared/enums/day-of-week';
+import TimeColumnVariant from '../../schedule-shared/enums/time-column-variant';
 import DayLessons from '../../schedule-shared/interfaces/day-lessons';
 import LessonTimelineEntry from '../../schedule-shared/interfaces/lesson-timeline-entry';
 import Time from '../../schedule-shared/interfaces/shared/time';
@@ -52,7 +53,8 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
     protected override getTimeColumnComponent(): JSX.Element {
         return (
             <TimeColumn
-                config={this.props.config}
+                {...this.props.config}
+                variant={TimeColumnVariant.WholeHoursByCellSpec}
             />
         )
     }

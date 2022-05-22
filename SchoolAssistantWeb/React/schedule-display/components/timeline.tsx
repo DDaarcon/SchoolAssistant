@@ -39,7 +39,7 @@ export default class ScheduleDisplayTimeline extends ScheduleTimelineBase<Schedu
     protected override getTimeColumnComponent(): JSX.Element {
         return (
             <TimeColumn
-                config={this.props.config}
+                { ...this.props.config }
                 scheduleHeight={this.state.scheduleHeight}
                 variant={TimeColumnVariant.WholeHoursByHeight}
             />

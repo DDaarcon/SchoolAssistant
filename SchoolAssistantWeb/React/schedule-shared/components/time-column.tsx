@@ -1,15 +1,19 @@
 ﻿import React from "react";
 import TimeColumnVariant from "../enums/time-column-variant";
 import { displayTime } from "../help/time-functions";
-import ScheduleTimelineConfig from "../interfaces/props-models/schedule-timeline-config";
 import Time from "../interfaces/shared/time";
 import './time-column.css';
 
 type TimeColumnProps = {
-    config: ScheduleTimelineConfig;
+    startHour: number;
+    endHour: number;
+
     variant?: TimeColumnVariant;
 
     scheduleHeight?: number;
+
+    cellDuration?: number;
+    cellHeight?: number;
 }
 type TimeColumnState = {
 
@@ -34,8 +38,8 @@ export default class TimeColumn extends React.Component<TimeColumnProps, TimeCol
     private _timeLables: JSX.Element[];
 
     private addTimeLabelsByVariant() {
-        switch (this.props.variant ?? TimeColumnVariant.WholeHoursByConfig) {
-            case TimeColumnVariant.WholeHoursByConfig:
+        switch (this.props.variant ?? TimeColumnVariant.WholeHoursByCellSpec) {
+            case TimeColumnVariant.WholeHoursByCellSpec:
                 this.addWholeHoursByConfig();
                 break;
             case TimeColumnVariant.WholeHoursByHeight:
@@ -47,7 +51,7 @@ export default class TimeColumn extends React.Component<TimeColumnProps, TimeCol
     private addWholeHoursByConfig() {
         const hours = this._wholeHoursToDisplay;
 
-        const offsetIncrement = (60 / this.props.config.cellDuration) * this.props.config.cellHeight;
+        const offsetIncrement = (60 / this.props.cellDuration) * this.props.cellHeight;
         let offset = 0;
 
         for (const hour of hours) {
@@ -71,8 +75,8 @@ export default class TimeColumn extends React.Component<TimeColumnProps, TimeCol
 
     private get _wholeHoursToDisplay() {
         return Array.from({
-            length: this.props.config.endHour - this.props.config.startHour
-        }, (_, i) => this.props.config.startHour + i);
+            length: this.props.endHour - this.props.startHour
+        }, (_, i) => this.props.startHour + i);
     }
 
     private timeLabel = (time: Time, top: number) => (

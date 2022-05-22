@@ -25,6 +25,7 @@
     <None Remove="React\data-management\classes\interfaces\class-list-entry.ts" />
     <None Remove="React\data-management\classes\interfaces\class-modification-data.ts" />
     <None Remove="React\data-management\enums\category.ts" />
+    <None Remove="React\schedule-display\settings.ts" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
     <None Remove="React\shared\lists\components\list-entry-coponent.tsx" />
     <None Remove="React\shared\lists\components\list-entry-inner-component.tsx" />
@@ -173,6 +174,7 @@
     <TypeScriptCompile Include="React\data-management\classes\interfaces\class-list-entry.ts" />
     <TypeScriptCompile Include="React\data-management\classes\interfaces\class-modification-data.ts" />
     <TypeScriptCompile Include="React\data-management\enums\category.ts" />
+    <TypeScriptCompile Include="React\schedule-display\settings.ts" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-coponent.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-inner-component.tsx" />

@@ -1,5 +1,5 @@
 ﻿enum TimeColumnVariant {
-    WholeHoursByConfig,
+    WholeHoursByCellSpec,
     WholeHoursByHeight
 }
 export default TimeColumnVariant;
