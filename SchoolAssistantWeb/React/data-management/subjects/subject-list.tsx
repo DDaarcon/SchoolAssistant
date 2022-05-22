@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import ColumnSetting from "../lists/interfaces/column-setting";
-import List from "../lists/list";
+import { List } from "../../shared/lists";
+import ColumnSetting from "../../shared/lists/interfaces/column-setting";
 import { server } from "../main";
 import SubjectListEntry from "./interfaces/subject-list-entry";
 import SubjectModComp from "./subject-mod-comp";

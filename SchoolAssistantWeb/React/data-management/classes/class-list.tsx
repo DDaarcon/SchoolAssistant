@@ -1,7 +1,6 @@
 ﻿import React from "react";
-import { EntryInfoProps } from "../lists/components/entry-info-component";
-import ColumnSetting from "../lists/interfaces/column-setting";
-import List from "../lists/list";
+import { List } from "../../shared/lists";
+import ColumnSetting from "../../shared/lists/interfaces/column-setting";
 import { server } from "../main";
 import { StudentsPageProps } from "../students/students-page";
 import ClassModComp from "./class-mod-comp";

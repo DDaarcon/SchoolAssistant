@@ -1,4 +1,4 @@
-﻿import ListEntry from "../../lists/interfaces/list-entry";
+﻿import ListEntry from "../../../shared/lists/interfaces/list-entry";
 
 export default interface RoomListEntry extends ListEntry {
     name: string;

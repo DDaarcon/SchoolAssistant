@@ -1,7 +1,7 @@
 ﻿import React from "react";
-import GroupList from "../lists/group-list";
-import ColumnSetting from "../lists/interfaces/column-setting";
-import GroupListEntry from "../lists/interfaces/group-list-entry";
+import { GroupList } from "../../shared/lists";
+import ColumnSetting from "../../shared/lists/interfaces/column-setting";
+import GroupListEntry from "../../shared/lists/interfaces/group-list-entry";
 import { server } from "../main";
 import StudentListEntry from "./interfaces/student-list-entry";
 import StudentModComp from "./student-mod-comp";

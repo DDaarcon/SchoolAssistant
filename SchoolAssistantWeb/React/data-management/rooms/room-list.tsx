@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import ColumnSetting from "../lists/interfaces/column-setting";
-import List from "../lists/list";
+import { List } from "../../shared/lists";
+import ColumnSetting from "../../shared/lists/interfaces/column-setting";
 import { server } from "../main";
 import RoomListEntry from "./interfaces/room-list-entry";
 import RoomModComp from "./room-mod-comp";
