@@ -8,7 +8,7 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
     {
         private readonly IFetchUserListEntriesService _fetchEntriesSvc;
 
-        public IEnumerable<UserListEntryModel> Users { get; private set; } = null!;
+        public IEnumerable<UserListEntryJson> Users { get; private set; } = null!;
 
         public UsersManagementModel(
             IFetchUserListEntriesService fetchEntriesSvc)

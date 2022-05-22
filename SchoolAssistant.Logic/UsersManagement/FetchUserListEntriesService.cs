@@ -1,15 +1,13 @@
-﻿using SchoolAssistant.DAL.Enums;
-using SchoolAssistant.DAL.Interfaces;
-using SchoolAssistant.DAL.Models.AppStructure;
-using SchoolAssistant.DAL.Repositories;
+﻿using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
+using SchoolAssistant.Logic.UsersManagement.FetchUserListEntriesHelp;
 
 namespace SchoolAssistant.Logic.UsersManagement
 {
     public interface IFetchUserListEntriesService
     {
-        Task<UserListEntryModel[]> FetchAsync(FetchUsersListModel model);
+        Task<UserListEntryJson[]> FetchAsync(FetchUsersListModel model);
     }
 
     [Injectable]
@@ -18,7 +16,9 @@ namespace SchoolAssistant.Logic.UsersManagement
         private readonly IUserRepository _userRepo;
 
         private FetchUsersListModel _model = null!;
-        private IEnumerable<UserAndInfo> _users = null!;
+        private IEnumerable<UserPersonModel> _users = null!;
+
+        private IUserListEntriesHelper _helper = null!;
 
         public FetchUserListEntriesService(
             IUserRepository userRepo)
@@ -26,11 +26,13 @@ namespace SchoolAssistant.Logic.UsersManagement
             _userRepo = userRepo;
         }
 
-        public async Task<UserListEntryModel[]> FetchAsync(FetchUsersListModel model)
+        public async Task<UserListEntryJson[]> FetchAsync(FetchUsersListModel model)
         {
             _model = model;
-            if (model == null) return new UserListEntryModel[0];
-            VerifyModel();
+            if (!ValidateModel()) return new UserListEntryJson[0];
+            RemoveNegativeSkipAndTake();
+
+            CreateHelper();
 
             await FetchUsersFromDB();
 
@@ -41,7 +43,14 @@ namespace SchoolAssistant.Logic.UsersManagement
             return SelectEntries();
         }
 
-        private void VerifyModel()
+        private bool ValidateModel()
+        {
+            if (_model == null) return false;
+            if (!Enum.IsDefined(typeof(UserTypeForManagement), _model.OfType)) return false;
+            return true;
+        }
+
+        private void RemoveNegativeSkipAndTake()
         {
             if (_model.Skip.HasValue && _model.Skip.Value <= 0)
                 _model.Skip = null;
@@ -49,48 +58,37 @@ namespace SchoolAssistant.Logic.UsersManagement
                 _model.Take = null;
         }
 
+        private void CreateHelper()
+        {
+            _helper = _model.OfType switch
+            {
+                UserTypeForManagement.Student => new StudentUsersListEntriesHelper(),
+                UserTypeForManagement.Teacher => new TeacherUsersListEntriesHelper(),
+                UserTypeForManagement.Administration => throw new NotImplementedException(),
+                UserTypeForManagement.Headmaster => throw new NotImplementedException(),
+                UserTypeForManagement.SystemAdmin => throw new NotImplementedException(),
+                UserTypeForManagement.Parent => throw new NotImplementedException(),
+                _ => throw new NotImplementedException(),
+            };
+        }
+
         private async Task FetchUsersFromDB()
         {
-            _users = (await _userRepo.AsListAsync()).Select(x => new UserAndInfo
-            {
-                user = x,
-                info = GetInfo(x)!
-            })
+            _users = (await _userRepo.AsListAsync()).Select(x => new UserPersonModel(x, _helper.GetInfo(x)))
                 .Where(x => x.info != null);
         }
 
         private void FilterQueryByType()
         {
-            var type = GetDbUserType();
-            _users = _users.Where(x => x.user.Type == type);
-        }
-
-        private UserType GetDbUserType()
-        {
-            return _model.OfType switch
-            {
-                UserTypeForManagement.Student => UserType.Student,
-                UserTypeForManagement.Teacher => UserType.Teacher,
-                UserTypeForManagement.Parent => UserType.Parent,
-                _ => (UserType)(-1)
-            };
+            _users = _users.Where(x => x.user.Type == _helper.DbType);
         }
 
         private void OrderQueryByLastNameThenFirstName()
         {
-            // TODO: Possible null reference
             _users = _users.OrderBy(x =>
                 x.info?.LastName ?? null)
                 .ThenBy(x =>
                 x.info?.FirstName ?? null);
-        }
-
-        private IPerson? GetInfo(User user)
-        {
-            return user.Type == UserType.Student ? user.Student
-                : user.Type == UserType.Teacher ? user.Teacher
-                : user.Type == UserType.Parent ? user.Parent?.Info
-                : null;
         }
 
         private void SkipAndTake()
@@ -101,23 +99,9 @@ namespace SchoolAssistant.Logic.UsersManagement
                 _users = _users.Take(_model.Take.Value);
         }
 
-        private UserListEntryModel[] SelectEntries()
+        private UserListEntryJson[] SelectEntries()
         {
-            return _users.Select(x => new UserListEntryModel
-            {
-                FirstName = x.info.FirstName,
-                LastName = x.info.LastName,
-                UserName = x.user.UserName,
-                Email = x.user.Email,
-                Type = _model.OfType
-            }).ToArray();
-        }
-
-
-        private class UserAndInfo
-        {
-            public User user { get; set; } = null!;
-            public IPerson info { get; set; } = null!;
+            return _users.Select(_helper.CreateEntry).ToArray();
         }
     }
 }

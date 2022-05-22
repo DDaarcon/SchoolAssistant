@@ -40,6 +40,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
         protected override async Task CleanDataAfterEveryTestAsync()
         {
+            await TestDatabase.ClearDataAsync<Subject>();
             await TestDatabase.ClearDataAsync<User>();
         }
 
@@ -70,13 +71,13 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(_studentUsers.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Student));
-
             Assert.IsTrue(res.All(x => _studentUsers.Any(u =>
-                u.UserName == x.UserName
-                && u.Student?.FirstName == x.FirstName
-                && u.Student?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Student?.FirstName == x.firstName
+                && u.Student?.LastName == x.lastName
+                && u.Email == x.email)));
+
+            Assert.IsTrue(res.All(x => x is StudentUsersListEntryJson));
         }
 
         [Test]
@@ -90,13 +91,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(_teacherUsers.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Teacher));
-
             Assert.IsTrue(res.All(x => _teacherUsers.Any(u =>
-                u.UserName == x.UserName
-                && u.Teacher?.FirstName == x.FirstName
-                && u.Teacher?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Teacher?.FirstName == x.firstName
+                && u.Teacher?.LastName == x.lastName
+                && u.Email == x.email)));
         }
 
         [Test]
@@ -118,13 +117,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(test.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Student));
-
             Assert.IsTrue(res.All(x => test.Any(u =>
-                u.UserName == x.UserName
-                && u.Student?.FirstName == x.FirstName
-                && u.Student?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Student?.FirstName == x.firstName
+                && u.Student?.LastName == x.lastName
+                && u.Email == x.email)));
         }
 
         [Test]
@@ -146,13 +143,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(test.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Teacher));
-
             Assert.IsTrue(res.All(x => test.Any(u =>
-                u.UserName == x.UserName
-                && u.Teacher?.FirstName == x.FirstName
-                && u.Teacher?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Teacher?.FirstName == x.firstName
+                && u.Teacher?.LastName == x.lastName
+                && u.Email == x.email)));
         }
 
         [Test]
@@ -172,13 +167,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(test.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Student));
-
             Assert.IsTrue(res.All(x => test.Any(u =>
-                u.UserName == x.UserName
-                && u.Student?.FirstName == x.FirstName
-                && u.Student?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Student?.FirstName == x.firstName
+                && u.Student?.LastName == x.lastName
+                && u.Email == x.email)));
         }
 
         [Test]
@@ -198,13 +191,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(test.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Teacher));
-
             Assert.IsTrue(res.All(x => test.Any(u =>
-                u.UserName == x.UserName
-                && u.Teacher?.FirstName == x.FirstName
-                && u.Teacher?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Teacher?.FirstName == x.firstName
+                && u.Teacher?.LastName == x.lastName
+                && u.Email == x.email)));
         }
 
         [Test]
@@ -220,13 +211,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             Assert.IsNotNull(res);
             Assert.AreEqual(_teacherUsers.Count(), res!.Length);
 
-            Assert.IsTrue(res.All(x => x.Type == UserTypeForManagement.Teacher));
-
             Assert.IsTrue(res.All(x => _teacherUsers.Any(u =>
-                u.UserName == x.UserName
-                && u.Teacher?.FirstName == x.FirstName
-                && u.Teacher?.LastName == x.LastName
-                && u.Email == x.Email)));
+                u.UserName == x.userName
+                && u.Teacher?.FirstName == x.firstName
+                && u.Teacher?.LastName == x.lastName
+                && u.Email == x.email)));
         }
 
         [Test]
