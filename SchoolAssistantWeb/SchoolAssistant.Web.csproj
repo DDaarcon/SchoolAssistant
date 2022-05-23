@@ -155,6 +155,17 @@
     <None Remove="React\users-management\users-catalog\users-lists\student-users-list.tsx" />
     <None Remove="React\users-management\users-catalog\users-lists\teacher-users-list.tsx" />
     <None Remove="React\users-management\users-catalog\users-lists\users-list-base.tsx" />
+    <None Remove="React\users-management\users-creation-form.tsx" />
+    <None Remove="React\users-management\users-creation-form\interfaces\add-user-request.ts" />
+    <None Remove="React\users-management\users-creation-form\interfaces\fetch-related-objects-request.ts" />
+    <None Remove="React\users-management\users-creation-form\interfaces\simple-related-object.ts" />
+    <None Remove="React\users-management\users-creation-form\interfaces\student-related-object.ts" />
+    <None Remove="React\users-management\users-creation-form\related-object-selector.tsx" />
+    <None Remove="React\users-management\users-creation-form\related-object-selector\related-objects-list.tsx" />
+    <None Remove="React\users-management\users-creation-form\related-object-selector\related-objects-lists-spec.tsx" />
+    <None Remove="React\users-management\users-creation-form\server-creation-form.ts" />
+    <None Remove="React\users-management\users-creation-form\user-details-form.tsx" />
+    <None Remove="React\users-management\users-creation-form\user-type-selector.tsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -327,6 +338,17 @@
     <TypeScriptCompile Include="React\users-management\users-catalog\users-lists\student-users-list.tsx" />
     <TypeScriptCompile Include="React\users-management\users-catalog\users-lists\teacher-users-list.tsx" />
     <TypeScriptCompile Include="React\users-management\users-catalog\users-lists\users-list-base.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\interfaces\add-user-request.ts" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\interfaces\fetch-related-objects-request.ts" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\interfaces\simple-related-object.ts" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\interfaces\student-related-object.ts" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector\related-objects-list.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector\related-objects-lists-spec.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\server-creation-form.ts" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\user-details-form.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\user-type-selector.tsx" />
   </ItemGroup>
 
   <ItemGroup>

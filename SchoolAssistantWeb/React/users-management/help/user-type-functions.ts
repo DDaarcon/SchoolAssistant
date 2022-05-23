@@ -4,7 +4,7 @@ import SETTINGS from "../settings";
 
 export const getEnabledUserTypes = () => {
     const all = getEnumValues(UserTypeForManagement);
-    return all.filter(x => SETTINGS.DisabledUserTypes.includes(x));
+    return all.filter(x => !SETTINGS.DisabledUserTypes.includes(x));
 }
 
 

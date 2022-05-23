@@ -1,0 +1,21 @@
+﻿@page
+@using Microsoft.AspNetCore.Antiforgery
+@model SchoolAssistant.Web.Pages.UsersManagement.CreateUserModel
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+
+@section Head {
+    @*<link rel="stylesheet" href="~/dist/data_management.css" asp-append-version="true"/>*@
+}
+
+@Html.React("Components.UsersCreationForm", new {})
+
+@section Scripts {
+    <script>
+        const antiforgeryToken = '@token';
+    </script>
+
+    <script src="~/dist/users_management.bundle.js" asp-append-version="true"></script>
+}

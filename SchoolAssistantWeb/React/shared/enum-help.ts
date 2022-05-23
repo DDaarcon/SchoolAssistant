@@ -29,3 +29,9 @@ export const getEnumValuesAndNames = (enumClass: object) => {
     }
     return namesValues;
 }
+
+export const isValidEnumValue = (enumClass: object, value: number) => {
+    const values = getEnumValues(enumClass);
+
+    return values.includes(value);
+}
