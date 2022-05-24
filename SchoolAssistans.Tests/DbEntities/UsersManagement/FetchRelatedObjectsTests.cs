@@ -68,7 +68,9 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             var studRegRecRepo = new Repository<StudentRegisterRecord>(_Context, null);
             var fetchStudents = new FetchStudentUserRelatedObjectsService(studRegRecRepo);
-            _fetchSvc = new FetchUserRelatedObjectsService(fetchStudents);
+
+            var fetchTechers = new FetchTeacherUserRelatedObjectsService(_teacherRepo);
+            _fetchSvc = new FetchUserRelatedObjectsService(fetchStudents, fetchTechers);
         }
 
         [Test]

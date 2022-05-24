@@ -13,11 +13,14 @@ namespace SchoolAssistant.Logic.UsersManagement
     public class FetchUserRelatedObjectsService : IFetchUserRelatedObjectsService
     {
         private IFetchStudentUserRelatedObjectsService _fetchStudentsService;
+        private IFetchTeacherUserRelatedObjectsService _fetchTeachersService;
 
         public FetchUserRelatedObjectsService(
-            IFetchStudentUserRelatedObjectsService fetchStudentsService)
+            IFetchStudentUserRelatedObjectsService fetchStudentsService,
+            IFetchTeacherUserRelatedObjectsService fetchTeachersService)
         {
             _fetchStudentsService = fetchStudentsService;
+            _fetchTeachersService = fetchTeachersService;
         }
 
         public async Task<SimpleRelatedObjectJson[]> GetObjectsAsync(FetchRelatedObjectsRequestJson model)
@@ -25,7 +28,7 @@ namespace SchoolAssistant.Logic.UsersManagement
             return model.ofType switch
             {
                 UserTypeForManagement.Student => await _fetchStudentsService.GetAsync(model),
-                UserTypeForManagement.Teacher => throw new NotImplementedException(),
+                UserTypeForManagement.Teacher => await _fetchTeachersService.GetAsync(model),
                 UserTypeForManagement.Administration => throw new NotImplementedException(),
                 UserTypeForManagement.Headmaster => throw new NotImplementedException(),
                 UserTypeForManagement.SystemAdmin => throw new NotImplementedException(),
