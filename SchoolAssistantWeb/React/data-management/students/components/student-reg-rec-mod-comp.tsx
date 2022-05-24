@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { Input } from "../../../shared/form-controls";
+import ModCompBase from "../../../shared/form-controls/mod-comp-base";
 import Loader, { LoaderSize, LoaderType } from "../../../shared/loader";
 import { CommonModalProps } from "../../../shared/modals/shared-modal-body";
 import { SaveResponseJson } from "../../../shared/server-connection";
@@ -22,8 +23,7 @@ type StudentRegisterRecordModCompState = {
         secondParent: boolean;
     }
 }
-export default class StudentRegisterRecordModComp extends React.Component<StudentRegisterRecordModCompProps & CommonModalProps, StudentRegisterRecordModCompState> {
-    private _validator = new Validator<StudentRegisterRecordDetails>();
+export default class StudentRegisterRecordModComp extends ModCompBase<StudentRegisterRecordDetails, StudentRegisterRecordModCompProps & CommonModalProps, StudentRegisterRecordModCompState> {
     private _firstParentValidator?: Validator<ParentRegisterSubecordDetails>;
     private _secondParentValidator?: Validator<ParentRegisterSubecordDetails>;
 
@@ -49,7 +49,6 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
             }
         }
 
-        this._validator.forModelGetter(() => this.state.data);
         this._validator.setRules({
             firstName: { notNull: true, notEmpty: 'Pole nie może być puste' },
             lastName: { notNull: true, notEmpty: 'Pole nie może być puste' },
@@ -125,11 +124,7 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
         return (event) => {
             const value = event.target.value;
 
-            this.setState(prevState => {
-                const data = { ...prevState.data };
-                data[property] = (value as unknown) as never;
-                return { data };
-            });
+            this.setStateFnData(data => data[property] = (value as unknown) as never);
         }
     }
 
@@ -163,8 +158,8 @@ export default class StudentRegisterRecordModComp extends React.Component<Studen
         });
 
         if (response.success) {
+            await this.props.reloadAsync();
             this.props.selectRecord(response.id);
-            //await this.props.reloadAsync();
             this.props.assignedAtPresenter.close();
         }
         else

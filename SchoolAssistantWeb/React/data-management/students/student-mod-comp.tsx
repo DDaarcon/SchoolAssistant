@@ -1,5 +1,6 @@
 ﻿import React from "react";
-import { Input, Select, Option } from "../../shared/form-controls";
+import { Input, Select, Option, OnChangeIdHandler } from "../../shared/form-controls";
+import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { modalController } from "../../shared/modals";
@@ -17,8 +18,7 @@ type StudentModCompState = {
     data: StudentDetails;
     registerRecords: StudentRegisterRecordListEntry[];
 }
-export default class StudentModComp extends React.Component<StudentModCompProps, StudentModCompState> {
-    private _validator = new Validator<StudentDetails>()
+export default class StudentModComp extends ModCompBase<StudentDetails, StudentModCompProps, StudentModCompState> {
 
     constructor(props) {
         super(props);
@@ -31,7 +31,6 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
             registerRecords: []
         }
 
-        this._validator.forModelGetter(() => this.state.data);
         this._validator.setRules({
             numberInJournal: {
                 notNull: true,
@@ -71,30 +70,18 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
         await this.fetchRegisterRecords();
     }
 
-    createOnTextChangeHandler: (property: keyof StudentDetails) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
-        return (event) => {
-            const value = event.target.value;
+    changeNumberInJournal: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        const value = event.target.value;
 
-            this.setState(prevState => {
-                const data = { ...prevState.data };
-                data[property] = (value as unknown) as never;
-                return { data };
-            });
+        this.setStateFnData(data => data.numberInJournal = (value as unknown) as number);
 
-            this.props.onMadeAnyChange();
-        }
+        this.props.onMadeAnyChange();
     }
 
-    onRegisterRecordChangeHandler: (value: Option<number>) => void = (value) => {
-        const setRecord = () => {
-            this.setState(prevState => {
-                const data = { ...prevState.data };
-                data.registerRecordId = value.value;
-                return { data };
-            });
-        }
+    onRegisterRecordChangeHandler: OnChangeIdHandler<number> = (id) => {
+        const setRecord = () => this.setStateFnData(data => data.registerRecordId = id as number);
 
-        const selected = this.state.registerRecords.find(x => x.id == value.value);
+        const selected = this.state.registerRecords.find(x => x.id == id);
 
         if (selected?.className != undefined) {
             modalController.addConfirmation({
@@ -116,7 +103,7 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
             modificationComponent: StudentRegisterRecordModComp,
             modificationComponentProps: {
                 reloadAsync: this.refetchRegisterRecords,
-                selectRecord: this.selectRecord
+                selectRecord: id => this.setStateFnData(data => data.registerRecordId = id)
             },
             style: {
                 width: '500px'
@@ -132,17 +119,9 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
             modificationComponentProps: {
                 recordId: this.state.data.registerRecordId,
                 reloadAsync: this.refetchRegisterRecords,
-                selectRecord: this.selectRecord
+                selectRecord: id => this.setStateFnData(data => data.registerRecordId = id)
             }
         })
-    }
-
-    private selectRecord = (id: number) => {
-        this.setState(prevState => {
-            const data = { ...prevState.data };
-            data.registerRecordId = id;
-            return { data };
-        });
     }
 
 
@@ -181,7 +160,7 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
                         name="number-in-journal-input"
                         label="Numer w dzienniku"
                         value={this.state.data.numberInJournal}
-                        onChange={this.createOnTextChangeHandler('numberInJournal')}
+                        onChange={this.changeNumberInJournal}
                         errorMessages={this._validator.getErrorMsgsFor('numberInJournal')}
                         type="number"
                     />
@@ -190,7 +169,7 @@ export default class StudentModComp extends React.Component<StudentModCompProps,
                         name="register-record-input"
                         label="Dane ucznia"
                         value={this.state.data.registerRecordId}
-                        onChange={this.onRegisterRecordChangeHandler}
+                        onChangeId={this.onRegisterRecordChangeHandler}
                         options={this.state.registerRecords.map(x => ({
                             label: x.name,
                             value: x.id
