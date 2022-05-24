@@ -33,7 +33,7 @@ namespace SchoolAssistant.Logic.UsersManagement
                 UserTypeForManagement.Headmaster => throw new NotImplementedException(),
                 UserTypeForManagement.SystemAdmin => throw new NotImplementedException(),
                 UserTypeForManagement.Parent => throw new NotImplementedException(),
-                _ => throw new NotImplementedException(),
+                _ => new SimpleRelatedObjectJson[0]
             };
         }
     }
