@@ -1,4 +1,6 @@
-﻿using SchoolAssistant.Infrastructure.Models.UsersManagement;
+﻿using SchoolAssistant.Infrastructure.Enums.Users;
+using SchoolAssistant.Infrastructure.Models.UsersManagement;
+using SchoolAssistant.Logic.UsersManagement.FetchUserRelatedObjectsHelp;
 
 namespace SchoolAssistant.Logic.UsersManagement
 {
@@ -10,14 +12,26 @@ namespace SchoolAssistant.Logic.UsersManagement
     [Injectable]
     public class FetchUserRelatedObjectsService : IFetchUserRelatedObjectsService
     {
+        private IFetchStudentUserRelatedObjectsService _fetchStudentsService;
 
-        private FetchRelatedObjectsRequestJson _model = null!;
+        public FetchUserRelatedObjectsService(
+            IFetchStudentUserRelatedObjectsService fetchStudentsService)
+        {
+            _fetchStudentsService = fetchStudentsService;
+        }
 
         public async Task<SimpleRelatedObjectJson[]> GetObjectsAsync(FetchRelatedObjectsRequestJson model)
         {
-            _model = model;
-
-            return null;
+            return model.ofType switch
+            {
+                UserTypeForManagement.Student => await _fetchStudentsService.GetAsync(model),
+                UserTypeForManagement.Teacher => throw new NotImplementedException(),
+                UserTypeForManagement.Administration => throw new NotImplementedException(),
+                UserTypeForManagement.Headmaster => throw new NotImplementedException(),
+                UserTypeForManagement.SystemAdmin => throw new NotImplementedException(),
+                UserTypeForManagement.Parent => throw new NotImplementedException(),
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }

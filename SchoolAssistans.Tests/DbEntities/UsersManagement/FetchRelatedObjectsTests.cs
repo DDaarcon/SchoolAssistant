@@ -11,6 +11,7 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.UsersManagement;
+using SchoolAssistant.Logic.UsersManagement.FetchUserRelatedObjectsHelp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,10 +43,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
         protected override async Task CleanDataAfterEveryTestAsync()
         {
+            await TestDatabase.ClearDataAsync<User>();
+            await TestDatabase.ClearDataAsync<Teacher>();
             await TestDatabase.ClearDataAsync<Student>();
             await TestDatabase.ClearDataAsync<StudentRegisterRecord>();
             await TestDatabase.ClearDataAsync<OrganizationalClass>();
-
         }
 
         protected override async Task SetupDataForEveryTestAsync()
@@ -64,7 +66,9 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             _userRepo = new UserRepository(_Context, null, userManager);
             _teacherRepo = new Repository<Teacher>(_Context, null);
 
-            _fetchSvc = new FetchUserRelatedObjectsService();
+            var studRegRecRepo = new Repository<StudentRegisterRecord>(_Context, null);
+            var fetchStudents = new FetchStudentUserRelatedObjectsService(studRegRecRepo);
+            _fetchSvc = new FetchUserRelatedObjectsService(fetchStudents);
         }
 
         [Test]
