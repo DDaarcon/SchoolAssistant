@@ -27,5 +27,7 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
             var objects = await _fetchRelatedObjectsSvc.GetObjectsAsync(model);
             return new JsonResult(objects);
         }
+
+        //public async Task<JsonResult> OnPostAddUserAsync()
     }
 }
