@@ -42,6 +42,7 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
             <UserDetailsForm
                 type={this.state.selectedType}
                 object={this.state.selectedObject}
+                returnToSelector={this.returnToSelector}
             />
         )
     }
@@ -53,8 +54,7 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
         this.setState({ selectedType: type, selectedObject: undefined });
     }
 
-    private selectRelatedObject = (obj: SimpleRelatedObject) => {
+    private selectRelatedObject = (obj: SimpleRelatedObject) => this.setState({ selectedObject: obj });
 
-        this.setState({ selectedObject: obj });
-    }
+    private returnToSelector = () => this.setState({ selectedObject: undefined });
 }
