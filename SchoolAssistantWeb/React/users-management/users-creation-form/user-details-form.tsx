@@ -21,7 +21,7 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
         this.state = {
             data: {
                 userName: '',
-                email: this.props.object.email,
+                email: this.props.object.email ?? '',
                 relatedType: this.props.type,
                 relatedId: this.props.object.id
             }
@@ -78,6 +78,13 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
                     type="tel"
                 />
 
+                <div className="form-group">
+                    <input
+                        type="submit"
+                        value="Dodaj użytkownika"
+                        className="form-control"
+                    />
+                </div>
             </form>
         )
     }
@@ -104,6 +111,11 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
 
     private submitAsync: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
+
+        if (!this._validator.validate()) {
+            this.forceUpdate();
+            return;
+        }
 
 
     }

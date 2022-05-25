@@ -45,12 +45,12 @@ export default class RelatedObjectsList
             )
 
         return (
-            <div key={`${this.props.type}-${obj.id}`}
+            <button key={`${this.props.type}-${obj.id}`}
                 className="related-object-entry"
                 onClick={() => this.props.selectObject(obj)}
             >
                 {elements}
-            </div>
+            </button>
         )
     }
 
