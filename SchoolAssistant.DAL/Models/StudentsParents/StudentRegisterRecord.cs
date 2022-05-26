@@ -4,7 +4,7 @@ using SchoolAssistant.DAL.Models.Shared;
 
 namespace SchoolAssistant.DAL.Models.StudentsParents
 {
-    public class StudentRegisterRecord : DbEntity, IPerson
+    public class StudentRegisterRecord : DbEntity, IPerson, IHasUser
     {
         public string FirstName { get; set; } = null!;
         public string? SecondName { get; set; } = null!;

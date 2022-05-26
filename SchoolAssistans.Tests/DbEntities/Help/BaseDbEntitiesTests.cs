@@ -3,6 +3,7 @@ using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
@@ -21,6 +22,17 @@ namespace SchoolAssistans.Tests.DbEntities
             TestDatabase.DisposeContext();
         }
 
+        [OneTimeSetUp]
+        public void StartTest()
+        {
+            Trace.Listeners.Add(new ConsoleTraceListener());
+        }
+
+        [OneTimeTearDown]
+        public void EndTest()
+        {
+            Trace.Flush();
+        }
 
         [SetUp]
         public async Task SetupOne()
@@ -43,6 +55,8 @@ namespace SchoolAssistans.Tests.DbEntities
         protected void AssertResponseSuccess(ResponseJson? res)
         {
             Assert.IsNotNull(res);
+            if (!res!.success)
+                Debug.WriteLine(res.message);
             Assert.IsTrue(res!.success);
         }
         protected void AssertResponseFail(ResponseJson? res)

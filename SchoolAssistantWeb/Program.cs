@@ -5,6 +5,7 @@ using React.AspNet;
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.Infrastructure.InjectablePattern;
+using SchoolAssistant.Logic.Help;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddJsEngineSwitcher(options => options.DefaultEngineName = V8Js
 builder.Services.AddIdentity<User, Role>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
+    PasswordHelper.ApplyDefaultOptionsTo(options.Password);
 })
     .AddEntityFrameworkStores<SADbContext>();
 

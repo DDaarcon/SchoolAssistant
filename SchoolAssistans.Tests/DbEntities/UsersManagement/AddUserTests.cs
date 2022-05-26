@@ -67,8 +67,12 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _userRepo = new UserRepository(_Context, null, userManager);
             _teacherRepo = new Repository<Teacher>(_Context, null);
+            var studentRepo = new Repository<StudentRegisterRecord>(_Context, null);
+            var parentRepo = new Repository<Parent>(_Context, null);
 
-            _addUserSvc = new AddUserService();
+            _addUserSvc = new AddUserService(
+                _userRepo,
+                studentRepo, _teacherRepo, parentRepo);
         }
 
 
@@ -76,50 +80,53 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         public async Task Should_add_student_user()
         {
             var student = _orgClass1.Students.First();
+            string username = "Some_ranDOm_usernaMe2412";
+            string email = "some.email@domain.com";
+            string phone = "4890099090";
 
             var res = await _addUserSvc.AddAsync(new AddUserRequestJson
             {
-                userName = "Some_ranDOm_usernaMe2412#",
-                email = "some.email@domain.com",
-                phoneNumber = "4890099090",
+                userName = username,
+                email = email,
+                phoneNumber = phone,
                 relatedType = UserTypeForManagement.Student,
                 relatedId = student.Id
             });
 
             AssertResponseSuccess(res);
 
-            var user = await _userRepo.Manager.FindByNameAsync("Some_ranDOm_usernaMe2412#");
+            var user = await _userRepo.Manager.FindByNameAsync(username);
             Assert.IsNotNull(user);
             Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, res.temporaryPassword));
             Assert.AreEqual(UserType.Student, user.Type);
-            Assert.IsNotNull(user.Student);
-            Assert.AreEqual(student.Id, user.Student!.Id);
-            Assert.AreEqual("some.email@domain.com", user.Email);
-            Assert.AreEqual("4890099090", user.PhoneNumber);
+            Assert.IsTrue(student.Id == user.Student?.Id || student.Id == user.StudentId);
+            Assert.AreEqual(email, user.Email);
+            Assert.AreEqual(phone, user.PhoneNumber);
         }
 
         [Test]
         public async Task Should_add_teacher_user()
         {
             var teacher = _teachers.First();
+            string username = "Some_ranDOm_usernaMe2412";
+            string email = "some.email@domain.com";
 
             var res = await _addUserSvc.AddAsync(new AddUserRequestJson
             {
-                userName = "teacherUser",
-                email = "some.email@domain.com",
+                userName = username,
+                email = email,
                 relatedType = UserTypeForManagement.Teacher,
                 relatedId = teacher.Id
             });
 
             AssertResponseSuccess(res);
 
-            var user = await _userRepo.Manager.FindByNameAsync("teacherUser");
+            var user = await _userRepo.Manager.FindByNameAsync(username);
             Assert.IsNotNull(user);
             Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, res.temporaryPassword));
             Assert.AreEqual(UserType.Teacher, user.Type);
-            Assert.IsNotNull(user.Teacher);
-            Assert.AreEqual(teacher.Id, user.Teacher!.Id);
-            Assert.AreEqual("some.email@domain.com", user.Email);
+            Assert.IsTrue(teacher.Id == user.Teacher?.Id || teacher.Id == user.TeacherId);
+            Assert.AreEqual(email, user.Email);
             Assert.IsNull(user.PhoneNumber);
         }
 
@@ -165,6 +172,22 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             {
                 userName = "some_user_name",
                 email = "",
+                relatedType = UserTypeForManagement.Teacher,
+                relatedId = teacher.Id
+            });
+
+            AssertResponseFail(res);
+        }
+
+        [Test]
+        public async Task Should_fail_invalid_email()
+        {
+            var teacher = _teachers.First();
+
+            var res = await _addUserSvc.AddAsync(new AddUserRequestJson
+            {
+                userName = "some_user_name",
+                email = "dasdadae",
                 relatedType = UserTypeForManagement.Teacher,
                 relatedId = teacher.Id
             });
@@ -267,6 +290,23 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         }
 
         [Test]
+        public async Task Should_fail_username_taken_but_different_case()
+        {
+            var teacher = _teachers.First();
+            var user = _teacherUsers.First();
+
+            var res = await _addUserSvc.AddAsync(new AddUserRequestJson
+            {
+                userName = user.UserName.ToUpper(),
+                email = "some.email@domain.com",
+                relatedType = UserTypeForManagement.Teacher,
+                relatedId = teacher.Id
+            });
+
+            AssertResponseFail(res);
+        }
+
+        [Test]
         public async Task Should_fail_email_taken()
         {
             var teacher = _teachers.First();
@@ -279,6 +319,34 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
                 relatedType = UserTypeForManagement.Teacher,
                 relatedId = teacher.Id
             });
+
+            AssertResponseFail(res);
+        }
+
+        [Test]
+        public async Task Should_fail_email_taken_but_different_case()
+        {
+            var teacher = _teachers.First();
+            var user = _teacherUsers.First();
+
+            var res = await _addUserSvc.AddAsync(new AddUserRequestJson
+            {
+                userName = "some_user_name",
+                email = user.Email.ToUpper(),
+                relatedType = UserTypeForManagement.Teacher,
+                relatedId = teacher.Id
+            });
+
+            AssertResponseFail(res);
+        }
+
+        [Test]
+        public async Task Should_fail_missing_model()
+        {
+            var teacher = _teachers.First();
+            var user = _teacherUsers.First();
+
+            var res = await _addUserSvc.AddAsync(null!);
 
             AssertResponseFail(res);
         }

@@ -24,6 +24,7 @@ namespace SchoolAssistant.DAL.Repositories
         void Update(User entity);
         void UpdateRange(IEnumerable<User> entities);
         void UseIndependentDbContext();
+        void Remove(User entity);
 
         UserManager<User> Manager { get; }
     }
@@ -66,6 +67,8 @@ namespace SchoolAssistant.DAL.Repositories
         public ValueTask<User?> GetByIdAsync(long id) => _Repo.FindAsync(id);
 
         public EntityEntry GetEntry(User entity) => _context.Entry(entity);
+
+        public void Remove(User entity) => _Repo.Remove(entity);
 
         public void Save() => _context.SaveChanges();
 

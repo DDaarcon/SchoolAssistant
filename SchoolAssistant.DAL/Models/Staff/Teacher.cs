@@ -1,4 +1,5 @@
 ﻿using SchoolAssistant.DAL.Help;
+using SchoolAssistant.DAL.Interfaces;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.LinkingTables;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Staff
 {
-    public class Teacher : StaffPerson
+    public class Teacher : StaffPerson, IHasUser
     {
         public virtual ICollection<TeacherToMainSubject> MainSubjects { get; set; } = new List<TeacherToMainSubject>();
         public virtual ICollection<TeacherToAdditionalSubject> AdditionalSubjects { get; set; } = new List<TeacherToAdditionalSubject>();

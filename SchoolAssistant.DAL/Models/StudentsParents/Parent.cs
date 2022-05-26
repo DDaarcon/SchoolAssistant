@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.StudentsParents
 {
-    public class Parent : DbEntity
+    public class Parent : DbEntity, IHasUser
     {
         public virtual ICollection<ParentToChild> Children { get; set; } = new List<ParentToChild>();
         public virtual User? User { get; set; }
