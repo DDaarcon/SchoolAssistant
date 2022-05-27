@@ -26,6 +26,7 @@
     <None Remove="React\data-management\classes\interfaces\class-modification-data.ts" />
     <None Remove="React\data-management\enums\category.ts" />
     <None Remove="React\schedule-display\settings.ts" />
+    <None Remove="React\shared\form-controls\label-value.tsx" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
     <None Remove="React\shared\lists\components\list-entry-coponent.tsx" />
     <None Remove="React\shared\lists\components\list-entry-inner-component.tsx" />
@@ -205,6 +206,7 @@
     <TypeScriptCompile Include="React\data-management\classes\interfaces\class-modification-data.ts" />
     <TypeScriptCompile Include="React\data-management\enums\category.ts" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />
+    <TypeScriptCompile Include="React\shared\form-controls\label-value.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-coponent.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-inner-component.tsx" />
@@ -351,7 +353,7 @@
     <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector.tsx" />
     <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector\related-objects-list.tsx" />
     <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector\related-objects-lists-spec.tsx" />
-    <TypeScriptCompile Include="React\users-management\users-creation-form\related-object-selector\user-created-page.tsx" />
+    <TypeScriptCompile Include="React\users-management\users-creation-form\user-created-page.tsx" />
     <TypeScriptCompile Include="React\users-management\users-creation-form\server-creation-form.ts" />
     <TypeScriptCompile Include="React\users-management\users-creation-form\user-details-form.tsx" />
     <TypeScriptCompile Include="React\users-management\users-creation-form\user-type-selector.tsx" />

@@ -1,0 +1,16 @@
+﻿.user-created-page > h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-created-page-rows {
+    display: flex;
+}
+
+.usr-crea-page-user-info-row {
+
+}
+
+.usr-crea-page-messages-row {
+    flex-grow: 1;
+}

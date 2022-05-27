@@ -1,0 +1,24 @@
+﻿.label-value {
+    display: flex;
+    width: 350px;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.lab-val-label-container, .lab-val-value-container {
+    width: 50%;
+}
+
+.lab-val-label {
+    float: right;
+    text-align: right;
+    font-size: 0.8em;
+    margin-right: 5px;
+    color: #767676;
+}
+
+.lab-val-label-container {
+    display: flex;
+    justify-content: end;
+    align-items: self-end;
+}

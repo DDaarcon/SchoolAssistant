@@ -57,6 +57,8 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
         return (
             <form onSubmit={this.submitAsync}>
 
+                {this.renderRelatedObjectInfo()}
+
                 <Input
                     label="Nazwa użytkownika"
                     name="username-input"
@@ -92,6 +94,27 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
                     />
                 </div>
             </form>
+        )
+    }
+
+    private renderRelatedObjectInfo = () => {
+        const info = Object.keys(this.props.object).map(key =>
+            key == 'id' || key == 'email' || key == 'firstName' || key == 'lastName' ? '' : this.props.object[key])
+            .filter(x => x);
+
+
+        return (
+            <div className="related-object-info">
+                <p>
+                    Tworzysz użytkonika dla osoby:
+                </p>
+                <h3>
+                    {this.props.object.lastName} {this.props.object.firstName}
+                </h3>
+                <p>
+                    {info.join(', ')}
+                </p>
+            </div>
         )
     }
 

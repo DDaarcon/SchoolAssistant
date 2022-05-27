@@ -4,7 +4,7 @@ import UserTypeForManagement from "./enums/user-type-for-management";
 import CreatedUserInfo from "./users-creation-form/interfaces/created-user-info";
 import SimpleRelatedObject from "./users-creation-form/interfaces/simple-related-object";
 import RelatedObjectSelector from "./users-creation-form/related-object-selector";
-import UserCreatedPage from "./users-creation-form/related-object-selector/user-created-page";
+import UserCreatedPage from "./users-creation-form/user-created-page";
 import UserDetailsForm from "./users-creation-form/user-details-form";
 import UserTypeSelector from "./users-creation-form/user-type-selector";
 
@@ -20,6 +20,18 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
     render() {
         return (
             <div className="whole-page">
+                <button onClick={() => this.setState({
+                    selectedType: UserTypeForManagement.Student,
+                    createdUser: {
+                        lastName: 'Dmowski',
+                        firstName: 'Roman',
+                        email: 'roma.dmow@gmail.com',
+                        passwordDeformed: "xxxxxx",
+                        userName: 'dmowski.roman'
+                    }
+                })}>
+
+                </button>
                 {this.renderContent()}
             </div>
         )
