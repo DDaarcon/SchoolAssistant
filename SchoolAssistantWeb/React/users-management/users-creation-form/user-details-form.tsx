@@ -1,9 +1,10 @@
 ﻿import React from "react";
 import { Input } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
-import { ResponseJson } from "../../shared/server-connection";
 import UserTypeForManagement from "../enums/user-type-for-management";
 import AddUserRequest from "./interfaces/add-user-request";
+import AddUserResponse from "./interfaces/add-user-response";
+import CreatedUserInfo from "./interfaces/created-user-info";
 import SimpleRelatedObject from "./interfaces/simple-related-object";
 import serverCreationForm from "./server-creation-form";
 
@@ -11,7 +12,8 @@ type UserDetailsFormProps = {
     type: UserTypeForManagement;
     object: SimpleRelatedObject;
 
-    returnToSelector: () => void;
+    changePage: (createdUser?: CreatedUserInfo) => void;
+
 }
 type UserDetailsFormState = {
     data: AddUserRequest;
@@ -121,10 +123,16 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
             return;
         }
 
-        var res = await serverCreationForm.postAsync<ResponseJson>("AddUser", undefined, this.state.data);
+        var res = await serverCreationForm.postAsync<AddUserResponse>("AddUser", undefined, this.state.data);
 
         if (res.success) {
-            this.props.returnToSelector();
+            this.props.changePage({
+                firstName: this.props.object.firstName,
+                lastName: this.props.object.lastName,
+                userName: this.state.data.userName,
+                email: this.state.data.email,
+                passwordDeformed: res.passwordDeformed
+            });
         }
         else
             console.debug(res.message);

@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import UserTypeForManagement from "../enums/user-type-for-management";
 import { getEnabledUserTypes, getLabelForUserType } from "../help/user-type-functions";
+import './user-type-selector.css';
 
 type UserTypeSelectorProps = {
     selectType: (type: UserTypeForManagement) => void;
