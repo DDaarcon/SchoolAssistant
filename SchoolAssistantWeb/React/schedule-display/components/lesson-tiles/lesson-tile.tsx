@@ -9,9 +9,19 @@ export type LessonTileProps = {
     config: ScheduleConfig;
     cellHeight: number;
 }
-export type LessonTileState = {}
+export type LessonTileState = {
+    hover: boolean;
+}
 
 export default abstract class LessonTile extends React.Component<LessonTileProps, LessonTileState> {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hover: false
+        }
+    }
 
     private get _cellDuration() { return 60 / SETTINGS.CellsPerHour; }
 
@@ -38,9 +48,18 @@ export default abstract class LessonTile extends React.Component<LessonTileProps
         return (
             <div className="sched-disp-lesson-tile"
                 style={style}
+                onMouseEnter={this.mouseEntered}
+                onMouseLeave={this.mouseLeft}
             >
                 {this.getInnerComponents()}
             </div>
         )
+    }
+
+    protected mouseEntered = () => {
+        this.setState({ hover: true });
+    }
+    protected mouseLeft = () => {
+        this.setState({ hover: false });
     }
 }

@@ -25,13 +25,14 @@ export default class ScheduleDisplayTimeline extends ScheduleTimelineBase<Schedu
     }
 
     protected override getDayColumnComponent(day: DayOfWeek): JSX.Element {
+        const lessons = this.props.data.find(x => x.dayIndicator == day)?.lessons ?? [];
         return (
             <DayColumn
                 key={day}
                 scheduleHeight={this.state.scheduleHeight}
                 config={this.props.config}
                 dayIndicator={day}
-                lessons={this.props.data.find(x => x.dayIndicator == day)?.lessons ?? []}
+                lessons={lessons}
             />
         )
     }

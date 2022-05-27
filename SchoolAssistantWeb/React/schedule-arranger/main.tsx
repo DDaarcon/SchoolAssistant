@@ -8,6 +8,7 @@ import ScheduleClassSelectorEntry from "./interfaces/page-model-to-react/schedul
 import ScheduleSubjectEntry from "./interfaces/page-model-to-react/schedule-subject-entry";
 import ScheduleTeacherEntry from "./interfaces/page-model-to-react/schedule-teacher-entry";
 import ScheduleRoomEntry from "./interfaces/page-model-to-react/schedule-room-entry";
+import TopBar from "../shared/top-bar";
 
 export let scheduleArrangerConfig: ScheduleArrangerConfig;
 export let scheduleChangePageScreen: (pageComponent: JSX.Element) => void;
@@ -51,6 +52,10 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
         dataService.rooms = this.props.rooms;
     }
 
+    componentDidMount() {
+        TopBar.Ref.setGoBackAction(() => this.setState({ pageComponent: this._classSelectorComponent }));
+    }
+
     changeScreen = (pageComponent: JSX.Element) => {
         this.setState({ pageComponent });
     }
@@ -58,6 +63,7 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
     render() {
         return (
             <div className="schedule-arranger-main">
+                <TopBar />
 
                 <div className="sa-page-content">
                     {this.state.pageComponent}

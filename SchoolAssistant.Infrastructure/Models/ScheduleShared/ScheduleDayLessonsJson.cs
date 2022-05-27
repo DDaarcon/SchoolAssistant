@@ -1,6 +1,4 @@
-﻿using SchoolAssistant.Infrastructure.Models.ScheduleShared;
-
-namespace SchoolAssistant.Infrastructure.Models.ScheduleArranger
+﻿namespace SchoolAssistant.Infrastructure.Models.ScheduleShared
 {
     public class ScheduleDayLessonsJson : ScheduleDayLessonsJson<LessonTimetableEntryJson> { }
     public class ScheduleDayLessonsJson<TLesson>

@@ -1,3 +1,6 @@
 ﻿.sched-disp-lesson-tile {
-    color: green;
+    color: #000000;
+    position: absolute;
+    width: 100%;
+    background-color: #c5ffc5;
 }
