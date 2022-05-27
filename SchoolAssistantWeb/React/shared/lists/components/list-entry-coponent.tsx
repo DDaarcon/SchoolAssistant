@@ -56,12 +56,14 @@ export default class ListEntryComponent<
 
     render() {
         const buttons = this.props.customButtons?.map(x => x) ?? [];
-        buttons.push({
-            label: "Edytuj",
-            buttonClassName: "dm-entry-info-row-button-cell",
-            cellClassName: "dm-entry-info-row-button",
-            action: this.onClickedEditBtn
-        });
+
+        if (this.ModificationComponent)
+            buttons.push({
+                label: "Edytuj",
+                buttonClassName: "dm-entry-info-row-button-cell",
+                cellClassName: "dm-entry-info-row-button",
+                action: this.onClickedEditBtn
+            });
 
         return (
             <this.ListEntryInnerComponent
@@ -76,7 +78,7 @@ export default class ListEntryComponent<
                         buttons={buttons}
                     />
                 }
-                modificationComponent={this.ModificationComponent != null ?
+                modificationComponent={this.ModificationComponent ?
                     <this.ModificationComponent
                         recordId={this.props.recordId}
                         reloadAsync={this.props.reloadAsync}
