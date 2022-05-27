@@ -47,7 +47,7 @@ const ClassEntry = (props: ClassEntryProps) => {
 
 
     return (
-        <div className="sa-selector-class-entry"
+        <button className="sa-selector-class-entry tiled-btn"
             onClick={selectClass}
         >
             <span className="sa-selector-class-name">
@@ -56,6 +56,6 @@ const ClassEntry = (props: ClassEntryProps) => {
             <span className="sa-selector-class-spec">
                 {props.specialization}
             </span>
-        </div>
+        </button>
     )
 }

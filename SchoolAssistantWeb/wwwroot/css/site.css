@@ -37,3 +37,28 @@ body {
 label {
     font-size: 0.9em;
 }
+
+
+
+
+
+
+.tiled-btn {
+    background-color: #c4ffc4;
+    min-width: 150px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 10px;
+    box-shadow: rgb(0 0 0 / 40%) 1px 1px 10px 2px inset;
+    border: 0;
+    transition: background-color 0.5s;
+}
+
+.tiled-btn:hover {
+    background-color: #8bff8b;
+}
+
+.tiled-btn:active {
+    background-color: #d0d0d0;
+    transition: background-color 0.2s;
+}

@@ -25,7 +25,7 @@ export default class UserTypeSelector extends React.Component<UserTypeSelectorPr
                 {this._enabledTypes.map(type => 
                     <button
                         key={type}
-                        className="user-type-btn"
+                        className="user-type-btn tiled-btn"
                         onClick={() => this.props.selectType(type)}
                     >
                         {getLabelForUserType(type)}

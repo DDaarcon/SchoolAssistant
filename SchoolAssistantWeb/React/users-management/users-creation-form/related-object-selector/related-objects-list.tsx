@@ -46,7 +46,7 @@ export default class RelatedObjectsList
 
         return (
             <button key={`${this.props.type}-${obj.id}`}
-                className="related-object-entry"
+                className="related-object-entry tiled-btn"
                 onClick={() => this.props.selectObject(obj)}
             >
                 {elements}

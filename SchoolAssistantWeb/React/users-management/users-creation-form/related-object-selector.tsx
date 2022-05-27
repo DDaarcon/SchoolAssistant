@@ -2,6 +2,7 @@
 import UserTypeForManagement from "../enums/user-type-for-management";
 import SimpleRelatedObject from "./interfaces/simple-related-object";
 import { ParentObjectsList, StudentObjectsList, TeacherObjectsList } from "./related-object-selector/related-objects-lists-spec";
+import './related-object-selector.css';
 
 type RelatedObjectSelectorProps = {
     type: UserTypeForManagement;

@@ -12,13 +12,6 @@
 
 .sa-selector-class-entry {
     height: 150px;
-    background-color: #c4ffc4;
-    min-width: 150px;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 10px;
-    box-shadow: rgba(0,0,0,0.4) 5px 5px 10px 5px inset;
-    cursor: pointer;
 }
 
 .sa-selector-class-name {
