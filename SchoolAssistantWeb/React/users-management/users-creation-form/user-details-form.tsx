@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import { Input } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
+import TopBar from "../../shared/top-bar";
 import UserTypeForManagement from "../enums/user-type-for-management";
 import AddUserRequest from "./interfaces/add-user-request";
 import AddUserResponse from "./interfaces/add-user-response";
@@ -13,6 +14,7 @@ type UserDetailsFormProps = {
     object: SimpleRelatedObject;
 
     changePage: (createdUser?: CreatedUserInfo) => void;
+    backToObjectSelect: () => void;
 
 }
 type UserDetailsFormState = {
@@ -54,6 +56,8 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
     }
 
     render() {
+        TopBar.Ref.setGoBackAction(this.props.backToObjectSelect);
+
         return (
             <form onSubmit={this.submitAsync}>
 

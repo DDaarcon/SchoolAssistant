@@ -140,6 +140,7 @@
     <None Remove="React\shared\modals\modal-presenter.tsx" />
     <None Remove="React\shared\modals\modal.tsx" />
     <None Remove="React\shared\modals\shared-modal-body.tsx" />
+    <None Remove="React\shared\top-bar.tsx" />
     <None Remove="React\shared\validator.ts" />
     <None Remove="React\users-management.ts" />
     <None Remove="React\users-management\help\user-type-functions.ts" />
@@ -319,6 +320,7 @@
     <TypeScriptCompile Include="React\shared\modals\modal-presenter.tsx" />
     <TypeScriptCompile Include="React\shared\modals\modal.tsx" />
     <TypeScriptCompile Include="React\shared\modals\shared-modal-body.tsx" />
+    <TypeScriptCompile Include="React\shared\top-bar.tsx" />
     <TypeScriptCompile Include="React\shared\validator.ts" />
     <TypeScriptCompile Include="React\schedule-arranger\class-selector.tsx" />
     <TypeScriptCompile Include="React\schedule-arranger\main.tsx" />

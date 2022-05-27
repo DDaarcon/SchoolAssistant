@@ -3,16 +3,20 @@ import UserTypeForManagement from "../enums/user-type-for-management";
 import SimpleRelatedObject from "./interfaces/simple-related-object";
 import { ParentObjectsList, StudentObjectsList, TeacherObjectsList } from "./related-object-selector/related-objects-lists-spec";
 import './related-object-selector.css';
+import TopBar from "../../shared/top-bar";
 
 type RelatedObjectSelectorProps = {
     type: UserTypeForManagement;
-    selectRelatedObject: (obj: SimpleRelatedObject) => void;
+    selectRelatedObject: (obj?: SimpleRelatedObject) => void;
+    backToTypeSelect: () => void;
 }
 type RelatedObjectSelectorState = {}
 
 export default class RelatedObjectSelector extends React.Component<RelatedObjectSelectorProps, RelatedObjectSelectorState> {
 
     render() {
+        TopBar.Ref.setGoBackAction(this.props.backToTypeSelect);
+
         return (
             <div className="related-object-selector">
                 {this.renderObjectsList()}

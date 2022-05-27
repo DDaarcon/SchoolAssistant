@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { LabelValue } from "../../shared/form-controls";
+import TopBar from "../../shared/top-bar";
 import CreatedUserInfo from "./interfaces/created-user-info";
 import serverCreationForm from "./server-creation-form";
 import './user-created-page.css';
@@ -22,6 +23,8 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
     }
 
     render() {
+        TopBar.Ref.setGoBackAction(this.props.returnToSelector);
+
         return (
             <div className="user-created-page">
                 <h2>

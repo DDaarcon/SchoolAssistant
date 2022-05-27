@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import TopBar from "../../../shared/top-bar";
 import UserTypeForManagement from "../../enums/user-type-for-management";
 import FetchRelatedObjectsRequest from "../interfaces/fetch-related-objects-request";
 import SimpleRelatedObject from "../interfaces/simple-related-object";
@@ -8,7 +9,7 @@ type RelatedObjectsListProps<TRelated extends SimpleRelatedObject> = {
     objectToFields: (obj: TRelated) => string[];
     fieldClassNames: string[];
     type: UserTypeForManagement;
-    selectObject: (obj: TRelated) => void;
+    selectObject: (obj?: TRelated) => void;
 }
 type RelatedObjectsListState<TRelated extends SimpleRelatedObject> = {
     objects?: TRelated[];

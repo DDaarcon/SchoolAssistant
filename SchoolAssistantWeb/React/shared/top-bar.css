@@ -1,0 +1,30 @@
+﻿:root {
+    --top-bar-height: 40px;
+    --top-bar-outline-color: #d3f2d4;
+}
+
+.top-bar-container {
+    height: var(--top-bar-height);
+}
+
+.top-bar {
+    width: 100%;
+    height: var(--top-bar-height);
+    position: absolute;
+    left: 0;
+    box-shadow: 
+        0px -18px 27px 1px var(--top-bar-outline-color) inset,
+        0px 4px 4px 1px var(--top-bar-outline-color);
+    padding: 3px;
+    padding-left: 20px;
+}
+
+.top-bar-go-back-btn {
+    height: 100%;
+    width: 100px;
+    border-radius: 40% 5% 5% 40% / 49% 50% 50% 51%;
+    border: 0;
+    box-shadow: 0px 0px 3px 2px inset #b9b9b9;
+    text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
+    font-weight: bold;
+}

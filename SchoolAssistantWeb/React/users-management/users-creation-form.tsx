@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { isValidEnumValue } from "../shared/enum-help";
+import TopBar from "../shared/top-bar";
 import UserTypeForManagement from "./enums/user-type-for-management";
 import CreatedUserInfo from "./users-creation-form/interfaces/created-user-info";
 import SimpleRelatedObject from "./users-creation-form/interfaces/simple-related-object";
@@ -20,24 +21,15 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
     render() {
         return (
             <div className="whole-page">
-                <button onClick={() => this.setState({
-                    selectedType: UserTypeForManagement.Student,
-                    createdUser: {
-                        lastName: 'Dmowski',
-                        firstName: 'Roman',
-                        email: 'roma.dmow@gmail.com',
-                        passwordDeformed: "xxxxxx",
-                        userName: 'dmowski.roman'
-                    }
-                })}>
+                <TopBar />
 
-                </button>
                 {this.renderContent()}
             </div>
         )
     }
 
     private renderContent(): JSX.Element {
+
         if (this.state?.selectedType == undefined)
             return (
                 <UserTypeSelector
@@ -50,6 +42,8 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
                 <RelatedObjectSelector
                     type={this.state.selectedType}
                     selectRelatedObject={this.selectRelatedObject}
+                    backToTypeSelect={() => this.setState({ selectedType: undefined })}
+
                 />
             )
 
@@ -59,6 +53,7 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
                     type={this.state.selectedType}
                     object={this.state.selectedObject}
                     changePage={this.redirectFromEdition}
+                    backToObjectSelect={() => this.setState({ selectedObject: undefined })}
                 />
             )
 
@@ -77,7 +72,7 @@ export default class UsersCreationForm extends React.Component<UsersCreationForm
         this.setState({ selectedType: type, selectedObject: undefined });
     }
 
-    private selectRelatedObject = (obj: SimpleRelatedObject) => this.setState({ selectedObject: obj });
+    private selectRelatedObject = (obj?: SimpleRelatedObject) => this.setState({ selectedObject: obj });
 
     private redirectFromEdition = (createdUser?: CreatedUserInfo) =>
         this.setState({ selectedObject: undefined, createdUser });
