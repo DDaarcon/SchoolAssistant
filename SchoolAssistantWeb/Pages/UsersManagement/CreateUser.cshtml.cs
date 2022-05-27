@@ -29,6 +29,12 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
         {
         }
 
+        public async Task<JsonResult> OnGetUserListEntriesAsync(FetchUsersListRequestJson model)
+        {
+            var entries = await _fetchUserListEntriesSvc.FetchAsync(model);
+            return new JsonResult(entries);
+        }
+
         public async Task<JsonResult> OnGetRelatedObjectsAsync(FetchRelatedObjectsRequestJson model)
         {
             var objects = await _fetchRelatedObjectsSvc.GetObjectsAsync(model);

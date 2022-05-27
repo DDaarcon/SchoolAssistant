@@ -1,6 +1,7 @@
 ﻿import React from "react"
 import UserTypeForManagement from "../../enums/user-type-for-management";
 import { getEnabledUserTypes, getLabelForUserType } from "../../help/user-type-functions";
+import './users-type-controls.css';
 
 type UsersTypeControlsProps = {
     changeUsersType: (type: UserTypeForManagement) => void;
@@ -25,7 +26,7 @@ export default class UsersTypeControls extends React.Component<UsersTypeControls
                 {this._enabledTypes.map(type => 
                     <button
                         key={type}
-                        className="user-type-btn"
+                        className="user-type-btn tiled-btn"
                         onClick={() => this.props.changeUsersType(type)}
                     >
                         {getLabelForUserType(type)}

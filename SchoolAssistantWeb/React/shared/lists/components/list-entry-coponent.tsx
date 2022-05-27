@@ -76,14 +76,14 @@ export default class ListEntryComponent<
                         buttons={buttons}
                     />
                 }
-                modificationComponent={
+                modificationComponent={this.ModificationComponent != null ?
                     <this.ModificationComponent
                         recordId={this.props.recordId}
                         reloadAsync={this.props.reloadAsync}
                         onMadeAnyChange={this.onMadeAnyChange}
                         //@ts-ignore
                         groupId={this.props.groupId}
-                    />
+                    /> : undefined
                 }
             />
         )
