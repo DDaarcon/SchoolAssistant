@@ -12,6 +12,7 @@ using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
+using SchoolAssistant.Logic.General.Other;
 using SchoolAssistant.Logic.UsersManagement;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IUserRepository _userRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
+        private readonly IPasswordDeformationService _deformationSvc = new PasswordDeformationService(null);
 
 
         private OrganizationalClass _orgClass1 = null!;
@@ -72,7 +74,8 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             _addUserSvc = new AddUserService(
                 _userRepo,
-                studentRepo, _teacherRepo, parentRepo);
+                studentRepo, _teacherRepo, parentRepo,
+                _deformationSvc);
         }
 
 
@@ -97,7 +100,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             var user = await _userRepo.Manager.FindByNameAsync(username);
             Assert.IsNotNull(user);
-            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, res.temporaryPassword));
+            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, _deformationSvc.GetReadable(res.passwordDeformed)));
             Assert.AreEqual(UserType.Student, user.Type);
             Assert.IsTrue(student.Id == user.Student?.Id || student.Id == user.StudentId);
             Assert.AreEqual(email, user.Email);
@@ -123,7 +126,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             var user = await _userRepo.Manager.FindByNameAsync(username);
             Assert.IsNotNull(user);
-            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, res.temporaryPassword));
+            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, _deformationSvc.GetReadable(res.passwordDeformed)));
             Assert.AreEqual(UserType.Teacher, user.Type);
             Assert.IsTrue(teacher.Id == user.Teacher?.Id || teacher.Id == user.TeacherId);
             Assert.AreEqual(email, user.Email);

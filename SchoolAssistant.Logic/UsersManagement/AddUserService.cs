@@ -8,6 +8,7 @@ using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
+using SchoolAssistant.Logic.General.Other;
 using SchoolAssistant.Logic.Help;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,6 +26,7 @@ namespace SchoolAssistant.Logic.UsersManagement
         private readonly IRepository<StudentRegisterRecord> _studentRegRecRepo;
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepository<Parent> _parentRepo;
+        private readonly IPasswordDeformationService _deformationSvc;
 
         private readonly EmailAddressAttribute _emailValidator = new();
 
@@ -39,12 +41,14 @@ namespace SchoolAssistant.Logic.UsersManagement
             IUserRepository userRepo,
             IRepository<StudentRegisterRecord> studentRegRecRepo,
             IRepository<Teacher> teacherRepo,
-            IRepository<Parent> parentRepo)
+            IRepository<Parent> parentRepo,
+            IPasswordDeformationService deformationSvc)
         {
             _userRepo = userRepo;
             _studentRegRecRepo = studentRegRecRepo;
             _teacherRepo = teacherRepo;
             _parentRepo = parentRepo;
+            _deformationSvc = deformationSvc;
         }
 
         public async Task<AddUserResponseJson> AddAsync(AddUserRequestJson model)
@@ -58,7 +62,7 @@ namespace SchoolAssistant.Logic.UsersManagement
             await CreateUserAsync();
 
             if (_response.success)
-                _response.temporaryPassword = _temporaryPassword!;
+                _response.passwordDeformed = _deformationSvc.GetDeformed(_temporaryPassword!);
 
             return _response;
         }

@@ -4,6 +4,6 @@ namespace SchoolAssistant.Infrastructure.Models.UsersManagement
 {
     public class AddUserResponseJson : ResponseJson
     {
-        public string temporaryPassword { get; set; } = null!;
+        public string passwordDeformed { get; set; } = null!;
     }
 }
