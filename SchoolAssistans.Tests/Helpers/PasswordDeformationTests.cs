@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SchoolAssistant.Logic.General.Other;
+using SchoolAssistant.Logic.Help;
 using System;
 using System.Linq;
 
@@ -22,7 +23,7 @@ namespace SchoolAssistans.Tests.Helpers
 
             string deformed = _deformationSvc.GetDeformed(text);
 
-            Assert.IsTrue(deformed.All(x => _deformationSvc.AllowedChars.Contains(x)));
+            Assert.IsTrue(deformed.All(x => PasswordHelper.AllowedCharacters.Contains(x)));
 
             string readable = _deformationSvc.GetReadable(deformed);
 

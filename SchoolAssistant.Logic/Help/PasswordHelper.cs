@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.Logic.Help
 {
     public static class PasswordHelper
     {
+        public static char[] AllowedCharacters => (UPPER_CASE + LOWER_CASE + DIGITS + NON_ALPHANUMERIC).ToCharArray();
+
+        private const string UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string LOWER_CASE = "abcdefghijklmnopqrstuvwxyz";
+        private const string DIGITS = "0123456789";
+        private const string NON_ALPHANUMERIC = "!@$?_-";
+
         public static void ApplyDefaultOptionsTo(PasswordOptions opts)
         {
             // TODO: Password configuration here
@@ -34,10 +36,10 @@ namespace SchoolAssistant.Logic.Help
             if (opts is null) throw new ArgumentNullException("Password options must not be null");
 
             string[] randomChars = new[] {
-                "ABCDEFGHJKLMNOPQRSTUVWXYZ",    // uppercase 
-                "abcdefghijkmnopqrstuvwxyz",    // lowercase
-                "0123456789",                   // digits
-                "!@$?_-"                        // non-alphanumeric
+                UPPER_CASE,
+                LOWER_CASE,
+                DIGITS,
+                NON_ALPHANUMERIC
             };
 
             Random rand = new Random(Environment.TickCount);

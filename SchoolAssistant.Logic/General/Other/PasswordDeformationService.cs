@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.General.Other
 {
     public interface IPasswordDeformationService
     {
-        char[] AllowedChars { get; }
-
         string GetDeformed(string password);
         string GetReadable(string deformed);
     }
@@ -19,7 +18,7 @@ namespace SchoolAssistant.Logic.General.Other
         private readonly int _shiftBytesBy;
         private readonly int _decreaseBy;
 
-        public char[] AllowedChars { get; private set; }
+        private char[] _AllowedChars => PasswordHelper.AllowedCharacters;
 
         public PasswordDeformationService(
             IConfiguration? config)
@@ -31,8 +30,6 @@ namespace SchoolAssistant.Logic.General.Other
             _increaseBy = passwordDefSec?.GetValue<int>("increaseCharBy") ?? 10;
             _shiftBytesBy = passwordDefSec?.GetValue<int>("shiftCharBytesBy") ?? 3;
             _decreaseBy = passwordDefSec?.GetValue<int>("decreaseCharBy") ?? 15;
-
-            AllowedChars = GetAllowedChars();
         }
 
         public string GetDeformed(string password)
@@ -51,9 +48,9 @@ namespace SchoolAssistant.Logic.General.Other
 
             var increased = ForEach(text.ToCharArray(), (c, index) =>
             {
-                int oldIdx = Array.IndexOf(AllowedChars, c);
-                int newIdx = GetShiftedIndex(oldIdx, _increaseBy * multipl, AllowedChars.Length);
-                return AllowedChars[newIdx];
+                int oldIdx = Array.IndexOf(_AllowedChars, c);
+                int newIdx = GetShiftedIndex(oldIdx, _increaseBy * multipl, _AllowedChars.Length);
+                return _AllowedChars[newIdx];
             });
 
             var shifting = ForEach(increased, (c, index) =>
@@ -72,9 +69,9 @@ namespace SchoolAssistant.Logic.General.Other
 
             var decreased = ForEach(text.ToCharArray(), (c, index) =>
             {
-                int oldIdx = Array.IndexOf(AllowedChars, c);
-                int newIdx = GetShiftedIndex(oldIdx, _decreaseBy * multipl * -1, AllowedChars.Length);
-                return AllowedChars[newIdx];
+                int oldIdx = Array.IndexOf(_AllowedChars, c);
+                int newIdx = GetShiftedIndex(oldIdx, _decreaseBy * multipl * -1, _AllowedChars.Length);
+                return _AllowedChars[newIdx];
             });
 
             return new string(decreased);
@@ -93,24 +90,6 @@ namespace SchoolAssistant.Logic.General.Other
             int newIndex = (index + shift) % length;
             if (newIndex < 0) newIndex = length + newIndex;
             return newIndex;
-        }
-
-
-
-        private char[] GetAllowedChars()
-        {
-            return CharsInRange('0', '9')
-                .Concat(CharsInRange('A', 'Z'))
-                .Concat(CharsInRange('a', 'z'))
-                .Concat(CharsInRange('_', '_')).ToArray();
-        }
-
-        private char[] CharsInRange(char from, char to)
-        {
-            var chars = new List<char>();
-            while (from <= to)
-                chars.Add(from++);
-            return chars.ToArray();
         }
     }
 }
