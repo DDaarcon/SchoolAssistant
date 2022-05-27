@@ -1,11 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SchoolAssistant.Logic.General.Other;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.Helpers
 {
@@ -22,9 +18,12 @@ namespace SchoolAssistans.Tests.Helpers
         [Test]
         public void Should_deform_and_parse()
         {
-            string text = "Ala ma kota, kota małego";
+            string text = "Ala_ma_kota_kota_malego21412";
 
             string deformed = _deformationSvc.GetDeformed(text);
+
+            Assert.IsTrue(deformed.All(x => _deformationSvc.AllowedChars.Contains(x)));
+
             string readable = _deformationSvc.GetReadable(deformed);
 
             Assert.AreEqual(text, readable);
