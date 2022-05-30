@@ -35,6 +35,7 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
 
         private ScheduleViewerType GetScheduleViewerTypeFromUser(User user)
         {
+            // TODO: temporary solution
             return user.Type switch
             {
                 UserType.Student => ScheduleViewerType.Student,

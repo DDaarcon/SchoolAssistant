@@ -28,10 +28,10 @@ namespace SchoolAssistant.Web.Pages
             return user.Type switch
             {
                 UserType.Student => RedirectToPage("Dashboard/Student"),
-                UserType.Teacher => throw new NotImplementedException(),
+                UserType.Teacher => RedirectToPage("Dashboard/Teacher"),
                 UserType.Administration => throw new NotImplementedException(),
                 UserType.Headmaster => throw new NotImplementedException(),
-                UserType.SystemAdmin => RedirectToPage("Dashboard/Student"),
+                UserType.SystemAdmin => Page(),
                 _ => throw new NotImplementedException(),
             };
         }

@@ -1,0 +1,34 @@
+﻿@page
+@using Microsoft.AspNetCore.Antiforgery
+@model SchoolAssistant.Web.Pages.Dashboard.TeacherModel
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+
+@section Head{
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/dist/schedule_shared.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/dist/schedule_display.css" asp-append-version="true"/>
+}
+
+
+Teacher dashboard
+
+<div class="dashboard">
+    <div class="dashboard-item dashboard-item-green dashboard-schedule">
+        @Html.React("Components.Schedule", new {
+            config = Model.ScheduleConfig,
+            lessons = Model.ScheduleLessons
+        }, containerClass: "schedule-view")
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        const antiforgeryToken = '@token';
+    </script>
+
+    <script src="~/dist/schedule_shared.bundle.js" asp-append-version="true"></script>
+    <script src="~/dist/schedule_display.bundle.js" asp-append-version="true"></script>
+}

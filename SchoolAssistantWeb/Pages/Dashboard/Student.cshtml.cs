@@ -5,8 +5,6 @@ using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.Infrastructure.Models.MarksOverview;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
-using SchoolAssistant.Logic.Help;
-using SchoolAssistant.Logic.ScheduleDisplay;
 using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
@@ -72,12 +70,21 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         private async Task FetchUserAndStudentForCurrentYearAsync()
         {
             _user = await _userManager.GetUserAsync(User);
-            _student = _user.Student?.StudentInstances.FirstOrDefault(x => x.SchoolYear.Current);
 
-            if (_student is null)
+            if (_user is null)
             {
                 // TODO: redirect to error page
+                throw new NotImplementedException();
             }
+
+            var student = _user!.Student?.StudentInstances.FirstOrDefault(x => x.SchoolYear.Current);
+
+            if (student is null)
+            {
+                // TODO: redirect to error page
+                throw new NotImplementedException();
+            }
+            _student = student;
         }
     }
 }
