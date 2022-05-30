@@ -19,7 +19,7 @@ Student dashboard
     <div class="dashboard-item dashboard-item-green dashboard-schedule">
         @Html.React("Components.Schedule", new {
             config = Model.ScheduleConfig,
-            events = Model.ScheduleEvents
+            lessons = Model.ScheduleLessons
         }, containerClass: "schedule-view")
     </div>
     <div class="dashboard-item dashboard-item-cyan dashboard-marks-overview">

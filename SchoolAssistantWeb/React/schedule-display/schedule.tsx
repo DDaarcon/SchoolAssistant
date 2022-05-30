@@ -6,7 +6,7 @@ import './schedule.css';
 
 type ScheduleProps = {
     config: ScheduleConfig;
-    events: DayLessons[];
+    lessons: DayLessons[];
 }
 type ScheduleState = { }
 export default class Schedule extends React.Component<ScheduleProps, ScheduleState> {
@@ -19,7 +19,7 @@ export default class Schedule extends React.Component<ScheduleProps, ScheduleSta
         return (
             <ScheduleDisplayTimeline
                 config={this.props.config}
-                data={this.props.events}
+                data={this.props.lessons}
             />
         )
     }

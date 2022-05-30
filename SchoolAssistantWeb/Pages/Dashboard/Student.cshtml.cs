@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.Infrastructure.Models.MarksOverview;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.Help;
+using SchoolAssistant.Logic.Schedule;
 using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
@@ -13,69 +15,38 @@ namespace SchoolAssistant.Web.Pages.Dashboard
     {
         private readonly UserManager<User> _userManager;
         private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
+        private readonly IStudentScheduleService _scheduleSvc;
+
 
         private User _user = null!;
+        private Student _student = null!;
 
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
-        public ScheduleDayLessonsJson[] ScheduleEvents { get; set; } = null!;
+        public ScheduleDayLessonsJson[] ScheduleLessons { get; set; } = null!;
 
         public MarksOverviewModel MarksOverview { get; set; } = new MarksOverviewModel();
 
         public StudentModel(
             UserManager<User> userManager,
-            IFetchSchedDisplayConfigService fetchScheduleConfigSvc)
+            IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
+            IStudentScheduleService scheduleSvc)
         {
             _userManager = userManager;
             _fetchScheduleConfigSvc = fetchScheduleConfigSvc;
+            _scheduleSvc = scheduleSvc;
         }
+
+        // TODO: verify if user
+        // TODO: check authorization on every controller
 
         public async Task OnGetAsync()
         {
-            _user = await _userManager.GetUserAsync(User);
+            await FetchUserAndStudentForCurrentYearAsync();
 
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
 
-            ScheduleEvents = new ScheduleDayLessonsJson[]
-            {
-                new ScheduleDayLessonsJson()
-                {
-                    dayIndicator = DayOfWeek.Monday,
-                    lessons = new LessonTimetableEntryJson[]
-                    {
-                        new ()
-                        {
-                            id = 1,
-                            time = new TimeJson{ hour = 12, minutes = 30 },
-                            lecturer = new IdNameJson{ name = "T. Milecki", id = 4 },
-                            room = new IdNameJson{ name = "Sala nr 5", id = 4 },
-                            subject = new IdNameJson{ name = "Jêzyk polski", id = 4 }
-                        }
-                    }
-                }
-                //new ()
-                //{
-                    
-                    //id = 1.ToString(),
-                    //title = "Jêzyk polski",
-                    //start = new DateTime(2022, 5, 17, 10, 50, 0).GetMillisecondsJsUTC(),
-                    //end = new DateTime(2022, 5, 17, 11, 35, 0).GetMillisecondsJsUTC(),
-                    //@class = "1d",
-                    //lecturer = "T. Milecki",
-                    //room = "Sala nr 5",
-                    //subject = "Jêzyk polski"
-                //},
-                //new ()
-                //{
-                //    id = 2.ToString(),
-                //    title = "Jêzyk angielski",
-                //    start = new DateTime(2022, 5, 18, 12, 50, 0).GetMillisecondsJsUTC(),
-                //    end = new DateTime(2022, 5, 18, 13, 35, 0).GetMillisecondsJsUTC(),
-                //    @class = "1d",
-                //    lecturer = "T. Wielicki",
-                //    room = "Sala nr 4",
-                //    subject = "Jêzyk angielski"
-                //},
-            };
+            ScheduleLessons = _scheduleSvc.GetModel(_student)!;
+
 
             MarksOverview.Marks = new List<MarkForOverviewModel>()
             {
@@ -96,6 +67,17 @@ namespace SchoolAssistant.Web.Pages.Dashboard
                     Mark = "-5", Subject = "Some long subject name to check long names", Issuer = "Tomasz Kowalczykowiañskowski"
                 }
             };
+        }
+
+        private async Task FetchUserAndStudentForCurrentYearAsync()
+        {
+            _user = await _userManager.GetUserAsync(User);
+            _student = _user.Student?.StudentInstances.FirstOrDefault(x => x.SchoolYear.Current);
+
+            if (_student is null)
+            {
+                // TODO: redirect to error page
+            }
         }
     }
 }
