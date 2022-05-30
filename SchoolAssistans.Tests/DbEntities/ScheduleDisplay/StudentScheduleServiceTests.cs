@@ -46,6 +46,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleDisplay
         {
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _teacherRepo = new Repository<Teacher>(_Context, null);
+            _studentRepo = new Repository<Student>(_Context, null);
 
             _studentScheduleSvc = new StudentScheduleService(_studentRepo);
         }
@@ -60,14 +61,15 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleDisplay
             Assert.IsNotNull(lessons);
             Assert.IsNotEmpty(lessons!);
 
-            //foreach (var lesson in lessons)
-            //{
-            //    Assert.IsTrue(_orgClass1.Schedule.Any(x =>
-            //        x.Id.ToString() == lesson.id
-            //        && x.Subject.Name == lesson.subject
-            //        && x.Lecturer.GetShortenedName() == lesson.lecturer
-            //        && x.));
-            //}
+            Assert.IsTrue(lessons!.SelectMany(x => x.lessons)
+                .All(x => _orgClass1.Schedule.Any(d =>
+                    x.id == d.Id
+                    && x.time.hour == d.GetTime()!.Value.Hour
+                    && x.time.minutes == d.GetTime()!.Value.Minute
+                    && x.customDuration == d.CustomDuration
+                    && x.subject.id == d.Subject.Id
+                    && x.lecturer.id == d.Lecturer.Id
+                    && x.room.id == d.Room.Id)));
         }
     }
 }

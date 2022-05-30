@@ -4,7 +4,7 @@
     {
         public static (DateTime start, DateTime end) GetStartAndEndOfCurrentWeek()
         {
-            return GetStartAndEndOfWeek(DateTime.Now);
+            return GetStartAndEndOfWeek(DateTime.UtcNow);
         }
 
         public static (DateTime start, DateTime end) GetStartAndEndOfWeek(DateTime forDate)
