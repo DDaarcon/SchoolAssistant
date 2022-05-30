@@ -15,7 +15,7 @@
     left: 0;
 }
 
-.sched-lesson-expandable {
+.sched-stud-lesson-expandable {
     position: absolute;
     top: calc(100% - 10px);
     left: 0;
@@ -28,11 +28,11 @@
     border-bottom: 10px;
 }
 
-.sched-lesson-expandable > label-value:first-child {
+.sched-stud-lesson-expandable > label-value:first-child {
     margin-top: 10px;
 }
 
-.sched-lesson-expandable.expanded {
+.sched-stud-lesson-expandable.expanded {
     height: 60px;
     transition-delay: 0.3s;
 }

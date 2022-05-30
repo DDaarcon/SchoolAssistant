@@ -24,7 +24,7 @@ export default class StudentLessonTile extends LessonTile {
                     {this.props.lesson.subject.name}
                 </div>
 
-                <div className={"sched-lesson-expandable " + (this.state.hover ? "expanded" : "")}>
+                <div className={"sched-stud-lesson-expandable " + (this.state.hover ? "expanded" : "")}>
                     <LabelValue
                         label="czas"
                         valueComp={displayTime(this.props.lesson.time)}
@@ -43,16 +43,6 @@ export default class StudentLessonTile extends LessonTile {
                         outerStyle={labelValueStyle}
                         labelOuterStyle={labelStyle}
                     />
-
-                    {/*<div className={"sched-stud-lesson-lecturer " + (this.state.hover ? "expanded" : "")}>*/}
-                    {/*    {this.props.lesson.lecturer.name}*/}
-                    {/*</div>*/}
-                    {/*<div className={"sched-stud-lesson-room " + (this.state.hover ? "expanded" : "")}>*/}
-                    {/*    {this.props.lesson.room.name}*/}
-                    {/*</div>*/}
-                    {/*<div className={"sched-stud-lesson-time " + (this.state.hover ? "expanded" : "")}>*/}
-                    {/*    {displayTime(this.props.lesson.time)}*/}
-                    {/*</div>*/}
                 </div>
             </div>
         )
