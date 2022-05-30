@@ -13,13 +13,14 @@ using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities.ScheduleDisplay
 {
-    public class StudentScheduleServiceTests : BaseDbEntitiesTests
+    public class TeacherScheduleServiceTests : BaseDbEntitiesTests
     {
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepository<Student> _studentRepo = null!;
+        private IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo = null!;
 
-        private IStudentScheduleService _studentScheduleSvc = null!;
+        private ITeacherScheduleService _teacherScheduleSvc = null!;
 
         private OrganizationalClass _orgClass1 = null!;
 
@@ -36,10 +37,6 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleDisplay
         protected override async Task SetupDataForEveryTestAsync()
         {
             _orgClass1 = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
-
-            _orgClass1.Students.Add(await FakeData.Student(await _Year, _studentRepo));
-
-            await _orgClassRepo.SaveAsync();
         }
 
         protected override void SetupServices()
@@ -48,28 +45,33 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleDisplay
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _studentRepo = new Repository<Student>(_Context, null);
 
-            _studentScheduleSvc = new StudentScheduleService(_studentRepo);
+            _lessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
+
+            _teacherScheduleSvc = new TeacherScheduleService(_schoolYearRepo, _teacherRepo, _lessonRepo);
         }
 
         [Test]
-        public void Should_fetch_class_lessons_for_schedule_by_student()
+        public async Task Should_fetch_teachers_lessons()
         {
-            var student = _orgClass1.Students.First();
+            var lessonsDb = await _lessonRepo.AsListByYear.ByCurrentAsync();
+            var teacherId = lessonsDb.First().LecturerId;
 
-            var lessons = _studentScheduleSvc.GetModel(student);
+            var res = await _teacherScheduleSvc.GetModelForCurrentYearAsync(teacherId);
 
-            Assert.IsNotNull(lessons);
-            Assert.IsNotEmpty(lessons!);
+            Assert.IsNotNull(res);
+            Assert.IsNotEmpty(res!);
 
-            Assert.IsTrue(lessons!.SelectMany(x => x.lessons)
-                .All(x => _orgClass1.Schedule.Any(d =>
+            Assert.IsTrue(res!.SelectMany(x => x.lessons)
+                .All(x => lessonsDb.Any(d =>
                     x.id == d.Id
+                    && x.customDuration == d.CustomDuration
                     && x.time.hour == d.GetTime()!.Value.Hour
                     && x.time.minutes == d.GetTime()!.Value.Minute
-                    && x.customDuration == d.CustomDuration
-                    && x.subject.id == d.Subject.Id
-                    && x.lecturer.id == d.Lecturer.Id
-                    && x.room.id == d.Room.Id)));
+                    && x.lecturer.id == d.LecturerId
+                    && x.subject.id == d.SubjectId
+                    && x.room.id == d.RoomId
+                    && x.orgClass?.id == d.ParticipatingOrganizationalClassId
+                    && x.subjClass?.id == d.ParticipatingSubjectClassId)));
         }
     }
 }

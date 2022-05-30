@@ -6,7 +6,7 @@ using SchoolAssistant.Infrastructure.Models.MarksOverview;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.Help;
-using SchoolAssistant.Logic.Schedule;
+using SchoolAssistant.Logic.ScheduleDisplay;
 using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard

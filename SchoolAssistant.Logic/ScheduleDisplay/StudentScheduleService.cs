@@ -5,7 +5,7 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.Help;
 
-namespace SchoolAssistant.Logic.Schedule
+namespace SchoolAssistant.Logic.ScheduleDisplay
 {
     public interface IStudentScheduleService
     {
