@@ -13,6 +13,9 @@ export type LessonTileState = {
     hover: boolean;
 }
 
+
+// TODO: room name doesn't have numer
+// TODO: details panel is hidden behind lesson tile
 export default abstract class LessonTile extends React.Component<LessonTileProps, LessonTileState> {
 
     constructor(props) {

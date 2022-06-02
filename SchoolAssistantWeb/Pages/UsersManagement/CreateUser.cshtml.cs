@@ -47,6 +47,7 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
             return new JsonResult(res);
         }
 
+        // TODO: sometimes returns invalid password
         public JsonResult OnGetUnscramblePassword(string deformed)
         {
             return new JsonResult(new
