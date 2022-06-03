@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.ScheduleDisplay;
@@ -19,6 +20,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
         public ScheduleDayLessonsJson<LessonJson>[] ScheduleLessons { get; set; } = null!;
 
+        public ScheduledLessonListModel ScheduledLessonListModel { get; set; } = null!;
+
         public TeacherModel(
             IUserRepository userRepo,
             IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
@@ -34,8 +37,21 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             await FetchUserAsync();
 
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
-
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value))!;
+
+            ScheduledLessonListModel = new ScheduledLessonListModel
+            {
+                Items = new ScheduledLessonListItemModel[]
+                {
+                    new ()
+                    {
+                        ClassName = "1e",
+                        SubjectName = "Jêzyk polski",
+                        StartTime = DateTime.Now,
+                        Duration = 45
+                    }
+                }
+            };
         }
 
         private async Task FetchUserAsync()

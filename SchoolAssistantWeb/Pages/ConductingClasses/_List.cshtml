@@ -1,0 +1,56 @@
+﻿@model SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList.ScheduledLessonListModel
+
+<table class="scheduled-lessons-list">
+    <thead>
+        <tr>
+            <th>
+                Czas
+            </th>
+            <th>
+                Klasa
+            </th>
+            <th>
+                Przedmiot
+            </th>
+            <th>
+                Temat zajęć
+            </th>
+            <th>
+                Frekwencja
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @item.StartTime.TimeOfDay
+                </td>
+                <td>
+                    @item.ClassName
+                </td>
+                <td>
+                    @item.SubjectName
+                </td>
+                @if (item.HeldClasses is null)
+                {
+                    <td></td>
+                    <td></td>
+                } else
+                {
+                    <td>
+                        @item.HeldClasses.Topic
+                    </td>
+                    <td>
+                        @item.HeldClasses.AmountOfPresentStudents / @item.HeldClasses.AmountOfAllStudents
+                    </td>
+                }
+                <td>
+                    @* Button for going to details of already held classes, or conductor panel for classes that are to held *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

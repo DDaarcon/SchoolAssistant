@@ -8,8 +8,11 @@
 
 @section Head{
     <link rel="stylesheet" href="~/css/dashboard/shared.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/dashboard/teacher.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/dist/schedule_shared.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/dist/schedule_display.css" asp-append-version="true"/>
+
+    <link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>
 }
 
 
@@ -24,7 +27,15 @@ Teacher dashboard
     </div>
 
     <div class="dashboard-item dashboard-item-cyan dashboard-scheduled-lessons">
-        <partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />
+        <div class="scheduled-lessons-container">
+            <partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />
+            <button
+                id="show-more-scheduled-lessons-btn"
+                href="#"
+            >
+                Pokaż więcej
+            </button>
+        </div>
     </div>
 </div>
 

@@ -1,0 +1,9 @@
+﻿.scheduled-lessons-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.scheduled-lessons-container > table {
+    flex-grow: 1;
+}
