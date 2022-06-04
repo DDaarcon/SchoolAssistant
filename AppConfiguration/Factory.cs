@@ -1,4 +1,5 @@
 ﻿using AppConfigurationEFCore.Configuration;
+using AppConfigurationEFCore.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -9,55 +10,55 @@ namespace AppConfigurationEFCore
         where TDbContext : DbContext
         where TRecords : class, new()
     {
+        private readonly IRecordHandlerFactory _handlerFactory;
         private static TDbContext? _context;
 
         private TRecords? _records;
 
-        public Factory()
-        {
 
+        public Factory(
+            IRecordHandlerFactory handlerFactory)
+        {
+            _handlerFactory = handlerFactory;
         }
 
         private readonly Func<TDbContext> _getContext = () => _context ?? throw new ArgumentNullException("DbContext has not been provided");
 
         public AppConfiguration<TDbContext, TRecords> ConstructAppConfiguration(TDbContext context, IServiceScopeFactory scopeFactory)
         {
+            _context = context;
+            if (_records is null)
+                SetUpRecords();
 
-            return new AppConfiguration<TDbContext, TRecords>(_getContext(), scopeFactory, _records);
+            return new AppConfiguration<TDbContext, TRecords>(_getContext(), scopeFactory, _records!);
         }
 
-        public void SetUpProperties()
+        private void SetUpRecords()
         {
+            _records = new TRecords();
             var properties = _records.GetType().GetProperties()!;
 
             foreach (var property in properties)
             {
                 if (IsPropertyValid(property))
-                    property.SetValue(_records, CreateOperations(property));
+                    property.SetValue(_records, CreateRecordOperations(property));
             }
         }
 
-        private object CreateOperations(PropertyInfo property)
+        private object CreateRecordOperations(PropertyInfo property)
         {
             var attr = property.GetCustomAttribute<RecordKeyAttribute>()!;
             var genericType = property.PropertyType.GenericTypeArguments[0];
 
-            if (typeof(int).IsEquivalentTo(genericType))
-                return new PrimitiveRecordHandler<int>(
-                    attr.Key, _getContext,
-                    to => to is null ? null : int.Parse(to), from => from?.ToString());
+            object? handler = null;
+            if (genericType.IsPrimitive)
+                handler = _handlerFactory.GetPrimitive(genericType, attr.Key, _getContext);
+            else
+                handler = _handlerFactory.Get(genericType, attr.Key, _getContext);
 
-            if (typeof(decimal).IsEquivalentTo(genericType))
-                return new PrimitiveRecordHandler<decimal>(
-                    attr.Key, _getContext,
-                    to => to is null ? null : decimal.Parse(to), from => from?.ToString());
-
-            if (typeof(string).IsEquivalentTo(genericType))
-                return new RecordHandler<string>(
-                    attr.Key, _getContext,
-                    to => to, from => from);
-
-            throw new ArgumentException($"Storing/fetching configuration of type {genericType.Name} has not been specified.");
+            if (handler is null)
+                throw new ArgumentException($"Storing/fetching configuration of type {genericType.Name} has not been specified. To specify it use action parameter in AddAppConfiguration");
+            return handler;
         }
 
         private bool IsPropertyValid(PropertyInfo property)
@@ -76,6 +77,5 @@ namespace AppConfigurationEFCore
 
             return IsAssignableTo(baseType, genericType);
         }
-
     }
 }

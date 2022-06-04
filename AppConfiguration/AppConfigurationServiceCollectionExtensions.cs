@@ -86,10 +86,17 @@ namespace AppConfigurationEFCore.Setup
             Type factoryType = typeof(Factory<,>).MakeGenericType(dbContextType, configurationRecordsType);
             services.TryAddSingleton(factoryType);
 
+            var options = new CustomRecordTypeOptions();
+            customRecordTypesAction?.Invoke(options);
 
-
+            RegisterTypeHandlersFactory(services, options);
 
             return services;
+        }
+
+        private static void RegisterTypeHandlersFactory(IServiceCollection services, CustomRecordTypeOptions options)
+        {
+            services.TryAddSingleton<IRecordHandlerFactory>(new RecordHandlerFactory(options.ReferenceTypeHandlers, options.PrimitiveTypeHandlers));
         }
     }
 
@@ -119,17 +126,24 @@ namespace AppConfigurationEFCore.Setup
             _primitiveInfo.Add(new PrimitiveHandlerInfo<T>(type, toTypeConverter, fromTypeConverter ?? (x => x?.ToString())));
         }
 
+
+
+        public object[] ReferenceTypeHandlers => _info.ToArray()!;
+        public object[] PrimitiveTypeHandlers => _primitiveInfo.ToArray()!;
+
         private readonly ArrayList _info = new ArrayList();
-        private record HandlerInfo<T>(
-            Type ForType,
-            Func<string?, T?> ToTypeConverter,
-            Func<T?, string?> FromTypeConverter);
 
         private readonly ArrayList _primitiveInfo = new ArrayList();
-        private record PrimitiveHandlerInfo<T>(
-            Type ForType,
-            Func<string?, T?> ToTypeConverter,
-            Func<T?, string?> FromTypeConverter)
-            where T : struct;
     }
+
+    internal record HandlerInfo<T>(
+        Type ForType,
+        Func<string?, T?> ToTypeConverter,
+        Func<T?, string?> FromTypeConverter);
+
+    internal record PrimitiveHandlerInfo<T>(
+        Type ForType,
+        Func<string?, T?> ToTypeConverter,
+        Func<T?, string?> FromTypeConverter)
+        where T : struct;
 }
