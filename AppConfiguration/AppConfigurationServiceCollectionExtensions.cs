@@ -91,6 +91,18 @@ namespace AppConfigurationEFCore.Setup
 
             RegisterTypeHandlersFactory(services, options);
 
+            services.TryAddScoped(typeof(IAppConfiguration<>).MakeGenericType(configurationRecordsType), services =>
+            {
+                var factory = services.GetRequiredService(typeof(Factory<,>).MakeGenericType(dbContextType, configurationRecordsType));
+
+                var dbContext = services.GetRequiredService(dbContextType);
+                var serviceScopeFactory = services.GetRequiredService<IServiceScopeFactory>();
+
+                return factory.GetType().GetMethod("ConstructAppConfiguration")!
+                    .MakeGenericMethod(dbContextType, configurationRecordsType)
+                    .Invoke(factory, new[] { dbContext, serviceScopeFactory })!;
+            });
+
             return services;
         }
 

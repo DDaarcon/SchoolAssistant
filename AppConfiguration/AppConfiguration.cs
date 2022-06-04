@@ -7,10 +7,9 @@ namespace AppConfigurationEFCore
     public interface IAppConfiguration<TRecords>
         where TRecords : class, new()
     {
-
         TRecords Records { get; }
-
         RecordHandler<string> CustomConfig(string key);
+
         void Save();
         Task SaveAsync();
         void UseIndependentDbContext();
