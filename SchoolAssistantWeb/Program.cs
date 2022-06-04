@@ -1,3 +1,4 @@
+using AppConfigurationEFCore.Setup;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using JavaScriptEngineSwitcher.V8;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 #endregion
+
+builder.Services.AddAppConfiguration(null, null, options =>
+{
+    options.Add<Exception>(x => new Exception());
+});
 
 builder.Services.AddAllInjectable();
 
