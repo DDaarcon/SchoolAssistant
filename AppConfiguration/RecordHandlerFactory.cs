@@ -5,8 +5,8 @@ namespace AppConfigurationEFCore.Setup
 {
     internal interface IRecordHandlerFactory
     {
-        RecordHandler<T>? Get<T>(string key, Func<DbContext> getContext);
-        PrimitiveRecordHandler<T>? GetPrimitive<T>(string key, Func<DbContext> getContext) where T : struct;
+        object? Get(Type type, string key, Func<DbContext> getContext);
+        object? GetPrimitive(Type type, string key, Func<DbContext> getContext);
     }
     internal class RecordHandlerFactory : IRecordHandlerFactory
     {
@@ -25,31 +25,30 @@ namespace AppConfigurationEFCore.Setup
             _primitiveHandlersInfo = primitiveInfo;
         }
 
-        public RecordHandler<T>? Get<T>(string key, Func<DbContext> getContext)
+        public object? Get(Type type, string key, Func<DbContext> getContext)
         {
-            if (!AssignHandlerParamsAndValidateNulls(typeof(T), key, getContext))
+            if (!AssignHandlerParamsAndValidateNulls(type, key, getContext))
                 return null;
 
-            if (TryGetDefaultHandler(out var handlerObj2))
-                return handlerObj2 as RecordHandler<T>;
+            if (TryGetDefaultHandler(out var h1))
+                return h1;
 
-            if (TryGetUserDefinedHandler<T>(out var handler))
-                return handler;
+            if (TryGetUserDefinedHandler(out var h2))
+                return h2;
 
             return null;
         }
 
-        public PrimitiveRecordHandler<T>? GetPrimitive<T>(string key, Func<DbContext> getContext)
-            where T : struct
+        public object? GetPrimitive(Type type, string key, Func<DbContext> getContext)
         {
-            if (!AssignHandlerParamsAndValidateNulls(typeof(T), key, getContext))
+            if (!AssignHandlerParamsAndValidateNulls(type, key, getContext))
                 return null;
 
-            if (TryGetDefaultPrimitiveHandler(out var handlerObj2))
-                return handlerObj2 as PrimitiveRecordHandler<T>;
+            if (TryGetDefaultPrimitiveHandler(out var h1))
+                return h1;
 
-            if (TryGetUserDefinedPrimitiveHandler<T>(out var handler))
-                return handler;
+            if (TryGetUserDefinedPrimitiveHandler(out var h2))
+                return h2;
 
             return null;
         }
@@ -78,6 +77,11 @@ namespace AppConfigurationEFCore.Setup
             return false;
         }
 
+        private bool TryGetUserDefinedHandler(out object? handlerObj)
+        {
+            handlerObj = null;
+            return this.GetType().GetMethod(nameof(TryGetDefaultHandler))!.MakeGenericMethod(_type).Invoke(this, new[] { handlerObj }) as bool? ?? false;
+        }
         private bool TryGetUserDefinedHandler<T>(out RecordHandler<T>? handlerObj)
         {
             handlerObj = null;
@@ -91,6 +95,9 @@ namespace AppConfigurationEFCore.Setup
 
             return true;
         }
+
+
+
 
         private bool TryGetDefaultPrimitiveHandler(out object? handlerObj)
         {
@@ -115,6 +122,11 @@ namespace AppConfigurationEFCore.Setup
             return false;
         }
 
+        private bool TryGetUserDefinedPrimitiveHandler(out object? handlerObj)
+        {
+            handlerObj = null;
+            return this.GetType().GetMethod(nameof(TryGetUserDefinedPrimitiveHandler))!.MakeGenericMethod(_type).Invoke(this, new[] { handlerObj }) as bool? ?? false;
+        }
         private bool TryGetUserDefinedPrimitiveHandler<T>(out PrimitiveRecordHandler<T>? handlerObj)
             where T : struct
         {
