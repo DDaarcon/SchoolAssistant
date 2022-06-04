@@ -1,10 +1,9 @@
 ﻿using AppConfigurationEFCore.Configuration;
-using AppConfigurationEFCore.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace AppConfigurationEFCore
+namespace AppConfigurationEFCore.Setup
 {
     internal class Factory<TDbContext, TRecords>
         where TDbContext : DbContext
