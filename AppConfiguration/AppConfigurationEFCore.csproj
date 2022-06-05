@@ -4,6 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  
+	<PackageId>AppConfigurationEFCore</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>Dariusz Wiktorowski</Authors>
+	<Company>Dariusz Wiktorowski</Company>
+	  
   </PropertyGroup>
 
   <ItemGroup>
