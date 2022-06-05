@@ -2,6 +2,9 @@
 
 namespace AppConfigurationEFCore.Entities
 {
+    /// <summary>
+    /// Database entity, all application configuration records are stored in form of this class.
+    /// </summary>
     public class AppConfig
     {
         [Key]
