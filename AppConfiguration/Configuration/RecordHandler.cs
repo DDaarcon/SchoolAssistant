@@ -33,11 +33,19 @@ namespace AppConfigurationEFCore.Configuration
             _toType = toType;
             _fromType = fromType;
         }
-
+        /// <summary>
+        /// Get value from database.
+        /// </summary>
         public T? Get() => _toType(_Repo.FirstOrDefault(x => x.Key == _key)?.Value);
 
+        /// <summary>
+        /// Get value from database.
+        /// </summary>
         public async Task<T?> GetAsync() => _toType((await _Repo.FirstOrDefaultAsync(x => x.Key == _key))?.Value);
 
+        /// <summary>
+        /// Set database's entry to <paramref name="value"/>.
+        /// </summary>
         public void Set(T? value)
         {
             var entry = _Repo.FirstOrDefault(x => x.Key == _key);
@@ -46,6 +54,9 @@ namespace AppConfigurationEFCore.Configuration
             entry.Value = _fromType(value);
         }
 
+        /// <summary>
+        /// Set database's entry to <paramref name="value"/>.
+        /// </summary>
         public async Task SetAsync(T? value)
         {
             var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key);
@@ -54,18 +65,27 @@ namespace AppConfigurationEFCore.Configuration
             entry.Value = _fromType(value);
         }
 
+        /// <summary>
+        /// Set database's entry to <paramref name="value"/> and apply change (call <see cref="DbContext.SaveChanges"/>).
+        /// </summary>
         public void SetAndSave(T? value)
         {
             Set(value);
             _Context.SaveChanges();
         }
 
+        /// <summary>
+        /// Set database's entry to <paramref name="value"/> and apply change (call <see cref="DbContext.SaveChangesAsync"/>).
+        /// </summary>
         public async Task SetAndSaveAsync(T? value)
         {
             await SetAsync(value);
             await _Context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Set database's entry to <paramref name="value"/> if hasn't been set yet
+        /// </summary>
         public bool SetIfEmpty(T? value)
         {
             var entry = _Repo.FirstOrDefault(x => x.Key == _key);
@@ -76,6 +96,9 @@ namespace AppConfigurationEFCore.Configuration
             return true;
         }
 
+        /// <summary>
+        /// Set database's entry to <paramref name="value"/> if hasn't been set yet
+        /// </summary>
         public async Task<bool> SetIfEmptyAsync(T? value)
         {
             var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key);
