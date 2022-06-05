@@ -41,7 +41,8 @@ namespace AppConfigurationEFCore.Configuration
         /// <summary>
         /// Get value from database.
         /// </summary>
-        public async Task<T?> GetAsync() => _toType((await _Repo.FirstOrDefaultAsync(x => x.Key == _key))?.Value);
+        public async Task<T?> GetAsync(CancellationToken cancellationToken = default) =>
+            _toType((await _Repo.FirstOrDefaultAsync(x => x.Key == _key, cancellationToken))?.Value);
 
         /// <summary>
         /// Set database's entry to <paramref name="value"/>.
@@ -57,9 +58,9 @@ namespace AppConfigurationEFCore.Configuration
         /// <summary>
         /// Set database's entry to <paramref name="value"/>.
         /// </summary>
-        public async Task SetAsync(T? value)
+        public async Task SetAsync(T? value, CancellationToken cancellationToken = default)
         {
-            var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key);
+            var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key, cancellationToken);
             entry ??= Add();
 
             entry.Value = _fromType(value);
@@ -77,10 +78,10 @@ namespace AppConfigurationEFCore.Configuration
         /// <summary>
         /// Set database's entry to <paramref name="value"/> and apply change (call <see cref="DbContext.SaveChangesAsync"/>).
         /// </summary>
-        public async Task SetAndSaveAsync(T? value)
+        public async Task SetAndSaveAsync(T? value, CancellationToken cancellationToken = default)
         {
-            await SetAsync(value);
-            await _Context.SaveChangesAsync();
+            await SetAsync(value, cancellationToken);
+            await _Context.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>
@@ -99,13 +100,13 @@ namespace AppConfigurationEFCore.Configuration
         /// <summary>
         /// Set database's entry to <paramref name="value"/> if hasn't been set yet
         /// </summary>
-        public async Task<bool> SetIfEmptyAsync(T? value)
+        public async Task<bool> SetIfEmptyAsync(T? value, CancellationToken cancellationToken = default)
         {
-            var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key);
+            var entry = await _Repo.FirstOrDefaultAsync(x => x.Key == _key, cancellationToken);
             if (!String.IsNullOrEmpty(entry?.Value))
                 return false;
 
-            await SetAsync(value);
+            await SetAsync(value, cancellationToken);
             return true;
         }
 

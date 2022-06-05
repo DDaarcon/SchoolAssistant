@@ -11,7 +11,7 @@ namespace AppConfigurationEFCore
         RecordHandler<string> CustomConfig(string key);
 
         void Save();
-        Task SaveAsync();
+        Task SaveAsync(CancellationToken cancellationToken = default);
         void UseIndependentDbContext();
     }
 
@@ -46,9 +46,9 @@ namespace AppConfigurationEFCore
             _context.SaveChanges();
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public void UseIndependentDbContext()
