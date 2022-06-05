@@ -35,7 +35,10 @@ builder.Services.AddJsEngineSwitcher(options => options.DefaultEngineName = V8Js
 
 builder.Services.AddIdentity<User, Role>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+
     PasswordHelper.ApplyDefaultOptionsTo(options.Password);
 })
     .AddEntityFrameworkStores<SADbContext>();

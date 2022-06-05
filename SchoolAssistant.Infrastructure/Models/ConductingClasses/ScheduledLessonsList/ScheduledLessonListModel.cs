@@ -3,5 +3,7 @@
     public class ScheduledLessonListModel
     {
         public IEnumerable<ScheduledLessonListItemModel> Items { get; set; } = null!;
+        public ScheduledLessonListItemModel? Incoming { get; set; }
+        public int MinutessBeforeClose { get; set; }
     }
 }

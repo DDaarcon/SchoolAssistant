@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="React\conducting-classes\interfaces\held-classes.ts" />
+    <None Remove="React\conducting-classes\interfaces\scheduled-lesson-list-entry.ts" />
+    <None Remove="React\conducting-classes\interfaces\scheduled-lesson-list-item.ts" />
+    <None Remove="React\conducting-classes\list.tsx" />
     <None Remove="React\data-management.ts" />
     <None Remove="React\data-management\classes\class-list.tsx" />
     <None Remove="React\data-management\classes\class-mod-comp.tsx" />
@@ -30,6 +34,7 @@
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
     <None Remove="React\shared\lists\components\list-entry-coponent.tsx" />
     <None Remove="React\shared\lists\components\list-entry-inner-component.tsx" />
+    <None Remove="React\shared\lists\components\shared-loaded-list-component.tsx" />
     <None Remove="React\shared\lists\group-list.tsx" />
     <None Remove="React\shared\lists\help\confirm-close-mod.tsx" />
     <None Remove="React\shared\lists\interfaces\custom-row-button.ts" />
@@ -198,6 +203,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="React\conducting-classes\interfaces\held-classes.ts" />
+    <TypeScriptCompile Include="React\conducting-classes\interfaces\scheduled-lesson-list-entry.ts" />
+    <TypeScriptCompile Include="React\conducting-classes\interfaces\scheduled-lesson-list-item.ts" />
+    <TypeScriptCompile Include="React\conducting-classes\list.tsx" />
     <TypeScriptCompile Include="React\data-management.ts" />
     <TypeScriptCompile Include="React\data-management\classes\class-list.tsx" />
     <TypeScriptCompile Include="React\data-management\classes\class-mod-comp.tsx" />

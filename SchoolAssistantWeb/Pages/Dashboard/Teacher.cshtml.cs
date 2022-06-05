@@ -5,6 +5,7 @@ using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsLi
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.ScheduleDisplay;
+using SchoolAssistant.Web.Pages.ConductingClasses;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
@@ -39,18 +40,12 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value))!;
 
+            var lessons = SpawnScheduledLessons._6LessonsFromNow;
             ScheduledLessonListModel = new ScheduledLessonListModel
             {
-                Items = new ScheduledLessonListItemModel[]
-                {
-                    new ()
-                    {
-                        ClassName = "1e",
-                        SubjectName = "Jêzyk polski",
-                        StartTime = DateTime.Now,
-                        Duration = 45
-                    }
-                }
+                Items = lessons,
+                Incoming = lessons[0],
+                MinutessBeforeClose = 5
             };
         }
 

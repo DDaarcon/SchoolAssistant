@@ -4,19 +4,19 @@
     <thead>
         <tr>
             <th>
-                Czas
+                <span>Czas</span>
             </th>
             <th>
-                Klasa
+                <span>Klasa</span>
             </th>
             <th>
-                Przedmiot
+                <span>Przedmiot</span>
             </th>
             <th>
-                Temat zajęć
+                <span>Temat zajęć</span>
             </th>
             <th>
-                Frekwencja
+                <span>Frekwencja</span>
             </th>
             <th></th>
         </tr>
@@ -24,15 +24,15 @@
     <tbody>
         @foreach (var item in Model.Items)
         {
-            <tr>
+            <tr id="@(item == Model.Incoming ? "incoming-lesson" : "")">
                 <td>
-                    @item.StartTime.TimeOfDay
+                    <span>@item.StartTime.TimeOfDay</span>
                 </td>
                 <td>
-                    @item.ClassName
+                    <span>@item.ClassName</span>
                 </td>
                 <td>
-                    @item.SubjectName
+                    <span>@item.SubjectName</span>
                 </td>
                 @if (item.HeldClasses is null)
                 {
@@ -41,14 +41,51 @@
                 } else
                 {
                     <td>
-                        @item.HeldClasses.Topic
+                        <span>@item.HeldClasses.Topic</span>
                     </td>
                     <td>
-                        @item.HeldClasses.AmountOfPresentStudents / @item.HeldClasses.AmountOfAllStudents
+                        <span>@item.HeldClasses.AmountOfPresentStudents / @item.HeldClasses.AmountOfAllStudents</span>
                     </td>
                 }
                 <td>
                     @* Button for going to details of already held classes, or conductor panel for classes that are to held *@
+                    @{
+                        bool closeOrOngoing = item == Model.Incoming 
+                            && item.StartTime.AddMinutes(-Model.MinutessBeforeClose) <= DateTime.Now
+                            && item.StartTime.AddMinutes(item.Duration) >= DateTime.Now;
+                    }
+                    @if (closeOrOngoing)
+                    {
+                    <button 
+                        class="conduct-btn"
+                    >
+                        Poprowadź zajęcia
+                    </button>
+                    }
+                    else if (item.HeldClasses is not null)
+                    {
+                    <button 
+                        class="see-past-details-btn"
+                    >
+                        Szczegóły
+                    </button>
+                    }
+                    else if (item.StartTime < DateTime.Now)
+                    {
+                    <button 
+                        class="see-omitted-btn"
+                    >
+                        Uzupełnij
+                    </button>
+                    }
+                    else
+                    {
+                    <button
+                        class="see-upcomming-btn"
+                    >
+                        Szczegóły nadchodzących
+                    </button>
+                    }
                 </td>
             </tr>
         }
