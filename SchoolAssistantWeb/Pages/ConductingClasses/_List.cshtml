@@ -24,7 +24,7 @@
     <tbody>
         @foreach (var item in Model.Items)
         {
-            <tr id="@(item == Model.Incoming ? "incoming-lesson" : "")">
+            <tr id="@(item.StartTime == Model.IncomingAt ? "incoming-lesson" : "")">
                 <td>
                     <span>@item.StartTime.ToString("ddd, HH:mm")</span>
                 </td>
@@ -50,7 +50,7 @@
                 <td>
                     @* Button for going to details of already held classes, or conductor panel for classes that are to held *@
                     @{
-                        bool closeOrOngoing = item == Model.Incoming 
+                        bool closeOrOngoing = item.StartTime == Model.IncomingAt 
                             && item.StartTime.AddMinutes(-Model.MinutessBeforeClose) <= DateTime.Now
                             && item.StartTime.AddMinutes(item.Duration) >= DateTime.Now;
                     }

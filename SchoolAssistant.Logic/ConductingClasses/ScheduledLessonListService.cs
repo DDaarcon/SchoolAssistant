@@ -128,7 +128,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             return new ScheduledLessonListModel
             {
                 Items = _listItems,
-                Incoming = _listItems.Where(x => x.StartTime >= DateTime.Now).FirstOrDefault(),
+                IncomingAt = _listItems.Where(x => x.StartTime >= DateTime.Now).FirstOrDefault()?.StartTime,
                 MinutessBeforeClose = await _configRepo.Records.MinutesBeforeLessonConsideredClose.GetAsync() ?? 5
             };
         }
