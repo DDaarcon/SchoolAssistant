@@ -7,11 +7,27 @@ namespace AppConfigurationEFCore
     public interface IAppConfiguration<TRecords>
         where TRecords : class, new()
     {
+
+        /// <summary>
+        /// User defined records in type <typeparamref name="TRecords"/>.
+        /// </summary>
         TRecords Records { get; }
+        /// <summary>
+        /// Get handler for custom record, which key is <paramref name="key"/> and value of type <see cref="string"/>.
+        /// </summary>
         RecordHandler<string> CustomConfig(string key);
 
+        /// <summary>
+        /// Call <see cref="DbContext.SaveChanges"/>.
+        /// </summary>
         void Save();
+        /// <summary>
+        /// Call <see cref="DbContext.SaveChangesAsync"/>.
+        /// </summary>
         Task SaveAsync(CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Use new <typeparamref name="TDbContext"/> (<see cref="DbContext"/>), requested from <see cref="IServiceScope"/>.
+        /// </summary>
         void UseIndependentDbContext();
     }
 
@@ -34,9 +50,7 @@ namespace AppConfigurationEFCore
             Records = records;
         }
 
-
         public TRecords Records { get; init; }
-
 
         public RecordHandler<string> CustomConfig(string key) =>
             new RecordHandler<string>(key, () => _context, v => v, v => v);
