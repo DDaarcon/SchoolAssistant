@@ -82,7 +82,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             foreach (var lesson in orgClass.Schedule)
             {
-                var occurance = lesson.GetNextOccurance();
+                var occurance = lesson.GetNextOccurrence();
 
                 Assert.IsTrue(resLessonsWithDay.Any(x =>
                     x.day == occurance!.Value.DayOfWeek
@@ -120,7 +120,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
             foreach (var lesson in orgClass.Schedule)
             {
-                var occurance = lesson.GetNextOccurance();
+                var occurance = lesson.GetNextOccurrence();
 
                 Assert.IsTrue(resLessonsWithDay.Any(x =>
                     x.day == occurance!.Value.DayOfWeek

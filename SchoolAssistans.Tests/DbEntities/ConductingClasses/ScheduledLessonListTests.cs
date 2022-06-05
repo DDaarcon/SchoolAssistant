@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
@@ -23,7 +24,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
-        private IRepository<PeriodicLesson> _periLessonRepo = null!;
+        private IRepositoryBySchoolYear<PeriodicLesson> _periLessonRepo = null!;
         private IRepository<Lesson> _lessonRepo = null!;
 
         private OrganizationalClass _orgClass1 = null!;
@@ -48,12 +49,12 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _orgClass1 = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
             _orgClass2 = await FakeData.Class_5f_0Students_RandomScheduleAddedSeparately(await _Year, _orgClassRepo, _teacherRepo, _periLessonRepo);
 
-            var periLessons = _periLessonRepo.AsQueryable().Take(5);
+            var periLessons = await _periLessonRepo.AsListAsync();
             var schoolYearId = (await _Year).Id;
 
             foreach (var periLesson in periLessons)
             {
-                var pastLessonDates = periLesson.GetCronExpression().GetOccurrences(DateTime.MinValue, DateTime.Now);
+                var pastLessonDates = periLesson.GetOccurrences(DateTime.Now.AddMonths(-12), DateTime.Now);
 
                 var lessons = pastLessonDates.Select(x => new Lesson
                 {
@@ -67,20 +68,25 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
                         StudentId = x.Id,
                         Status = PresenceStatus.Present
                     }).ToList()
-                });
+                }).ToList();
 
-
+                periLesson.TakenLessons = lessons;
+                _periLessonRepo.Update(periLesson);
             }
+
+            await _periLessonRepo.SaveAsync();
+
+            Assert.IsTrue(await _periLessonRepo.ExistsAsync(x => x.TakenLessons.Any()));
         }
 
         protected override void SetupServices()
         {
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _teacherRepo = new Repository<Teacher>(_Context, null);
-            _periLessonRepo = new Repository<PeriodicLesson>(_Context, null);
+            _periLessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
             _lessonRepo = new Repository<Lesson>(_Context, null);
 
-            _service = new ScheduledLessonListService();
+            _service = new ScheduledLessonListService(_teacherRepo, _periLessonRepo, _configRepo);
         }
 
 
@@ -97,7 +103,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         [Test]
         public async Task Should_fetch_all_upcoming_in_next_week()
         {
-            var teacher = GetTeacherWithMostScheduledLessons();
+            var teacher = await GetTeacherWithMostScheduledLessonsAsync();
 
             var from = _Monday.AddDays(7);
             var to = _Monday.AddDays(7 + 5);
@@ -115,14 +121,14 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
                 x.ClassName == d.ParticipatingOrganizationalClass?.Name
                 && x.SubjectName == d.Subject.Name
                 && x.Duration == (d.CustomDuration ?? _DefDuration)
-                && x.StartTime == d.GetCronExpression().GetOccurrences(from, to).First()
+                && x.StartTime == d.GetOccurrences(from, to).First()
                 && x.HeldClasses == null)));
         }
 
         [Test]
         public async Task Should_fetch_all_held_from_previous_week()
         {
-            var teacher = GetTeacherWithMostScheduledLessons();
+            var teacher = await GetTeacherWithMostScheduledLessonsAsync();
 
             var from = _Monday.AddDays(-7);
             var to = _Monday.AddDays(-7 + 5);
@@ -136,16 +142,23 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             AssertItemsPresent(res);
 
             Assert.IsTrue(res.Items.All(x => teacher.Schedule.Any(d =>
-                x.ClassName == d.ParticipatingOrganizationalClass?.Name
+            {
+                var time = d.GetOccurrences(from, to).FirstOrDefault();
+                if (time == default)
+                    return false;
+
+                return x.ClassName == d.ParticipatingOrganizationalClass?.Name
                 && x.SubjectName == d.Subject.Name
                 && x.Duration == (d.CustomDuration ?? _DefDuration)
-                && x.StartTime == d.GetCronExpression().GetOccurrences(from, to).First()
+                && x.StartTime == time
                 && x.HeldClasses != null
                 && _lessonRepo.Exists(l =>
                     l.FromScheduleId == d.Id
                     && l.Date == x.StartTime
                     && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.HeldClasses.AmountOfPresentStudents
-                    && l.Topic == x.HeldClasses.Topic))));
+                    && l.Topic == x.HeldClasses.Topic);
+            })));
+
         }
 
         private void AssertItemsPresent(ScheduledLessonListModel res)
@@ -155,13 +168,13 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             Assert.IsNotEmpty(res.Items);
         }
 
-        private Teacher GetTeacherWithMostScheduledLessons()
+        private async Task<Teacher> GetTeacherWithMostScheduledLessonsAsync()
         {
-            return _teacherRepo.AsQueryable().Select(x => new
+            return (await _teacherRepo.AsQueryable().Select(x => new
             {
                 Teacher = x,
                 LessonsCount = x.Schedule.Count
-            }).MaxBy(x => x.LessonsCount)!.Teacher;
+            }).OrderByDescending(x => x.LessonsCount).FirstAsync()).Teacher;
         }
     }
 }

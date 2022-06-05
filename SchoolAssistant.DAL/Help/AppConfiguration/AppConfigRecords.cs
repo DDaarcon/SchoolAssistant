@@ -16,5 +16,8 @@ namespace SchoolAssistant.DAL.Help.AppConfiguration
         public VTRecordHandler<int> ScheduleStartHour { get; private set; } = null!;
         [RecordKey("scheduleEndHour")]
         public VTRecordHandler<int> ScheduleEndhour { get; private set; } = null!;
+
+        [RecordKey("minutesBeforeLessonConsideredClose")]
+        public VTRecordHandler<int> MinutesBeforeLessonConsideredClose { get; set; } = null!;
     }
 }

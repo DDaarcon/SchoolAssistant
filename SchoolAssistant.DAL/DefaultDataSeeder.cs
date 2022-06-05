@@ -104,7 +104,8 @@ namespace SchoolAssistant.DAL
                 await _configRepo.Records.DefaultLessonDuration.SetIfEmptyAsync(45),
                 await _configRepo.Records.ScheduleStartHour.SetIfEmptyAsync(7),
                 await _configRepo.Records.ScheduleEndhour.SetIfEmptyAsync(18),
-                await _configRepo.Records.DefaultRoomName.SetIfEmptyAsync("Sala")
+                await _configRepo.Records.DefaultRoomName.SetIfEmptyAsync("Sala"),
+                await _configRepo.Records.MinutesBeforeLessonConsideredClose.SetIfEmptyAsync(5)
             };
 
             if (results.Any(x => x))

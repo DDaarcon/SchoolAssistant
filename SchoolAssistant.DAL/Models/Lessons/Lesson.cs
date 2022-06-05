@@ -7,6 +7,8 @@ namespace SchoolAssistant.DAL.Models.Lessons
     public class Lesson : SchoolYearDbEntity
     {
         public DateTime Date { get; set; }
+        public DateTime? ActualDate { get; set; }
+
         public string Topic { get; set; } = null!;
 
         public long FromScheduleId { get; set; }
