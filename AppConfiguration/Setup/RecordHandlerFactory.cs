@@ -10,6 +10,7 @@ namespace AppConfigurationEFCore.Setup
     }
     internal class RecordHandlerFactory : IRecordHandlerFactory
     {
+        private readonly IList<string> _usedKeys = new List<string>();
         private readonly object[] _handlersInfo;
         private readonly object[] _vtHandlersInfo;
 
@@ -59,6 +60,11 @@ namespace AppConfigurationEFCore.Setup
             if (_type is null) return false;
             if (_key is null) return false;
             if (_getContext is null) return false;
+
+            if (_usedKeys.Contains(_key))
+                throw new Exception($"Duplicate usage of one key. Key '{_key}' is used twice in application configuration records.");
+            _usedKeys.Add(_key);
+
             return true;
         }
 

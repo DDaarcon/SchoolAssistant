@@ -41,6 +41,8 @@ namespace AppConfigurationEFCore.Setup
             {
                 if (IsPropertyValid(property))
                     property.SetValue(_records, CreateRecordOperations(property));
+                else
+                    throw new FormatException($"Incorrectly formed TRecords class. Property {property.Name} is either of invalid type (valid are RecordHandler<> and VTRecordHandler<>) or missing RecordKeyAttribute");
             }
         }
 
@@ -56,7 +58,7 @@ namespace AppConfigurationEFCore.Setup
                 handler = _handlerFactory.Get(genericType, attr.Key, _getContext);
 
             if (handler is null)
-                throw new ArgumentException($"Storing/fetching configuration of type {genericType.Name} has not been specified. To specify it use action parameter in AddAppConfiguration");
+                throw new ArgumentException($"Missing type handler. Storing/fetching rules for type {genericType.Name} has not been specified. To specify it use `customRecordTypesAction` parameter in AddAppConfiguration");
             return handler;
         }
 

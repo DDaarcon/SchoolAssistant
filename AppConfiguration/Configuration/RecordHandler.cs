@@ -33,6 +33,7 @@ namespace AppConfigurationEFCore.Configuration
             _toType = toType;
             _fromType = fromType;
         }
+
         /// <summary>
         /// Get value from database.
         /// </summary>
