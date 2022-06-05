@@ -3,3 +3,26 @@
 @{
 }
 
+@section Head {
+    <link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/conducting-classes/list-page.css" asp-append-version="true"/>
+}
+
+
+<div id="scheduled-lesson-list-page" class="whole-area">
+    <div id="scheduled-lesson-list-controls">
+        <form>
+            <partial name="ConductingClasses/_ListControls" />
+        </form>
+    </div>
+
+    <partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />
+
+</div>
+
+@section Scripts {
+    <script>
+
+
+    </script>
+}
