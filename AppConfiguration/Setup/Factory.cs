@@ -50,8 +50,8 @@ namespace AppConfigurationEFCore.Setup
             var genericType = property.PropertyType.GenericTypeArguments[0];
 
             object? handler = null;
-            if (genericType.IsPrimitive)
-                handler = _handlerFactory.GetPrimitive(genericType, attr.Key, _getContext);
+            if (genericType.IsValueType)
+                handler = _handlerFactory.GetVT(genericType, attr.Key, _getContext);
             else
                 handler = _handlerFactory.Get(genericType, attr.Key, _getContext);
 

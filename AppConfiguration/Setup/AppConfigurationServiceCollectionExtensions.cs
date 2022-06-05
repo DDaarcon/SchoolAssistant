@@ -15,7 +15,7 @@ namespace AppConfigurationEFCore.Setup
         /// 
         /// <typeparamref name="TRecords"/> type must have properties of type <see cref="RecordHandler{T}"/> (for records that come from reference types)
         /// <br />
-        /// or <see cref="PrimitiveRecordHandler{T}"/> (for records that come from primitive types, like <c>int</c>, <c>decimal</c>).
+        /// or <see cref="VTRecordHandler{T}"/> (for records that come from value types, like <c>int</c>, <c>decimal</c>).
         /// <br />
         /// Each property must have attribute <see cref="RecordKeyAttribute"/> with key of configuration record.
         /// <br />
@@ -26,7 +26,7 @@ namespace AppConfigurationEFCore.Setup
         ///     [RecordKey("name")]
         ///     public RecordHandler&lt;string&gt; ApplicationName { get; private set; } = null!;
         ///     [RecordKey("maxItemsPerPage")]
-        ///     public PrimitiveRecordHandler&lt;int&gt; MaxItemsPerPage { get; private set; } = null!;
+        ///     public VTRecordHandler&lt;int&gt; MaxItemsPerPage { get; private set; } = null!;
         /// }
         /// </code>
         /// <br />
@@ -39,7 +39,9 @@ namespace AppConfigurationEFCore.Setup
         /// Type with defined records that you'd like to have in your AppConfiguration table. See remarks for an example.
         /// </typeparam>
         /// <param name="customRecordTypesAction">
-        /// Use this action to configure your own type handler. Method <c>Add</c> registers reference type converter, <c>AddPrimitive</c> registers primitive type converter.
+        /// Use this action to configure your own type handler.
+        /// Method <see cref="CustomRecordTypeOptions.Add{T}(Func{string?, T?}, Func{T?, string?}?)"/> registers reference type converter,
+        /// <see cref="CustomRecordTypeOptions.AddVT{T}(Func{string?, T?}, Func{T?, string?}?)"/> registers value type converter.
         /// </param>
         public static IServiceCollection AddAppConfiguration<TDbContext, TRecords>(this IServiceCollection services, Action<CustomRecordTypeOptions>? customRecordTypesAction = null)
             where TDbContext : DbContext
@@ -55,7 +57,7 @@ namespace AppConfigurationEFCore.Setup
         /// 
         /// <c>TRecords</c> type must have properties of type <see cref="RecordHandler{T}"/> (for records that come from reference types)
         /// <br />
-        /// or <see cref="PrimitiveRecordHandler{T}"/> (for records that come from primitive types, like <c>int</c>, <c>decimal</c>).
+        /// or <see cref="VTRecordHandler{T}"/> (for records that come from value types, like <c>int</c>, <c>decimal</c>).
         /// <br />
         /// Each property must have attribute <see cref="RecordKeyAttribute"/> with key of configuration record.
         /// <br />
@@ -66,7 +68,7 @@ namespace AppConfigurationEFCore.Setup
         ///     [RecordKey("name")]
         ///     public RecordHandler&lt;string&gt; ApplicationName { get; private set; } = null!;
         ///     [RecordKey("maxItemsPerPage")]
-        ///     public PrimitiveRecordHandler&lt;int&gt; MaxItemsPerPage { get; private set; } = null!;
+        ///     public VTRecordHandler&lt;int&gt; MaxItemsPerPage { get; private set; } = null!;
         /// }
         /// </code>
         /// <br />
@@ -79,7 +81,9 @@ namespace AppConfigurationEFCore.Setup
         /// Type with defined records that you'd like to have in your AppConfiguration table. See remarks for an example.
         /// </param>
         /// <param name="customRecordTypesAction">
-        /// Use this action to configure your own type handler. Method <c>Add</c> registers reference type converter, <c>AddPrimitive</c> registers primitive type converter.
+        /// Use this action to configure your own type handler.
+        /// Method <see cref="CustomRecordTypeOptions.Add{T}(Func{string?, T?}, Func{T?, string?}?)"/> registers reference type converter,
+        /// <see cref="CustomRecordTypeOptions.AddVT{T}(Func{string?, T?}, Func{T?, string?}?)"/> registers value type converter.
         /// </param>
         public static IServiceCollection AddAppConfiguration(this IServiceCollection services, Type dbContextType, Type configurationRecordsType, Action<CustomRecordTypeOptions>? customRecordTypesAction = null)
         {
@@ -98,8 +102,9 @@ namespace AppConfigurationEFCore.Setup
                 var dbContext = services.GetRequiredService(dbContextType);
                 var serviceScopeFactory = services.GetRequiredService<IServiceScopeFactory>();
 
-                return factory.GetType().GetMethod("ConstructAppConfiguration")!
-                    .MakeGenericMethod(dbContextType, configurationRecordsType)
+                var constructMethod = factory.GetType().GetMethod("ConstructAppConfiguration")!;
+
+                return constructMethod
                     .Invoke(factory, new[] { dbContext, serviceScopeFactory })!;
             });
 
@@ -108,7 +113,7 @@ namespace AppConfigurationEFCore.Setup
 
         private static void RegisterTypeHandlersFactory(IServiceCollection services, CustomRecordTypeOptions options)
         {
-            services.TryAddSingleton<IRecordHandlerFactory>(new RecordHandlerFactory(options.ReferenceTypeHandlers, options.PrimitiveTypeHandlers));
+            services.TryAddSingleton<IRecordHandlerFactory>(new RecordHandlerFactory(options.ReferenceTypeHandlers, options.VTTypeHandlers));
         }
     }
 
@@ -126,26 +131,26 @@ namespace AppConfigurationEFCore.Setup
             _info.Add(new HandlerInfo<T>(type, toTypeConverter, fromTypeConverter ?? (x => x?.ToString())));
         }
         /// <summary>
-        /// Register primitive type handler.
+        /// Register value type handler.
         /// </summary>
-        /// <typeparam name="T">Primitive type</typeparam>
+        /// <typeparam name="T">Value type</typeparam>
         /// <param name="toTypeConverter">Function converting <c>string</c> value to <typeparamref name="T"/>.</param>
         /// <param name="fromTypeConverter">Function converting <typeparamref name="T"/> to <c>string</c>. By default <c>ToString()</c> method will be used.</param>
-        public void AddPrimitive<T>(Func<string?, T?> toTypeConverter, Func<T?, string?>? fromTypeConverter = null)
+        public void AddVT<T>(Func<string?, T?> toTypeConverter, Func<T?, string?>? fromTypeConverter = null)
             where T : struct
         {
             var type = typeof(T);
-            _primitiveInfo.Add(new PrimitiveHandlerInfo<T>(type, toTypeConverter, fromTypeConverter ?? (x => x?.ToString())));
+            _vtInfo.Add(new VTHandlerInfo<T>(type, toTypeConverter, fromTypeConverter ?? (x => x?.ToString())));
         }
 
 
 
         public object[] ReferenceTypeHandlers => _info.ToArray()!;
-        public object[] PrimitiveTypeHandlers => _primitiveInfo.ToArray()!;
+        public object[] VTTypeHandlers => _vtInfo.ToArray()!;
 
         private readonly ArrayList _info = new ArrayList();
 
-        private readonly ArrayList _primitiveInfo = new ArrayList();
+        private readonly ArrayList _vtInfo = new ArrayList();
     }
 
     internal record HandlerInfo<T>(
@@ -153,7 +158,7 @@ namespace AppConfigurationEFCore.Setup
         Func<string?, T?> ToTypeConverter,
         Func<T?, string?> FromTypeConverter);
 
-    internal record PrimitiveHandlerInfo<T>(
+    internal record VTHandlerInfo<T>(
         Type ForType,
         Func<string?, T?> ToTypeConverter,
         Func<T?, string?> FromTypeConverter)

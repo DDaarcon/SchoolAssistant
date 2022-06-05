@@ -6,12 +6,12 @@ namespace AppConfigurationEFCore.Setup
     internal interface IRecordHandlerFactory
     {
         object? Get(Type type, string key, Func<DbContext> getContext);
-        object? GetPrimitive(Type type, string key, Func<DbContext> getContext);
+        object? GetVT(Type type, string key, Func<DbContext> getContext);
     }
     internal class RecordHandlerFactory : IRecordHandlerFactory
     {
         private readonly object[] _handlersInfo;
-        private readonly object[] _primitiveHandlersInfo;
+        private readonly object[] _vtHandlersInfo;
 
         private Type _type = null!;
         private string _key = null!;
@@ -19,10 +19,10 @@ namespace AppConfigurationEFCore.Setup
 
         public RecordHandlerFactory(
             object[] info,
-            object[] primitiveInfo)
+            object[] vtInfo)
         {
             _handlersInfo = info;
-            _primitiveHandlersInfo = primitiveInfo;
+            _vtHandlersInfo = vtInfo;
         }
 
         public object? Get(Type type, string key, Func<DbContext> getContext)
@@ -39,15 +39,15 @@ namespace AppConfigurationEFCore.Setup
             return null;
         }
 
-        public object? GetPrimitive(Type type, string key, Func<DbContext> getContext)
+        public object? GetVT(Type type, string key, Func<DbContext> getContext)
         {
             if (!AssignHandlerParamsAndValidateNulls(type, key, getContext))
                 return null;
 
-            if (TryGetDefaultPrimitiveHandler(out var h1))
+            if (TryGetDefaultVTHandler(out var h1))
                 return h1;
 
-            if (TryGetUserDefinedPrimitiveHandler(out var h2))
+            if (TryGetUserDefinedVTHandler(out var h2))
                 return h2;
 
             return null;
@@ -56,6 +56,7 @@ namespace AppConfigurationEFCore.Setup
         private bool AssignHandlerParamsAndValidateNulls(Type type, string key, Func<DbContext> getContext)
         {
             _type = type; _key = key; _getContext = getContext;
+            if (_type is null) return false;
             if (_key is null) return false;
             if (_getContext is null) return false;
             return true;
@@ -64,7 +65,6 @@ namespace AppConfigurationEFCore.Setup
         private bool TryGetDefaultHandler(out object? handlerObj)
         {
             handlerObj = null;
-            if (_type is null) return false;
 
             if (typeof(string).IsEquivalentTo(_type))
             {
@@ -79,10 +79,15 @@ namespace AppConfigurationEFCore.Setup
 
         private bool TryGetUserDefinedHandler(out object? handlerObj)
         {
-            handlerObj = null;
-            return this.GetType().GetMethod(nameof(TryGetDefaultHandler))!.MakeGenericMethod(_type).Invoke(this, new[] { handlerObj }) as bool? ?? false;
+            var methodParams = new object?[] { null };
+            var result = this.GetType()
+                .GetMethod("TryGetUserDefinedHandler")!
+                .MakeGenericMethod(_type)
+                .Invoke(this, methodParams) as bool? ?? false;
+            handlerObj = methodParams[0];
+            return result;
         }
-        private bool TryGetUserDefinedHandler<T>(out RecordHandler<T>? handlerObj)
+        public bool TryGetUserDefinedHandler<T>(out RecordHandler<T>? handlerObj)
         {
             handlerObj = null;
             var info = _handlersInfo.FirstOrDefault(x => x is HandlerInfo<T> h && h.ForType == _type) as HandlerInfo<T>;
@@ -99,21 +104,20 @@ namespace AppConfigurationEFCore.Setup
 
 
 
-        private bool TryGetDefaultPrimitiveHandler(out object? handlerObj)
+        private bool TryGetDefaultVTHandler(out object? handlerObj)
         {
             handlerObj = null;
-            if (_type is null) return false;
 
             if (typeof(int).IsEquivalentTo(_type))
             {
-                handlerObj = new PrimitiveRecordHandler<int>(
+                handlerObj = new VTRecordHandler<int>(
                     _key, _getContext,
                     to => to is null ? null : int.Parse(to), from => from?.ToString());
                 return true;
             }
             if (typeof(decimal).IsEquivalentTo(_type))
             {
-                handlerObj = new PrimitiveRecordHandler<decimal>(
+                handlerObj = new VTRecordHandler<decimal>(
                     _key, _getContext,
                     to => to is null ? null : decimal.Parse(to), from => from?.ToString());
                 return true;
@@ -122,20 +126,25 @@ namespace AppConfigurationEFCore.Setup
             return false;
         }
 
-        private bool TryGetUserDefinedPrimitiveHandler(out object? handlerObj)
+        private bool TryGetUserDefinedVTHandler(out object? handlerObj)
         {
-            handlerObj = null;
-            return this.GetType().GetMethod(nameof(TryGetUserDefinedPrimitiveHandler))!.MakeGenericMethod(_type).Invoke(this, new[] { handlerObj }) as bool? ?? false;
+            var methodParams = new object?[] { null };
+            var result = this.GetType()
+                .GetMethod("TryGetUserDefinedVTHandler")!
+                .MakeGenericMethod(_type)
+                .Invoke(this, methodParams) as bool? ?? false;
+            handlerObj = methodParams[0];
+            return result;
         }
-        private bool TryGetUserDefinedPrimitiveHandler<T>(out PrimitiveRecordHandler<T>? handlerObj)
+        public bool TryGetUserDefinedVTHandler<T>(out VTRecordHandler<T>? handlerObj)
             where T : struct
         {
             handlerObj = null;
-            var info = _primitiveHandlersInfo.FirstOrDefault(x => x is PrimitiveHandlerInfo<T> h && h.ForType == _type) as PrimitiveHandlerInfo<T>;
+            var info = _vtHandlersInfo.FirstOrDefault(x => x is VTHandlerInfo<T> h && h.ForType == _type) as VTHandlerInfo<T>;
 
             if (info is null) return false;
 
-            handlerObj = new PrimitiveRecordHandler<T>(
+            handlerObj = new VTRecordHandler<T>(
                 _key, _getContext,
                 info.ToTypeConverter, info.FromTypeConverter);
 

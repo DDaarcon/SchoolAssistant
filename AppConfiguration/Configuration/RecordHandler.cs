@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppConfigurationEFCore.Configuration
 {
-    public class PrimitiveRecordHandler<T> : RecordHandler<T?>
+    public class VTRecordHandler<T> : RecordHandler<T?>
         where T : struct
     {
-        public PrimitiveRecordHandler(string key, Func<DbContext> getContext, Func<string?, T?> toType, Func<T?, string?> fromType) : base(key, getContext, toType, fromType)
+        public VTRecordHandler(string key, Func<DbContext> getContext, Func<string?, T?> toType, Func<T?, string?> fromType) : base(key, getContext, toType, fromType)
         {
         }
     }

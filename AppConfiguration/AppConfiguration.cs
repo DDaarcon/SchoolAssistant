@@ -15,7 +15,7 @@ namespace AppConfigurationEFCore
         void UseIndependentDbContext();
     }
 
-    public class AppConfiguration<TDbContext, TRecords> : IAppConfiguration<TRecords>
+    internal class AppConfiguration<TDbContext, TRecords> : IAppConfiguration<TRecords>
         where TDbContext : DbContext
         where TRecords : class, new()
     {
