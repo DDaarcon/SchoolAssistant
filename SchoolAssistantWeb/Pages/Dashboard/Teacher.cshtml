@@ -26,15 +26,16 @@ Teacher dashboard
         }, containerClass: "schedule-view")
     </div>
 
-    <div class="dashboard-item dashboard-item-cyan dashboard-scheduled-lessons">
+    <div class="dashboard-item dashboard-scheduled-lessons">
         <div class="scheduled-lessons-container">
             <partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />
-            <button
-                id="show-more-scheduled-lessons-btn"
-                href="#"
-            >
-                Pokaż więcej
-            </button>
+            <div id="show-more-scheduled-lessons">
+                <button
+                    href="#"
+                >
+                    Pokaż więcej
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -26,7 +26,7 @@
         {
             <tr id="@(item == Model.Incoming ? "incoming-lesson" : "")">
                 <td>
-                    <span>@item.StartTime.TimeOfDay</span>
+                    <span>@item.StartTime.ToString("ddd, HH:mm")</span>
                 </td>
                 <td>
                     <span>@item.ClassName</span>
