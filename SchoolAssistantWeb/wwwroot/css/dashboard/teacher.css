@@ -15,7 +15,7 @@
     margin-right: -3px;
 }
 
-#show-more-scheduled-lessons > button {
+#show-more-scheduled-lessons input {
     position: absolute;
     top: 0;
     left: 0;
@@ -32,6 +32,6 @@
     transition: all 0.3s;
 }
 
-#show-more-scheduled-lessons > button:hover {
+#show-more-scheduled-lessons input:hover {
     height: 150%;
 }

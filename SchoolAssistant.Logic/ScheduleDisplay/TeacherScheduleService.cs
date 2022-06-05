@@ -1,9 +1,7 @@
-﻿using Cronos;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.Staff;
-using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
 using SchoolAssistant.Logic.Help;
@@ -119,9 +117,7 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
         {
             foreach (var periodic in _periodic!)
             {
-                var cron = CronExpression.Parse(periodic.CronPeriodicity);
-
-                var occurances = cron.GetOccurrences(_from, _to);
+                var occurances = periodic.GetOccurrences(_from, _to);
 
                 foreach (var occurance in occurances)
                 {

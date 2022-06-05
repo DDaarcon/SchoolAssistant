@@ -74,8 +74,6 @@ namespace SchoolAssistant.Logic.ConductingClasses
                 .Where(x => x.LecturerId == _teacherId)
                 .ToListAsync();
 
-            var from = DateTime.SpecifyKind(_model.From.Value, DateTimeKind.Utc);
-
             _lessonWithOccurances = scheduled.Select(x => new PeriodicLessonWithOccurances
             {
                 ScheduleLesson = x,
@@ -88,13 +86,18 @@ namespace SchoolAssistant.Logic.ConductingClasses
         private void CreateListItems()
         {
             _listItems = _lessonWithOccurances.SelectMany(lwo =>
-                lwo.Occurances.Select(date => new ScheduledLessonListItemModel
+                lwo.Occurances.Select(date =>
                 {
-                    ClassName = lwo.ScheduleLesson.ParticipatingOrganizationalClass!.Name,
-                    Duration = lwo.ScheduleLesson.CustomDuration ?? _defaultDuration,
-                    SubjectName = lwo.ScheduleLesson.Subject.Name,
-                    StartTime = date,
-                    HeldClasses = ToHeldClassesModel(lwo.ScheduleLesson.TakenLessons.FirstOrDefault(x => x.Date == date))
+                    var takenLesson = lwo.ScheduleLesson.TakenLessons.FirstOrDefault(x => x.Date == date);
+
+                    return new ScheduledLessonListItemModel
+                    {
+                        ClassName = lwo.ScheduleLesson.ParticipatingOrganizationalClass!.Name,
+                        Duration = lwo.ScheduleLesson.CustomDuration ?? _defaultDuration,
+                        SubjectName = lwo.ScheduleLesson.Subject.Name,
+                        StartTime = takenLesson?.ActualDate ?? date,
+                        HeldClasses = ToHeldClassesModel(takenLesson)
+                    };
                 })).OrderBy(x => x.StartTime);
         }
 

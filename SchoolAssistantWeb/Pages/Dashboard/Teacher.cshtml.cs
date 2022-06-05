@@ -4,8 +4,8 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
+using SchoolAssistant.Logic.ConductingClasses;
 using SchoolAssistant.Logic.ScheduleDisplay;
-using SchoolAssistant.Web.Pages.ConductingClasses;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
@@ -15,6 +15,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
         private readonly ITeacherScheduleService _scheduleSvc;
 
+        private readonly IScheduledLessonListService _scheduledLessonsListSvc;
 
         private User _user = null!;
 
@@ -26,11 +27,13 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         public TeacherModel(
             IUserRepository userRepo,
             IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
-            ITeacherScheduleService scheduleSvc)
+            ITeacherScheduleService scheduleSvc,
+            IScheduledLessonListService scheduledLessonsListSvc)
         {
             _userRepo = userRepo;
             _fetchScheduleConfigSvc = fetchScheduleConfigSvc;
             _scheduleSvc = scheduleSvc;
+            _scheduledLessonsListSvc = scheduledLessonsListSvc;
         }
 
         public async Task OnGetAsync()
@@ -40,13 +43,11 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value))!;
 
-            var lessons = SpawnScheduledLessons._6LessonsFromNow;
-            ScheduledLessonListModel = new ScheduledLessonListModel
+            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonListModel
             {
-                Items = lessons,
-                Incoming = lessons[0],
-                MinutessBeforeClose = 5
-            };
+                From = DateTime.Now,
+                LimitTo = 6
+            }))!;
         }
 
         private async Task FetchUserAsync()
