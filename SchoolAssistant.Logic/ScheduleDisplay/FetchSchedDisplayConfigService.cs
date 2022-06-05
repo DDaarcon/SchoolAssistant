@@ -1,6 +1,7 @@
-﻿using SchoolAssistant.DAL.Enums;
+﻿using AppConfigurationEFCore;
+using SchoolAssistant.DAL.Enums;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
-using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Schedule;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 
@@ -14,10 +15,10 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
     [Injectable]
     public class FetchSchedDisplayConfigService : IFetchSchedDisplayConfigService
     {
-        readonly IAppConfigRepository _configRepo;
+        readonly IAppConfiguration<AppConfigRecords> _configRepo;
 
         public FetchSchedDisplayConfigService(
-            IAppConfigRepository configRepo)
+            IAppConfiguration<AppConfigRecords> configRepo)
         {
             _configRepo = configRepo;
         }
@@ -26,9 +27,9 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
         {
             return new ScheduleConfigJson
             {
-                defaultLessonDuration = await _configRepo.DefaultLessonDuration.GetAsync() ?? 45,
-                startHour = await _configRepo.ScheduleStartHour.GetAsync() ?? 7,
-                endHour = await _configRepo.ScheduleEndhour.GetAsync() ?? 18,
+                defaultLessonDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45,
+                startHour = await _configRepo.Records.ScheduleStartHour.GetAsync() ?? 7,
+                endHour = await _configRepo.Records.ScheduleEndhour.GetAsync() ?? 18,
                 @for = GetScheduleViewerTypeFromUser(forUser)
             };
         }

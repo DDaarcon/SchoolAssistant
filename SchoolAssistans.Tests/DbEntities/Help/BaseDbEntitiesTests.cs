@@ -1,5 +1,8 @@
-﻿using NUnit.Framework;
+﻿using AppConfigurationEFCore;
+using AppConfigurationEFCore.Setup;
+using NUnit.Framework;
 using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
@@ -11,6 +14,7 @@ namespace SchoolAssistans.Tests.DbEntities
     public abstract class BaseDbEntitiesTests
     {
         protected ISchoolYearRepository _schoolYearRepo = null!;
+        protected IAppConfiguration<AppConfigRecords> _configRepo = null!;
 
         protected Task<SchoolYear> _Year => _schoolYearRepo.GetOrCreateCurrentAsync();
 
@@ -38,8 +42,10 @@ namespace SchoolAssistans.Tests.DbEntities
         public async Task SetupOne()
         {
             TestDatabase.RequestContextFromServices(TestServices.Collection);
+            TestServices.Collection.AddAppConfiguration<SADbContext, AppConfigRecords>();
 
             _schoolYearRepo = new SchoolYearRepository(_Context, null);
+            _configRepo = TestServices.GetService<IAppConfiguration<AppConfigRecords>>();
             SetupServices();
 
             await SetupDataForEveryTestAsync();

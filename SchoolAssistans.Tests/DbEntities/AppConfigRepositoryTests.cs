@@ -1,13 +1,10 @@
 ﻿using NUnit.Framework;
-using SchoolAssistant.DAL.Repositories;
 using System.Threading.Tasks;
 
 namespace SchoolAssistans.Tests.DbEntities
 {
     internal class AppConfigRepositoryTests : BaseDbEntitiesTests
     {
-        private IAppConfigRepository _configRepo = null!;
-
         protected override Task CleanDataAfterEveryTestAsync()
         {
             return Task.CompletedTask;
@@ -20,42 +17,41 @@ namespace SchoolAssistans.Tests.DbEntities
 
         protected override void SetupServices()
         {
-            _configRepo = new AppConfigRepository(_Context, null);
         }
 
 
         [Test]
         public void Should_add_config_record()
         {
-            _configRepo.DefaultLessonDuration.Set(45);
+            _configRepo.Records.DefaultLessonDuration.Set(45);
             _configRepo.Save();
 
-            Assert.AreEqual(45, _configRepo.DefaultLessonDuration.Get());
+            Assert.AreEqual(45, _configRepo.Records.DefaultLessonDuration.Get());
         }
 
         [Test]
         public async Task Should_add_config_record_async()
         {
-            await _configRepo.DefaultLessonDuration.SetAsync(48);
+            await _configRepo.Records.DefaultLessonDuration.SetAsync(48);
             await _configRepo.SaveAsync();
 
-            Assert.AreEqual(48, await _configRepo.DefaultLessonDuration.GetAsync());
+            Assert.AreEqual(48, await _configRepo.Records.DefaultLessonDuration.GetAsync());
         }
 
         [Test]
         public void Should_add_and_save_config_record()
         {
-            _configRepo.DefaultLessonDuration.SetAndSave(38);
+            _configRepo.Records.DefaultLessonDuration.SetAndSave(38);
 
-            Assert.AreEqual(38, _configRepo.DefaultLessonDuration.Get());
+            Assert.AreEqual(38, _configRepo.Records.DefaultLessonDuration.Get());
         }
 
         [Test]
         public async Task Should_add_and_save_config_record_async()
         {
-            await _configRepo.DefaultLessonDuration.SetAndSaveAsync(35);
+            await _configRepo.Records.DefaultLessonDuration.SetAndSaveAsync(35);
 
-            Assert.AreEqual(35, await _configRepo.DefaultLessonDuration.GetAsync());
+            Assert.AreEqual(35, await _configRepo.Records.DefaultLessonDuration.GetAsync());
         }
     }
 }

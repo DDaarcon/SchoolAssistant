@@ -25,7 +25,6 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepository<PeriodicLesson> _periLessonRepo = null!;
         private IRepository<Lesson> _lessonRepo = null!;
-        private IAppConfigRepository _configRepo = null!;
 
         private OrganizationalClass _orgClass1 = null!;
         private OrganizationalClass _orgClass2 = null!;
@@ -44,7 +43,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
         protected override async Task SetupDataForEveryTestAsync()
         {
-            await _configRepo.DefaultLessonDuration.SetAndSaveAsync(_DefDuration);
+            await _configRepo.Records.DefaultLessonDuration.SetAndSaveAsync(_DefDuration);
 
             _orgClass1 = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
             _orgClass2 = await FakeData.Class_5f_0Students_RandomScheduleAddedSeparately(await _Year, _orgClassRepo, _teacherRepo, _periLessonRepo);
@@ -80,7 +79,6 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _periLessonRepo = new Repository<PeriodicLesson>(_Context, null);
             _lessonRepo = new Repository<Lesson>(_Context, null);
-            _configRepo = new AppConfigRepository(_Context, null);
 
             _service = new ScheduledLessonListService();
         }

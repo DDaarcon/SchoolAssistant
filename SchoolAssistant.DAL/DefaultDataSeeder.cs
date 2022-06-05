@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AppConfigurationEFCore;
+using Microsoft.AspNetCore.Identity;
 using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
-using SchoolAssistant.DAL.Repositories;
 
 namespace SchoolAssistant.DAL
 {
@@ -19,7 +20,7 @@ namespace SchoolAssistant.DAL
     {
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
-        private readonly IAppConfigRepository _configRepo;
+        private readonly IAppConfiguration<AppConfigRecords> _configRepo;
 
         private readonly User _systemAdmin = new()
         {
@@ -39,7 +40,7 @@ namespace SchoolAssistant.DAL
         public DefaultDataSeeder(
             RoleManager<Role> roleManager,
             UserManager<User> userManager,
-            IAppConfigRepository configRepo)
+            IAppConfiguration<AppConfigRecords> configRepo)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -98,12 +99,12 @@ namespace SchoolAssistant.DAL
         {
             var results = new bool[]
             {
-                await _configRepo.ScheduleArrangerCellHeight.SetIfEmptyAsync(5),
-                await _configRepo.ScheduleArrangerCellDuration.SetIfEmptyAsync(5),
-                await _configRepo.DefaultLessonDuration.SetIfEmptyAsync(45),
-                await _configRepo.ScheduleStartHour.SetIfEmptyAsync(7),
-                await _configRepo.ScheduleEndhour.SetIfEmptyAsync(18),
-                await _configRepo.DefaultRoomName.SetIfEmptyAsync("Sala")
+                await _configRepo.Records.ScheduleArrangerCellHeight.SetIfEmptyAsync(5),
+                await _configRepo.Records.ScheduleArrangerCellDuration.SetIfEmptyAsync(5),
+                await _configRepo.Records.DefaultLessonDuration.SetIfEmptyAsync(45),
+                await _configRepo.Records.ScheduleStartHour.SetIfEmptyAsync(7),
+                await _configRepo.Records.ScheduleEndhour.SetIfEmptyAsync(18),
+                await _configRepo.Records.DefaultRoomName.SetIfEmptyAsync("Sala")
             };
 
             if (results.Any(x => x))

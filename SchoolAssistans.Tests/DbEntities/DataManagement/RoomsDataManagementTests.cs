@@ -13,7 +13,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
     {
         private IRoomDataManagementService _dataManagementService = null!;
         private IModifyRoomFromJsonService _modifyFromJsonService = null!;
-        private IAppConfigRepository _configRepo = null!;
 
         private IRepository<Room> _roomRepo = null!;
 
@@ -32,7 +31,6 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         protected override void SetupServices()
         {
             _roomRepo = new Repository<Room>(_Context, null);
-            _configRepo = new AppConfigRepository(_Context, null);
 
             _modifyFromJsonService = new ModifyRoomFromJsonService(_roomRepo);
             _dataManagementService = new RoomDataManagementService(_modifyFromJsonService, _roomRepo, _configRepo);
@@ -71,7 +69,7 @@ namespace SchoolAssistans.Tests.DbEntities.DataManagement
         [Test]
         public async Task Should_fetch_modification_data()
         {
-            await _configRepo.DefaultRoomName.SetAndSaveAsync("Sala lekcyjna");
+            await _configRepo.Records.DefaultRoomName.SetAndSaveAsync("Sala lekcyjna");
             var res = await _dataManagementService.GetModificationDataJsonAsync(_room.Id);
 
             Assert.IsNotNull(res);

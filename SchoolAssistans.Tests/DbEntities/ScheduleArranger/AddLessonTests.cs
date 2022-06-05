@@ -21,7 +21,6 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
     {
         private IAddLessonBySchedArrService _addLessonService = null!;
 
-        private IAppConfigRepository _configRepo = null!;
         private IRepositoryBySchoolYear<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepository<Room> _roomRepo = null!;
@@ -52,7 +51,6 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
 
         protected override void SetupServices()
         {
-            _configRepo = new AppConfigRepository(_Context, null);
             _orgClassRepo = new RepositoryBySchoolYear<OrganizationalClass>(_Context, null, _schoolYearRepo);
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _roomRepo = new Repository<Room>(_Context, null);
@@ -155,7 +153,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         [Test]
         public async Task Should_fail_invalid_hour_to_early()
         {
-            await _configRepo.ScheduleStartHour.SetAndSaveAsync(11);
+            await _configRepo.Records.ScheduleStartHour.SetAndSaveAsync(11);
 
             var subject = _Teacher.SubjectOperations.MainIter.First();
             var model = new AddLessonRequestJson
@@ -179,7 +177,7 @@ namespace SchoolAssistans.Tests.DbEntities.ScheduleArranger
         [Test]
         public async Task Should_fail_invalid_hour_to_late()
         {
-            await _configRepo.ScheduleEndhour.SetAndSaveAsync(18);
+            await _configRepo.Records.ScheduleEndhour.SetAndSaveAsync(18);
 
             var subject = _Teacher.SubjectOperations.MainIter.First();
             var model = new AddLessonRequestJson

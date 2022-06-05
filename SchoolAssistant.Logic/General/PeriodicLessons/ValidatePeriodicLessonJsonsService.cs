@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AppConfigurationEFCore;
+using Microsoft.EntityFrameworkCore;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Repositories;
@@ -17,12 +19,12 @@ namespace SchoolAssistant.Logic.General.PeriodicLessons
     [Injectable]
     public class ValidatePeriodicLessonJsonsService : IValidatePeriodicLessonJsonsService
     {
-        private readonly IAppConfigRepository _configRepo;
+        private readonly IAppConfiguration<AppConfigRecords> _configRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _lessonRepo;
 
         public ValidatePeriodicLessonJsonsService(
-            IAppConfigRepository configRepo,
+            IAppConfiguration<AppConfigRecords> configRepo,
             IRepository<OrganizationalClass> orgClassRepo,
             IRepositoryBySchoolYear<PeriodicLesson> lessonRepo)
         {
@@ -34,9 +36,9 @@ namespace SchoolAssistant.Logic.General.PeriodicLessons
 
         public async Task<bool> ValidateTime(TimeJson time, int? customDuration)
         {
-            var minHour = await _configRepo.ScheduleStartHour.GetAsync() ?? 0;
-            var maxHour = await _configRepo.ScheduleEndhour.GetAsync() ?? 24;
-            var duration = customDuration ?? await _configRepo.DefaultLessonDuration.GetAsync() ?? 45;
+            var minHour = await _configRepo.Records.ScheduleStartHour.GetAsync() ?? 0;
+            var maxHour = await _configRepo.Records.ScheduleEndhour.GetAsync() ?? 24;
+            var duration = customDuration ?? await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45;
             var lessonEndHour = time.hour + (time.minutes + duration) / 60;
 
             return time.minutes >= 0 && time.minutes < 60
@@ -61,7 +63,7 @@ namespace SchoolAssistant.Logic.General.PeriodicLessons
                 .ToListAsync();
             var lessonsThatDay = lessons.Where(x => x.GetDayOfWeek() == model.day);
 
-            var defaultDuration = await _configRepo.DefaultLessonDuration.GetAsync() ?? 45;
+            var defaultDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45;
 
             foreach (var lesson in lessonsThatDay)
             {

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AppConfigurationEFCore;
+using Microsoft.EntityFrameworkCore;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.DataManagement.Rooms;
@@ -19,12 +21,12 @@ namespace SchoolAssistant.Logic.DataManagement.Rooms
     {
         private readonly IModifyRoomFromJsonService _modifyFromJsonService;
         private readonly IRepository<Room> _roomRepo;
-        private readonly IAppConfigRepository _configRepo;
+        private readonly IAppConfiguration<AppConfigRecords> _configRepo;
 
         public RoomDataManagementService(
             IModifyRoomFromJsonService modifyRoomFromJsonService,
             IRepository<Room> roomRepo,
-            IAppConfigRepository configRepo)
+            IAppConfiguration<AppConfigRecords> configRepo)
         {
             _modifyFromJsonService = modifyRoomFromJsonService;
             _roomRepo = roomRepo;
@@ -33,7 +35,7 @@ namespace SchoolAssistant.Logic.DataManagement.Rooms
 
         public Task<string?> GetDefaultNameAsync()
         {
-            return _configRepo.DefaultRoomName.GetAsync();
+            return _configRepo.Records.DefaultRoomName.GetAsync();
         }
 
         public Task<RoomListEntryJson[]> GetEntriesJsonAsync()

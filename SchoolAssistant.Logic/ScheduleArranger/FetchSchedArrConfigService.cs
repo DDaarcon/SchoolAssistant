@@ -1,4 +1,5 @@
-﻿using SchoolAssistant.DAL.Repositories;
+﻿using AppConfigurationEFCore;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger.PageModelToReact;
 
 namespace SchoolAssistant.Logic.ScheduleArranger
@@ -11,10 +12,10 @@ namespace SchoolAssistant.Logic.ScheduleArranger
     [Injectable]
     public class FetchSchedArrConfigService : IFetchSchedArrConfigService
     {
-        private readonly IAppConfigRepository _configRepo;
+        private readonly IAppConfiguration<AppConfigRecords> _configRepo;
 
         public FetchSchedArrConfigService(
-            IAppConfigRepository configRepo)
+            IAppConfiguration<AppConfigRecords> configRepo)
         {
             _configRepo = configRepo;
         }
@@ -23,11 +24,11 @@ namespace SchoolAssistant.Logic.ScheduleArranger
         {
             return new ScheduleArrangerConfigJson
             {
-                defaultLessonDuration = await _configRepo.DefaultLessonDuration.GetAsync() ?? 45,
-                cellDuration = await _configRepo.ScheduleArrangerCellDuration.GetAsync() ?? 5,
-                cellHeight = await _configRepo.ScheduleArrangerCellHeight.GetAsync() ?? 5,
-                startHour = await _configRepo.ScheduleStartHour.GetAsync() ?? 7,
-                endHour = await _configRepo.ScheduleEndhour.GetAsync() ?? 18
+                defaultLessonDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45,
+                cellDuration = await _configRepo.Records.ScheduleArrangerCellDuration.GetAsync() ?? 5,
+                cellHeight = await _configRepo.Records.ScheduleArrangerCellHeight.GetAsync() ?? 5,
+                startHour = await _configRepo.Records.ScheduleStartHour.GetAsync() ?? 7,
+                endHour = await _configRepo.Records.ScheduleEndhour.GetAsync() ?? 18
             };
         }
     }

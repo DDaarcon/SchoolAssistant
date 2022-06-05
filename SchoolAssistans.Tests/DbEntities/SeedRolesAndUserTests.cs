@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AppConfigurationEFCore;
+using AppConfigurationEFCore.Setup;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
-using SchoolAssistant.DAL.Repositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +29,10 @@ namespace SchoolAssistans.Tests.DbEntities
 
             RegisterIdentity();
 
-            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager, new AppConfigRepository(TestDatabase.Context, null));
+            TestServices.Collection.AddAppConfiguration<SADbContext, AppConfigRecords>();
+            var svc = TestServices.GetService<IAppConfiguration<AppConfigRecords>>();
+
+            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager, svc);
         }
 
         private void RegisterIdentity()

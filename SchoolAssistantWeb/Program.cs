@@ -4,6 +4,7 @@ using JavaScriptEngineSwitcher.V8;
 using Microsoft.EntityFrameworkCore;
 using React.AspNet;
 using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.Infrastructure.InjectablePattern;
 using SchoolAssistant.Logic.Help;
@@ -56,10 +57,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 #endregion
 
-builder.Services.AddAppConfiguration(null, null, options =>
-{
-    options.Add<Exception>(x => new Exception());
-});
+builder.Services.AddAppConfiguration<SADbContext, AppConfigRecords>();
 
 builder.Services.AddAllInjectable();
 
