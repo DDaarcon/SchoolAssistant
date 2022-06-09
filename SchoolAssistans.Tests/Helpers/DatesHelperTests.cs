@@ -60,5 +60,16 @@ namespace SchoolAssistans.Tests.Helpers
             // might fail
             Assert.AreEqual(millisec, 100 - 1 * 60 * 60 * 1000);
         }
+
+
+        [Test]
+        public void ShouldGetTicksInJs_WhenDateIs2000_10_10_10_10_10_UTC()
+        {
+            var date = new DateTime(2000, 10, 10, 10, 10, 10, DateTimeKind.Utc);
+
+            var ticks = DatesHelper.GetTicksJs(date);
+
+            Assert.AreEqual(971172610000, ticks);
+        }
     }
 }
