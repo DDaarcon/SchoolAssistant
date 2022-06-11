@@ -1,4 +1,11 @@
-﻿#incoming-lesson {
+﻿.scheduled-lessons-list-body tr {
+    box-shadow: inset 0 0 10em #ffffff91, inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(255,255,255, 0.1);
+    text-shadow: #909164ad 0px 4px 6px;
+    transition: all 1s;
+}
+
+
+#incoming-lesson {
     background-color: #95ff7d8a;
 }
 
@@ -20,4 +27,10 @@
 .conduct-btn:hover {
     background-color: #ffb05957 !important;
     font-size: 0.9em !important;
+}
+
+
+.squeezed {
+    height: 0px;
+    font-size: 0px;
 }

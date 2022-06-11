@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="React\conducting-classes\**" />
+    <Content Remove="React\conducting-classes\**" />
+    <EmbeddedResource Remove="React\conducting-classes\**" />
+    <None Remove="React\conducting-classes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="React\schedule-arranger\class-selector.tsx" />
     <Content Remove="React\schedule-arranger\main.tsx" />
     <Content Remove="React\schedule-arranger\schedule-arranger-page.tsx" />
@@ -17,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="React\conducting-classes\interfaces\held-classes.ts" />
-    <None Remove="React\conducting-classes\interfaces\scheduled-lesson-list-entry.ts" />
-    <None Remove="React\conducting-classes\interfaces\scheduled-lesson-list-item.ts" />
-    <None Remove="React\conducting-classes\list.tsx" />
     <None Remove="React\data-management.ts" />
     <None Remove="React\data-management\classes\class-list.tsx" />
     <None Remove="React\data-management\classes\class-mod-comp.tsx" />
@@ -211,10 +214,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="React\conducting-classes\interfaces\held-classes.ts" />
-    <TypeScriptCompile Include="React\conducting-classes\interfaces\scheduled-lesson-list-entry.ts" />
-    <TypeScriptCompile Include="React\conducting-classes\interfaces\scheduled-lesson-list-item.ts" />
-    <TypeScriptCompile Include="React\conducting-classes\list.tsx" />
     <TypeScriptCompile Include="React\data-management.ts" />
     <TypeScriptCompile Include="React\data-management\classes\class-list.tsx" />
     <TypeScriptCompile Include="React\data-management\classes\class-mod-comp.tsx" />

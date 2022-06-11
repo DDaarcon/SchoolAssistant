@@ -17,15 +17,37 @@ type ScheduledLessonsListProps = {
     tbodyClassName?: string;
     tbodyTrClassName?: string;
 }
+type ScheduledLessonsListState = {
+    entries: ScheduledLessonEntry[];
+}
 
-export default class ScheduledLessonsList extends React.Component<ScheduledLessonsListProps> {
+export default class ScheduledLessonsList extends React.Component<ScheduledLessonsListProps, ScheduledLessonsListState> {
+
+    private _counter = 0;
 
     constructor(props) {
         super(props);
 
+        this.state = {
+            entries: this.props.entries
+        }
         assignToState(this.props);
+    }
 
-        console.log(ScheduledLessonsListState.tableClassName);
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({
+                entries: [
+                    {
+                        startTimeTk: this._counter++,
+                        className: "test",
+                        duration: 45,
+                        subjectName: "test",
+                    },
+                    ...this.state.entries
+                ]
+            });
+        }, 3000);
     }
 
     render() {
@@ -35,7 +57,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
             <table className={ScheduledLessonsListState.tableClassName + " scheduled-lessons-list"}>
                 <ListHead />
                 <ListBody
-                    rows={this.props.entries}
+                    rows={this.state.entries}
                 />
             </table>
         )

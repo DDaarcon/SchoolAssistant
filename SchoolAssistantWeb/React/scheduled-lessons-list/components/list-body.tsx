@@ -11,18 +11,28 @@ type ListBodyProps = {
 
 export default class ListBody extends React.Component<ListBodyProps> {
 
+    private _isFirstLoad = true;
+
+    componentDidMount() {
+        this._isFirstLoad = false;
+    }
+
     render() {
+        console.log("is first load: " + (this._isFirstLoad ? "true" : "false"))
+
         return (
             <tbody className={ScheduledLessonsListState.tbodyClassName + " scheduled-lessons-list-body"}>
-                {this.props.rows.map(x => (
+                {this.props.rows.map((x, index) => (
                     <Row
                         key={x.startTimeTk}
+                        entryIndex={index}
                         isIncoming={x.startTimeTk == this.props.incomingAtTk}
                         startTime={new Date(x.startTimeTk)}
                         duration={x.duration}
                         className={x.className}
                         subjectName={x.subjectName}
                         heldClasses={x.heldClasses}
+                        isNew={!this._isFirstLoad}
                     />
                 ))}
             </tbody>

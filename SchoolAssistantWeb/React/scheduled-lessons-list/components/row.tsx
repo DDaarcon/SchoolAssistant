@@ -11,16 +11,36 @@ type RowProps = {
     className: string;
     subjectName: string;
     heldClasses?: HeldClasses;
+
+    entryIndex: number;
+    isNew?: boolean;
+}
+type RowState = {
+
 }
 
-export default class Row extends React.Component<RowProps> {
+export default class Row extends React.Component<RowProps, RowState> {
+
+    private _rowEl?: HTMLTableRowElement;
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    componentDidMount() {
+        if (this.props.isNew) {
+            setTimeout(() => this._rowEl.classList.remove('squeezed'));
+        }
+    }
 
     render() {
         return (
-            <tr id={this.props.isIncoming ? "incoming-lesson" : ""}
+            <tr id={(this.props.isIncoming ? "incoming-lesson" : "")}
                 //@ts-ignore
                 height={ScheduledLessonsListState.entryHeight}
-                className={ScheduledLessonsListState.tbodyTrClassName}
+                className={ScheduledLessonsListState.tbodyTrClassName + " " + (this.props.isNew ? "squeezed" : "")}
+                ref={ref => this._rowEl = ref}
             >
                 <td>
                     <span>{this.props.startTime.toString()}{/* ddd, HH:mm */}</span>
