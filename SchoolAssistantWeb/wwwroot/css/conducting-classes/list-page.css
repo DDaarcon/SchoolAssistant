@@ -19,28 +19,21 @@ body > .container {
     top: 10px;
 }
 
-#list-frame {
-    flex-grow: 1;
-    height: 100%;
-    overflow-y: auto;
-    position: relative;
-}
-
 .scheduled-lessons-list thead {
     position: sticky;
     top: 10px;
 }
 
-.scheduled-lessons-list thead tr {
+.header-row {
     box-shadow: 
         inset 0 10em 3em rgb(242, 242, 242, 0.86),
         0 0 0 2px rgb(255, 255, 255),
-        0.3em 0.3em 1em rgb(0, 0, 0, 0.3);
+        0.3em 0.3em 1em rgb(0, 0, 0, 0.3)
+        !important;
 }
 
-.scheduled-lessons-list tbody tr td {
-    padding-top: 7px;
-    padding-bottom: 7px;
+.scheduled-lesson-list-container {
+    width: 100%;
 }
 
 

@@ -1,0 +1,23 @@
+﻿#incoming-lesson {
+    background-color: #95ff7d8a;
+}
+
+.see-upcomming-btn:hover {
+    background-color: #2eff6547 !important;
+    font-size: 0.88em !important;
+}
+
+
+.see-omitted-btn {
+}
+
+.see-past-details-btn {
+}
+
+.conduct-btn {
+}
+
+.conduct-btn:hover {
+    background-color: #ffb05957 !important;
+    font-size: 0.9em !important;
+}

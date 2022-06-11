@@ -22,7 +22,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
         public ScheduleDayLessonsJson<LessonJson>[] ScheduleLessons { get; set; } = null!;
 
-        public ScheduledLessonListModel ScheduledLessonListModel { get; set; } = null!;
+        public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
 
         public TeacherModel(
             IUserRepository userRepo,

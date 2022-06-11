@@ -23,6 +23,10 @@ module.exports = {
 			import: './React/schedule-shared.ts',
 			dependOn: [ 'react_lib', 'shared' ]
 		},
+		scheduled_lessons_list: {
+			import: './React/scheduled-lessons-list.ts',
+			dependOn: [ 'react_lib', 'shared' ]
+		},
 		shared: {
 			import: './React/shared.ts'
 		},

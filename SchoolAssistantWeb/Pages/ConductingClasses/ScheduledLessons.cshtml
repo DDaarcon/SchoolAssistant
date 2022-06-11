@@ -4,8 +4,10 @@
 }
 
 @section Head {
-    <link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>
+    @*<link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>*@
     <link rel="stylesheet" href="~/css/conducting-classes/list-page.css" asp-append-version="true"/>
+
+    <link rel="stylesheet" href="~/dist/scheduled_lessons_list.css" asp-append-version="true"/>
 }
 
 
@@ -15,14 +17,22 @@
             <partial name="ConductingClasses/_ListControls" />
         </form>
     </div>
-
-    <partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />
-
+    
+    @{
+        Model.ScheduledLessonListModel.theadTrClassName = "header-row";
+    }
+    @Html.React("Components.ScheduledLessonsList",
+        Model.ScheduledLessonListModel,
+        containerClass: "scheduled-lesson-list-container")
+    @*<partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />*@
 </div>
 
 @section Scripts {
+    <script src="~/dist/scheduled_lessons_list.bundle.js" asp-append-version="true"></script>
+
     <script>
 
 
+    
     </script>
 }

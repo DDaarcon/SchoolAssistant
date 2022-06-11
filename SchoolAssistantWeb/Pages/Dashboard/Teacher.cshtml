@@ -9,10 +9,11 @@
 @section Head{
     <link rel="stylesheet" href="~/css/dashboard/shared.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/css/dashboard/teacher.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>
+
     <link rel="stylesheet" href="~/dist/schedule_shared.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/dist/schedule_display.css" asp-append-version="true"/>
-
-    <link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/dist/scheduled_lessons_list.css" asp-append-version="true"/>
 }
 
 
@@ -28,7 +29,8 @@ Teacher dashboard
 
     <div class="dashboard-item dashboard-scheduled-lessons">
         <div class="scheduled-lessons-container">
-            <partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />
+            @*<partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />*@
+            @Html.React("Components.ScheduledLessonsList", Model.ScheduledLessonListModel)
 
             <div id="show-more-scheduled-lessons">
                 <a asp-area="" asp-page="/ConductingClasses/ScheduledLessons">
@@ -48,4 +50,5 @@ Teacher dashboard
 
     <script src="~/dist/schedule_shared.bundle.js" asp-append-version="true"></script>
     <script src="~/dist/schedule_display.bundle.js" asp-append-version="true"></script>
+    <script src="~/dist/scheduled_lessons_list.bundle.js" asp-append-version="true"></script>
 }

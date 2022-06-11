@@ -5,12 +5,13 @@ using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
+using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.ConductingClasses
 {
     public interface IScheduledLessonListService
     {
-        Task<ScheduledLessonListModel?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonListModel model);
+        Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonListModel model);
     }
 
     [Injectable]
@@ -28,7 +29,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
 
         private IEnumerable<PeriodicLessonWithOccurances> _lessonWithOccurances = null!;
 
-        private IEnumerable<ScheduledLessonListItemModel> _listItems = null!;
+        private IEnumerable<ScheduledLessonListEntryJson> _listItems = null!;
 
         public ScheduledLessonListService(
             IRepository<Teacher> teacherRepo,
@@ -40,7 +41,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _configRepo = configRepo;
         }
 
-        public async Task<ScheduledLessonListModel?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonListModel model)
+        public async Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonListModel model)
         {
             _model = model;
             _teacherId = teacherId;
@@ -90,15 +91,15 @@ namespace SchoolAssistant.Logic.ConductingClasses
                 {
                     var takenLesson = lwo.ScheduleLesson.TakenLessons.FirstOrDefault(x => x.Date == date);
 
-                    return new ScheduledLessonListItemModel
+                    return new ScheduledLessonListEntryJson
                     {
-                        ClassName = lwo.ScheduleLesson.ParticipatingOrganizationalClass!.Name,
-                        Duration = lwo.ScheduleLesson.CustomDuration ?? _defaultDuration,
-                        SubjectName = lwo.ScheduleLesson.Subject.Name,
-                        StartTime = takenLesson?.ActualDate ?? date,
-                        HeldClasses = ToHeldClassesModel(takenLesson)
+                        className = lwo.ScheduleLesson.ParticipatingOrganizationalClass!.Name,
+                        duration = lwo.ScheduleLesson.CustomDuration ?? _defaultDuration,
+                        subjectName = lwo.ScheduleLesson.Subject.Name,
+                        startTimeTk = takenLesson?.ActualDate.GetTicksJs() ?? date.GetTicksJs(),
+                        heldClasses = ToHeldClassesModel(takenLesson)
                     };
-                })).OrderBy(x => x.StartTime);
+                })).OrderBy(x => x.startTimeTk);
         }
 
         private HeldClassesModel? ToHeldClassesModel(Lesson? lesson)
@@ -115,7 +116,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
         private void FilterListItems()
         {
             if (_model.OnlyUpcoming)
-                _listItems = _listItems.Where(x => x.HeldClasses == null);
+                _listItems = _listItems.Where(x => x.heldClasses == null);
 
             if (_model.From.HasValue)
                 _listItems = _listItems.Take(_model.LimitTo ?? MAX);
@@ -123,13 +124,14 @@ namespace SchoolAssistant.Logic.ConductingClasses
                 _listItems = _listItems.TakeLast(_model.LimitTo ?? MAX);
         }
 
-        private async Task<ScheduledLessonListModel> GetListModelAsync()
+        private async Task<ScheduledLessonListJson> GetListModelAsync()
         {
-            return new ScheduledLessonListModel
+            var nowTk = DateTime.Now.GetTicksJs();
+            return new ScheduledLessonListJson
             {
-                Items = _listItems,
-                IncomingAt = _listItems.Where(x => x.StartTime >= DateTime.Now).FirstOrDefault()?.StartTime,
-                MinutessBeforeClose = await _configRepo.Records.MinutesBeforeLessonConsideredClose.GetAsync() ?? 5
+                entries = _listItems.ToArray(),
+                incomingAtTk = _listItems.Where(x => x.startTimeTk >= nowTk).FirstOrDefault()?.startTimeTk,
+                minutesBeforeLessonIsSoon = await _configRepo.Records.MinutesBeforeLessonConsideredClose.GetAsync() ?? 5
             };
         }
 

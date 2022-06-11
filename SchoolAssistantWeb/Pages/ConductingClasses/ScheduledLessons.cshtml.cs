@@ -12,7 +12,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         private readonly IScheduledLessonListService _scheduledLessonsListSvc;
 
         private User _user = null!;
-        public ScheduledLessonListModel ScheduledLessonListModel { get; set; } = null!;
+        public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
 
         public ScheduledLessonsModel(
             IUserRepository userRepo,

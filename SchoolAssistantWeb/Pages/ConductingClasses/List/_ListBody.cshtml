@@ -3,7 +3,7 @@
 <tbody>
     @foreach (var item in Model.Items)
     {
-        <tr id="@(item.StartTime == Model.IncomingAt ? "incoming-lesson" : "")">
+        <tr id="@(item.StartTime == Model.IncomingAt ? "incoming-lesson" : "")" height="40px">
             <td>
                 <span>@item.StartTime.ToString("ddd, HH:mm")</span>
             </td>
