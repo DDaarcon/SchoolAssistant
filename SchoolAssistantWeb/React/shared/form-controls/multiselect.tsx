@@ -14,9 +14,9 @@ type MultiselectProps<TValue extends number | string, TOption extends Option<TVa
     warningMessages?: string[];
     optionStyle?: <TInnerOption extends Option<TValue>>(props: OptionProps<TInnerOption>) => CSSObjectWithLabel;
 }
-const Multiselect = <TValue extends number | string>(props: MultiselectProps<TValue, Option<TValue>>) => {
+const Multiselect = <TValue extends number | string, TOption extends Option<TValue>>(props: MultiselectProps<TValue, TOption>) => {
     return (
-        <Select
+        <Select<TValue, TOption>
             label={props.label}
             name={props.name}
             value={props.value}
