@@ -12,6 +12,7 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ConductingClasses;
+using SchoolAssistant.Logic.Help;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -108,7 +109,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             var from = _Monday.AddDays(7);
             var to = _Monday.AddDays(7 + 5);
 
-            var res = await _service.GetModelForTeacherAsync(teacher.Id, new FetchScheduledLessonListModel
+            var res = await _service.GetModelForTeacherAsync(teacher.Id, new FetchScheduledLessonsRequestModel
             {
                 From = from,
                 To = to,
@@ -117,12 +118,12 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
             AssertItemsPresent(res);
 
-            Assert.IsTrue(res.Items.All(x => teacher.Schedule.Any(d =>
-                x.ClassName == d.ParticipatingOrganizationalClass?.Name
-                && x.SubjectName == d.Subject.Name
-                && x.Duration == (d.CustomDuration ?? _DefDuration)
-                && x.StartTime == d.GetOccurrences(from, to).First()
-                && x.HeldClasses == null)));
+            Assert.IsTrue(res.entries.All(x => teacher.Schedule.Any(d =>
+                x.className == d.ParticipatingOrganizationalClass?.Name
+                && x.subjectName == d.Subject.Name
+                && x.duration == (d.CustomDuration ?? _DefDuration)
+                && x.startTimeTk == d.GetOccurrences(from, to).First().GetTicksJs()
+                && x.heldClasses == null)));
         }
 
         [Test]
@@ -133,7 +134,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             var from = _Monday.AddDays(-7);
             var to = _Monday.AddDays(-7 + 5);
 
-            var res = await _service.GetModelForTeacherAsync(teacher.Id, new FetchScheduledLessonListModel
+            var res = await _service.GetModelForTeacherAsync(teacher.Id, new FetchScheduledLessonsRequestModel
             {
                 From = from,
                 To = to
@@ -141,31 +142,31 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
             AssertItemsPresent(res);
 
-            Assert.IsTrue(res.Items.All(x => teacher.Schedule.Any(d =>
+            Assert.IsTrue(res.entries.All(x => teacher.Schedule.Any(d =>
             {
                 var time = d.GetOccurrences(from, to).FirstOrDefault();
                 if (time == default)
                     return false;
 
-                return x.ClassName == d.ParticipatingOrganizationalClass?.Name
-                && x.SubjectName == d.Subject.Name
-                && x.Duration == (d.CustomDuration ?? _DefDuration)
-                && x.StartTime == time
-                && x.HeldClasses != null
+                return x.className == d.ParticipatingOrganizationalClass?.Name
+                && x.subjectName == d.Subject.Name
+                && x.duration == (d.CustomDuration ?? _DefDuration)
+                && x.startTimeTk == time.GetTicksJs()
+                && x.heldClasses != null
                 && _lessonRepo.Exists(l =>
                     l.FromScheduleId == d.Id
-                    && l.Date == x.StartTime
-                    && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.HeldClasses.AmountOfPresentStudents
-                    && l.Topic == x.HeldClasses.Topic);
+                    && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
+                    && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.AmountOfPresentStudents
+                    && l.Topic == x.heldClasses.Topic);
             })));
 
         }
 
-        private void AssertItemsPresent(ScheduledLessonListModel res)
+        private void AssertItemsPresent(ScheduledLessonListJson res)
         {
             Assert.IsNotNull(res);
-            Assert.IsNotNull(res!.Items);
-            Assert.IsNotEmpty(res.Items);
+            Assert.IsNotNull(res!.entries);
+            Assert.IsNotEmpty(res.entries);
         }
 
         private async Task<Teacher> GetTeacherWithMostScheduledLessonsAsync()

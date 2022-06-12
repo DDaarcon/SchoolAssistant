@@ -71,5 +71,26 @@ namespace SchoolAssistans.Tests.Helpers
 
             Assert.AreEqual(971172610000, ticks);
         }
+
+
+        [Test]
+        public void ShouldGetDateFromTicksJs_WhenDateIs2000_10_10_10_10_10_UTC()
+        {
+            var ticks = 971172610000;
+
+            var date = DatesHelper.FromTicksJs(ticks);
+
+            Assert.AreEqual(new DateTime(2000, 10, 10, 10, 10, 10, DateTimeKind.Utc), date);
+        }
+
+        [Test]
+        public void ShouldConvertDateTimeToTicksJsAndReverse()
+        {
+            var date = new DateTime(2000, 10, 10, 10, 10, 10, DateTimeKind.Utc);
+
+            var date2 = DatesHelper.FromTicksJs(date.GetTicksJs());
+
+            Assert.AreEqual(date, date2);
+        }
     }
 }
