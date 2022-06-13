@@ -1,0 +1,9 @@
+﻿.sll-controls-layout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sll-filters-panel {
+    flex-grow: 1;
+}

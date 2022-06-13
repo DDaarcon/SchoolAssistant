@@ -11,7 +11,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
 {
     public interface IScheduledLessonListService
     {
-        Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonListModel model);
+        Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
     }
 
     [Injectable]
@@ -24,7 +24,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
         private const int MAX = 50;
 
         private long _teacherId;
-        private FetchScheduledLessonListModel _model = null!;
+        private FetchScheduledLessonsRequestModel _model = null!;
         private int _defaultDuration;
 
         private IEnumerable<PeriodicLessonWithOccurances> _lessonWithOccurances = null!;
@@ -41,7 +41,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _configRepo = configRepo;
         }
 
-        public async Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonListModel model)
+        public async Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model)
         {
             _model = model;
             _teacherId = teacherId;
@@ -70,9 +70,11 @@ namespace SchoolAssistant.Logic.ConductingClasses
 
         private async Task FetchPeriodicLessonsAsync()
         {
+            // TODO: Calculating occurances of PeriodicLesson in db, including TakenLessons only in range
             var scheduled = await _perioLessonRepo.AsQueryableByYear
                 .ByCurrent()
                 .Where(x => x.LecturerId == _teacherId)
+                .Include(x => x.TakenLessons)
                 .ToListAsync();
 
             _lessonWithOccurances = scheduled.Select(x => new PeriodicLessonWithOccurances

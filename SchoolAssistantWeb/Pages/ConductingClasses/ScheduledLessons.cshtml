@@ -12,18 +12,20 @@
 
 
 <div id="scheduled-lesson-list-page" class="whole-area">
-    <div id="scheduled-lesson-list-controls">
-        <form>
-            <partial name="ConductingClasses/_ListControls" />
-        </form>
-    </div>
+    @Html.React("Components.ScheduledLessonsListControls", new {}, 
+        containerClass: "scheduled-lesson-list-controls")
+    @*<form>
+        <partial name="ConductingClasses/_ListControls" />
+    </form>*@
     
     @{
-        Model.ScheduledLessonListModel.theadTrClassName = "header-row";
+        Model.ScheduledLessonListConfig.theadTrClassName = "header-row";
+        Model.ScheduledLessonListConfig.entryHeight = 45;
     }
-    @Html.React("Components.ScheduledLessonsList",
-        Model.ScheduledLessonListModel,
-        containerClass: "scheduled-lesson-list-container")
+    @Html.React("Components.ScheduledLessonsList", new {
+        config = Model.ScheduledLessonListConfig,
+        entries = Model.ScheduledLessonListEntries,
+    }, containerClass: "scheduled-lesson-list-container")
     @*<partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />*@
 </div>
 

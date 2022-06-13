@@ -1,0 +1,14 @@
+﻿.sll-load-lessons-button {
+    display: flex;
+    height: 70px;
+}
+
+.sll-load-lessons-button-main {
+    flex-grow: 2;
+}
+
+.sll-load-lessons-button-10,
+.sll-load-lessons-button-20,
+.sll-load-lessons-button-50 {
+    flex-grow: 1;
+}

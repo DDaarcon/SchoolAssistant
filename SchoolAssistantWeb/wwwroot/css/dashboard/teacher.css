@@ -1,14 +1,4 @@
-﻿.scheduled-lessons-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.scheduled-lessons-container > table {
-    flex-grow: 1;
-}
-
-#show-more-scheduled-lessons {
+﻿#show-more-scheduled-lessons {
     position: relative;
     height: 29px;
     margin-left: -3px;
@@ -34,4 +24,14 @@
 
 #show-more-scheduled-lessons input:hover {
     height: 150%;
+}
+
+.scheduled-lessons-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.scheduled-lessons-view {
+    flex-grow: 1;
 }

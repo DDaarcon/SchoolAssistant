@@ -1,5 +1,6 @@
 ﻿.scheduled-lessons-list {
     width: 100%;
+    height: 100%;
 }
 
 .scheduled-lessons-list tr td {

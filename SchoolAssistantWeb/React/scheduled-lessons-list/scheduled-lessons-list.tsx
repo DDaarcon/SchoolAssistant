@@ -1,24 +1,21 @@
 ﻿import React from "react";
+import ServerConnection from "../shared/server-connection";
 import ListBody from "./components/list-body";
 import ListHead from "./components/list-head";
-import ScheduledLessonEntry from "./interfaces/scheduled-lesson-entry";
+import { FetchScheduledLessonsRequest } from "./interfaces/fetch-scheduled-lessons-list";
+import ScheduledLessonListEntries from "./interfaces/scheduled-lesson-entries";
+import ScheduledLessonListEntry from "./interfaces/scheduled-lesson-entry";
+import ScheduledLessonListConfig from "./interfaces/scheduled-lessons-list-config";
 import ScheduledLessonsListState, { assignToState } from "./scheduled-lessons-list-state";
 import './scheduled-lessons-list.css';
+import server from "./server";
 
 type ScheduledLessonsListProps = {
-    entries: ScheduledLessonEntry[];
-
-    minutesBeforeLessonIsSoon: number;
-    entryHeight?: number;
-
-    tableClassName?: string;
-    theadClassName?: string;
-    theadTrClassName?: string;
-    tbodyClassName?: string;
-    tbodyTrClassName?: string;
+    entries: ScheduledLessonListEntries;
+    config: ScheduledLessonListConfig;
 }
 type ScheduledLessonsListState = {
-    entries: ScheduledLessonEntry[];
+    entries: ScheduledLessonListEntry[];
 }
 
 export default class ScheduledLessonsList extends React.Component<ScheduledLessonsListProps, ScheduledLessonsListState> {
@@ -29,12 +26,19 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
         super(props);
 
         this.state = {
-            entries: this.props.entries
+            entries: this.props.entries.entries
         }
-        assignToState(this.props);
+
+        assignToState(this.props.config);
+        if (this.props.entries.incomingAtTk)
+            ScheduledLessonsListState.incomingAt = new Date(this.props.entries.incomingAtTk);
+
     }
 
     componentDidMount() {
+
+        addEventListener("loadOlderLessons", (event: CustomEvent) => this.loadOlderLessonsAsync(event.detail.amount));
+
         setTimeout(() => {
             this.setState({
                 entries: [
@@ -43,6 +47,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
                         className: "test",
                         duration: 45,
                         subjectName: "test",
+                        newlyAdded: true
                     },
                     ...this.state.entries
                 ]
@@ -51,8 +56,6 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
     }
 
     render() {
-
-
         return (
             <table className={ScheduledLessonsListState.tableClassName + " scheduled-lessons-list"}>
                 <ListHead />
@@ -61,5 +64,19 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
                 />
             </table>
         )
+    }
+
+    private async loadOlderLessonsAsync(amount: number): Promise<void> {
+        const earliest = this.state.entries.length > 0 ? this.state.entries[0] : null;
+        const toTk = earliest != null ? (earliest?.startTimeTk - 1) : undefined;
+
+        const req: FetchScheduledLessonsRequest = {
+            onlyUpcoming: false,
+            toTk,
+            limitTo: amount
+        }
+        const res = await server.getAsync("OlderLessons", req);
+
+
     }
 }

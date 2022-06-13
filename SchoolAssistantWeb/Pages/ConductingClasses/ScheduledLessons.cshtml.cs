@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
@@ -13,6 +14,8 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
 
         private User _user = null!;
         public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
+        public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
+        public ScheduledLessonListConfigJson ScheduledLessonListConfig { get; set; } = null!;
 
         public ScheduledLessonsModel(
             IUserRepository userRepo,
@@ -26,13 +29,28 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         {
             await FetchUserAsync();
 
-            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonListModel
+            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now.AddDays(-1),
                 LimitTo = 30
             }))!;
+
+            ScheduledLessonListEntries = new ScheduledLessonListEntriesJson
+            {
+                entries = ScheduledLessonListModel.entries,
+                incomingAtTk = ScheduledLessonListModel.incomingAtTk
+            };
+            ScheduledLessonListConfig = new ScheduledLessonListConfigJson
+            {
+                minutesBeforeLessonIsSoon = ScheduledLessonListModel.minutesBeforeLessonIsSoon
+            };
         }
 
+
+        public async Task<JsonResult> OnGetOlderLessonsAsync()
+        {
+            return null;
+        }
 
 
         private async Task FetchUserAsync()

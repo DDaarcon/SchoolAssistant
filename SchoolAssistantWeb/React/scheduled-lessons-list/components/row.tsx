@@ -37,10 +37,12 @@ export default class Row extends React.Component<RowProps, RowState> {
     render() {
         return (
             <tr id={(this.props.isIncoming ? "incoming-lesson" : "")}
-                //@ts-ignore
-                height={ScheduledLessonsListState.entryHeight}
                 className={ScheduledLessonsListState.tbodyTrClassName + " " + (this.props.isNew ? "squeezed" : "")}
                 ref={ref => this._rowEl = ref}
+                {...ScheduledLessonsListState.entryHeight != undefined
+                    ? { height: ScheduledLessonsListState.entryHeight }
+                    : {}
+                }
             >
                 <td>
                     <span>{this.props.startTime.toString()}{/* ddd, HH:mm */}</span>

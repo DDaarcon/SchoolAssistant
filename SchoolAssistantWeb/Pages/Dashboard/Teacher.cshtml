@@ -30,7 +30,13 @@ Teacher dashboard
     <div class="dashboard-item dashboard-scheduled-lessons">
         <div class="scheduled-lessons-container">
             @*<partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />*@
-            @Html.React("Components.ScheduledLessonsList", Model.ScheduledLessonListModel)
+            @{
+                
+            }
+            @Html.React("Components.ScheduledLessonsList", new {
+                config = Model.ScheduledLessonListConfig,
+                entries = Model.ScheduledLessonListEntries,
+            }, containerClass: "scheduled-lessons-view")
 
             <div id="show-more-scheduled-lessons">
                 <a asp-area="" asp-page="/ConductingClasses/ScheduledLessons">

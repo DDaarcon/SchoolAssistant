@@ -1,19 +1,10 @@
-﻿
-interface State {
-    minutesBeforeLessonIsSoon?: number;
-    incomingAt?: Date;
-    entryHeight: number;
+﻿import ScheduledLessonListConfig from "./interfaces/scheduled-lessons-list-config";
 
-    tableClassName: string;
-    theadClassName: string;
-    theadTrClassName: string;
-    tbodyClassName: string;
-    tbodyTrClassName: string;
+interface State extends ScheduledLessonListConfig {
+    incomingAt?: Date;
 }
 
 const ScheduledLessonsListState: State = {
-    entryHeight: 45,
-
     tableClassName: "",
     theadClassName: "",
     theadTrClassName: "",
@@ -22,7 +13,7 @@ const ScheduledLessonsListState: State = {
 }
 export default ScheduledLessonsListState;
 
-export function assignToState(values: any) {
+export function assignToState(values: ScheduledLessonListConfig) {
     const props = Object.keys(values);
 
     for (const prop of props) {

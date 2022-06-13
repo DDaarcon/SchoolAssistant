@@ -11,7 +11,7 @@ body > .container {
     gap: 20px;
 }
 
-#scheduled-lesson-list-controls {
+.scheduled-lesson-list-controls {
     flex-basis: 200px;
     height: 95vh;
     background-color: aqua;
@@ -19,7 +19,7 @@ body > .container {
     top: 10px;
 }
 
-.scheduled-lessons-list thead {
+.scheduled-lessons-list-head {
     position: sticky;
     top: 10px;
 }
@@ -38,8 +38,8 @@ body > .container {
 
 
 
-#scheduled-lesson-list-controls form,
-#scheduled-lesson-list-controls form div {
+.scheduled-lesson-list-controls form,
+.scheduled-lesson-list-controls form div {
     height: 100%;
 }
 .controls-layout {

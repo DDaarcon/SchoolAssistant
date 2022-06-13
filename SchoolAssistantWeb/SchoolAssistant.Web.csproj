@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="React\conducting-classes\**" />
+    <Compile Remove="React\users-management\interfaces\**" />
     <Content Remove="React\conducting-classes\**" />
+    <Content Remove="React\users-management\interfaces\**" />
     <EmbeddedResource Remove="React\conducting-classes\**" />
+    <EmbeddedResource Remove="React\users-management\interfaces\**" />
     <None Remove="React\conducting-classes\**" />
+    <None Remove="React\users-management\interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,13 +38,21 @@
     <None Remove="React\data-management\enums\category.ts" />
     <None Remove="React\schedule-display\settings.ts" />
     <None Remove="React\scheduled-lessons-list.ts" />
+    <None Remove="React\scheduled-lessons-list\components-controls\filters.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-button-spec.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-button.tsx" />
     <None Remove="React\scheduled-lessons-list\components\list-body.tsx" />
     <None Remove="React\scheduled-lessons-list\components\list-head.tsx" />
     <None Remove="React\scheduled-lessons-list\components\row.tsx" />
+    <None Remove="React\scheduled-lessons-list\interfaces\fetch-scheduled-lessons-list.ts" />
     <None Remove="React\scheduled-lessons-list\interfaces\held-classes.ts" />
+    <None Remove="React\scheduled-lessons-list\interfaces\scheduled-lesson-entries.ts" />
     <None Remove="React\scheduled-lessons-list\interfaces\scheduled-lesson-entry.ts" />
+    <None Remove="React\scheduled-lessons-list\interfaces\scheduled-lessons-list-config.ts" />
+    <None Remove="React\scheduled-lessons-list\scheduled-lessons-list-controls.tsx" />
     <None Remove="React\scheduled-lessons-list\scheduled-lessons-list-state.ts" />
     <None Remove="React\scheduled-lessons-list\scheduled-lessons-list.tsx" />
+    <None Remove="React\scheduled-lessons-list\server.ts" />
     <None Remove="React\shared\form-controls\label-value.tsx" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
     <None Remove="React\shared\lists\components\list-entry-coponent.tsx" />
@@ -160,7 +172,6 @@
     <None Remove="React\shared\validator.ts" />
     <None Remove="React\users-management.ts" />
     <None Remove="React\users-management\help\user-type-functions.ts" />
-    <None Remove="React\users-management\interfaces\user-type-for-management.ts" />
     <None Remove="React\users-management\server-catalog.ts" />
     <None Remove="React\users-management\settings.ts" />
     <None Remove="React\users-management\users-catalog.tsx" />
@@ -224,13 +235,21 @@
     <TypeScriptCompile Include="React\data-management\enums\category.ts" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list.ts" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\filters.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-button-spec.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-button.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\list-body.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\list-head.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\row.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\interfaces\fetch-scheduled-lessons-list.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\interfaces\held-classes.ts" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\interfaces\scheduled-lesson-entries.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\interfaces\scheduled-lesson-entry.ts" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\interfaces\scheduled-lessons-list-config.ts" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list-controls.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list-state.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\server.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\label-value.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-coponent.tsx" />
@@ -386,7 +405,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="React\users-management\interfaces\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 </Project>

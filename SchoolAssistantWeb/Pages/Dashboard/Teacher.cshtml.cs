@@ -23,6 +23,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         public ScheduleDayLessonsJson<LessonJson>[] ScheduleLessons { get; set; } = null!;
 
         public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
+        public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
+        public ScheduledLessonListConfigJson ScheduledLessonListConfig { get; set; } = null!;
 
         public TeacherModel(
             IUserRepository userRepo,
@@ -43,11 +45,21 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value))!;
 
-            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonListModel
+            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now,
                 LimitTo = 6
             }))!;
+
+            ScheduledLessonListEntries = new ScheduledLessonListEntriesJson
+            {
+                entries = ScheduledLessonListModel.entries,
+                incomingAtTk = ScheduledLessonListModel.incomingAtTk
+            };
+            ScheduledLessonListConfig = new ScheduledLessonListConfigJson
+            {
+                minutesBeforeLessonIsSoon = ScheduledLessonListModel.minutesBeforeLessonIsSoon
+            };
         }
 
         private async Task FetchUserAsync()
