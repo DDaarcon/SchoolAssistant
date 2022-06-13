@@ -9,13 +9,13 @@ using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.ConductingClasses
 {
-    public interface IScheduledLessonListService
+    public interface IFetchScheduledLessonListEntriesService
     {
         Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
     }
 
     [Injectable]
-    public class ScheduledLessonListService : IScheduledLessonListService
+    public class FetchScheduledLessonListEntriesService : IFetchScheduledLessonListEntriesService
     {
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _perioLessonRepo;
@@ -31,7 +31,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
 
         private IEnumerable<ScheduledLessonListEntryJson> _listItems = null!;
 
-        public ScheduledLessonListService(
+        public FetchScheduledLessonListEntriesService(
             IRepository<Teacher> teacherRepo,
             IRepositoryBySchoolYear<PeriodicLesson> perioLessonRepo,
             IAppConfiguration<AppConfigRecords> configRepo)
@@ -104,14 +104,14 @@ namespace SchoolAssistant.Logic.ConductingClasses
                 })).OrderBy(x => x.startTimeTk);
         }
 
-        private HeldClassesModel? ToHeldClassesModel(Lesson? lesson)
+        private HeldClassesJson? ToHeldClassesModel(Lesson? lesson)
         {
             if (lesson is null) return null;
-            return new HeldClassesModel
+            return new HeldClassesJson
             {
-                Topic = lesson.Topic,
-                AmountOfPresentStudents = lesson.PresenceOfStudents.Count(x => x.Status == DAL.Enums.PresenceStatus.Present),
-                AmountOfAllStudents = lesson.PresenceOfStudents.Count
+                topic = lesson.Topic,
+                amountOfPresentStudents = lesson.PresenceOfStudents.Count(x => x.Status == DAL.Enums.PresenceStatus.Present),
+                amountOfAllStudents = lesson.PresenceOfStudents.Count
             };
         }
 

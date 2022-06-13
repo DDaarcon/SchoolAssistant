@@ -21,7 +21,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 {
     public class ScheduledLessonListTests : BaseDbEntitiesTests
     {
-        private IScheduledLessonListService _service = null!;
+        private IFetchScheduledLessonListEntriesService _service = null!;
 
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
@@ -87,7 +87,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _periLessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
             _lessonRepo = new Repository<Lesson>(_Context, null);
 
-            _service = new ScheduledLessonListService(_teacherRepo, _periLessonRepo, _configRepo);
+            _service = new FetchScheduledLessonListEntriesService(_teacherRepo, _periLessonRepo, _configRepo);
         }
 
 
@@ -156,8 +156,8 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
                 && _lessonRepo.Exists(l =>
                     l.FromScheduleId == d.Id
                     && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
-                    && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.AmountOfPresentStudents
-                    && l.Topic == x.heldClasses.Topic);
+                    && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
+                    && l.Topic == x.heldClasses.topic);
             })));
 
         }

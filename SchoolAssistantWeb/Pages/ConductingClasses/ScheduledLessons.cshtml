@@ -4,7 +4,6 @@
 }
 
 @section Head {
-    @*<link rel="stylesheet" href="~/css/conducting-classes/list.css" asp-append-version="true"/>*@
     <link rel="stylesheet" href="~/css/conducting-classes/list-page.css" asp-append-version="true"/>
 
     <link rel="stylesheet" href="~/dist/scheduled_lessons_list.css" asp-append-version="true"/>
@@ -14,9 +13,6 @@
 <div id="scheduled-lesson-list-page" class="whole-area">
     @Html.React("Components.ScheduledLessonsListControls", new {}, 
         containerClass: "scheduled-lesson-list-controls")
-    @*<form>
-        <partial name="ConductingClasses/_ListControls" />
-    </form>*@
     
     @{
         Model.ScheduledLessonListConfig.theadTrClassName = "header-row";
@@ -26,7 +22,6 @@
         config = Model.ScheduledLessonListConfig,
         entries = Model.ScheduledLessonListEntries,
     }, containerClass: "scheduled-lesson-list-container")
-    @*<partial name="ConductingClasses/_List" for="ScheduledLessonListModel" />*@
 </div>
 
 @section Scripts {

@@ -6,6 +6,6 @@
         public string subjectName { get; set; } = null!;
         public long startTimeTk { get; set; }
         public int duration { get; set; }
-        public HeldClassesModel? heldClasses { get; set; }
+        public HeldClassesJson? heldClasses { get; set; }
     }
 }

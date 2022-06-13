@@ -15,7 +15,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
         private readonly ITeacherScheduleService _scheduleSvc;
 
-        private readonly IScheduledLessonListService _scheduledLessonsListSvc;
+        private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
 
         private User _user = null!;
 
@@ -30,7 +30,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             IUserRepository userRepo,
             IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
             ITeacherScheduleService scheduleSvc,
-            IScheduledLessonListService scheduledLessonsListSvc)
+            IFetchScheduledLessonListEntriesService scheduledLessonsListSvc)
         {
             _userRepo = userRepo;
             _fetchScheduleConfigSvc = fetchScheduleConfigSvc;

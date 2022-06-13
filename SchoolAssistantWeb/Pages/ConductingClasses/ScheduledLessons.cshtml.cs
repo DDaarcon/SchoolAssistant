@@ -10,7 +10,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
     public class ScheduledLessonsModel : PageModel
     {
         private readonly IUserRepository _userRepo;
-        private readonly IScheduledLessonListService _scheduledLessonsListSvc;
+        private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
 
         private User _user = null!;
         public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
@@ -19,7 +19,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
 
         public ScheduledLessonsModel(
             IUserRepository userRepo,
-            IScheduledLessonListService scheduledLessonsListSvc)
+            IFetchScheduledLessonListEntriesService scheduledLessonsListSvc)
         {
             _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
