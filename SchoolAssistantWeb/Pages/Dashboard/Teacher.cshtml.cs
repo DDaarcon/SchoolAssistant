@@ -16,13 +16,13 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         private readonly ITeacherScheduleService _scheduleSvc;
 
         private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
+        private readonly IFetchScheduledLessonListConfigService _scheduledLessonsListConfigSvc;
 
         private User _user = null!;
 
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
         public ScheduleDayLessonsJson<LessonJson>[] ScheduleLessons { get; set; } = null!;
 
-        public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
         public ScheduledLessonListConfigJson ScheduledLessonListConfig { get; set; } = null!;
 
@@ -30,12 +30,14 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             IUserRepository userRepo,
             IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
             ITeacherScheduleService scheduleSvc,
-            IFetchScheduledLessonListEntriesService scheduledLessonsListSvc)
+            IFetchScheduledLessonListEntriesService scheduledLessonsListSvc,
+            IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc)
         {
             _userRepo = userRepo;
             _fetchScheduleConfigSvc = fetchScheduleConfigSvc;
             _scheduleSvc = scheduleSvc;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
+            _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
         }
 
         public async Task OnGetAsync()
@@ -45,21 +47,12 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value))!;
 
-            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
+            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now,
                 LimitTo = 6
             }))!;
-
-            ScheduledLessonListEntries = new ScheduledLessonListEntriesJson
-            {
-                entries = ScheduledLessonListModel.entries,
-                incomingAtTk = ScheduledLessonListModel.incomingAtTk
-            };
-            ScheduledLessonListConfig = new ScheduledLessonListConfigJson
-            {
-                minutesBeforeLessonIsSoon = ScheduledLessonListModel.minutesBeforeLessonIsSoon
-            };
+            ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync();
         }
 
         private async Task FetchUserAsync()

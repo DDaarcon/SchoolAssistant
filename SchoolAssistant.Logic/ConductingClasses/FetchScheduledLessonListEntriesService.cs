@@ -11,7 +11,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
 {
     public interface IFetchScheduledLessonListEntriesService
     {
-        Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
+        Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
     }
 
     [Injectable]
@@ -41,7 +41,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _configRepo = configRepo;
         }
 
-        public async Task<ScheduledLessonListJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model)
+        public async Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model)
         {
             _model = model;
             _teacherId = teacherId;
@@ -55,7 +55,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             CreateListItems();
             FilterListItems();
 
-            return await GetListModelAsync();
+            return GetListModel();
         }
 
         private async Task<bool> ValidateAndFetchAsync(long teacherId)
@@ -126,14 +126,13 @@ namespace SchoolAssistant.Logic.ConductingClasses
                 _listItems = _listItems.TakeLast(_model.LimitTo ?? MAX);
         }
 
-        private async Task<ScheduledLessonListJson> GetListModelAsync()
+        private ScheduledLessonListEntriesJson GetListModel()
         {
             var nowTk = DateTime.Now.GetTicksJs();
-            return new ScheduledLessonListJson
+            return new ScheduledLessonListEntriesJson
             {
                 entries = _listItems.ToArray(),
-                incomingAtTk = _listItems.Where(x => x.startTimeTk >= nowTk).FirstOrDefault()?.startTimeTk,
-                minutesBeforeLessonIsSoon = await _configRepo.Records.MinutesBeforeLessonConsideredClose.GetAsync() ?? 5
+                incomingAtTk = _listItems.Where(x => x.startTimeTk >= nowTk).FirstOrDefault()?.startTimeTk
             };
         }
 

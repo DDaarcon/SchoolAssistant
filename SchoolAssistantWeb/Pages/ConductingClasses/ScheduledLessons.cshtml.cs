@@ -11,39 +11,32 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
     {
         private readonly IUserRepository _userRepo;
         private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
+        private readonly IFetchScheduledLessonListConfigService _scheduledLessonsListConfigSvc;
 
         private User _user = null!;
-        public ScheduledLessonListJson ScheduledLessonListModel { get; set; } = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
         public ScheduledLessonListConfigJson ScheduledLessonListConfig { get; set; } = null!;
 
         public ScheduledLessonsModel(
             IUserRepository userRepo,
-            IFetchScheduledLessonListEntriesService scheduledLessonsListSvc)
+            IFetchScheduledLessonListEntriesService scheduledLessonsListSvc,
+            IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc)
         {
             _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
+            _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
         }
 
         public async Task OnGetAsync()
         {
             await FetchUserAsync();
 
-            ScheduledLessonListModel = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
+            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now.AddDays(-1),
                 LimitTo = 30
             }))!;
-
-            ScheduledLessonListEntries = new ScheduledLessonListEntriesJson
-            {
-                entries = ScheduledLessonListModel.entries,
-                incomingAtTk = ScheduledLessonListModel.incomingAtTk
-            };
-            ScheduledLessonListConfig = new ScheduledLessonListConfigJson
-            {
-                minutesBeforeLessonIsSoon = ScheduledLessonListModel.minutesBeforeLessonIsSoon
-            };
+            ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync();
         }
 
 
