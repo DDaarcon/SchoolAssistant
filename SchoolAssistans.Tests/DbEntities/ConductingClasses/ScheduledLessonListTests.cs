@@ -14,6 +14,7 @@ using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ConductingClasses;
 using SchoolAssistant.Logic.Help;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -118,12 +119,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
             AssertItemsPresent(res);
 
-            Assert.IsTrue(res.entries.All(x => teacher.Schedule.Any(d =>
-                x.className == d.ParticipatingOrganizationalClass?.Name
-                && x.subjectName == d.Subject.Name
-                && x.duration == (d.CustomDuration ?? _DefDuration)
-                && x.startTimeTk == d.GetOccurrences(from, to).FirstOrDefault().GetTicksJs()
-                && x.heldClasses == null)));
+            AssertEntriesMatchEntities(res.entries, teacher.Schedule, from, to, false, true);
         }
 
         [Test]
@@ -142,24 +138,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
             AssertItemsPresent(res);
 
-            Assert.IsTrue(res.entries.All(x => teacher.Schedule.Any(d =>
-            {
-                // TODO: fix
-                var time = d.GetOccurrences(from, to).FirstOrDefault();
-                if (time == default)
-                    return false;
-
-                return x.className == d.ParticipatingOrganizationalClass?.Name
-                && x.subjectName == d.Subject.Name
-                && x.duration == (d.CustomDuration ?? _DefDuration)
-                && x.startTimeTk == time.GetTicksJs()
-                && x.heldClasses != null
-                && _lessonRepo.Exists(l =>
-                    l.FromScheduleId == d.Id
-                    && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
-                    && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
-                    && l.Topic == x.heldClasses.topic);
-            })));
+            AssertEntriesMatchEntities(res.entries, teacher.Schedule, from, to, true, false);
 
         }
 
@@ -180,25 +159,27 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
             Assert.IsTrue(res.entries.Length <= 5);
 
-            Assert.IsTrue(res.entries.All(x => teacher.Schedule.Any(d =>
+            AssertEntriesMatchEntities(res.entries, teacher.Schedule, from, from.AddDays(100), false, false);
+        }
+
+        [Test]
+        public async Task ShouldFetchLessons_WhenToMondayLimitTo8()
+        {
+            var teacher = await GetTeacherWithMostScheduledLessonsAsync();
+
+            var to = _Monday;
+
+            var res = await _service.GetModelForTeacherAsync(teacher.Id, new FetchScheduledLessonsRequestModel
             {
-                // TODO: fix
-                var time = d.GetOccurrences(from, from.AddDays(100)).FirstOrDefault();
-                if (time == default)
-                    return false;
+                To = to,
+                LimitTo = 8
+            });
 
-                return x.className == d.ParticipatingOrganizationalClass?.Name
-                && x.subjectName == d.Subject.Name
-                && x.duration == (d.CustomDuration ?? _DefDuration)
-                && x.startTimeTk == time.GetTicksJs()
-                && x.heldClasses != null
-                && _lessonRepo.Exists(l =>
-                    l.FromScheduleId == d.Id
-                    && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
-                    && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
-                    && l.Topic == x.heldClasses.topic);
-            })));
+            AssertItemsPresent(res);
 
+            Assert.IsTrue(res.entries.Length <= 8);
+
+            AssertEntriesMatchEntities(res.entries, teacher.Schedule, to.AddDays(-100), to, false, false);
         }
 
 
@@ -221,6 +202,38 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
                 Teacher = x,
                 LessonsCount = x.Schedule.Count
             }).OrderByDescending(x => x.LessonsCount).FirstAsync()).Teacher;
+        }
+
+        private void AssertEntriesMatchEntities(ScheduledLessonListEntryJson[] entries, IEnumerable<PeriodicLesson> entities, DateTime from, DateTime to, bool mustHaveClasses, bool mustNotHaveClasses)
+        {
+            Assert.IsTrue(entries.All(x => entities.Any(d =>
+            {
+                var times = d.GetOccurrences(from, to);
+                if (!times.Any(y => y.GetTicksJs() == x.startTimeTk))
+                    return false;
+
+                bool baseCheck = x.className == d.ParticipatingOrganizationalClass?.Name
+                    && x.subjectName == d.Subject.Name
+                    && x.duration == (d.CustomDuration ?? _DefDuration);
+
+                if (!baseCheck)
+                    return false;
+
+                if (x.heldClasses != null && mustNotHaveClasses)
+                    return false;
+
+                if (x.heldClasses != null)
+                    return _lessonRepo.Exists(l =>
+                        l.FromScheduleId == d.Id
+                        && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
+                        && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
+                        && l.Topic == x.heldClasses.topic);
+
+                if (x.heldClasses == null && mustHaveClasses)
+                    return false;
+
+                return true;
+            })));
         }
     }
 }

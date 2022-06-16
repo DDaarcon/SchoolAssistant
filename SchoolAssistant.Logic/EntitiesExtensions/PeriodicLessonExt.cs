@@ -59,6 +59,9 @@ namespace SchoolAssistant.Logic
             }
         }
 
+
+
+
         /// <returns> <c>DayOfWeek</c> from cron expression. If day is not found (invalid cron), value out of enum range is returned </returns>
         public static DayOfWeek GetDayOfWeek(this PeriodicLesson lesson)
             => lesson.GetNextOccurrence()?.DayOfWeek ?? (DayOfWeek)99;
