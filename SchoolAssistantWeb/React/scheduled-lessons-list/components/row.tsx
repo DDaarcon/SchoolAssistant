@@ -45,7 +45,7 @@ export default class Row extends React.Component<RowProps, RowState> {
                 }
             >
                 <td>
-                    <span>{this.props.startTime.toString()}{/* ddd, HH:mm */}</span>
+                    <span>{this.props.startTime.toLocaleString('pl-PL', this._dateFormat)}</span>
                 </td>
                 <td>
                     <span>{this.props.className}</span>
@@ -75,6 +75,14 @@ export default class Row extends React.Component<RowProps, RowState> {
         )
     }
 
+    private _dateFormat: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        weekday: 'short',
+        month: "short",
+        hour: "numeric",
+        minute: "2-digit"
+    };
+
     private isSoon(): boolean {
         const closeTime = new Date(this.props.startTime.getTime());
         closeTime.setMinutes(closeTime.getMinutes() - ScheduledLessonsListState.minutesBeforeLessonIsSoon);
@@ -86,6 +94,7 @@ export default class Row extends React.Component<RowProps, RowState> {
         endTime.setMinutes(endTime.getMinutes() + this.props.duration);
         return endTime >= new Date();
     }
+
 
     private renderButton(): JSX.Element {
         let closeOrOngoing = this.props.isIncoming
