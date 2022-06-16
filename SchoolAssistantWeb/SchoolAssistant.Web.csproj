@@ -39,8 +39,9 @@
     <None Remove="React\schedule-display\settings.ts" />
     <None Remove="React\scheduled-lessons-list.ts" />
     <None Remove="React\scheduled-lessons-list\components-controls\filters.tsx" />
-    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-button-spec.tsx" />
     <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-button.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons\button-layer.tsx" />
     <None Remove="React\scheduled-lessons-list\components\list-body.tsx" />
     <None Remove="React\scheduled-lessons-list\components\list-head.tsx" />
     <None Remove="React\scheduled-lessons-list\components\row.tsx" />
@@ -236,8 +237,9 @@
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\filters.tsx" />
-    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-button-spec.tsx" />
-    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-button.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\button-layer.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\load-lessons-button.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\list-body.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\list-head.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\row.tsx" />

@@ -1,0 +1,64 @@
+﻿.sll-load-lessons-whole-btn {
+    height: 70px;
+    width: 100%;
+}
+
+.sll-load-lessons-btn {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    border-width: 0px;
+    border-color: #ffd0a5;
+    border-style: solid;
+    transition: all 0.5s;
+    background: transparent;
+    font-family: 'Lucida Sans Unicode', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 600;
+    text-shadow: 0px 2px 3px #00000034;
+}
+.sll-load-lessons-btn:hover {
+    text-shadow: 0px 0px 0px #00000000;
+    border-color: #feb069;
+}
+
+
+.sll-load-lessons-btn-upright {
+    border-top-width: 3px;
+    box-shadow: inset 0px 35px 40px -40px #ffa81e;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 7px;
+}
+.sll-load-lessons-btn-upright:hover {
+    box-shadow: inset 0px 20px 30px -40px #ffa81e;
+}
+
+
+.sll-load-lessons-btn-upside-down {
+    border-bottom-width: 3px;
+    box-shadow: inset 0px -35px 40px -40px #ffa81e;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 7px;
+}
+.sll-load-lessons-btn-upside-down:hover {
+    box-shadow: inset 0px -20px 30px -40px #ffa81e;
+}
+
+
+.sll-load-lessons-btn-5 {
+}
+
+.sll-load-lessons-btn-10,
+.sll-load-lessons-btn-20,
+.sll-load-lessons-btn-50 {
+/*    flex-grow: 1;*/
+}
+
+.sll-load-lessons-btn-inner {
+    flex-grow: 1;
+}
+
+.sll-load-lessons-btn-val {
+    align-self: center;
+    flex-basis: 25px;
+    text-align: center;
+}

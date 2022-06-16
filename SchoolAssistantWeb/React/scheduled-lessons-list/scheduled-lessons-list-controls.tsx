@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { LoadNewerLessonsButton, LoadOlderLessonsButton } from "./components-controls/load-lessons-button-spec";
+import { LoadNewerLessonsButton, LoadOlderLessonsButton } from "./components-controls/load-lessons-buttons";
 import './scheduled-lessons-list-controls.css';
 
 type ScheduledLessonsListControlsProps = {
