@@ -14,19 +14,21 @@ namespace SchoolAssistant.Logic
         public static DateTime? GetNextOccurrence(this PeriodicLesson lesson)
             => lesson.GetCronExpression().GetNextOccurrence(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
 
+
+
         public static IEnumerable<DateTime> GetNextOccurrences(this PeriodicLesson lesson, DateTime from, int limitTo)
         {
             var cron = lesson.GetCronExpression();
 
-            from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
-
             if (limitTo <= 0)
                 yield break;
+
+            from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
 
             var occurrence = cron.GetNextOccurrence(from, true);
             while (limitTo-- > 0)
             {
-                yield return occurrence.Value;
+                yield return occurrence!.Value;
 
                 occurrence = cron.GetNextOccurrence(occurrence.Value);
             }
@@ -34,7 +36,27 @@ namespace SchoolAssistant.Logic
 
         public static IEnumerable<DateTime> GetPreviousOccurrences(this PeriodicLesson lesson, DateTime to, int limitTo)
         {
-            return null;
+            var cron = lesson.GetCronExpression();
+
+            if (limitTo <= 0)
+                yield break;
+
+            to = DateTime.SpecifyKind(to, DateTimeKind.Utc);
+
+            while (limitTo > 0)
+            {
+                var occurrencesPrevWeek = cron.GetOccurrences(to.AddDays(-7), to, false, true);
+
+                foreach (var occ in occurrencesPrevWeek.Reverse())
+                {
+                    yield return occ;
+
+                    if (--limitTo <= 0)
+                        yield break;
+                }
+
+                to = to.AddDays(-7);
+            }
         }
 
         /// <returns> <c>DayOfWeek</c> from cron expression. If day is not found (invalid cron), value out of enum range is returned </returns>
