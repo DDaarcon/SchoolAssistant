@@ -3,14 +3,10 @@
     height: 100%;
 }
 
-.scheduled-lessons-list tr td {
+.scheduled-lessons-list > tr > td {
     vertical-align: middle;
 }
 
-.scheduled-lessons-list tr :is(th, td) span {
+.scheduled-lessons-list tr :is(th, td) > span {
     margin-left: 20px;
-}
-
-.scheduled-lessons-list tr :is(th, td):last-child span {
-    /*    margin*/
 }

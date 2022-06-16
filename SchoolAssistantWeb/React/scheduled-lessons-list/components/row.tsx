@@ -68,7 +68,7 @@ export default class Row extends React.Component<RowProps, RowState> {
                             </td>
                         </>
                 )}
-                <td>
+                <td className="sll-entry-button-cell">
                     {this.renderButton()}
                 </td>
             </tr>
@@ -105,7 +105,7 @@ export default class Row extends React.Component<RowProps, RowState> {
             return <button
                 className="conduct-btn"
             >
-                Poprowadź zajęcia
+                <span>Poprowadź zajęcia</span>
             </button>
         }
         else if (this.props.heldClasses)
@@ -113,21 +113,21 @@ export default class Row extends React.Component<RowProps, RowState> {
             return <button
                 className="see-past-details-btn"
             >
-                Szczegóły
+                <span>Szczegóły</span>
             </button>
         }
         else if (this.props.startTime < new Date()) {
             return <button
                 className="see-omitted-btn"
             >
-                Uzupełnij
+                <span>Uzupełnij</span>
             </button>
         }
         else {
             return <button
                 className="see-upcomming-btn"
             >
-                Szczegóły nadchodzących
+                <span>Szczegóły nadchodzących</span>
             </button>
         }
     }

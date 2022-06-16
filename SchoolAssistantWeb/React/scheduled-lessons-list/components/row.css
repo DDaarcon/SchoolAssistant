@@ -1,12 +1,11 @@
-﻿.scheduled-lessons-list-body tr {
+﻿.scheduled-lessons-list-body > tr {
     box-shadow: inset 0 0 10em #ffffff91, inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(255,255,255, 0.1);
     text-shadow: #909164ad 0px 4px 6px;
     transition: all 1s, font-size 0s;
 }
-.scheduled-lessons-list-body tr span {
+.scheduled-lessons-list-body > tr > span {
     transition: all 1s;
 }
-
 
 #incoming-lesson {
     background-color: #95ff7d8a;
@@ -14,9 +13,27 @@
 
 .see-upcomming-btn:hover {
     background-color: #2eff6547 !important;
-    font-size: 0.88em !important;
 }
 
+
+
+.sll-entry-button-cell button {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 100%;
+    width: 100%;
+    font-size: 0.8em;
+    background-color: #8dfff517;
+    border: 0;
+    box-shadow: inset 0 0 10px #ffffff91, inset 0 -3em 2em rgba(12, 40, 60, 0.03), 0 0 0 1px rgb(255,255,255, 0.1);
+    white-space: nowrap;
+    transition: all 0.3s;
+}
+
+.sll-entry-button-cell > button:hover {
+    transform: scale(1.1);
+}
 
 .see-omitted-btn {
 }
@@ -29,7 +46,6 @@
 
 .conduct-btn:hover {
     background-color: #ffb05957 !important;
-    font-size: 0.9em !important;
 }
 
 
