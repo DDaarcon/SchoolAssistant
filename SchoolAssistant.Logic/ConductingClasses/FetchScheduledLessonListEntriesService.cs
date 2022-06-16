@@ -83,11 +83,12 @@ namespace SchoolAssistant.Logic.ConductingClasses
 
         private async Task FetchPeriodicLessonsAsync()
         {
-            // TODO: Calculating occurances of PeriodicLesson in db, including TakenLessons only in range
             var scheduled = await _perioLessonRepo.AsQueryableByYear
                 .ByCurrent()
                 .Where(x => x.LecturerId == _teacherId)
-                .Include(x => x.TakenLessons)
+                .Include(x => x.TakenLessons.Where(x => 
+                    _model.From.HasValue ? x.Date >= _model.From.Value : true
+                    && _model.To.HasValue ? x.Date <= _model.To.Value : true))
                 .ToListAsync();
 
             _lessonWithOccurances = scheduled.Select(x => new PeriodicLessonWithOccurances
