@@ -162,7 +162,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
         }
 
-        private void AssertItemsPresent(ScheduledLessonListJson res)
+        private void AssertItemsPresent(ScheduledLessonListEntriesJson res)
         {
             Assert.IsNotNull(res);
             Assert.IsNotNull(res!.entries);
