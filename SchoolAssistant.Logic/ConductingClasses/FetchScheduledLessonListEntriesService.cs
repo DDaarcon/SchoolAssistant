@@ -12,6 +12,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
     public interface IFetchScheduledLessonListEntriesService
     {
         Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
+        Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestJson model);
     }
 
     [Injectable]
@@ -40,6 +41,15 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _perioLessonRepo = perioLessonRepo;
             _configRepo = configRepo;
         }
+
+        public Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestJson model)
+            => GetModelForTeacherAsync(teacherId, new FetchScheduledLessonsRequestModel
+            {
+                From = DatesHelper.FromTicksJs(model.fromTk),
+                To = DatesHelper.FromTicksJs(model.toTk),
+                LimitTo = model.limitTo,
+                OnlyUpcoming = model.onlyUpcoming
+            });
 
         public async Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model)
         {
