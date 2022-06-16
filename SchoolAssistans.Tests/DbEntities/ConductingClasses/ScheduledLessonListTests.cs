@@ -15,6 +15,7 @@ using SchoolAssistant.Logic.ConductingClasses;
 using SchoolAssistant.Logic.Help;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -105,6 +106,8 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         [Test]
         public async Task Should_fetch_all_upcoming_in_next_week()
         {
+            using var timer = new TestTimer();
+
             var teacher = await GetTeacherWithMostScheduledLessonsAsync();
 
             var from = _Monday.AddDays(7);
@@ -125,6 +128,8 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         [Test]
         public async Task Should_fetch_all_held_from_previous_week()
         {
+            using var timer = new TestTimer();
+
             var teacher = await GetTeacherWithMostScheduledLessonsAsync();
 
             var from = _Monday.AddDays(-7);
@@ -145,6 +150,8 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         [Test]
         public async Task ShouldFetchLessons_WhenFromMondayLimitTo5()
         {
+            using var timer = new TestTimer();
+
             var teacher = await GetTeacherWithMostScheduledLessonsAsync();
 
             var from = _Monday;
@@ -165,6 +172,8 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         [Test]
         public async Task ShouldFetchLessons_WhenToMondayLimitTo8()
         {
+            using var timer = new TestTimer();
+
             var teacher = await GetTeacherWithMostScheduledLessonsAsync();
 
             var to = _Monday;
@@ -183,10 +192,43 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         }
 
 
+        #region Fails
+
+        [Test]
+        public async Task ShouldReturnEmpty_WhenLimitDatesAreMissing()
+        {
+            using var timer = new TestTimer();
+
+            var teacher = await GetTeacherWithMostScheduledLessonsAsync();
+
+            var res = await _service.GetModelForTeacherAsync(teacher.Id, new FetchScheduledLessonsRequestJson
+            {
+                limitTo = 100,
+                onlyUpcoming = true
+            });
+
+            Assert.IsNotNull(res);
+            Assert.IsEmpty(res.entries);
+        }
+
+        [Test]
+        public async Task ShouldReturnEmpty_WhenInvalidTeacherId()
+        {
+            using var timer = new TestTimer();
+
+            var res = await _service.GetModelForTeacherAsync(999, new FetchScheduledLessonsRequestJson
+            {
+                fromTk = _Monday.GetTicksJs(),
+                limitTo = 100,
+                onlyUpcoming = true
+            });
+
+            Assert.IsNotNull(res);
+            Assert.IsEmpty(res.entries);
+        }
 
 
-
-
+        #endregion
 
         private void AssertItemsPresent(ScheduledLessonListEntriesJson res)
         {
@@ -206,34 +248,42 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
         private void AssertEntriesMatchEntities(ScheduledLessonListEntryJson[] entries, IEnumerable<PeriodicLesson> entities, DateTime from, DateTime to, bool mustHaveClasses, bool mustNotHaveClasses)
         {
-            Assert.IsTrue(entries.All(x => entities.Any(d =>
-            {
-                var times = d.GetOccurrences(from, to);
-                if (!times.Any(y => y.GetTicksJs() == x.startTimeTk))
-                    return false;
+            Assert.IsTrue(entries.All(x => {
+                var entitiesTimes = entities.Select(x => x.GetOccurrences(from, to).ToList()).ToList();
+                var date = DatesHelper.FromTicksJs(x.startTimeTk);
 
-                bool baseCheck = x.className == d.ParticipatingOrganizationalClass?.Name
-                    && x.subjectName == d.Subject.Name
-                    && x.duration == (d.CustomDuration ?? _DefDuration);
+                return entities.Any(d =>
+                {
+                    var times = d.GetOccurrences(from, to);
+                    if (!times.Any(y =>
+                    {
+                        return y.GetTicksJs() == x.startTimeTk;
+                    }))
+                        return false;
 
-                if (!baseCheck)
-                    return false;
+                    bool baseCheck = x.className == d.ParticipatingOrganizationalClass?.Name
+                        && x.subjectName == d.Subject.Name
+                        && x.duration == (d.CustomDuration ?? _DefDuration);
 
-                if (x.heldClasses != null && mustNotHaveClasses)
-                    return false;
+                    if (!baseCheck)
+                        return false;
 
-                if (x.heldClasses != null)
-                    return _lessonRepo.Exists(l =>
-                        l.FromScheduleId == d.Id
-                        && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
-                        && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
-                        && l.Topic == x.heldClasses.topic);
+                    if (x.heldClasses != null && mustNotHaveClasses)
+                        return false;
 
-                if (x.heldClasses == null && mustHaveClasses)
-                    return false;
+                    if (x.heldClasses != null)
+                        return _lessonRepo.Exists(l =>
+                            l.FromScheduleId == d.Id
+                            && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
+                            && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
+                            && l.Topic == x.heldClasses.topic);
 
-                return true;
-            })));
+                    if (x.heldClasses == null && mustHaveClasses)
+                        return false;
+
+                    return true;
+                });
+            }));
         }
     }
 }
