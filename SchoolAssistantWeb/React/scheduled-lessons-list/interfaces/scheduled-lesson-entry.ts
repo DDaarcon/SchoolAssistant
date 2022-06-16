@@ -7,5 +7,5 @@ export default interface ScheduledLessonListEntry {
     subjectName: string;
     heldClasses?: HeldClasses;
 
-    newlyAdded?: boolean;
+    alreadyAdded?: true;
 }

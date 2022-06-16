@@ -10,6 +10,11 @@ type ListBodyProps = {
 }
 
 export default class ListBody extends React.Component<ListBodyProps> {
+    private _laterRenders = false;
+
+    componentDidMount() {
+        this._laterRenders = true;
+    }
 
     render() {
         const rows = this.props.rows.map((x, index) => (
@@ -22,11 +27,11 @@ export default class ListBody extends React.Component<ListBodyProps> {
                 className={x.className}
                 subjectName={x.subjectName}
                 heldClasses={x.heldClasses}
-                isNew={x.newlyAdded}
+                isNew={this._laterRenders && x.alreadyAdded != true}
             />
         ));
 
-        this.props.rows.forEach(entry => entry.newlyAdded = false);
+        this.props.rows.forEach(entry => entry.alreadyAdded = true);
 
         return (
             <tbody className={ScheduledLessonsListState.tbodyClassName + " scheduled-lessons-list-body"}>
