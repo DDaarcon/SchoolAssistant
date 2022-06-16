@@ -16,7 +16,20 @@ namespace SchoolAssistant.Logic
 
         public static IEnumerable<DateTime> GetNextOccurrences(this PeriodicLesson lesson, DateTime from, int limitTo)
         {
-            return null;
+            var cron = lesson.GetCronExpression();
+
+            from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
+
+            if (limitTo <= 0)
+                yield break;
+
+            var occurrence = cron.GetNextOccurrence(from, true);
+            while (limitTo-- > 0)
+            {
+                yield return occurrence.Value;
+
+                occurrence = cron.GetNextOccurrence(occurrence.Value);
+            }
         }
 
         public static IEnumerable<DateTime> GetPreviousOccurrences(this PeriodicLesson lesson, DateTime to, int limitTo)
