@@ -11,8 +11,8 @@ namespace SchoolAssistant.Logic.ConductingClasses
 {
     public interface IFetchScheduledLessonListEntriesService
     {
-        Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
-        Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestJson model);
+        Task<ScheduledLessonListEntriesJson> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model);
+        Task<ScheduledLessonListEntriesJson> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestJson model);
     }
 
     [Injectable]
@@ -42,7 +42,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _configRepo = configRepo;
         }
 
-        public Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestJson model)
+        public Task<ScheduledLessonListEntriesJson> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestJson model)
             => GetModelForTeacherAsync(teacherId, new FetchScheduledLessonsRequestModel
             {
                 From = DatesHelper.FromTicksJs(model.fromTk),
@@ -51,14 +51,14 @@ namespace SchoolAssistant.Logic.ConductingClasses
                 OnlyUpcoming = model.onlyUpcoming
             });
 
-        public async Task<ScheduledLessonListEntriesJson?> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model)
+        public async Task<ScheduledLessonListEntriesJson> GetModelForTeacherAsync(long teacherId, FetchScheduledLessonsRequestModel model)
         {
             _model = model;
             _teacherId = teacherId;
             _defaultDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45;
 
             if (!await ValidateAndFetchAsync(teacherId))
-                return null;
+                return new ScheduledLessonListEntriesJson { entries = new ScheduledLessonListEntryJson[0] };
 
             await FetchPeriodicLessonsAsync();
 
@@ -73,6 +73,9 @@ namespace SchoolAssistant.Logic.ConductingClasses
             if (_model is null) return false;
 
             if (!await _teacherRepo.ExistsAsync(teacherId))
+                return false;
+
+            if (!_model.From.HasValue && !_model.To.HasValue)
                 return false;
 
             return true;
@@ -90,10 +93,21 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _lessonWithOccurances = scheduled.Select(x => new PeriodicLessonWithOccurances
             {
                 ScheduleLesson = x,
-                Occurances = x.GetOccurrences(_model.From?.AddMinutes(-(x.CustomDuration ?? _defaultDuration)) ?? DateTime.MinValue,
-                        _model.To ?? DateTime.MaxValue)
+                Occurances = GetRangedAndLimitedLessonOccurrences(x)
             })
                 .Where(x => x.Occurances.Any());
+        }
+
+        private IEnumerable<DateTime> GetRangedAndLimitedLessonOccurrences(PeriodicLesson lesson)
+        {
+            if (_model.From.HasValue && _model.To.HasValue)
+                return lesson.GetOccurrences(_model.From.Value, _model.To.Value);
+            if (_model.From.HasValue)
+                return lesson.GetNextOccurrences(_model.From.Value, _Limit);
+            if (_model.To.HasValue)
+                return lesson.GetPreviousOccurrences(_model.To.Value, _Limit);
+
+            throw new Exception("Model validation failed. Model has to have From, To, or both");
         }
 
         private void CreateListItems()
@@ -130,10 +144,10 @@ namespace SchoolAssistant.Logic.ConductingClasses
             if (_model.OnlyUpcoming)
                 _listItems = _listItems.Where(x => x.heldClasses == null);
 
-            if (_model.From.HasValue)
-                _listItems = _listItems.Take(_model.LimitTo ?? MAX);
+            if (_TakeNearEndDate)
+                _listItems = _listItems.TakeLast(_Limit);
             else
-                _listItems = _listItems.TakeLast(_model.LimitTo ?? MAX);
+                _listItems = _listItems.Take(_Limit);
         }
 
         private ScheduledLessonListEntriesJson GetListModel()
@@ -146,7 +160,10 @@ namespace SchoolAssistant.Logic.ConductingClasses
             };
         }
 
-        internal class PeriodicLessonWithOccurances
+        private bool _TakeNearEndDate => !_model.From.HasValue;
+        private int _Limit => _model.LimitTo ?? MAX;
+
+        private class PeriodicLessonWithOccurances
         {
             public PeriodicLesson ScheduleLesson { get; set; } = null!;
             public IEnumerable<DateTime> Occurances { get; set; } = null!;

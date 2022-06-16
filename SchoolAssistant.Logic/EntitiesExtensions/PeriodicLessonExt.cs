@@ -45,7 +45,8 @@ namespace SchoolAssistant.Logic
 
             while (limitTo > 0)
             {
-                var occurrencesPrevWeek = cron.GetOccurrences(to.AddDays(-7), to, false, true);
+                var from = to.AddDays(-7);
+                var occurrencesPrevWeek = cron.GetOccurrences(from, to, false, true);
 
                 foreach (var occ in occurrencesPrevWeek.Reverse())
                 {
@@ -55,7 +56,7 @@ namespace SchoolAssistant.Logic
                         yield break;
                 }
 
-                to = to.AddDays(-7);
+                to = from;
             }
         }
 
