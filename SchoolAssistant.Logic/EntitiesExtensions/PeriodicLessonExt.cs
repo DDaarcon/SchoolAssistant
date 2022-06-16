@@ -14,6 +14,16 @@ namespace SchoolAssistant.Logic
         public static DateTime? GetNextOccurrence(this PeriodicLesson lesson)
             => lesson.GetCronExpression().GetNextOccurrence(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
 
+        public static IEnumerable<DateTime> GetNextOccurrences(this PeriodicLesson lesson, DateTime from, int limitTo)
+        {
+            return null;
+        }
+
+        public static IEnumerable<DateTime> GetPreviousOccurrences(this PeriodicLesson lesson, DateTime to, int limitTo)
+        {
+            return null;
+        }
+
         /// <returns> <c>DayOfWeek</c> from cron expression. If day is not found (invalid cron), value out of enum range is returned </returns>
         public static DayOfWeek GetDayOfWeek(this PeriodicLesson lesson)
             => lesson.GetNextOccurrence()?.DayOfWeek ?? (DayOfWeek)99;
