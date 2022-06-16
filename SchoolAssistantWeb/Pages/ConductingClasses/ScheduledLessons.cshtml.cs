@@ -34,13 +34,13 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now.AddDays(-1),
-                LimitTo = 5
+                LimitTo = 30
             }))!;
             ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync();
         }
 
 
-        public async Task<JsonResult> OnGetOlderLessonsAsync(FetchScheduledLessonsRequestJson model)
+        public async Task<JsonResult> OnGetEntriesAsync(FetchScheduledLessonsRequestJson model)
         {
             await FetchUserAsync();
 

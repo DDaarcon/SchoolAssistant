@@ -34,7 +34,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
 
     componentDidMount() {
         addEventListener("loadOlderLessons", (event: CustomEvent) => this.loadOlderLessonsAsync(event.detail.amount));
-
+        addEventListener("loadNewerLessons", (event: CustomEvent) => this.loadNewerLessonsAsync(event.detail.amount));
     }
 
     render() {
@@ -50,14 +50,14 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
 
     private async loadOlderLessonsAsync(amount: number): Promise<void> {
         const earliest = this.state.entries.length > 0 ? this.state.entries[0] : null;
-        const toTk = earliest != null ? (earliest?.startTimeTk - 1) : undefined;
+        const toTk = earliest != null ? (earliest.startTimeTk - 1) : undefined;
 
         const req: FetchScheduledLessonsRequest = {
             onlyUpcoming: false,
             toTk,
             limitTo: amount
-        }
-        const res = await server.getAsync<ScheduledLessonListEntries>("OlderLessons", req);
+        };
+        const res = await server.getAsync<ScheduledLessonListEntries>("Entries", req);
 
         if (!res)
             return;
@@ -70,6 +70,38 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
                 ...res.entries,
                 ...this.state.entries
             ]
-        })
+        });
+    }
+
+    private async loadNewerLessonsAsync(amount: number): Promise<void> {
+        let fromTk;
+        if (this.state.entries.length) {
+            const latest = this.state.entries[this.state.entries.length - 1];
+            const from = new Date(latest.startTimeTk);
+            from.setMinutes(from.getMinutes() + latest.duration);
+
+            fromTk = from.getTime();
+        }
+
+        const req: FetchScheduledLessonsRequest = {
+            onlyUpcoming: false,
+            fromTk,
+            limitTo: amount
+        };
+
+        const res = await server.getAsync<ScheduledLessonListEntries>("Entries", req);
+
+        if (!res)
+            return;
+
+        if (res.incomingAtTk)
+            ScheduledLessonsListState.incomingAt = new Date(res.incomingAtTk);
+
+        this.setState({
+            entries: [
+                ...this.state.entries,
+                ...res.entries
+            ]
+        });
     }
 }
