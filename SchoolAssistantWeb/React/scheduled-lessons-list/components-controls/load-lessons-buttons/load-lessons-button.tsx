@@ -5,6 +5,7 @@ import './load-lessons-button.css';
 type LoadLessonsButtonProps = {
     layout: LoadLessonsButtonLayout;
     onClick: (amount: number) => void;
+    title?: string;
     children?: React.ReactNode;
 }
 
@@ -12,7 +13,7 @@ export default class LoadLessonsButton extends React.Component<LoadLessonsButton
 
     render() {
         return (
-            <div className="sll-load-lessons-whole-btn">
+            <div className="sll-load-lessons-whole-btn" title={this.props.title}>
                 <LayeredButton
                     layout={this.props.layout}
                     amounts={LoadLessonsButton._amounts}

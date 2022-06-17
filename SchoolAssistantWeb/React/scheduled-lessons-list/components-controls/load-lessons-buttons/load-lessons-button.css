@@ -50,15 +50,23 @@
 .sll-load-lessons-btn-10,
 .sll-load-lessons-btn-20,
 .sll-load-lessons-btn-50 {
-/*    flex-grow: 1;*/
 }
 
 .sll-load-lessons-btn-inner {
     flex-grow: 1;
 }
+.sll-load-lessons-btn-right-edge {
+    flex-basis: 35px;
+}
+
+.sll-load-lessons-inner-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
+}
 
 .sll-load-lessons-btn-val {
-    align-self: center;
-    flex-basis: 25px;
     text-align: center;
+    margin-top: 5px;
 }

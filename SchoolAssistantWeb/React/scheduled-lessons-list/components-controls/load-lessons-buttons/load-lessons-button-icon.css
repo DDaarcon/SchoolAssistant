@@ -1,0 +1,39 @@
+﻿.all-load-button-icon-box {
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    transform: rotateZ(-90deg) scale(1.3);
+}
+
+.sll-load-button-icon {
+    --anim-dist: 2em;
+}
+
+@keyframes arrow-animation-upright {
+    0%, 100% {
+        opacity: 1;
+        transform: translateX(calc(var(--anim-dist) * 0.25));
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateX(calc(var(--anim-dist) * 0.75));
+    }
+
+    79.99% {
+        opacity: 0;
+        transform: translateX(calc(var(--anim-dist) * 1));
+    }
+
+    80% {
+        opacity: 0;
+        transform: translateX(calc(var(--anim-dist) * 0));
+    }
+}
+
+.sll-load-button-icon-upright {
+    animation-name: arrow-animation-upright;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}

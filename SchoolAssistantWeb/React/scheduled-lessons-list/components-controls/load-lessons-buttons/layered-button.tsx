@@ -1,4 +1,6 @@
 ﻿import React from "react";
+import { enumAssignSwitch } from "../../../shared/enum-help/enum-switch";
+import ArrowAnimationEventHelper from "./animation-events";
 
 export enum LoadLessonsButtonLayout {
     Upright,
@@ -34,59 +36,68 @@ export default LayeredButton
 
 type LoadLessonsButtonLayerProps = LayeredButtonProps & {
     amountIdx?: number;
-    hoverStates?: boolean[];
-}
-type LoadLessonsButtonLayerState = {
-    hoverStates: boolean[];
 }
 
-class ButtonLayer extends React.Component<LoadLessonsButtonLayerProps, LoadLessonsButtonLayerState> {
+class ButtonLayer extends React.Component<LoadLessonsButtonLayerProps> {
 
     constructor(props) {
         super(props);
 
         this._index = this.props.amountIdx ?? 0;
-
-        this.state = {
-            hoverStates: this.props.hoverStates
-                ?? Array.from({ length: this.props.amounts.length }).map(x => false)
-        }
     }
 
     render() {
-        if (!this._postLastLayer)
+        if (!this._postLastLayer) {
+            const { amountIdx, ...propsToPass } = this.props;
+
+            const mouseEvents = {
+                onMouseEnter: () => this.hover(true),
+                onMouseLeave: () => this.hover(false)
+            };
+
             return (
                 <div
                     className={this._className}
                     onClick={this._onClick}
                     role="button"
-                    onMouseEnter={() => this.hover(true)}
-                    onMouseLeave={() => this.hover(false)}
+                    {...this._lastLayer && !this._postLastLayer
+                        ? mouseEvents
+                        : {}
+                    }
                 >
                     <div className="sll-load-lessons-btn-inner">
                         <ButtonLayer
-                            {...this.props}
+                            {...propsToPass}
                             amountIdx={this._index + 1}
-                            hoverStates={this.state.hoverStates}
                         />
                     </div>
-                    <div className="sll-load-lessons-btn-val">
-                        {this._amount}
+                    <div className="sll-load-lessons-btn-right-edge"
+                        {...!this._lastLayer && !this._postLastLayer
+                            ? mouseEvents
+                            : {}
+                        }
+                    >
+                        <div className="sll-load-lessons-btn-val">
+                            {this._amount}
+                        </div>
                     </div>
                 </div>
             );
+        }
 
         if (!this.props.children)
             return <></>;
 
         return (
             <div className="sll-load-lessons-inner-content">
-                {this._childrenWithProps}
+                {this.props.children}
             </div>
         )
     }
 
     private _index: number;
+
+    private get _lastLayer() { return this._index == this.props.amounts.length - 1; }
 
     private get _postLastLayer() { return this._index >= this.props.amounts.length; }
 
@@ -98,47 +109,22 @@ class ButtonLayer extends React.Component<LoadLessonsButtonLayerProps, LoadLesso
 
     private get _className() {
         let className = `sll-load-lessons-btn sll-load-lessons-btn-${this._amount} `;
-        switch (this.props.layout) {
-            case LoadLessonsButtonLayout.Upright:
-                className += classNameUpright;
-                break;
-            case LoadLessonsButtonLayout.UpsideDown:
-                className += classNameUpsideDown;
-                break;
-        }
+
+        className += enumAssignSwitch<string, typeof LoadLessonsButtonLayout>(LoadLessonsButtonLayout, this.props.layout, {
+            Upright: () => classNameUpright,
+            UpsideDown: () => classNameUpsideDown,
+            _: () => { throw new Error("invalid 'LoadLessonsButtonLayout' enum value") }
+        })
+
         return className;
     }
 
     private get _onClick() { return () => this.props.onClick(this._amount); }
 
-
-    private get _childrenWithProps() {
-        return React.Children.map(this.props.children, child => {
-            if (React.isValidElement(child)) {
-
-                const highestHoveredAmount = this.props.amounts
-                    .filter((_, index) => this.state.hoverStates[index])
-                    .sort()
-                    .shift();
-
-
-                return React.cloneElement(child, {
-                    highestHoveredAmount
-                });
-            }
-            return child;
-        });
-    }
-
     private hover(hover: boolean) {
         if (this._postLastLayer)
             return;
 
-        const hoverStates = [...this.state.hoverStates];
-        hoverStates[this._index] = hover;
-
-        this.setState({
-            hoverStates
-        });
+        ArrowAnimationEventHelper.dispatch(this.props.layout, { amount: this._amount, on: hover });
     }
 }

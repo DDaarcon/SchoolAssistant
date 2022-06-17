@@ -41,7 +41,9 @@
     <None Remove="React\scheduled-lessons-list\components-controls\filters.tsx" />
     <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-button.tsx" />
     <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons.tsx" />
-    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons\button-layer.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons\animation-events.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons\layered-button.tsx" />
+    <None Remove="React\scheduled-lessons-list\components-controls\load-lessons-buttons\load-lessons-button-icon.tsx" />
     <None Remove="React\scheduled-lessons-list\components\list-body.tsx" />
     <None Remove="React\scheduled-lessons-list\components\list-head.tsx" />
     <None Remove="React\scheduled-lessons-list\components\row.tsx" />
@@ -54,6 +56,7 @@
     <None Remove="React\scheduled-lessons-list\scheduled-lessons-list-state.ts" />
     <None Remove="React\scheduled-lessons-list\scheduled-lessons-list.tsx" />
     <None Remove="React\scheduled-lessons-list\server.ts" />
+    <None Remove="React\shared\enum-help\enum-switch.ts" />
     <None Remove="React\shared\form-controls\label-value.tsx" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
     <None Remove="React\shared\lists\components\list-entry-coponent.tsx" />
@@ -238,7 +241,9 @@
     <TypeScriptCompile Include="React\scheduled-lessons-list.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\filters.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons.tsx" />
-    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\button-layer.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\animation-events.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\layered-button.tsx" />
+    <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\load-lessons-button-icon.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\load-lessons-buttons\load-lessons-button.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\list-body.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components\list-head.tsx" />
@@ -252,6 +257,7 @@
     <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list-state.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\server.ts" />
+    <TypeScriptCompile Include="React\shared\enum-help\enum-switch.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\label-value.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-coponent.tsx" />
