@@ -27,8 +27,10 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
         }
 
         assignToState(this.props.config);
-        if (this.props.entries.incomingAtTk)
+        if (this.props.entries.incomingAtTk) {
+            ScheduledLessonsListState.incomingAtTk = this.props.entries.incomingAtTk;
             ScheduledLessonsListState.incomingAt = new Date(this.props.entries.incomingAtTk);
+        }
 
     }
 

@@ -8,4 +8,5 @@ export default interface ScheduledLessonListEntry {
     heldClasses?: HeldClasses;
 
     alreadyAdded?: true;
+    startTime?: Date;
 }

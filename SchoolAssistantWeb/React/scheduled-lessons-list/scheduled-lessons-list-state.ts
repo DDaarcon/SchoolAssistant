@@ -2,6 +2,7 @@
 
 interface State extends ScheduledLessonListConfig {
     incomingAt?: Date;
+    incomingAtTk?: number;
 }
 
 const ScheduledLessonsListState: State = {
