@@ -48,17 +48,17 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         public async Task OnGetAsync(long? classId)
         {
-            Config = await _fetchConfigService.FetchAsync();
+            Config = await _fetchConfigService.FetchAsync().ConfigureAwait(false);
             Config.classId = classId;
-            Classes = await _fetchDataService.FetchClassesForCurrentYearAsync();
-            Subjects = await _fetchDataService.FetchSubjectsAsync();
-            Teachers = await _fetchDataService.FetchTeachersAsync();
-            Rooms = await _fetchDataService.FetchRoomsAsync();
+            Classes = await _fetchDataService.FetchClassesForCurrentYearAsync().ConfigureAwait(false);
+            Subjects = await _fetchDataService.FetchSubjectsAsync().ConfigureAwait(false);
+            Teachers = await _fetchDataService.FetchTeachersAsync().ConfigureAwait(false);
+            Rooms = await _fetchDataService.FetchRoomsAsync().ConfigureAwait(false);
         }
 
         public async Task<JsonResult> OnGetClassLessonsAsync(long classId)
         {
-            var model = await _fetchLessonsSvc.ForAsync(classId);
+            var model = await _fetchLessonsSvc.ForAsync(classId).ConfigureAwait(false);
             return new JsonResult(model);
         }
 
@@ -66,18 +66,18 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         public async Task<JsonResult> OnPostLessonAsync([FromBody] AddLessonRequestJson model)
         {
-            var result = await _addLessonSvc.AddToClassAsync(model);
+            var result = await _addLessonSvc.AddToClassAsync(model).ConfigureAwait(false);
             return new JsonResult(result);
         }
         public async Task<JsonResult> OnPostLessonModificationAsync([FromBody] LessonEditModelJson model)
         {
-            var result = await _editLessonSvc.EditAsync(model);
+            var result = await _editLessonSvc.EditAsync(model).ConfigureAwait(false);
             return new JsonResult(result);
         }
 
         public async Task<JsonResult> OnPostDeleteLessonAsync(long id)
         {
-            var success = await _removeLessonSvc.ValidateIdAndRemoveAsync(id);
+            var success = await _removeLessonSvc.ValidateIdAndRemoveAsync(id).ConfigureAwait(false);
             return new JsonResult(new ResponseJson
             {
                 message = success ? null : "Nie znaleziono lekcji"
@@ -87,7 +87,7 @@ namespace SchoolAssistant.Web.Pages.ScheduleArranger
 
         public async Task<JsonResult> OnGetOtherLessonsAsync(long classId, long? teacherId, long? roomId)
         {
-            var result = await _fetchOtherLessonsSvc.ForAsync(classId, teacherId, roomId);
+            var result = await _fetchOtherLessonsSvc.ForAsync(classId, teacherId, roomId).ConfigureAwait(false);
             return new JsonResult(result);
         }
 
