@@ -80,7 +80,8 @@ export default class Row extends React.Component<RowProps, RowState> {
         weekday: 'short',
         month: "short",
         hour: "numeric",
-        minute: "2-digit"
+        minute: "2-digit",
+        timeZone: 'UTC'
     };
 
     private isSoon(): boolean {

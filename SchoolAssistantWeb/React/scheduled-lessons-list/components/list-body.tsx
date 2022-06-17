@@ -6,7 +6,6 @@ import ScheduledLessonsListState from "../scheduled-lessons-list-state";
 
 type ListBodyProps = {
     rows: ScheduledLessonListEntry[];
-    incomingAtTk?: number;
 }
 
 export default class ListBody extends React.Component<ListBodyProps> {
@@ -17,19 +16,23 @@ export default class ListBody extends React.Component<ListBodyProps> {
     }
 
     render() {
-        const rows = this.props.rows.map((x, index) => (
-            <Row
-                key={x.startTimeTk}
-                entryIndex={index}
-                isIncoming={x.startTimeTk == this.props.incomingAtTk}
-                startTime={new Date(x.startTimeTk)}
-                duration={x.duration}
-                className={x.className}
-                subjectName={x.subjectName}
-                heldClasses={x.heldClasses}
-                isNew={this._laterRenders && x.alreadyAdded != true}
-            />
-        ));
+        const rows = this.props.rows.map((x, index) => {
+            x.startTime ??= new Date(x.startTimeTk);
+
+            return (
+                <Row
+                    key={x.startTimeTk}
+                    entryIndex={index}
+                    isIncoming={x.startTimeTk == ScheduledLessonsListState.incomingAtTk}
+                    startTime={x.startTime}
+                    duration={x.duration}
+                    className={x.className}
+                    subjectName={x.subjectName}
+                    heldClasses={x.heldClasses}
+                    isNew={this._laterRenders && x.alreadyAdded != true}
+                />
+            )
+        });
 
         this.props.rows.forEach(entry => entry.alreadyAdded = true);
 
