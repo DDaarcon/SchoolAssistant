@@ -1,4 +1,6 @@
-﻿export const getEnumValues = (enumClass: object) => {
+﻿import { enumAssignSwitch, enumSwitch } from "./enum-help/enum-switch";
+
+export const getEnumValues = (enumClass: object) => {
     const entries = Object.keys(enumClass);
     const names: number[] = [];
     for (let i = entries.length / 2; i < entries.length; i++) {
@@ -34,4 +36,10 @@ export const isValidEnumValue = (enumClass: object, value: number) => {
     const values = getEnumValues(enumClass);
 
     return values.includes(value);
+}
+
+
+export {
+    enumSwitch,
+    enumAssignSwitch
 }
