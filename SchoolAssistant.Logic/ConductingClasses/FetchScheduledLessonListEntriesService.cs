@@ -123,7 +123,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
                         className = lwo.ScheduleLesson.ParticipatingOrganizationalClass!.Name,
                         duration = lwo.ScheduleLesson.CustomDuration ?? _defaultDuration,
                         subjectName = lwo.ScheduleLesson.Subject.Name,
-                        startTimeTk = takenLesson?.ActualDate.GetTicksJs() ?? date.GetTicksJs(),
+                        startTimeTk = takenLesson?.ActualDate?.GetTicksJsFakeLocal() ?? date.GetTicksJsFakeLocal(),
                         heldClasses = ToHeldClassesModel(takenLesson)
                     };
                 })).OrderBy(x => x.startTimeTk);
@@ -153,7 +153,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
 
         private ScheduledLessonListEntriesJson GetListModel()
         {
-            var nowTk = DateTime.Now.GetTicksJsFakeUtc();
+            var nowTk = DateTime.Now.GetTicksJs();
             return new ScheduledLessonListEntriesJson
             {
                 entries = _listItems.ToArray(),

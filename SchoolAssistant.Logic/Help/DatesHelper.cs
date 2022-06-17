@@ -39,6 +39,7 @@
 
 
         public static long GetTicksJsFakeUtc(this DateTime date) => (DateTime.SpecifyKind(date, DateTimeKind.Utc).Ticks - UnixEpochTicks) / 10000;
+        public static long GetTicksJsFakeLocal(this DateTime date) => (DateTime.SpecifyKind(date, DateTimeKind.Local).ToUniversalTime().Ticks - UnixEpochTicks) / 10000;
 
         public static DateTime? FromTicksJs(long? ticksJs) => ticksJs.HasValue ? FromTicksJs(ticksJs.Value) : null;
         public static DateTime FromTicksJs(long ticksJs) => new DateTime((ticksJs * 10000) + UnixEpochTicks, DateTimeKind.Utc);

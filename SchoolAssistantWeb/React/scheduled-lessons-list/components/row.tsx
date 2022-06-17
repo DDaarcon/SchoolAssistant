@@ -80,20 +80,23 @@ export default class Row extends React.Component<RowProps, RowState> {
         weekday: 'short',
         month: "short",
         hour: "numeric",
-        minute: "2-digit",
-        timeZone: 'UTC'
+        minute: "2-digit"
     };
 
     private isSoon(): boolean {
         const closeTime = new Date(this.props.startTime.getTime());
         closeTime.setMinutes(closeTime.getMinutes() - ScheduledLessonsListState.minutesBeforeLessonIsSoon);
-        return closeTime <= new Date();
+
+        const now = new Date();
+        return closeTime <= now;
     }
 
     private isBeforeEnd(): boolean {
         const endTime = new Date(this.props.startTime.getTime());
         endTime.setMinutes(endTime.getMinutes() + this.props.duration);
-        return endTime >= new Date();
+
+        const now = new Date();
+        return endTime >= now; 
     }
 
 
