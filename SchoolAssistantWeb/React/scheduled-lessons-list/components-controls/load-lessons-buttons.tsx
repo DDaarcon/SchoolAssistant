@@ -18,7 +18,6 @@ export const LoadOlderLessonsButton = (props: LoadOlderLessonsButtonProps) => (
     >
         <LoadLessonsButtonIcon
             layout={LoadLessonsButtonLayout.Upright}
-            maxAmount={50}
         />
     </LoadLessonsButton>
 )
@@ -39,7 +38,6 @@ export const LoadNewerLessonsButton = (props: LoadNewerLessonsButtonProps) => (
     >
         <LoadLessonsButtonIcon
             layout={LoadLessonsButtonLayout.UpsideDown}
-            maxAmount={50}
         />
     </LoadLessonsButton>
 )

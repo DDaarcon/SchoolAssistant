@@ -6,7 +6,7 @@ import './load-lessons-button-icon.css';
 
 type LoadLessonsButtonIconProps = {
     layout: LoadLessonsButtonLayout;
-    maxAmount: number;
+    maxAmount?: number;
 }
 type LoadLessonsButtonIconState = {
     animateForAmount?: number;
