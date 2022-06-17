@@ -16,7 +16,7 @@
     font-weight: 600;
     text-shadow: 0px 2px 3px #00000034;
 }
-.sll-load-lessons-btn:hover {
+.sll-load-lessons-btn.hover {
     text-shadow: 0px 0px 0px #00000000;
     border-color: #feb069;
 }
@@ -28,7 +28,7 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 7px;
 }
-.sll-load-lessons-btn-upright:hover {
+.sll-load-lessons-btn-upright.hover {
     box-shadow: inset 0px 20px 30px -40px #ffa81e;
 }
 
@@ -39,7 +39,7 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 7px;
 }
-.sll-load-lessons-btn-upside-down:hover {
+.sll-load-lessons-btn-upside-down.hover {
     box-shadow: inset 0px -20px 30px -40px #ffa81e;
 }
 

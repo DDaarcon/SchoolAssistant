@@ -46,6 +46,8 @@ class ButtonLayer extends React.Component<LoadLessonsButtonLayerProps> {
         this._index = this.props.amountIdx ?? 0;
     }
 
+    private _buttonRef?: HTMLDivElement;
+
     render() {
         if (!this._postLastLayer) {
             const { amountIdx, ...propsToPass } = this.props;
@@ -59,6 +61,7 @@ class ButtonLayer extends React.Component<LoadLessonsButtonLayerProps> {
             return (
                 <div
                     className={this._className}
+                    ref={ref => this._buttonRef = ref}
                     role="button"
                     {...this._lastLayer && !this._postLastLayer
                         ? handlers
@@ -131,6 +134,11 @@ class ButtonLayer extends React.Component<LoadLessonsButtonLayerProps> {
     private hover(hover: boolean) {
         if (this._postLastLayer)
             return;
+
+        if (hover)
+            this._buttonRef.classList.add("hover");
+        else
+            this._buttonRef.classList.remove("hover");
 
         ArrowAnimationEventHelper.dispatch(this.props.layout, { amount: this._amount, on: hover });
     }
