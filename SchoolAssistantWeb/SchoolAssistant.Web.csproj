@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-SchoolAssistantWeb-52F90A5F-B66A-4D10-859B-A2D25A2D9E50</UserSecretsId>
     <OutputType>Exe</OutputType>
+	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>
@@ -208,6 +209,7 @@
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.17.4" />
     <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.17.4" />
+    <PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.5" />

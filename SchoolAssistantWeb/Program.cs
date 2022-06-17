@@ -124,4 +124,4 @@ await seeder.SeedAppConfigAsync();
 
 #endregion
 
-app.Run();
+await app.RunAsync().ConfigureAwait(false);

@@ -29,29 +29,29 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
 
         public async Task OnGetAsync()
         {
-            await FetchUserAsync();
+            await FetchUserAsync().ConfigureAwait(false);
 
             ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now.AddDays(-1),
                 LimitTo = 30
-            }))!;
-            ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync();
+            }).ConfigureAwait(false))!;
+            ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync().ConfigureAwait(false);
         }
 
 
         public async Task<JsonResult> OnGetEntriesAsync(FetchScheduledLessonsRequestJson model)
         {
-            await FetchUserAsync();
+            await FetchUserAsync().ConfigureAwait(false);
 
-            var entries = await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, model);
+            var entries = await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, model).ConfigureAwait(false);
             return new JsonResult(entries);
         }
 
 
         private async Task FetchUserAsync()
         {
-            _user = await _userRepo.Manager.GetUserAsync(User);
+            _user = await _userRepo.Manager.GetUserAsync(User).ConfigureAwait(false);
 
             if (_user is null)
             {

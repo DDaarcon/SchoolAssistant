@@ -58,7 +58,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
             _defaultDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45;
 
             if (!await ValidateAndFetchAsync(teacherId))
-                return new ScheduledLessonListEntriesJson { entries = new ScheduledLessonListEntryJson[0] };
+                return new ScheduledLessonListEntriesJson { entries = Array.Empty<ScheduledLessonListEntryJson>() };
 
             await FetchPeriodicLessonsAsync();
 
