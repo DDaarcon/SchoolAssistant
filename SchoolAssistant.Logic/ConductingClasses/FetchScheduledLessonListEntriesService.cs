@@ -153,7 +153,7 @@ namespace SchoolAssistant.Logic.ConductingClasses
 
         private ScheduledLessonListEntriesJson GetListModel()
         {
-            var nowTk = DateTime.Now.GetTicksJs();
+            var nowTk = DateTime.Now.GetTicksJsFakeUtc();
             return new ScheduledLessonListEntriesJson
             {
                 entries = _listItems.ToArray(),

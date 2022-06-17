@@ -37,8 +37,11 @@
         public static long? GetTicksJs(this DateTime? date) => date.HasValue ? GetTicksJs(date.Value) : null;
         public static long GetTicksJs(this DateTime date) => (date.ToUniversalTime().Ticks - UnixEpochTicks) / 10000;
 
+
+        public static long GetTicksJsFakeUtc(this DateTime date) => (DateTime.SpecifyKind(date, DateTimeKind.Utc).Ticks - UnixEpochTicks) / 10000;
+
         public static DateTime? FromTicksJs(long? ticksJs) => ticksJs.HasValue ? FromTicksJs(ticksJs.Value) : null;
-        public static DateTime FromTicksJs(long ticksJs) => new DateTime((ticksJs * 10000) + UnixEpochTicks);
+        public static DateTime FromTicksJs(long ticksJs) => new DateTime((ticksJs * 10000) + UnixEpochTicks, DateTimeKind.Utc);
 
         private static readonly long UnixEpochTicks = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
     }
