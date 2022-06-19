@@ -101,8 +101,7 @@ export default class Row extends React.Component<RowProps, RowState> {
 
 
     private renderButton(): JSX.Element {
-        let closeOrOngoing = this.props.isIncoming
-            && this.isSoon() && this.isBeforeEnd();
+        let closeOrOngoing = this.isSoon() && this.isBeforeEnd();
 
 
         if (closeOrOngoing) {
