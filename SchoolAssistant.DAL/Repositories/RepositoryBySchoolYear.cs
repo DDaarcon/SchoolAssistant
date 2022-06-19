@@ -11,6 +11,18 @@ namespace SchoolAssistant.DAL.Repositories
         RepositoryBySchoolYear<TSchoolYearDbEntity>.SchoolYearOperations<List<TSchoolYearDbEntity>> AsListByYear { get; init; }
         RepositoryBySchoolYear<TSchoolYearDbEntity>.SchoolYearOperations<IQueryable<TSchoolYearDbEntity>> AsQueryableByYear { get; init; }
 
+        TSchoolYearDbEntity? GetByIdAndCurrentYear(long id);
+        Task<TSchoolYearDbEntity?> GetByIdAndCurrentYearAsync(long id);
+        TSchoolYearDbEntity? GetByIdAndSelectedYear(long id);
+        Task<TSchoolYearDbEntity?> GetByIdAndSelectedYearAsync(long id);
+        TSchoolYearDbEntity? GetByIdAndYear(long id, SchoolYear year);
+        Task<TSchoolYearDbEntity?> GetByIdAndYearAsync(long id, SchoolYear year);
+        TSchoolYearDbEntity? GetByIdAndYearId(long id, long yearId);
+        Task<TSchoolYearDbEntity?> GetByIdAndYearIdAsync(long id, long yearId);
+        TSchoolYearDbEntity? GetByIdAndYearOf(long id, SchoolYearDbEntity entity);
+        Task<TSchoolYearDbEntity?> GetByIdAndYearOfAsync(long id, SchoolYearDbEntity entity);
+
+        /// <summary> Set year used in queries </summary>
         void SelectYear(SchoolYear year);
     }
 
@@ -49,10 +61,48 @@ namespace SchoolAssistant.DAL.Repositories
             => _selectedYear = year;
 
 
+
+        #region Get by id operations
+
+        public TSchoolYearDbEntity? GetByIdAndCurrentYear(long id)
+        {
+            var curSemester = _schoolYearSvc.GetOrCreateCurrent();
+            return GetByIdAndYear(id, curSemester);
+        }
+        public TSchoolYearDbEntity? GetByIdAndYearOf(long id, SchoolYearDbEntity entity)
+            => GetByIdAndYearId(id, entity.SchoolYear?.Id ?? entity.SchoolYearId);
+        public TSchoolYearDbEntity? GetByIdAndYear(long id, SchoolYear year)
+            => GetByIdAndYearId(id, year.Id);
+        public TSchoolYearDbEntity? GetByIdAndYearId(long id, long yearId)
+            => _Repo.SingleOrDefault(x => x.Id == id && x.SchoolYearId == yearId);
+
+
+        public async Task<TSchoolYearDbEntity?> GetByIdAndCurrentYearAsync(long id)
+        {
+            var curSemester = await _schoolYearSvc.GetOrCreateCurrentAsync();
+            return await GetByIdAndYearAsync(id, curSemester);
+        }
+        public Task<TSchoolYearDbEntity?> GetByIdAndYearOfAsync(long id, SchoolYearDbEntity entity)
+            => GetByIdAndYearIdAsync(id, entity.SchoolYear?.Id ?? entity.SchoolYearId);
+        public Task<TSchoolYearDbEntity?> GetByIdAndYearAsync(long id, SchoolYear year)
+            => GetByIdAndYearIdAsync(id, year.Id);
+        public Task<TSchoolYearDbEntity?> GetByIdAndYearIdAsync(long id, long yearId)
+            => _Repo.SingleOrDefaultAsync(x => x.Id == id && x.SchoolYearId == yearId);
+
+
+        public TSchoolYearDbEntity? GetByIdAndSelectedYear(long id)
+            => GetByIdAndYearId(id, _selectedYear?.Id ?? 0);
+        public Task<TSchoolYearDbEntity?> GetByIdAndSelectedYearAsync(long id)
+            => GetByIdAndYearIdAsync(id, _selectedYear?.Id ?? 0);
+
+        #endregion
+
+
+        #region Enumerable operations
+
         public SchoolYearOperations<List<TSchoolYearDbEntity>> AsListByYear { get; init; }
 
         public SchoolYearOperations<IQueryable<TSchoolYearDbEntity>> AsQueryableByYear { get; init; }
-
 
 
         public class SchoolYearOperations<TResult>
@@ -114,5 +164,7 @@ namespace SchoolAssistant.DAL.Repositories
             public Task<TResult> BySelectedAsync()
                 => ByAsync(_SelectedYear?.Id ?? 0);
         }
+
+        #endregion
     }
 }
