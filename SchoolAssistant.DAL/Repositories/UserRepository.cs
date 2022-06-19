@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,8 @@ namespace SchoolAssistant.DAL.Repositories
         void UseIndependentDbContext();
         void Remove(User entity);
 
+        Task<User?> GetCurrentAsync();
+
         UserManager<User> Manager { get; }
     }
 
@@ -36,17 +39,31 @@ namespace SchoolAssistant.DAL.Repositories
 
 
         private readonly IServiceScopeFactory? _scopeFactory;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private SADbContext _context;
+
+        private HttpContext? _httpContextBackinigField;
+        private HttpContext? _HttpContext
+        {
+            get
+            {
+                _httpContextBackinigField ??= _httpContextAccessor.HttpContext;
+                return _httpContextBackinigField;
+            }
+        }
+
         private DbSet<User> _Repo => _context.Set<User>();
 
         public UserRepository(
             SADbContext context,
             IServiceScopeFactory? scopeFactory,
-            UserManager<User> manager)
+            UserManager<User> manager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _scopeFactory = scopeFactory;
             Manager = manager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IList<User> AsList() => _Repo.ToList();
@@ -77,6 +94,16 @@ namespace SchoolAssistant.DAL.Repositories
         public void Update(User entity) => _Repo.Update(entity);
 
         public void UpdateRange(IEnumerable<User> entities) => _Repo.UpdateRange(entities);
+
+
+        public async Task<User?> GetCurrentAsync()
+        {
+            if (_HttpContext is null)
+                return null;
+
+            return await Manager.GetUserAsync(_HttpContext.User).ConfigureAwait(false);
+        }
+
 
         public void UseIndependentDbContext()
         {
