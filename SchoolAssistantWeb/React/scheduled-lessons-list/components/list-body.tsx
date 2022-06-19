@@ -16,6 +16,7 @@ export default class ListBody extends React.Component<ListBodyProps> {
     }
 
     render() {
+        // TODO: map to RowProps on receive from server
         const rows = this.props.rows.map((x, index) => {
             x.startTime ??= new Date(x.startTimeTk);
 
