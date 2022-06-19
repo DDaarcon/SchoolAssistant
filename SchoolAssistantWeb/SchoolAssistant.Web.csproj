@@ -37,6 +37,9 @@
     <None Remove="React\data-management\classes\interfaces\class-list-entry.ts" />
     <None Remove="React\data-management\classes\interfaces\class-modification-data.ts" />
     <None Remove="React\data-management\enums\category.ts" />
+    <None Remove="React\lesson-conduction-panel.ts" />
+    <None Remove="React\lesson-conduction-panel\lesson-conduction-panel-anchor.tsx" />
+    <None Remove="React\lesson-conduction-panel\lesson-conduction-panel-area.tsx" />
     <None Remove="React\schedule-display\settings.ts" />
     <None Remove="React\scheduled-lessons-list.ts" />
     <None Remove="React\scheduled-lessons-list\components-controls\filters.tsx" />
@@ -239,6 +242,9 @@
     <TypeScriptCompile Include="React\data-management\classes\interfaces\class-list-entry.ts" />
     <TypeScriptCompile Include="React\data-management\classes\interfaces\class-modification-data.ts" />
     <TypeScriptCompile Include="React\data-management\enums\category.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\lesson-conduction-panel-anchor.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\lesson-conduction-panel-area.tsx" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\components-controls\filters.tsx" />

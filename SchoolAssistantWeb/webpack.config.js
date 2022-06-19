@@ -27,6 +27,10 @@ module.exports = {
 			import: './React/scheduled-lessons-list.ts',
 			dependOn: [ 'react_lib', 'shared' ]
 		},
+		lesson_conduction_panel: {
+			import: './React/lesson-conduction-panel.ts',
+			dependOn: [ 'react_lib', 'shared' ]
+		},
 		shared: {
 			import: './React/shared.ts'
 		},

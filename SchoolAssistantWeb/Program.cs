@@ -117,7 +117,8 @@ app.UseReact(config =>
         .AddScriptWithoutTransform("~/dist/schedule_arranger.bundle.js")
         .AddScriptWithoutTransform("~/dist/schedule_display.bundle.js")
         .AddScriptWithoutTransform("~/dist/users_management.bundle.js")
-        .AddScriptWithoutTransform("~/dist/scheduled_lessons_list.bundle.js");
+        .AddScriptWithoutTransform("~/dist/scheduled_lessons_list.bundle.js")
+        .AddScriptWithoutTransform("~/dist/lesson_conduction_panel.bundle.js");
 
 });
 

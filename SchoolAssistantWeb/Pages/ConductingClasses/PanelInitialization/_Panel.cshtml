@@ -5,8 +5,5 @@
 
 @if (model is not null)
 {
-    @*@:@Html.React("Components.ScheduledLessonsList", new {
-        config = Model.ScheduledLessonListConfig,
-        entries = Model.ScheduledLessonListEntries,
-    }, containerClass: "scheduled-lessons-view")*@
+    @:@Html.React("Components.LessonConductionPanelArea", new { })
 }
