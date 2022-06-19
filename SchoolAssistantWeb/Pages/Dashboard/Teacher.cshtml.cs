@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
-using SchoolAssistant.Logic.ConductingClasses;
+using SchoolAssistant.Logic.ConductingClasses.ConductLesson;
+using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
@@ -42,22 +44,23 @@ namespace SchoolAssistant.Web.Pages.Dashboard
 
         public async Task OnGetAsync()
         {
-            await FetchUserAsync();
+            await FetchUserAsync().ConfigureAwait(false);
 
-            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
-            ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value))!;
+            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user).ConfigureAwait(false);
+            ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value).ConfigureAwait(false))!;
 
-            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
-            {
+            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel 
+            { 
                 From = DateTime.Now,
-                LimitTo = 6
-            }))!;
-            ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync();
+                LimitTo = 6 
+            }).ConfigureAwait(false))!;
+            ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync().ConfigureAwait(false);
         }
+
 
         private async Task FetchUserAsync()
         {
-            _user = await _userRepo.Manager.GetUserAsync(User);
+            _user = (await _userRepo.GetCurrentAsync().ConfigureAwait(false))!;
 
             if (_user is null)
             {

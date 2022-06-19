@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SchoolAssistant.Logic.ConductingClasses
+namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
 {
     public interface IFetchScheduledLessonListConfigService
     {

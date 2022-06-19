@@ -4,6 +4,7 @@ using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.ConductingClasses;
+using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 
 namespace SchoolAssistant.Web.Pages.ConductingClasses
 {

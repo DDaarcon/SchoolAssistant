@@ -8,6 +8,7 @@ using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.Infrastructure.InjectablePattern;
 using SchoolAssistant.Logic.Help;
+using SchoolAssistant.Web.PageFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,10 @@ builder.Services.AddRazorPages()
     {
         options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
         options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+    })
+    .AddMvcOptions(options =>
+    {
+        options.Filters.Add<EnableReactLessonConductionAsyncPageFilter>();
     });
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -56,6 +61,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = $"/Identity/Account/Login";
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+#endregion
+
+#region Configure ISession
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    //options.IdleTimeout = default 20 minutes;
+    //options.Cookie.HttpOnly = true;
+    //options.Cookie.IsEssential = true;
 });
 
 #endregion
@@ -109,6 +127,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

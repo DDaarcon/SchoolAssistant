@@ -1,0 +1,12 @@
+﻿@{
+    var model = ViewData[SchoolAssistant.Logic.ConductingClasses.ConductLesson.IDisplayPanelForConductingLessonService.VIEW_DATA_KEY] 
+        as SchoolAssistant.Infrastructure.Models.ConductingClasses.ConductLesson.PanelForConductingLessonJson;
+}
+
+@if (model is not null)
+{
+    @*@:@Html.React("Components.ScheduledLessonsList", new {
+        config = Model.ScheduledLessonListConfig,
+        entries = Model.ScheduledLessonListEntries,
+    }, containerClass: "scheduled-lessons-view")*@
+}

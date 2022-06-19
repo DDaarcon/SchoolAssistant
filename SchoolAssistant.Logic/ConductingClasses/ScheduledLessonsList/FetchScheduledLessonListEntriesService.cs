@@ -7,7 +7,7 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.Help;
 
-namespace SchoolAssistant.Logic.ConductingClasses
+namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
 {
     public interface IFetchScheduledLessonListEntriesService
     {

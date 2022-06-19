@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="~/dist/shared.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Head", required: false)
+    
+    <partial name="ConductingClasses/PanelInitialization/_Styles" />
 </head>
 <body>
     @if (!hideNavbar)
@@ -55,6 +57,8 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+            <partial name="ConductingClasses/PanelInitialization/_Panel" />
         </main>
     </div>
 
@@ -74,6 +78,8 @@
     <script src="~/dist/react_lib.bundle.js" asp-append-version="true"></script>
     <script src="~/dist/shared.bundle.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    
+    <partial name="ConductingClasses/PanelInitialization/_Scripts" />
 
     @Html.ReactInitJavaScript()
 </body>
