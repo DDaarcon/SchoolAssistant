@@ -5,12 +5,24 @@ class TogglePanelServiceImplementation {
 
     private _backgroundArea?: BackgroundArea;
     public registerBackgoundArea(component: BackgroundArea) {
-        this.registerComponent(component, "_backgroundArea");
+        this._backgroundArea = component;
     }
 
     private _panel?: Panel;
     public registerPanel(component: Panel) {
-        this.registerComponent(component, "_panel");
+        this._panel = component;
+    }
+
+
+    public toggle() {
+        if (this._panel.isShown) {
+            this._panel.hide();
+            this._backgroundArea.hide();
+        }
+        else {
+            this._panel.show();
+            this._backgroundArea.show();
+        }
     }
 
 
@@ -19,17 +31,6 @@ class TogglePanelServiceImplementation {
 
 
 
-
-
-
-
-
-
-    private registerComponent<TComponent>(component: TComponent, fieldName: string) {
-        if (this[fieldName])
-            throw new Error(`Component ${fieldName} is already registered and can not be registered twice`);
-        this[fieldName] = component;
-    }
 }
 
 const TogglePanelService = new TogglePanelServiceImplementation;

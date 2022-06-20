@@ -43,6 +43,7 @@
     <None Remove="React\lesson-conduction-panel\interfaces\lesson-conduction-panel-model.ts" />
     <None Remove="React\lesson-conduction-panel\interfaces\participating-student-model.ts" />
     <None Remove="React\lesson-conduction-panel\lesson-conduction-panel.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\components\anchor.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\clock-components.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\clock.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\controls.tsx" />
@@ -268,6 +269,7 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\enums\presence-status.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\interfaces\lesson-conduction-panel-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\lesson-conduction-panel.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\anchor.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock-components.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\controls.tsx" />

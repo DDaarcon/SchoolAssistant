@@ -1,6 +1,8 @@
 ﻿import React from "react";
 import { enumSwitch } from "../../shared/enum-help";
+import StoreAndSaveService from "../services/store-and-save-service";
 import TogglePanelService from "../services/toggle-panel-service";
+import Anchor from "./components/anchor";
 import Clock from "./components/clock";
 import Controls from "./components/controls";
 import LessonCondPanelContent from "./enums/lesson-cond-panel-content";
@@ -23,12 +25,9 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         super(props);
 
         this.state = {
-            show: true,
+            show: false,
             content: <></>
         }
-
-        this._start = new Date();
-        this._dur = 45;
 
         TogglePanelService.registerPanel(this);
     }
@@ -43,9 +42,6 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
 
     public get isShown() { return this.state.show; }
 
-    private _start: Date;
-    private _dur: number;
-
     render() {
         return (
             <div className={"lcp-panel-container " + (this.isShown ? "" : "lcp-panel-container-hide")}>
@@ -55,8 +51,8 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
                     <div className="lcp-panel-top">
 
                         <Clock
-                            startTime={this._start}
-                            duration={this._dur}
+                            startTime={this._startTime}
+                            duration={this._duration}
                         />
 
                         <Controls
@@ -71,9 +67,15 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
 
                 </div>
 
+                <Anchor />
+
             </div>
         )
     }
+
+    private get _startTime() { return StoreAndSaveService.startTime; }
+    private get _duration() { return StoreAndSaveService.duration; }
+
 
     private _currentContent: LessonCondPanelContent;
 
@@ -103,4 +105,6 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         this._attendanceEdition ??= <AttendanceEdition />
         return this._attendanceEdition;
     }
+
+
 }
