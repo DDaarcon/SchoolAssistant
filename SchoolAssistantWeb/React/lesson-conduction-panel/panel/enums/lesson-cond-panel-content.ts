@@ -4,3 +4,4 @@
     GivingMark,
     GivingGroupMark
 }
+export default LessonCondPanelContent;

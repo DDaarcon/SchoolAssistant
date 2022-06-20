@@ -3,6 +3,8 @@ import { enumSwitch } from "../../shared/enum-help";
 import TogglePanelService from "../services/toggle-panel-service";
 import Clock from "./components/clock";
 import Controls from "./components/controls";
+import LessonCondPanelContent from "./enums/lesson-cond-panel-content";
+import AttendanceEdition from "./panel-content-area/attendance-edition/attendance-edition";
 import LessonDetailsEdition from "./panel-content-area/lesson-details-edition/lesson-details-edition";
 import PanelContentArea from "./panel-content-area/panel-content-area";
 import './panel.css';
@@ -79,11 +81,13 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         if (this._currentContent == content)
             return;
 
+        this._currentContent = content;
+
         enumSwitch(LessonCondPanelContent, content, {
             LessonDetailsEdit: () => this.setState({ content: this.getLessonDetailsEdition() }),
-            AttendanceEdit: () => this.setState({ content:  }),
-            GivingMark: () => this.setState({ content:  }),
-            GivingGroupMark: () => this.setState({ content:  }),
+            AttendanceEdit: () => this.setState({ content: this.getAttendanceEdition() }),
+            GivingMark: () => this.setState({ content: null }),
+            GivingGroupMark: () => this.setState({ content: null }),
         });
     }
 
@@ -92,5 +96,11 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
     private getLessonDetailsEdition = () => {
         this._lessonDetailsEdition ??= <LessonDetailsEdition />
         return this._lessonDetailsEdition;
+    }
+
+    private _attendanceEdition?: React.ReactNode;
+    private getAttendanceEdition = () => {
+        this._attendanceEdition ??= <AttendanceEdition />
+        return this._attendanceEdition;
     }
 }

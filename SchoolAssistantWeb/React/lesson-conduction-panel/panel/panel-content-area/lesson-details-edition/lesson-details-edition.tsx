@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import { TextInput } from "../../../../shared/form-controls";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
+import StoreAndSaveService from "../../../services/store-and-save-service";
 import LessonDetailsEditModel from "./lesson-details-edit-model";
 
 type LessonDetailsEditionProps = {}
@@ -9,6 +10,16 @@ type LessonDetailsEditionState = {
 }
 
 export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditModel, LessonDetailsEditionProps, LessonDetailsEditionState> {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            data: {
+                topic: StoreAndSaveService.topic
+            }
+        }
+    }
 
     render() {
         return (

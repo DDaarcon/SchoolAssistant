@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { IconLabelButton } from "../../../shared/components";
+import LessonCondPanelContent from "../enums/lesson-cond-panel-content";
 import './controls.css';
 
 type ControlsProps = {
