@@ -15,7 +15,7 @@ export default class StudentsList<TEntryProps> extends React.Component<StudentsL
         return (
             <>
                 {StoreAndSaveService.students.map(student => {
-                    React.Children.map(this.props.entryComponent, child => {
+                    return React.Children.map(this.props.entryComponent, child => {
 
                         if (React.isValidElement(child))
                             return React.cloneElement(child, { ...this.props.studentToEntryProps(student) });

@@ -14,5 +14,6 @@ namespace SchoolAssistant.Infrastructure.Models.ConductingClasses.ConductLesson
         public long startTimeTk { get; set; }
         public int duration { get; set; }
         public string? topic { get; set; }
+        public ParticipatingStudentJson[] students { get; set; } = null!;
     }
 }

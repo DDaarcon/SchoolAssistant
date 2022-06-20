@@ -16,7 +16,7 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
 
         this.state = {
             data: {
-                topic: StoreAndSaveService.topic
+                topic: StoreAndSaveService.topic ?? ""
             }
         }
     }
@@ -31,7 +31,6 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
                     onChange={this.changeTopic}
                     errorMessages={this._validator.getErrorMsgsFor('topic')}
                     value={this.state.data.topic}
-                    placeholder="Temat zajęć"
                 />
 
             </form>

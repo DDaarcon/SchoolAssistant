@@ -6,10 +6,10 @@ namespace SchoolAssistant.Web.PageFilters
 {
     public class EnableReactLessonConductionAsyncPageFilter : IAsyncPageFilter
     {
-        private readonly IDisplayPanelForConductingLessonService _displayPanelSvc;
+        private readonly IModelForLessonConductionPanelService _displayPanelSvc;
 
         public EnableReactLessonConductionAsyncPageFilter(
-            IDisplayPanelForConductingLessonService displayPanelSvc)
+            IModelForLessonConductionPanelService displayPanelSvc)
         {
             _displayPanelSvc = displayPanelSvc;
         }
