@@ -11,10 +11,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/dist/shared.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/fontawesome/css/fontawesome.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/fontawesome/css/solid.min.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Head", required: false)
     
     <partial name="ConductingClasses/PanelInitialization/_Styles" />
+
+    <link rel="stylesheet" href="~/css/temp.css" />
 </head>
 <body>
     @if (!hideNavbar)
@@ -70,7 +74,6 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/7a31640d83.js" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script src="~/dist/runtime.bundle.js" asp-append-version="true"></script>
