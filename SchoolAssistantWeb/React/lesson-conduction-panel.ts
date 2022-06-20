@@ -1,3 +1,3 @@
-﻿import LessonConductionPanelArea from "./lesson-conduction-panel/lesson-conduction-panel-area";
+﻿import LessonConductionPanel from "./lesson-conduction-panel/lesson-conduction-panel";
 
-globalThis.Components.LessonConductionPanelArea = LessonConductionPanelArea;
+globalThis.Components.LessonConductionPanel = LessonConductionPanel;

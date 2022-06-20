@@ -1,0 +1,14 @@
+﻿.lcp-panel-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    height: 100vh;
+
+    transition: all 0.5s;
+    transition-timing-function: ease-in-out;
+}
+
+.lcp-panel-container-hide {
+    transform: translateX(100%);
+}
