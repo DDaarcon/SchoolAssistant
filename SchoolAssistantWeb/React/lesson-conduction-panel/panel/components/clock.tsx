@@ -25,8 +25,10 @@ export default class Clock extends React.Component<ClockProps> {
 
         return (
             <div className="lcp-clock">
-                {this.toClockDigits(this._seconds)}
-                <ClockColon />
+                {this.toClockDigits(this._seconds, 2)}
+                <ClockColon
+                    key="colon"
+                />
                 {this.toClockDigits(this._minutes)}
             </div>
         )
@@ -59,17 +61,26 @@ export default class Clock extends React.Component<ClockProps> {
     }
 
 
-    private toClockDigits(num: number) {
+    private toClockDigits(num: number, minDigits?: number) {
         const digits = this.toDigitsIt(num);
         const comps: JSX.Element[] = [];
+
         for (const digit of digits)
-            comps.push(
-                <ClockDigit
-                    key={this._digitKeyCounter++}
-                    digit={digit}
-                />
-            );
+            comps.push(this.getClockDigit(digit));
+
+        while (comps.length < minDigits)
+            comps.push(this.getClockDigit(0));
+
         return comps;
+    }
+
+    private getClockDigit(digit: number) {
+        return (
+            <ClockDigit
+                key={this._digitKeyCounter++}
+                digit={digit}
+            />
+        )
     }
 
     private * toDigitsIt(num: number) {
