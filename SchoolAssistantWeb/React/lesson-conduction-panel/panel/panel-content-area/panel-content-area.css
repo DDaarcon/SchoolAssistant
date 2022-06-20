@@ -1,0 +1,11 @@
+﻿.lcp-content-area {
+    flex-grow: 1;
+    width: 100%;
+
+    transition: all 0.3s;
+    opacity: 1;
+}
+
+.lcp-content-area-hidden {
+    opacity: 0;
+}

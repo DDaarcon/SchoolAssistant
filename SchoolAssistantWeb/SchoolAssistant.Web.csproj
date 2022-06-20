@@ -42,7 +42,11 @@
     <None Remove="React\lesson-conduction-panel\lesson-conduction-panel.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\clock-components.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\clock.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\components\controls.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\help\lesson-cond-panel-content-container-state.ts" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\students-list\students-list.tsx" />
     <None Remove="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <None Remove="React\schedule-display\settings.ts" />
     <None Remove="React\scheduled-lessons-list.ts" />
@@ -64,6 +68,11 @@
     <None Remove="React\scheduled-lessons-list\scheduled-lessons-list-state.ts" />
     <None Remove="React\scheduled-lessons-list\scheduled-lessons-list.tsx" />
     <None Remove="React\scheduled-lessons-list\server.ts" />
+    <None Remove="React\shared\components.ts" />
+    <None Remove="React\shared\components\buttons\action-button.tsx" />
+    <None Remove="React\shared\components\buttons\button-props.ts" />
+    <None Remove="React\shared\components\buttons\icon-button.tsx" />
+    <None Remove="React\shared\components\buttons\icon-label-button.tsx" />
     <None Remove="React\shared\enum-help\enum-switch.ts" />
     <None Remove="React\shared\form-controls\label-value.tsx" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
@@ -251,7 +260,11 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\lesson-conduction-panel.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock-components.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\controls.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\help\lesson-cond-panel-content-container-state.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\students-list\students-list.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list.ts" />
@@ -273,6 +286,11 @@
     <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list-state.ts" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\scheduled-lessons-list.tsx" />
     <TypeScriptCompile Include="React\scheduled-lessons-list\server.ts" />
+    <TypeScriptCompile Include="React\shared\components.ts" />
+    <TypeScriptCompile Include="React\shared\components\buttons\action-button.tsx" />
+    <TypeScriptCompile Include="React\shared\components\buttons\button-props.ts" />
+    <TypeScriptCompile Include="React\shared\components\buttons\icon-button.tsx" />
+    <TypeScriptCompile Include="React\shared\components\buttons\icon-label-button.tsx" />
     <TypeScriptCompile Include="React\shared\enum-help\enum-switch.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\label-value.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />
@@ -429,6 +447,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="React\shared\components\buttons\config\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 ﻿import React from "react";
 import TogglePanelService from "../services/toggle-panel-service";
 import Clock from "./components/clock";
+import Controls from "./components/controls";
+import PanelContentArea from "./panel-content-area/panel-content-area";
 import './panel.css';
 
 type PanelProps = {
@@ -8,6 +10,7 @@ type PanelProps = {
 }
 type PanelState = {
     show: boolean;
+    content: React.ReactNode;
 }
 
 export default class Panel extends React.Component<PanelProps, PanelState> {
@@ -16,7 +19,8 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         super(props);
 
         this.state = {
-            show: false
+            show: true,
+            content: this.red()
         }
 
         this._start = new Date();
@@ -44,14 +48,47 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
 
                 <div className="lcp-panel">
 
-                    <Clock
-                        startTime={this._start}
-                        duration={this._dur}
-                    />
+                    <div className="lcp-panel-top">
+
+                        <Clock
+                            startTime={this._start}
+                            duration={this._dur}
+                        />
+
+                        <Controls
+                            goToAttendanceEdit={this.showRed}
+                            goToGivingMark={this.showBlue}
+                        />
+
+                    </div>
+
+                    <PanelContentArea>
+                        {this.state.content}
+                    </PanelContentArea>
 
                 </div>
 
             </div>
         )
     }
+
+    private showRed = () => {
+        this.setState({
+            content: this.red()
+        });
+    }
+
+    private showBlue = () => {
+        this.setState({
+            content: this.blue()
+        });
+    }
+
+    private red = () => (
+        <div className="red screen"></div>
+    )
+
+    private blue = () => (
+        <div className="blue screen"></div>
+    )
 }

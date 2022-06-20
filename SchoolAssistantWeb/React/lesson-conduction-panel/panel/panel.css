@@ -7,8 +7,28 @@
 
     transition: all 0.5s;
     transition-timing-function: ease-in-out;
+    
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 25px;
 }
 
 .lcp-panel-container-hide {
     transform: translateX(100%);
+}
+
+
+
+.lcp-panel {
+    background-color: #7be1d8e1;
+    padding: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.lcp-panel-top {
+    display: flex;
+    flex-direction: row-reverse;
 }
