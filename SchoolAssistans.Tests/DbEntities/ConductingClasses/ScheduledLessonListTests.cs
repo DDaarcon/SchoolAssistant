@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Rooms;
@@ -9,6 +8,7 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.Infrastructure.Enums.Attendance;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ConductingClasses;

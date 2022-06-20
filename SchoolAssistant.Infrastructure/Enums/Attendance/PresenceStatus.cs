@@ -1,4 +1,4 @@
-﻿namespace SchoolAssistant.DAL.Enums
+﻿namespace SchoolAssistant.Infrastructure.Enums.Attendance
 {
     public enum PresenceStatus
     {

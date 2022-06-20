@@ -4,6 +4,7 @@ using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.Infrastructure.Enums.Attendance;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.Help;
 
@@ -135,7 +136,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
             return new HeldClassesJson
             {
                 topic = lesson.Topic,
-                amountOfPresentStudents = lesson.PresenceOfStudents.Count(x => x.Status == DAL.Enums.PresenceStatus.Present),
+                amountOfPresentStudents = lesson.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present),
                 amountOfAllStudents = lesson.PresenceOfStudents.Count
             };
         }

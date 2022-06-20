@@ -1,7 +1,7 @@
-﻿using SchoolAssistant.DAL.Enums;
-using SchoolAssistant.DAL.Models.Lessons;
+﻿using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Shared;
 using SchoolAssistant.DAL.Models.StudentsParents;
+using SchoolAssistant.Infrastructure.Enums.Attendance;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Attendance

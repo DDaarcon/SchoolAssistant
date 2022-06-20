@@ -17,7 +17,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
         string ViewDataKey => VIEW_DATA_KEY;
 
         Task<bool> CheckSessionStateForLessonIdAsync();
-        Task<PanelForConductingLessonJson?> GetModelAsync();
+        Task<LessonConductionPanelJson?> GetModelAsync();
     }
 
     [Injectable]
@@ -51,9 +51,9 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 
         private Lesson? _conductedLesson;
 
-        public async Task<PanelForConductingLessonJson?> GetModelAsync()
+        public async Task<LessonConductionPanelJson?> GetModelAsync()
         {
-            return new PanelForConductingLessonJson
+            return new LessonConductionPanelJson
             {
                 lessonId = 1
             };
@@ -98,9 +98,9 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
             return true;
         }
 
-        private PanelForConductingLessonJson ConstructModel()
+        private LessonConductionPanelJson ConstructModel()
         {
-            return new PanelForConductingLessonJson
+            return new LessonConductionPanelJson
             {
                 lessonId = _conductedLesson!.Id,
                 subjectName = _conductedLesson.FromSchedule.Subject.Name,
