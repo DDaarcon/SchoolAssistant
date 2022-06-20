@@ -11,6 +11,8 @@
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 25px;
+    
+    max-width: calc(100% - 200px);
 }
 
 .lcp-panel-container-hide {

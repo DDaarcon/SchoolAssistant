@@ -48,11 +48,11 @@
     <None Remove="React\lesson-conduction-panel\panel\components\controls.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edition.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edit-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel.tsx" />
-    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\students-list\students-list.tsx" />
     <None Remove="React\lesson-conduction-panel\services\store-and-save-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <None Remove="React\schedule-display\settings.ts" />
@@ -275,11 +275,11 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\interfaces\participating-student-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edition.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edit-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel.tsx" />
-    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\students-list\students-list.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-and-save-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />

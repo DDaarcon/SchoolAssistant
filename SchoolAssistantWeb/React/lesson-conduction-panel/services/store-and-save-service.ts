@@ -12,18 +12,21 @@ class StoreAndSaveServiceImplementation {
     }
 
 
-    public get students() { return this._model.students; }
+    public get students() { return this._model?.students; }
 
     private _startTimeBackingField?: Date;
     public get startTime() {
-        this._startTimeBackingField ??= new Date(this._model.startTimeTk);
+        this._startTimeBackingField ??= new Date(this._model?.startTimeTk);
         return this._startTimeBackingField;
     }
 
-    public get duration() { return this._model.duration; }
+    public get duration() { return this._model?.duration; }
 
-    public get topic() { return this._model.topic; }
+    public get topic() { return this._model?.topic; }
 
+    public get className() { return this._model?.className; }
+
+    public get subjectName() { return this._model?.subjectName; }
 
 }
 const StoreAndSaveService = new StoreAndSaveServiceImplementation;

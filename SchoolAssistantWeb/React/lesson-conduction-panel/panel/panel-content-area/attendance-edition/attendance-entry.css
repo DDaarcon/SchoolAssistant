@@ -1,0 +1,28 @@
+﻿.attendance-entry {
+    padding: 10px;
+    display: flex;
+    background-color: #ffffffa6
+}
+
+.attendance-entry > span:nth-child(1) {
+    width: 5%;
+}
+
+.presence-options {
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly
+}
+
+.selected-presence,
+.selected-presence:hover {
+    color: #00ae17;
+}
+
+.not-selected-presence {
+    color: #bababa
+}
+
+.none-presence-selected {
+    color: #e10000;
+}
