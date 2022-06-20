@@ -16,7 +16,7 @@ export default class Controls extends React.Component<ControlsProps> {
                 <BtnWrapper>
                     <IconLabelButton
                         label="Uzupełnij informacje o lekcji"
-                        faIcon="fa-solid fa-memo-circle-info"
+                        faIcon="fa-solid fa-circle-info"
                         onClick={() => this.props.goTo(LessonCondPanelContent.LessonDetailsEdit)}
                     />
                 </BtnWrapper>
@@ -40,7 +40,7 @@ export default class Controls extends React.Component<ControlsProps> {
                 <BtnWrapper>
                     <IconLabelButton
                         label="Wpisz oceny z pracy klasowej"
-                        faIcon="fa-solid fa-input-numeric"
+                        faIcon="fa-solid fa-arrows-down-to-people"
                         onClick={() => this.props.goTo(LessonCondPanelContent.GivingGroupMark)}
                     />
                 </BtnWrapper>
