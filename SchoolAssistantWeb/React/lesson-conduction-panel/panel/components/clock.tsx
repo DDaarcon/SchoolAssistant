@@ -21,6 +21,9 @@ export default class Clock extends React.Component<ClockProps> {
     }
 
     render() {
+        if (!this._leftSeconds)
+            return <></>;
+
         this._digitKeyCounter = 0;
 
         return (
