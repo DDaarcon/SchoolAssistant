@@ -43,7 +43,9 @@
     <None Remove="React\lesson-conduction-panel\panel\components\clock-components.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\clock.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\controls.tsx" />
-    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\help\lesson-cond-panel-content-container-state.ts" />
+    <None Remove="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content.ts" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edit-model.ts" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\students-list\students-list.tsx" />
@@ -75,6 +77,7 @@
     <None Remove="React\shared\components\buttons\icon-label-button.tsx" />
     <None Remove="React\shared\enum-help\enum-switch.ts" />
     <None Remove="React\shared\form-controls\label-value.tsx" />
+    <None Remove="React\shared\form-controls\text-input.tsx" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
     <None Remove="React\shared\lists\components\list-entry-coponent.tsx" />
     <None Remove="React\shared\lists\components\list-entry-inner-component.tsx" />
@@ -261,7 +264,10 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock-components.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\controls.tsx" />
-    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\help\lesson-cond-panel-content-container-state.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content-container-state.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edit-model.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\students-list\students-list.tsx" />
@@ -293,6 +299,7 @@
     <TypeScriptCompile Include="React\shared\components\buttons\icon-label-button.tsx" />
     <TypeScriptCompile Include="React\shared\enum-help\enum-switch.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\label-value.tsx" />
+    <TypeScriptCompile Include="React\shared\form-controls\text-input.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-coponent.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\list-entry-inner-component.tsx" />

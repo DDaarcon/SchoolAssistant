@@ -1,7 +1,9 @@
 ﻿import React from "react";
+import { enumSwitch } from "../../shared/enum-help";
 import TogglePanelService from "../services/toggle-panel-service";
 import Clock from "./components/clock";
 import Controls from "./components/controls";
+import LessonDetailsEdition from "./panel-content-area/lesson-details-edition/lesson-details-edition";
 import PanelContentArea from "./panel-content-area/panel-content-area";
 import './panel.css';
 
@@ -20,7 +22,7 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
 
         this.state = {
             show: true,
-            content: this.red()
+            content: <></>
         }
 
         this._start = new Date();
@@ -56,8 +58,7 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
                         />
 
                         <Controls
-                            goToAttendanceEdit={this.showRed}
-                            goToGivingMark={this.showBlue}
+                            goTo={this.changeContent}
                         />
 
                     </div>
@@ -72,23 +73,24 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         )
     }
 
-    private showRed = () => {
-        this.setState({
-            content: this.red()
+    private _currentContent: LessonCondPanelContent;
+
+    private changeContent = (content: LessonCondPanelContent) => {
+        if (this._currentContent == content)
+            return;
+
+        enumSwitch(LessonCondPanelContent, content, {
+            LessonDetailsEdit: () => this.setState({ content: this.getLessonDetailsEdition() }),
+            AttendanceEdit: () => this.setState({ content:  }),
+            GivingMark: () => this.setState({ content:  }),
+            GivingGroupMark: () => this.setState({ content:  }),
         });
     }
 
-    private showBlue = () => {
-        this.setState({
-            content: this.blue()
-        });
+
+    private _lessonDetailsEdition?: React.ReactNode;
+    private getLessonDetailsEdition = () => {
+        this._lessonDetailsEdition ??= <LessonDetailsEdition />
+        return this._lessonDetailsEdition;
     }
-
-    private red = () => (
-        <div className="red screen"></div>
-    )
-
-    private blue = () => (
-        <div className="blue screen"></div>
-    )
 }

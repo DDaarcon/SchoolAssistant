@@ -3,8 +3,7 @@ import { IconLabelButton } from "../../../shared/components";
 import './controls.css';
 
 type ControlsProps = {
-    goToAttendanceEdit: () => void;
-    goToGivingMark: () => void;
+    goTo: (content: LessonCondPanelContent) => void;
 }
 
 export default class Controls extends React.Component<ControlsProps> {
@@ -15,9 +14,17 @@ export default class Controls extends React.Component<ControlsProps> {
 
                 <BtnWrapper>
                     <IconLabelButton
+                        label="Uzupełnij informacje o lekcji"
+                        faIcon="fa-solid fa-memo-circle-info"
+                        onClick={() => this.props.goTo(LessonCondPanelContent.LessonDetailsEdit)}
+                    />
+                </BtnWrapper>
+
+                <BtnWrapper>
+                    <IconLabelButton
                         label="Sprawdź obecność"
                         faIcon="fa-solid fa-list-ol"
-                        onClick={this.props.goToAttendanceEdit}
+                        onClick={() => this.props.goTo(LessonCondPanelContent.AttendanceEdit)}
                     />
                 </BtnWrapper>
 
@@ -25,9 +32,18 @@ export default class Controls extends React.Component<ControlsProps> {
                     <IconLabelButton
                         label="Wpisz ocenę"
                         faIcon="fa-solid fa-highlighter"
-                        onClick={this.props.goToGivingMark}
+                        onClick={() => this.props.goTo(LessonCondPanelContent.GivingMark)}
                     />
                 </BtnWrapper>
+
+                <BtnWrapper>
+                    <IconLabelButton
+                        label="Wpisz oceny z pracy klasowej"
+                        faIcon="fa-solid fa-input-numeric"
+                        onClick={() => this.props.goTo(LessonCondPanelContent.GivingGroupMark)}
+                    />
+                </BtnWrapper>
+
             </div>
         )
     }

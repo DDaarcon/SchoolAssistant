@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import LessonCondPanelContentContainerState from "./help/lesson-cond-panel-content-container-state";
+import LessonCondPanelContentContainerState from "../enums/lesson-cond-panel-content-container-state";
 import './panel-content-area.css';
 
 type PanelContentAreaProps = {
