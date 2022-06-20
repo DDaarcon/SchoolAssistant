@@ -13,7 +13,7 @@ const IconLabelButton = (props: IconLabelButtonProps) => {
     return (
         <button
             className={
-                "icon-label-button " +
+                "my-button icon-label-button " +
                 (props.className ?? "") + " " +
                 (props.iconSize ? `icon-${props.iconSize}` : "") + " " +
                 (props.iconAbove ? 'icon-above' : "")

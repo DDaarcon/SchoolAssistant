@@ -7,7 +7,7 @@ type IconButtonProps = ButtonProps & {
 
 const IconButton = (props: IconButtonProps) => (
     <button
-        className={"icon-button " + (props.className ?? "")}
+        className={"my-button icon-button " + (props.className ?? "")}
         onClick={props.onClick}
         title={props.label}
     >

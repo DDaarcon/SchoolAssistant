@@ -5,7 +5,7 @@ type ActionButtonProps = ButtonProps;
 
 const ActionButton = (props: ActionButtonProps) => (
     <button
-        className={"action-button " + (props.className ?? "")}
+        className={"my-button action-button " + (props.className ?? "")}
         onClick={props.onClick}
     >
         {props.label}
