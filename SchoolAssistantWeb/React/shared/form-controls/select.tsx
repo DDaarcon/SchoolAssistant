@@ -14,7 +14,7 @@ export type OnChangeIdHandler<TValue extends number | string> =
     (value: TValue | MultiValue<TValue>) => void;
 
 type SelectProps<TValue extends number | string, TOption extends Option<TValue>> = {
-    label: string;
+    label?: string;
     name: string;
     value?: TValue | TOption | MultiValue<TValue> | MultiValue<TOption>;
     onChange?: OnChangeHandler<TOption>;
@@ -30,6 +30,46 @@ type SelectProps<TValue extends number | string, TOption extends Option<TValue>>
     optionStyle?: (props: OptionProps<TOption>) => CSSObjectWithLabel;
 }
 export default class Select<TValue extends number | string, TOption extends Option<TValue>> extends React.Component<SelectProps<TValue, TOption>> {
+
+    render() {
+        const value = this.prepareValue();
+
+        return (
+            <div className={"form-group my-form-group " + (this.props.containerClassName ?? '')}>
+                {this.renderLabel()}
+
+                <RSelect<TOption>
+                    className={(this._hasErrors || this._hasWarnings ? ' is-invalid' : '') + (this.props.containerClassName ?? '')}
+                    name={this.props.name}
+                    value={value}
+                    onChange={this.onChange}
+                    options={this.props.options}
+                    //@ts-ignore
+                    isMulti={this.props.multiple}
+                    styles={this._styles}
+                />
+
+
+                {this._hasErrors ? (
+                    <div className="invalid-feedback">
+                        {this.props.errorMessages?.map(x => defaultErrorMessage(x)).join(' ')}
+                    </div>
+                ) : this._hasWarnings ? (
+                    <div className="invalid-feedback warning-msg">
+                        {this.props.warningMessages?.join(' ')}
+                    </div>
+                ) : undefined}
+            </div>
+        )
+    }
+
+    private _styles: StylesConfig<TOption> = {
+        option: (provided, props) => ({
+            ...provided,
+            ...(this.props.optionStyle?.(props) ?? {})
+        })
+    }
+
     private get _hasErrors() { return this.props.hasErrors ?? this.props.errorMessages?.length; };
     private get _hasWarnings() { return this.props.warningMessages?.length; }
 
@@ -60,42 +100,9 @@ export default class Select<TValue extends number | string, TOption extends Opti
             this.props.onChangeId?.(values.value);
     }
 
-    private _styles: StylesConfig<TOption> = {
-        option: (provided, props) => ({
-            ...provided,
-            ...(this.props.optionStyle?.(props) ?? {})
-        })
-    }
-
-    render() {
-        const value = this.prepareValue();
-
-        return (
-            <div className={"form-group my-form-group " + (this.props.containerClassName ?? '')}>
-                <label htmlFor={this.props.name}>{this.props.label}</label>
-
-                <RSelect<TOption>
-                    className={(this._hasErrors || this._hasWarnings ? ' is-invalid' : '') + (this.props.containerClassName ?? '')}
-                    name={this.props.name}
-                    value={value}
-                    onChange={this.onChange}
-                    options={this.props.options}
-                    //@ts-ignore
-                    isMulti={this.props.multiple}
-                    styles={this._styles}
-                />
-
-
-                {this._hasErrors ? (
-                    <div className="invalid-feedback">
-                        {this.props.errorMessages?.map(x => defaultErrorMessage(x)).join(' ')}
-                    </div>
-                ) : this._hasWarnings ? (
-                        <div className="invalid-feedback warning-msg">
-                            {this.props.warningMessages?.join(' ')}
-                        </div>
-                    ) : undefined}
-            </div>
-        )
+    private renderLabel() {
+        if (this.props.label?.length)
+            return <label htmlFor={this.props.name}>{this.props.label}</label>
+        return <></>
     }
 }

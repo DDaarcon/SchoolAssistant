@@ -2,7 +2,7 @@
 import defaultErrorMessage from './default-error-msg';
 
 type InputProps = {
-    label: string;
+    label?: string;
     name: string;
     type: React.HTMLInputTypeAttribute;
     value?: string | number;
@@ -18,8 +18,9 @@ type InputProps = {
 const Input = (props: InputProps) => {
     const hasErrors = props.hasErrors ?? props.errorMessages?.length ?? false;
 
-    const label = (
-        <label htmlFor={props.name}>{props.label}</label>);
+    const label = props.label?.length
+        ? <label htmlFor={props.name}>{props.label}</label>
+        : <></>;
 
     const input = (
         <input

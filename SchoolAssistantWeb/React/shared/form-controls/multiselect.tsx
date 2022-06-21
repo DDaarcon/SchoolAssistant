@@ -3,7 +3,7 @@ import { CSSObjectWithLabel, MultiValue, OptionProps, Options } from 'react-sele
 import Select, { OnChangeHandler, OnChangeIdHandler, Option } from "./select";
 
 type MultiselectProps<TValue extends number | string, TOption extends Option<TValue>> = {
-    label: string;
+    label?: string;
     name: string;
     value?: MultiValue<TValue> | MultiValue<TOption>;
     onChange?: OnChangeHandler<TOption>;

@@ -2,7 +2,7 @@
 import Input from "./input";
 
 type TextInputProps = {
-    label: string;
+    label?: string;
     name: string;
     value?: string | number;
     onChange: (value: string) => void;
