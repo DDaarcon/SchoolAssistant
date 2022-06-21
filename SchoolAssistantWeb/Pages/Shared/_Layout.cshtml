@@ -16,7 +16,7 @@
 
     @await RenderSectionAsync("Head", required: false)
     
-    <partial name="ConductingClasses/PanelInitialization/_Styles" />
+    <partial name="../ConductingClasses/PanelInitialization/_Styles" />
 
     <link rel="stylesheet" href="~/css/temp.css" />
 </head>
@@ -62,7 +62,7 @@
         <main role="main" class="pb-3">
             @RenderBody()
 
-            <partial name="ConductingClasses/PanelInitialization/_Panel" />
+            <partial name="../ConductingClasses/PanelInitialization/_Panel" />
         </main>
     </div>
 
@@ -82,7 +82,7 @@
     <script src="~/dist/shared.bundle.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     
-    <partial name="ConductingClasses/PanelInitialization/_Scripts" />
+    <partial name="../ConductingClasses/PanelInitialization/_Scripts" />
 
     @Html.ReactInitJavaScript()
 </body>
