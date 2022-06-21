@@ -54,6 +54,7 @@
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel.tsx" />
+    <None Remove="React\lesson-conduction-panel\services\lesson-timer-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\store-and-save-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <None Remove="React\schedule-display\settings.ts" />
@@ -282,6 +283,7 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\services\lesson-timer-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-and-save-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />

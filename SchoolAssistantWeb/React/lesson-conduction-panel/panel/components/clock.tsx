@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import LessonTimerService from "../../services/lesson-timer-service";
 import { ClockColon, ClockDigit } from "./clock-components";
 import './clock.css';
 
@@ -9,59 +10,32 @@ type ClockProps = {
 
 export default class Clock extends React.Component<ClockProps> {
 
-    constructor(props) {
-        super(props);
-
-        let endTime = new Date(props.startTime.getTime());
-        endTime.setMinutes(endTime.getMinutes() + props.duration);
-
-        this._endTimeSeconds = endTime.getTime() / 1000;
-
-        this._fullDurationSeconds = this.props.duration * 60;
-    }
-
     render() {
-        if (!this._leftSeconds)
+        if (!LessonTimerService.isSetUp)
             return <></>;
 
         this._digitKeyCounter = 0;
 
         return (
             <div className="lcp-clock">
-                {this.toClockDigits(this._seconds, 2)}
+                {this.toClockDigits(LessonTimerService.seconds, 2)}
                 <ClockColon
                     key="colon"
                 />
-                {this.toClockDigits(this._minutes)}
+                {this.toClockDigits(LessonTimerService.minutes)}
             </div>
         )
     }
 
     componentDidMount() {
-        setInterval(() => {
-            this.calculateLeftSeconds();
-            this.forceUpdate();
-        }, 1000);
+        if (!LessonTimerService.isSetUp)
+            LessonTimerService.setUp(this.props.startTime, this.props.duration);
+
+        LessonTimerService.onUpdate(() => this.forceUpdate());
     }
 
-    private _leftSeconds: number;
-    private _endTimeSeconds: number;
-    private _fullDurationSeconds: number;
     private _digitKeyCounter: number;
 
-    private get _minutes() {
-        return Math.floor(this._leftSeconds / 60);
-    }
-
-    private get _seconds() {
-        return this._leftSeconds % 60;
-    }
-
-    private calculateLeftSeconds() {
-        this._leftSeconds = Math.floor(this._endTimeSeconds - new Date().getTime() / 1000);
-        if (this._leftSeconds > this._fullDurationSeconds)
-            this._leftSeconds = this._fullDurationSeconds;
-    }
 
 
     private toClockDigits(num: number, minDigits?: number) {
