@@ -85,12 +85,9 @@ export default class Validator<T extends {}> {
 
         this._errors = [];
 
-        const properties = Object.keys(this._model) as unknown as (keyof T)[];
+        const properties = Object.keys(this._rules) as unknown as (keyof T)[];
 
         for (const prop of properties) {
-            if (!this._rules[prop])
-                continue;
-
             const rules = this._rules[prop];
 
             if (rules.notNull && !this.validateNotNull(prop))
