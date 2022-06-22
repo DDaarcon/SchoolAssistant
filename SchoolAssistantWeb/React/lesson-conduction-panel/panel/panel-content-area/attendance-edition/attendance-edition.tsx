@@ -22,7 +22,7 @@ export default class AttendanceEdition extends React.Component<AttendanceEdition
 
     render() {
         return (
-            <div className="content-with-students-container">
+            <div className="attendance-edition-list">
                 {StoreAndSaveService.students.map(student => (
                     <AttendanceEntry
                         key={student.id}

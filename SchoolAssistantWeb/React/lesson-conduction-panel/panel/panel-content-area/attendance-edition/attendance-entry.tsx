@@ -10,7 +10,6 @@ type AttendanceEntryState = {}
 
 export default class AttendanceEntry extends React.Component<AttendanceEntryProps, AttendanceEntryState> {
 
-
     render() {
         return (
             <div className="attendance-entry">
