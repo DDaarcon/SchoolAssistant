@@ -65,6 +65,8 @@
         this._leftSec = Math.floor(this._endTimeSec - new Date().getTime() / 1000);
         if (this._leftSec > this._durationSec)
             this._leftSec = this._durationSec;
+        if (this._leftSec < 0)
+            this._leftSec = 0;
     }
 
     private callListeners() {
