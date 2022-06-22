@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Option, Select, TextInput } from "../../shared/form-controls";
+import { TextInput } from "../../shared/form-controls";
 import MarkModel, { MarkPrefix, MarkValue } from "./mark-model";
 
 type MarkInputProps = {
@@ -7,25 +7,26 @@ type MarkInputProps = {
     onChange: (mark?: MarkModel) => void;
     errorMessages?: string[];
     warningMessages?: string[];
+
+    containerClassName?: string;
+    inputClassName?: string;
 }
 
 export default class MarkInput extends React.Component<MarkInputProps> {
 
     render() {
         return (
-            <>
-                <TextInput
-                    label="Ocena"
-                    errorMessages={this.props.errorMessages}
-                    warningMessages={this.props.warningMessages}
+            <TextInput
+                label="Ocena"
+                errorMessages={this.props.errorMessages}
+                warningMessages={this.props.warningMessages}
                     
-                    name="mark-input"
-                    containerClassName="mark-input-container"
-                    inputClassName="mark-input"
-                    value={this._value}
-                    onChange={this.change}
-                />
-            </>
+                name="mark-input"
+                containerClassName={"mark-input-container " + (this.props.containerClassName?.length ? this.props.containerClassName : "")}
+                inputClassName={"mark-input " + (this.props.inputClassName?.length ? this.props.inputClassName : "")}
+                value={this._value}
+                onChange={this.change}
+            />
         )
     }
 

@@ -15,3 +15,7 @@
     align-items: flex-end;
     padding-right: 10px;
 }
+
+.one-mark-input {
+    width: 100px;
+}

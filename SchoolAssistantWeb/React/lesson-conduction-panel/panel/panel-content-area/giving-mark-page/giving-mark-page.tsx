@@ -28,9 +28,13 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                 notNull: true, notEmpty: 'Należy wprowadzić opis oceny'
             },
             mark: {
-                notNull: true,
+                notNull: 'Należy podać ocenę',
                 other: (model, on) => {
-                    // TODO: validate mark
+                    if (!model[on].value)
+                        return {
+                            error: 'Należy podać ocenę',
+                            on
+                        }
 
                     return undefined;
                 }
@@ -61,6 +65,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                             onChange={mark => this.setStateFnData(data => data.mark = mark)}
                             errorMessages={this._validator.getErrorMsgsFor('mark')}
                             warningMessages={this._validator.getWarningMsgsFor('mark')}
+                            containerClassName="one-mark-input"
                         />
 
                         <SubmitButton
@@ -113,4 +118,6 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
             return;
         }
     }
+
+    private validateMark
 }

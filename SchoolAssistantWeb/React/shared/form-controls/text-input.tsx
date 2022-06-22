@@ -21,7 +21,7 @@ const TextInput = (props: TextInputProps) => {
         <Input
             {...reducedProps}
             type="text"
-            onChange={(ev) => props.onChange(ev.target.value)}
+            onChangeV={props.onChange}
         />
     );
 }
