@@ -5,6 +5,7 @@ import StoreAndSaveService from "../../../services/store-and-save-service";
 import GiveMarkModel from "./give-mark-model";
 import StudentSelectionEntry from "./student-selection-entry";
 import './giving-mark-page.css';
+import { Input, TextArea } from "../../../../shared/form-controls";
 
 type GivingMarkPageProps = {}
 type GivingMarkPageState = {
@@ -56,6 +57,27 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                         onChange={mark => this.setStateFnData(data => data.mark = mark)}
                         errorMessages={this._validator.getErrorMsgsFor('mark')}
                         warningMessages={this._validator.getWarningMsgsFor('mark')}
+                    />
+
+                    <TextArea
+                        label="Opis"
+                        name="description-input"
+                        value={this.state.data.description}
+                        onChange={value => this.setStateFnData(data => data.description = value)}
+                        errorMessages={this._validator.getErrorMsgsFor('description')}
+                        warningMessages={this._validator.getWarningMsgsFor('description')}
+                        inputClassName="description-input"
+                    />
+
+                    <Input
+                        label="Waga"
+                        name="weight-input"
+                        type="number"
+                        value={this.state.data.weight}
+                        onChangeV={value => this.setStateFnData(data => data.weight = parseInt(value))}
+                        warningMessages={this._validator.getWarningMsgsFor('weight')}
+                        containerClassName="weight-input-container"
+                        inputClassName="weight-input"
                     />
                 </div>
 

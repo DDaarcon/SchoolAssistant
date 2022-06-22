@@ -7,7 +7,8 @@ type InputProps = {
     type: React.HTMLInputTypeAttribute;
     value?: string | number;
     checked?: boolean;
-    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    onChangeV?: (value: string) => void;
 
     hasErrors?: boolean;
     errorMessages?: string[];
@@ -26,13 +27,16 @@ const Input = (props: InputProps) => {
         ? <label htmlFor={props.name}>{props.label}</label>
         : <></>;
 
+    const onChange: React.ChangeEventHandler<HTMLInputElement>
+        = props.onChange ?? (event => props.onChangeV?.(event.target.value));
+
     const input = (
         <input
             className={"form-control" + (hasErrors ? ' is-invalid' : '') + " " + (props.inputClassName ?? '')}
             type={props.type}
             name={props.name}
-            value={props.value}
-            onChange={props.onChange}
+            value={props.value ?? ""}
+            onChange={onChange}
             disabled={props.disabled}
             checked={props.checked}
             placeholder={props.placeholder}
