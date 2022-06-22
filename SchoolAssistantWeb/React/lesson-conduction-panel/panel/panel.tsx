@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { enumSwitch } from "../../shared/enum-help";
+import { enumAssignSwitch } from "../../shared/enum-help";
 import StoreAndSaveService from "../services/store-and-save-service";
 import TogglePanelService from "../services/toggle-panel-service";
 import Anchor from "./components/anchor";
@@ -16,7 +16,7 @@ type PanelProps = {
 }
 type PanelState = {
     show: boolean;
-    content: React.ReactNode;
+    contentType: LessonCondPanelContent;
 }
 
 export default class Panel extends React.Component<PanelProps, PanelState> {
@@ -26,7 +26,7 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
 
         this.state = {
             show: false,
-            content: <></>
+            contentType: LessonCondPanelContent.LessonDetailsEdit
         }
 
         TogglePanelService.registerPanel(this);
@@ -62,7 +62,7 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
                     </div>
 
                     <PanelContentArea>
-                        {this.state.content}
+                        {this.getContentPage()}
                     </PanelContentArea>
 
                 </div>
@@ -76,35 +76,34 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
     private get _startTime() { return StoreAndSaveService.startTime; }
     private get _duration() { return StoreAndSaveService.duration; }
 
-
-    private _currentContent: LessonCondPanelContent;
-
     private changeContent = (content: LessonCondPanelContent) => {
-        if (this._currentContent == content)
+        if (this.state.contentType == content)
             return;
 
-        this._currentContent = content;
-
-        enumSwitch(LessonCondPanelContent, content, {
-            LessonDetailsEdit: () => this.setState({ content: this.getLessonDetailsEdition() }),
-            AttendanceEdit: () => this.setState({ content: this.getAttendanceEdition() }),
-            GivingMark: () => this.setState({ content: null }),
-            GivingGroupMark: () => this.setState({ content: null }),
-        });
+        this.setState({ contentType: content });
     }
 
 
-    private _lessonDetailsEdition?: React.ReactNode;
-    private getLessonDetailsEdition = () => {
-        this._lessonDetailsEdition ??= <LessonDetailsEdition />
-        return this._lessonDetailsEdition;
+    private _contentPages: { [index in keyof typeof LessonCondPanelContent]?: React.ReactNode } = {};
+
+    private getContentPage() {
+        if (!this._contentPages[this.state.contentType]) {
+
+            this._contentPages[this.state.contentType] =
+                enumAssignSwitch<React.ReactNode, typeof LessonCondPanelContent>(LessonCondPanelContent, this.state.contentType, {
+                    LessonDetailsEdit: this.createLessonDetailsEdition,
+                    AttendanceEdit: this.createAttendanceEdition,
+                    GivingMark: this.createGivingMarkPage,
+                    GivingGroupMark: this.createGivingGroupMarkPage,
+                    _: <></>
+                });
+        }
+
+        return this._contentPages[this.state.contentType];
     }
 
-    private _attendanceEdition?: React.ReactNode;
-    private getAttendanceEdition = () => {
-        this._attendanceEdition ??= <AttendanceEdition />
-        return this._attendanceEdition;
-    }
-
-
+    private createLessonDetailsEdition = () => <LessonDetailsEdition />;
+    private createAttendanceEdition = () => <AttendanceEdition />;
+    private createGivingMarkPage = () => undefined;
+    private createGivingGroupMarkPage = () => undefined;
 }
