@@ -5,14 +5,16 @@ type EnumCases<TEnum> = {
 };
 
 type EnumAssignCases<TEnum, TValue> = {
-    [index in keyof TEnum | "_"]?: () => TValue;
+    [index in keyof TEnum | "_"]?: (() => TValue) | TValue;
 }
 
 
 export function enumAssignSwitch<TValue, TEnum = undefined>(_enum: TEnum, val: keyof TEnum | number, cases: EnumAssignCases<TEnum, TValue>): TValue | undefined {
     const _case = getCase<TEnum, TValue>(_enum, val, cases);
 
-    return _case?.();
+    if (_case instanceof Function)
+        return _case();
+    return _case;
 }
 
 
@@ -22,7 +24,13 @@ export function enumSwitch<TEnum>(_enum: TEnum, val: keyof TEnum | number, cases
 
 
 
-function getCase<TEnum, TValue>(_enum: TEnum, val: keyof TEnum | number, cases: EnumAssignCases<TEnum, TValue>): () => TValue | undefined {
+
+
+
+
+
+
+function getCase<TEnum, TValue>(_enum: TEnum, val: keyof TEnum | number, cases: EnumAssignCases<TEnum, TValue>): (() => TValue) | TValue | undefined {
     let name: keyof TEnum | undefined;
 
     if (typeof val == 'number') {
@@ -34,9 +42,9 @@ function getCase<TEnum, TValue>(_enum: TEnum, val: keyof TEnum | number, cases: 
         name = val;
     }
 
-    let _case = cases[name] as () => TValue | undefined;
+    let _case = cases[name] as (() => TValue) | TValue | undefined;
     if (!_case)
-        _case = cases['_'] as () => TValue | undefined;
+        _case = cases['_'] as (() => TValue) | TValue | undefined;
 
     return _case;
 }
