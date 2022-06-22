@@ -54,6 +54,7 @@
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-mark-page\give-mark-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-mark-page\giving-mark-page.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-mark-page\student-selection-entry.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edit-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
@@ -287,6 +288,7 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-mark-page\give-mark-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-mark-page\giving-mark-page.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-mark-page\student-selection-entry.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edit-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\lesson-details-edition\lesson-details-edition.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />

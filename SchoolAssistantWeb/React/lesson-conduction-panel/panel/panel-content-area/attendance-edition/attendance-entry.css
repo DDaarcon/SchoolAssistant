@@ -1,7 +1,7 @@
 ﻿.attendance-entry {
     padding: 10px;
     display: flex;
-    background-color: #ffffffa6
+    background-color: #ffffffa6;
 }
 
 .attendance-entry > span:nth-child(1) {

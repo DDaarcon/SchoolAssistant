@@ -1,6 +1,7 @@
 ﻿.lcp-content-area {
     flex-grow: 1;
     width: 100%;
+    overflow-y: auto;
 
     transition: all 0.3s;
     opacity: 1;
