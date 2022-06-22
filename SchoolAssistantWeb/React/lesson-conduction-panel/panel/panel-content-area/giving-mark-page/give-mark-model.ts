@@ -2,5 +2,7 @@
 
 export default interface GiveMarkModel {
     mark?: MarkModel;
-
+    description: string;
+    weight?: number;
+    studentId?: number;
 }

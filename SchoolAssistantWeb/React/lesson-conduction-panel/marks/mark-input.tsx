@@ -5,6 +5,8 @@ import MarkModel, { MarkPrefix, MarkValue } from "./mark-model";
 type MarkInputProps = {
     mark?: MarkModel;
     onChange: (mark?: MarkModel) => void;
+    errorMessages?: string[];
+    warningMessages?: string[];
 }
 
 export default class MarkInput extends React.Component<MarkInputProps> {
@@ -13,6 +15,10 @@ export default class MarkInput extends React.Component<MarkInputProps> {
         return (
             <>
                 <TextInput
+                    label="Ocena"
+                    errorMessages={this.props.errorMessages}
+                    warningMessages={this.props.warningMessages}
+                    
                     name="mark-input"
                     containerClassName="mark-input-container"
                     inputClassName="mark-input"

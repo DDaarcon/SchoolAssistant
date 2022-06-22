@@ -15,8 +15,32 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
 
         this.state = {
             data: {
+                description: ""
             }
         };
+
+        this._validator.setRules({
+            description: {
+                notNull: true, notEmpty: true
+            },
+            mark: {
+                notNull: true,
+                other: (model, on) => {
+                    // TODO: validate mark
+
+                    return undefined;
+                }
+            },
+            studentId: {
+                notNull: true
+            },
+            weight: {
+                other: (model, on) => {
+                    // TODO: validate weight
+                    return undefined;
+                }
+            }
+        });
     }
 
     render() {
@@ -25,6 +49,8 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                 <MarkInput
                     mark={this.state.data.mark}
                     onChange={mark => this.setStateFnData(data => data.mark = mark)}
+                    errorMessages={this._validator.getErrorMsgsFor('mark')}
+                    warningMessages={this._validator.getWarningMsgsFor('mark')}
                 />
             </div>
         )
