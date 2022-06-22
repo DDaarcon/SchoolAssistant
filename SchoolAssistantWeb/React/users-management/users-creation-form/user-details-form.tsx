@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Input } from "../../shared/form-controls";
+import { Input, SubmitButton } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import TopBar from "../../shared/top-bar";
 import UserTypeForManagement from "../enums/user-type-for-management";
@@ -90,13 +90,9 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
                     type="tel"
                 />
 
-                <div className="form-group">
-                    <input
-                        type="submit"
-                        value="Dodaj użytkownika"
-                        className="form-control"
-                    />
-                </div>
+                <SubmitButton
+                    value="Zapisz"
+                />
             </form>
         )
     }

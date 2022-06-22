@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Input, Select, OnChangeIdHandler } from "../../shared/form-controls";
+import { Input, Select, OnChangeIdHandler, SubmitButton } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
@@ -193,13 +193,9 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
                         Dodaj nowego ucznia
                     </button>
 
-                    <div className="form-group">
-                        <input
-                            type="submit"
-                            value="Zapisz"
-                            className="form-control"
-                        />
-                    </div>
+                    <SubmitButton
+                        value="Zapisz"
+                    />
                 </form>
             </div>
         )

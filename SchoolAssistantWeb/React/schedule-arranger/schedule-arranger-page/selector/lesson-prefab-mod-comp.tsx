@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Select, Option, OnChangeIdHandler } from "../../../shared/form-controls";
+import { Select, Option, OnChangeIdHandler, SubmitButton } from "../../../shared/form-controls";
 import ModCompBase from "../../../shared/form-controls/mod-comp-base";
 import LessonModificationData from "../../interfaces/lesson-modification-data";
 import dataService from "../../schedule-data-service";
@@ -97,13 +97,9 @@ export default class LessonPrefabModComp extends ModCompBase<LessonModificationD
                     })) }
                 />
 
-                <div className="form-group">
-                    <input
-                        type="submit"
-                        value="Zapisz"
-                        className="form-control"
-                    />
-                </div>
+                <SubmitButton
+                    value="Zapisz"
+                />
             </form>
         )
     }

@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Input } from "../../shared/form-controls";
+import { Input, SubmitButton } from "../../shared/form-controls";
 import ModCompProps from "../../shared/lists/interfaces/shared-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
@@ -130,13 +130,9 @@ export default class ClassModComp extends React.Component<ClassModCompProps, Cla
                         type="text"
                     />
 
-                    <div className="form-group">
-                        <input
-                            type="submit"
-                            value="Zapisz"
-                            className="form-control"
-                        />
-                    </div>
+                    <SubmitButton
+                        value="Zapisz"
+                    />
                 </form>
             </div>
         )

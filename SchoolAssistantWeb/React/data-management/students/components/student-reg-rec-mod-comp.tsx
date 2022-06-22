@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Input } from "../../../shared/form-controls";
+import { Input, SubmitButton } from "../../../shared/form-controls";
 import ModCompBase from "../../../shared/form-controls/mod-comp-base";
 import Loader, { LoaderSize, LoaderType } from "../../../shared/loader";
 import { CommonModalProps } from "../../../shared/modals/shared-modal-body";
@@ -243,13 +243,9 @@ export default class StudentRegisterRecordModComp extends ModCompBase<StudentReg
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <input
-                            type="submit"
-                            value="Zapisz"
-                            className="form-control"
-                        />
-                    </div>
+                    <SubmitButton
+                        value="Zapisz"
+                    />
                 </form>
             </div>
         )

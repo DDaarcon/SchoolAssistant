@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { MultiValue } from "react-select";
-import { Input, Multiselect, OnChangeIdHandler, Option } from "../../shared/form-controls";
+import { Input, Multiselect, OnChangeIdHandler, Option, SubmitButton } from "../../shared/form-controls";
 import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
@@ -183,13 +183,9 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
                         }))}
                     />
 
-                    <div className="form-group">
-                        <input
-                            type="submit"
-                            value="Zapisz"
-                            className="form-control"
-                        />
-                    </div>
+                    <SubmitButton
+                        value="Zapisz"
+                    />
                 </form>
             </div>
         )

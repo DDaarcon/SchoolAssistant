@@ -5,7 +5,7 @@ import StoreAndSaveService from "../../../services/store-and-save-service";
 import GiveMarkModel from "./give-mark-model";
 import StudentSelectionEntry from "./student-selection-entry";
 import './giving-mark-page.css';
-import { Input, TextArea } from "../../../../shared/form-controls";
+import { Input, SubmitButton, TextArea } from "../../../../shared/form-controls";
 
 type GivingMarkPageProps = {}
 type GivingMarkPageState = {
@@ -25,7 +25,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
 
         this._validator.setRules({
             description: {
-                notNull: true, notEmpty: true
+                notNull: true, notEmpty: 'Należy wprowadzić opis oceny'
             },
             mark: {
                 notNull: true,
@@ -49,15 +49,24 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
 
     render() {
         return (
-            <div className="giving-mark-page">
+            <form className="giving-mark-page"
+                onSubmit={this.submitAsync}
+            >
 
                 <div className="giving-mark-details">
-                    <MarkInput
-                        mark={this.state.data.mark}
-                        onChange={mark => this.setStateFnData(data => data.mark = mark)}
-                        errorMessages={this._validator.getErrorMsgsFor('mark')}
-                        warningMessages={this._validator.getWarningMsgsFor('mark')}
-                    />
+
+                    <div className="giving-mark-details-first-row">
+                        <MarkInput
+                            mark={this.state.data.mark}
+                            onChange={mark => this.setStateFnData(data => data.mark = mark)}
+                            errorMessages={this._validator.getErrorMsgsFor('mark')}
+                            warningMessages={this._validator.getWarningMsgsFor('mark')}
+                        />
+
+                        <SubmitButton
+                            value="Zapisz"
+                        />
+                    </div>
 
                     <TextArea
                         label="Opis"
@@ -91,7 +100,17 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                         />
                     ))}
                 </div>
-            </div>
+            </form>
         )
+    }
+
+
+    private submitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
+
+        if (!this._validator.validate()) {
+            this.forceUpdate();
+            return;
+        }
     }
 }

@@ -89,6 +89,7 @@
     <None Remove="React\shared\components\buttons\icon-label-button.tsx" />
     <None Remove="React\shared\enum-help\enum-switch.ts" />
     <None Remove="React\shared\form-controls\label-value.tsx" />
+    <None Remove="React\shared\form-controls\submit-button.tsx" />
     <None Remove="React\shared\form-controls\text-area.tsx" />
     <None Remove="React\shared\form-controls\text-input.tsx" />
     <None Remove="React\shared\lists\components\entry-info-component.tsx" />
@@ -324,6 +325,7 @@
     <TypeScriptCompile Include="React\shared\components\buttons\icon-label-button.tsx" />
     <TypeScriptCompile Include="React\shared\enum-help\enum-switch.ts" />
     <TypeScriptCompile Include="React\shared\form-controls\label-value.tsx" />
+    <TypeScriptCompile Include="React\shared\form-controls\submit-button.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\text-area.tsx" />
     <TypeScriptCompile Include="React\shared\form-controls\text-input.tsx" />
     <TypeScriptCompile Include="React\shared\lists\components\entry-info-component.tsx" />

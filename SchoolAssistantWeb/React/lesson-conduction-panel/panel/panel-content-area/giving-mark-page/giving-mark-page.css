@@ -4,3 +4,14 @@
     gap: 5px;
     align-content: space-evenly;
 }
+
+.giving-mark-details {
+    margin-bottom: 20px;
+}
+
+.giving-mark-details-first-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-right: 10px;
+}
