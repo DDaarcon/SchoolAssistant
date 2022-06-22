@@ -8,8 +8,11 @@ type InputProps = {
     value?: string | number;
     checked?: boolean;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
+
     hasErrors?: boolean;
     errorMessages?: string[];
+    warningMessages?: string[];
+
     disabled?: boolean;
     containerClassName?: string;
     inputClassName?: string;
@@ -17,6 +20,7 @@ type InputProps = {
 }
 const Input = (props: InputProps) => {
     const hasErrors = props.hasErrors ?? props.errorMessages?.length ?? false;
+    const hasWarnings = props.warningMessages?.length;
 
     const label = props.label?.length
         ? <label htmlFor={props.name}>{props.label}</label>
@@ -41,9 +45,14 @@ const Input = (props: InputProps) => {
                 ? <>{label}{input}</>
                 : <>{input}{label}</>
             }
+
             {hasErrors ? (
                 <div className="invalid-feedback">
                     {props.errorMessages?.map(x => defaultErrorMessage(x)).join(' ')}
+                </div>
+            ) : hasWarnings ? (
+                <div className="invalid-feedback warning-msg">
+                    {props.warningMessages?.join(' ')}
                 </div>
             ) : undefined}
         </div>

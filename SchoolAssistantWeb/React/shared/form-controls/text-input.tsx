@@ -8,6 +8,7 @@ type TextInputProps = {
     onChange: (value: string) => void;
     hasErrors?: boolean;
     errorMessages?: string[];
+    warningMessages?: string[];
     disabled?: boolean;
     containerClassName?: string;
     inputClassName?: string;
