@@ -53,7 +53,7 @@ builder.Services.AddRazorPages()
     })
     .AddMvcOptions(options =>
     {
-        options.Filters.Add<EnableReactLessonConductionAsyncPageFilter>();
+        options.Filters.Add<EnableLessonConductionPanelAsyncPageFilter>();
     });
 
 builder.Services.ConfigureApplicationCookie(options =>

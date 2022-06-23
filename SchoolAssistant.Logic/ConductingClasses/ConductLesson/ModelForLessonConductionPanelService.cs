@@ -59,67 +59,6 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 
         public async Task<LessonConductionPanelJson?> GetModelAsync()
         {
-            return new LessonConductionPanelJson
-            {
-                lessonId = 1,
-                className = "4e",
-                subjectName = "Matematyka",
-                startTimeTk = DateTime.Now.GetTicksJs(),
-                duration = 45,
-                students = new ParticipatingStudentJson[]
-                {
-                    new()
-                    {
-                        id = 1,
-                        numberInJournal = 1,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    },
-                    new()
-                    {
-                        id = 2,
-                        numberInJournal = 2,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    },
-                    new()
-                    {
-                        id = 3,
-                        numberInJournal = 3,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    },
-                    new()
-                    {
-                        id = 4,
-                        numberInJournal = 4,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    },
-                    new()
-                    {
-                        id = 5,
-                        numberInJournal = 5,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    },
-                    new()
-                    {
-                        id = 6,
-                        numberInJournal = 6,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    },
-                    new()
-                    {
-                        id = 7,
-                        numberInJournal = 7,
-                        firstName = "Jonasz",
-                        lastName = "Kowalski"
-                    }
-                }
-            };
-
             if (!await ValidateConductedLessonIdAsync())
                 return null;
 
@@ -166,12 +105,31 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
             {
                 lessonId = _conductedLesson!.Id,
                 subjectName = _conductedLesson.FromSchedule.Subject.Name,
-                className = _conductedLesson.FromSchedule.ParticipatingOrganizationalClass?.Name,
+                className = _conductedLesson.FromSchedule.ParticipatingOrganizationalClass?.Name!,
                 startTimeTk = _conductedLesson.ActualDate.GetTicksJs() ?? _conductedLesson.Date.GetTicksJs(),
                 duration = _conductedLesson.FromSchedule.CustomDuration ?? await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45,
                 topic = _conductedLesson.Topic,
-                students = null
+                students = GetStudentEntries()
             };
+        }
+
+        private ParticipatingStudentJson[] GetStudentEntries()
+        {
+            return _conductedLesson!.FromSchedule.ParticipatingOrganizationalClass!.Students
+                .Select(x => new
+                {
+                    student = x,
+                    presence = _conductedLesson.PresenceOfStudents.FirstOrDefault(y => y.StudentId == x.Id)
+                })
+                .Select(x => new ParticipatingStudentJson
+                {
+                    id = x.student.Id,
+                    firstName = x.student.Info.FirstName,
+                    lastName = x.student.Info.LastName,
+                    numberInJournal = x.student.NumberInJournal,
+                    presence = x.presence?.Status
+                })
+                .ToArray();
         }
     }
 }
