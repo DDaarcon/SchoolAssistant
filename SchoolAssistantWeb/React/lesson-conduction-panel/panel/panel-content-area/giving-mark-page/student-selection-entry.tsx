@@ -13,6 +13,7 @@ export default class StudentSelectionEntry extends React.Component<StudentSelect
     render() {
         return (
             <button className={"student-selection-entry " + (this.props.selected ? "student-selection-entry-selected" : "")}
+                type="button"
                 onClick={() => this.props.select(this.props.id)}
             >
                 <span>

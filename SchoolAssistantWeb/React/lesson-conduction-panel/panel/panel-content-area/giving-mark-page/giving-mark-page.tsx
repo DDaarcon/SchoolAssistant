@@ -61,6 +61,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
 
                     <div className="giving-mark-details-first-row">
                         <MarkInput
+                            label="Ocena"
                             mark={this.state.data.mark}
                             onChange={mark => this.setStateFnData(data => data.mark = mark)}
                             errorMessages={this._validator.getErrorMsgsFor('mark')}
@@ -88,7 +89,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                         name="weight-input"
                         type="number"
                         value={this.state.data.weight}
-                        onChangeV={value => this.setStateFnData(data => data.weight = parseInt(value))}
+                        onChangeV={this.changeWeight}
                         warningMessages={this._validator.getWarningMsgsFor('weight')}
                         containerClassName="weight-input-container"
                         inputClassName="weight-input"
@@ -119,5 +120,13 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
         }
     }
 
-    private validateMark
+    private changeWeight = (value: string) => {
+        if (!value) {
+            this.setStateFnData(data => data.weight = undefined);
+            return;
+        }
+        const int = parseInt(value);
+        if (int)
+            this.setStateFnData(data => data.weight = int);
+    }
 }
