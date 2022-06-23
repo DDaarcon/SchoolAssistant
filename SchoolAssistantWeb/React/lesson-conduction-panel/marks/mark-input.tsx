@@ -3,6 +3,7 @@ import { TextInput } from "../../shared/form-controls";
 import MarkModel, { MarkPrefix, MarkValue } from "./mark-model";
 
 type MarkInputProps = {
+    label?: string;
     mark?: MarkModel;
     onChange: (mark?: MarkModel) => void;
     errorMessages?: string[];
@@ -17,7 +18,7 @@ export default class MarkInput extends React.Component<MarkInputProps> {
     render() {
         return (
             <TextInput
-                label="Ocena"
+                label={this.props.label}
                 errorMessages={this.props.errorMessages}
                 warningMessages={this.props.warningMessages}
                     

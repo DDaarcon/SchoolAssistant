@@ -7,6 +7,7 @@ import Clock from "./components/clock";
 import Controls from "./components/controls";
 import LessonCondPanelContent from "./enums/lesson-cond-panel-content";
 import AttendanceEdition from "./panel-content-area/attendance-edition/attendance-edition";
+import GivingGroupMarkPage from "./panel-content-area/giving-group-mark-page/giving-group-mark-page";
 import GivingMarkPage from "./panel-content-area/giving-mark-page/giving-mark-page";
 import LessonDetailsEdition from "./panel-content-area/lesson-details-edition/lesson-details-edition";
 import PanelContentArea from "./panel-content-area/panel-content-area";
@@ -103,8 +104,20 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         return this._contentPages[this.state.contentType];
     }
 
-    private createLessonDetailsEdition = () => <LessonDetailsEdition />;
-    private createAttendanceEdition = () => <AttendanceEdition />;
-    private createGivingMarkPage = () => <GivingMarkPage />;
-    private createGivingGroupMarkPage = () => undefined;
+    private createLessonDetailsEdition = () =>
+        <LessonDetailsEdition
+            key="lesson-details"
+        />;
+    private createAttendanceEdition = () =>
+        <AttendanceEdition
+            key="attendance"
+        />;
+    private createGivingMarkPage = () =>
+        <GivingMarkPage
+            key="giving-mark"
+        />;
+    private createGivingGroupMarkPage = () =>
+        <GivingGroupMarkPage
+            key="giving-group-mark"
+        />;
 }
