@@ -1,0 +1,22 @@
+﻿.student-mark-insertion-entry {
+    padding: 10px 15px;
+    border: 0;
+    background-color: #ffffffa6;
+    display: flex;
+    align-items: baseline;
+    border-radius: 3px;
+    transition: all 0.5s;
+}
+
+.student-mark-insertion-entry > span {
+    margin-right: 10px;
+}
+
+.student-mark-insertion-entry-inserted {
+    background-color: #adffb7ff;
+    box-shadow: inset 0px 0px 2px 3px #4bea5fff;
+}
+
+.student-mark-insertion-input-container {
+    width: 80px;
+}

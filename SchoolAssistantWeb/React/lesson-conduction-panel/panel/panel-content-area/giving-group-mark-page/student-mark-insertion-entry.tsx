@@ -2,6 +2,7 @@
 import ParticipatingStudentModel from "../../../interfaces/participating-student-model";
 import MarkInput from "../../../marks/mark-input";
 import MarkModel from "../../../marks/mark-model";
+import './student-mark-insertion-entry.css';
 
 type StudentMarkInsertionEntryProps = ParticipatingStudentModel & {
     mark?: MarkModel;

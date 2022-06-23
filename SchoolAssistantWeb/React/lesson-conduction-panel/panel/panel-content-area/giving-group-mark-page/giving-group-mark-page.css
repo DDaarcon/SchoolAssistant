@@ -1,0 +1,10 @@
+﻿.student-mark-insertion-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-content: space-evenly;
+}
+
+.giving-group-mark-details {
+    margin-bottom: 20px;
+}

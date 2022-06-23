@@ -4,6 +4,7 @@ import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
 import StoreAndSaveService from "../../../services/store-and-save-service";
 import GiveGroupMarkModel from "./give-group-mark-model";
 import StudentMarkInsertionEntry from "./student-mark-insertion-entry";
+import './giving-group-mark-page.css';
 
 type GivingGroupMarkPageProps = {}
 type GivingGroupMarkPageState = {
