@@ -36,3 +36,8 @@
     display: flex;
     flex-direction: row-reverse;
 }
+
+.lcp-panel-top-left {
+    display: flex;
+    flex-direction: column;
+}

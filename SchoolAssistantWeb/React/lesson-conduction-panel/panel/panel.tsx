@@ -5,6 +5,7 @@ import TogglePanelService from "../services/toggle-panel-service";
 import Anchor from "./components/anchor";
 import Clock from "./components/clock";
 import Controls from "./components/controls";
+import InfoRow from "./components/info-row";
 import LessonCondPanelContent from "./enums/lesson-cond-panel-content";
 import AttendanceEdition from "./panel-content-area/attendance-edition/attendance-edition";
 import GivingGroupMarkPage from "./panel-content-area/giving-group-mark-page/giving-group-mark-page";
@@ -57,10 +58,13 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
                             duration={this._duration}
                         />
 
-                        <Controls
-                            goTo={this.changeContent}
-                        />
+                        <div className="lcp-panel-top-left">
+                            <Controls
+                                goTo={this.changeContent}
+                            />
 
+                            <InfoRow />
+                        </div>
                     </div>
 
                     <PanelContentArea>

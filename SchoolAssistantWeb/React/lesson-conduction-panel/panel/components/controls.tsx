@@ -44,7 +44,6 @@ export default class Controls extends React.Component<ControlsProps> {
                         onClick={() => this.props.goTo(LessonCondPanelContent.GivingGroupMark)}
                     />
                 </BtnWrapper>
-
             </div>
         )
     }
