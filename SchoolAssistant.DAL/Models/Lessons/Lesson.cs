@@ -11,7 +11,7 @@ namespace SchoolAssistant.DAL.Models.Lessons
         /// <summary> Date, when lesson actually occured, when it is different than scheduled date </summary>
         public DateTime? ActualDate { get; set; }
 
-        public string Topic { get; set; } = null!;
+        public string? Topic { get; set; } = null!;
 
         public long FromScheduleId { get; set; }
         [ForeignKey(nameof(FromScheduleId))]
