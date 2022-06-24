@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
+using SchoolAssistant.Infrastructure.Models.Shared.Json;
 using SchoolAssistant.Logic.ConductingClasses;
+using SchoolAssistant.Logic.ConductingClasses.ConductLesson;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 
 namespace SchoolAssistant.Web.Pages.ConductingClasses
@@ -14,6 +16,8 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
         private readonly IFetchScheduledLessonListConfigService _scheduledLessonsListConfigSvc;
 
+        private readonly IStartLessonService _startLessonSvc;
+
         private User _user = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
         public ScheduledLessonListConfigJson ScheduledLessonListConfig { get; set; } = null!;
@@ -21,11 +25,13 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         public ScheduledLessonsModel(
             IUserRepository userRepo,
             IFetchScheduledLessonListEntriesService scheduledLessonsListSvc,
-            IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc)
+            IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc,
+            IStartLessonService startLessonSvc)
         {
             _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
             _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
+            _startLessonSvc = startLessonSvc;
         }
 
         public async Task OnGetAsync()
@@ -49,6 +55,17 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             return new JsonResult(entries);
         }
 
+        public async Task<JsonResult> OnGetOpenPanelAsync(DateTime scheduledTimeUtc)
+        {
+            await FetchUserAsync().ConfigureAwait(false);
+
+            var success = await _startLessonSvc.TryStartLessonAtAsync(scheduledTimeUtc.ToLocalTime(), _user.Teacher!).ConfigureAwait(false);
+
+            return new JsonResult(new ResponseJson
+            {
+                message = success ? null : "Nie odnaleziono zajêæ"
+            });
+        }
 
         private async Task FetchUserAsync()
         {

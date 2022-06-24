@@ -1,6 +1,9 @@
 ﻿import React from "react";
+import { ResponseJson } from "../../shared/server-connection";
 import HeldClasses from "../interfaces/held-classes";
+import OpenPanelRequest from "../interfaces/open-panel-request";
 import ScheduledLessonsListState from "../scheduled-lessons-list-state";
+import server from "../server";
 import './row.css';
 
 
@@ -107,6 +110,7 @@ export default class Row extends React.Component<RowProps, RowState> {
         if (closeOrOngoing) {
             return <button
                 className="conduct-btn"
+                onClick={this.openPanelAsync}
             >
                 <span>Poprowadź zajęcia</span>
             </button>
@@ -115,6 +119,7 @@ export default class Row extends React.Component<RowProps, RowState> {
         {
             return <button
                 className="see-past-details-btn"
+                onClick={this.openPanelAsync}
             >
                 <span>Szczegóły</span>
             </button>
@@ -122,6 +127,7 @@ export default class Row extends React.Component<RowProps, RowState> {
         else if (this.props.startTime < new Date()) {
             return <button
                 className="see-omitted-btn"
+                onClick={this.openPanelAsync}
             >
                 <span>Uzupełnij</span>
             </button>
@@ -129,10 +135,22 @@ export default class Row extends React.Component<RowProps, RowState> {
         else {
             return <button
                 className="see-upcomming-btn"
+                onClick={this.openPanelAsync}
             >
                 <span>Szczegóły nadchodzących</span>
             </button>
         }
+    }
+
+    private openPanelAsync = async () => {
+        const params: OpenPanelRequest = {
+            scheduledTimeUtc: this.props.startTime.toISOString()
+        }
+
+        const res = await server.getAsync<ResponseJson>("OpenPanel", params);
+
+        if (res?.success)
+            location.reload();
     }
 }
 

@@ -5,7 +5,6 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
-using SchoolAssistant.Logic.ConductingClasses.ConductLesson;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.ScheduleDisplay;
 

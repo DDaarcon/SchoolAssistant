@@ -74,5 +74,13 @@ namespace SchoolAssistant.Logic
             if (occurance is null) return null;
             return TimeOnly.FromDateTime(occurance.Value);
         }
+
+
+
+        public static bool IsValidOccurrence(this PeriodicLesson lesson, DateTime occurrence)
+        {
+            return TimeOnly.FromDateTime(occurrence).Equals(lesson.GetTime())
+                && occurrence.DayOfWeek == lesson.GetDayOfWeek();
+        }
     }
 }
