@@ -12,6 +12,7 @@ using SchoolAssistant.Infrastructure.Enums.Attendance;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ConductingClasses;
+using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.Help;
 using System;
 using System.Collections.Generic;

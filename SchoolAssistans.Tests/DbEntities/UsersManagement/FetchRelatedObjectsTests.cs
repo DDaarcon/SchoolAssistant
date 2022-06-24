@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
@@ -61,9 +62,11 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
         protected override void SetupServices()
         {
+            var httpContextAccessor = TestServices.GetService<IHttpContextAccessor>();
+
             var userManager = TestServices.GetService<UserManager<User>>();
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
-            _userRepo = new UserRepository(_Context, null, userManager);
+            _userRepo = new UserRepository(_Context, null, userManager, httpContextAccessor);
             _teacherRepo = new Repository<Teacher>(_Context, null);
 
             var studRegRecRepo = new Repository<StudentRegisterRecord>(_Context, null);
