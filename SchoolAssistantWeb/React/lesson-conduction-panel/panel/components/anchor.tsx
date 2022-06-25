@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import LessonTimerService from "../../services/lesson-timer-service";
-import StoreService from "../../services/store-and-save-service";
+import StoreService from "../../services/store-service";
 import TogglePanelService from "../../services/toggle-panel-service";
 import './anchor.css';
 

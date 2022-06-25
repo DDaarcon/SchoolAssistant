@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
 import MarkInput from "../../../marks/mark-input";
-import StoreService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-service";
 import GiveMarkModel from "./give-mark-model";
 import StudentSelectionEntry from "./student-selection-entry";
 import './giving-mark-page.css';

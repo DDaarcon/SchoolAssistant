@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Input, SubmitButton, TextArea } from "../../../../shared/form-controls";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
-import StoreService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-service";
 import GiveGroupMarkModel from "./give-group-mark-model";
 import StudentMarkInsertionEntry from "./student-mark-insertion-entry";
 import './giving-group-mark-page.css';

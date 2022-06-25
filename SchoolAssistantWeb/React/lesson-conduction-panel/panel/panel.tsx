@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { enumAssignSwitch } from "../../shared/enum-help";
-import StoreService from "../services/store-and-save-service";
+import StoreService from "../services/store-service";
 import TogglePanelService from "../services/toggle-panel-service";
 import Anchor from "./components/anchor";
 import Clock from "./components/clock";

@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import StoreService from '../../services/store-and-save-service';
+import StoreService from '../../services/store-service';
 import './info-row.css';
 
 const InfoRow = (props: {}) => {

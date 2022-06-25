@@ -3,7 +3,7 @@ import server from "../../../../scheduled-lessons-list/server";
 import { SubmitButton, TextInput } from "../../../../shared/form-controls";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
 import { ResponseJson } from "../../../../shared/server-connection";
-import StoreService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-service";
 import LessonDetailsEditModel from "./lesson-details-edit-model";
 
 type LessonDetailsEditionProps = {}

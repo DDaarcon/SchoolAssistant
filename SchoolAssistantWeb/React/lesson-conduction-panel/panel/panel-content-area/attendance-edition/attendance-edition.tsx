@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import PresenceStatus from "../../../enums/presence-status";
 import ParticipatingStudentModel from "../../../interfaces/participating-student-model";
-import StoreService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-service";
 import './attendance-edition.css';
 import AttendanceEntry from "./attendance-entry";
 
