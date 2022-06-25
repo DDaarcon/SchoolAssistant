@@ -1,26 +1,21 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
 using SchoolAssistant.DAL.Enums;
-using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
-using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
-    public class TeacherModel : PageModel
+    public class TeacherModel : MyPageModel
     {
-        private readonly IUserRepository _userRepo;
         private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
         private readonly ITeacherScheduleService _scheduleSvc;
 
         private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
         private readonly IFetchScheduledLessonListConfigService _scheduledLessonsListConfigSvc;
-
-        private User _user = null!;
 
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
         public ScheduleDayLessonsJson<LessonJson>[] ScheduleLessons { get; set; } = null!;
@@ -33,36 +28,30 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
             ITeacherScheduleService scheduleSvc,
             IFetchScheduledLessonListEntriesService scheduledLessonsListSvc,
-            IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc)
+            IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc) : base(userRepo)
         {
-            _userRepo = userRepo;
             _fetchScheduleConfigSvc = fetchScheduleConfigSvc;
             _scheduleSvc = scheduleSvc;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
             _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            await FetchAndValidateUserAsync().ConfigureAwait(false);
+            if (!await FetchAndValidateIfUserOfTypeAsync(UserType.Teacher).ConfigureAwait(false))
+                return RedirectToStart;
 
-            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user).ConfigureAwait(false);
-            ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value).ConfigureAwait(false))!;
+            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_User!).ConfigureAwait(false);
+            ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_User.TeacherId!.Value).ConfigureAwait(false))!;
 
-            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
+            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_User.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now,
                 LimitTo = 6
             }).ConfigureAwait(false))!;
             ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync().ConfigureAwait(false);
-        }
 
-
-        private async Task<bool> FetchAndValidateUserAsync()
-        {
-            _user = (await _userRepo.GetCurrentAsync().ConfigureAwait(false))!;
-
-            return _user.IsOfType(UserType.Teacher);
+            return Page();
         }
     }
 }
