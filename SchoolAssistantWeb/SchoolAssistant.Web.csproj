@@ -11,12 +11,16 @@
 
   <ItemGroup>
     <Compile Remove="React\conducting-classes\**" />
+    <Compile Remove="React\shared\components\buttons\config\**" />
     <Compile Remove="React\users-management\interfaces\**" />
     <Content Remove="React\conducting-classes\**" />
+    <Content Remove="React\shared\components\buttons\config\**" />
     <Content Remove="React\users-management\interfaces\**" />
     <EmbeddedResource Remove="React\conducting-classes\**" />
+    <EmbeddedResource Remove="React\shared\components\buttons\config\**" />
     <EmbeddedResource Remove="React\users-management\interfaces\**" />
     <None Remove="React\conducting-classes\**" />
+    <None Remove="React\shared\components\buttons\config\**" />
     <None Remove="React\users-management\interfaces\**" />
   </ItemGroup>
 
@@ -50,9 +54,12 @@
     <None Remove="React\lesson-conduction-panel\panel\components\clock.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\controls.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\components\info-row.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\components\save-button.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content.ts" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edit-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edition.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\student-presence-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\give-group-mark-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\giving-group-mark-page.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\student-mark-insertion-entry.tsx" />
@@ -64,6 +71,7 @@
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel.tsx" />
     <None Remove="React\lesson-conduction-panel\services\lesson-timer-service.ts" />
+    <None Remove="React\lesson-conduction-panel\services\save-button-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\store-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <None Remove="React\schedule-display\settings.ts" />
@@ -289,11 +297,14 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\clock.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\controls.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\info-row.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\components\save-button.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content-container-state.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\enums\lesson-cond-panel-content.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\interfaces\participating-student-model.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edit-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edition.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\student-presence-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\give-group-mark-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\giving-group-mark-page.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\student-mark-insertion-entry.tsx" />
@@ -305,6 +316,7 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\panel-content-area.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\lesson-timer-service.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\services\save-button-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
     <TypeScriptCompile Include="React\schedule-display\settings.ts" />
@@ -492,7 +504,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="React\shared\components\buttons\config\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 </Project>
