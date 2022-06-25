@@ -86,7 +86,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _marksCollectionRepo = new RepositoryBySchoolYear<MarksOfClass>(_Context, null, _schoolYearRepo);
             var studentRepo = new RepositoryBySchoolYear<Student>(_Context, null, _schoolYearRepo);
 
-            _service = new GiveGroupMarkService();
+            _service = new GiveGroupMarkService(_lessonRepo, _marksCollectionRepo);
         }
 
         private int _DefDuration => 45;
