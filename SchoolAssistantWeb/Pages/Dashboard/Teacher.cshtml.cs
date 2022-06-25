@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
+using SchoolAssistant.Logic;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.ScheduleDisplay;
 
@@ -43,34 +44,25 @@ namespace SchoolAssistant.Web.Pages.Dashboard
 
         public async Task OnGetAsync()
         {
-            await FetchUserAsync().ConfigureAwait(false);
+            await FetchAndValidateUserAsync().ConfigureAwait(false);
 
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user).ConfigureAwait(false);
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_user.TeacherId!.Value).ConfigureAwait(false))!;
 
-            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel 
-            { 
+            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
+            {
                 From = DateTime.Now,
-                LimitTo = 6 
+                LimitTo = 6
             }).ConfigureAwait(false))!;
             ScheduledLessonListConfig = await _scheduledLessonsListConfigSvc.GetDefaultConfigAsync().ConfigureAwait(false);
         }
 
 
-        private async Task FetchUserAsync()
+        private async Task<bool> FetchAndValidateUserAsync()
         {
             _user = (await _userRepo.GetCurrentAsync().ConfigureAwait(false))!;
 
-            if (_user is null)
-            {
-                // TODO: redirect to error page
-                throw new NotImplementedException();
-            }
-            if (_user.Teacher is null)
-            {
-                // TODO: redirect to error page
-                throw new NotImplementedException();
-            }
+            return _user.IsOfType(UserType.Teacher);
         }
     }
 }

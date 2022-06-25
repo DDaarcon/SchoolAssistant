@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
@@ -9,6 +10,7 @@ using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
+    [Authorize(Roles = "Student")]
     public class StudentModel : PageModel
     {
         private readonly UserManager<User> _userManager;
@@ -39,9 +41,9 @@ namespace SchoolAssistant.Web.Pages.Dashboard
 
         public async Task OnGetAsync()
         {
-            await FetchUserAndStudentForCurrentYearAsync();
+            await FetchUserAndStudentForCurrentYearAsync().ConfigureAwait(false);
 
-            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user);
+            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user).ConfigureAwait(false);
 
             ScheduleLessons = _scheduleSvc.GetModel(_student)!;
 
@@ -69,7 +71,7 @@ namespace SchoolAssistant.Web.Pages.Dashboard
 
         private async Task FetchUserAndStudentForCurrentYearAsync()
         {
-            _user = await _userManager.GetUserAsync(User);
+            _user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
 
             if (_user is null)
             {

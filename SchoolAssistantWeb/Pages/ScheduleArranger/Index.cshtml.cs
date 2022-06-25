@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.ScheduleArranger;
@@ -8,6 +9,7 @@ using SchoolAssistant.Logic.ScheduleArranger;
 
 namespace SchoolAssistant.Web.Pages.ScheduleArranger
 {
+    [Authorize(Roles = "Administration, Headmaster")]
     public class ScheduleArrangerModel : PageModel
     {
         private readonly IFetchSchedArrConfigService _fetchConfigService;

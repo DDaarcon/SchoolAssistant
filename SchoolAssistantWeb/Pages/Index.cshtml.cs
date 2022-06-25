@@ -23,7 +23,7 @@ namespace SchoolAssistant.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
 
             return user.Type switch
             {

@@ -55,6 +55,7 @@ namespace SchoolAssistant.DAL
 
         public async Task SeedRolesAsync()
         {
+            // TODO: verify if needed
             var descriptions = UserTypeHelper.GetUserTypeDescriptions();
 
             foreach (var description in descriptions)

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Logic.ConductingClasses.ConductLesson;
 
-namespace SchoolAssistant.Web.PageFilters
+namespace SchoolAssistant.Web.PagesRelated.Filters
 {
     public class EnableLessonConductionPanelAsyncPageFilter : IAsyncPageFilter
     {

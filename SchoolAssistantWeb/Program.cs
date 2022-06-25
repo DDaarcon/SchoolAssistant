@@ -8,7 +8,7 @@ using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.Infrastructure.InjectablePattern;
 using SchoolAssistant.Logic.Help;
-using SchoolAssistant.Web.PageFilters;
+using SchoolAssistant.Web.PagesRelated.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +48,7 @@ builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation()
     .AddRazorPagesOptions(options =>
     {
+        options.Conventions.AuthorizeFolder("/Dashboard");
         options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
         options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
     })
@@ -60,8 +61,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
     options.LogoutPath = $"/Identity/Account/Logout";
-    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+    options.AccessDeniedPath = $"/Index";
 });
+
+builder.Services.AddAuthorization();
 
 #endregion
 

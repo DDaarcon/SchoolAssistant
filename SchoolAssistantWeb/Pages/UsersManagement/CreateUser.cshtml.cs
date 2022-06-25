@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
@@ -6,6 +7,7 @@ using SchoolAssistant.Logic.UsersManagement;
 
 namespace SchoolAssistant.Web.Pages.UsersManagement
 {
+    [Authorize(Roles = "Administration, Headmaster")]
     public class CreateUserModel : PageModel
     {
         private readonly IFetchUserListEntriesService _fetchUserListEntriesSvc;
@@ -31,19 +33,19 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
 
         public async Task<JsonResult> OnGetUserListEntriesAsync(FetchUsersListRequestJson model)
         {
-            var entries = await _fetchUserListEntriesSvc.FetchAsync(model);
+            var entries = await _fetchUserListEntriesSvc.FetchAsync(model).ConfigureAwait(false);
             return new JsonResult(entries);
         }
 
         public async Task<JsonResult> OnGetRelatedObjectsAsync(FetchRelatedObjectsRequestJson model)
         {
-            var objects = await _fetchRelatedObjectsSvc.GetObjectsAsync(model);
+            var objects = await _fetchRelatedObjectsSvc.GetObjectsAsync(model).ConfigureAwait(false);
             return new JsonResult(objects);
         }
 
         public async Task<JsonResult> OnPostAddUserAsync([FromBody] AddUserRequestJson model)
         {
-            var res = await _addUserSvc.AddAsync(model);
+            var res = await _addUserSvc.AddAsync(model).ConfigureAwait(false);
             return new JsonResult(res);
         }
 

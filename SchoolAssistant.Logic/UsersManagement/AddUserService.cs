@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Interfaces;
 using SchoolAssistant.DAL.Models.AppStructure;
-using SchoolAssistant.DAL.Models.Shared;
-using SchoolAssistant.DAL.Models.Staff;
-using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.General.Other;
 using SchoolAssistant.Logic.Help;
-using System.ComponentModel.DataAnnotations;
+using SchoolAssistant.Logic.UsersManagement._Validation;
 
 namespace SchoolAssistant.Logic.UsersManagement
 {
@@ -23,12 +21,10 @@ namespace SchoolAssistant.Logic.UsersManagement
     public class AddUserService : IAddUserService
     {
         private readonly IUserRepository _userRepo;
-        private readonly IRepository<StudentRegisterRecord> _studentRegRecRepo;
-        private readonly IRepository<Teacher> _teacherRepo;
-        private readonly IRepository<Parent> _parentRepo;
         private readonly IPasswordDeformationService _deformationSvc;
 
-        private readonly EmailAddressAttribute _emailValidator = new();
+        private readonly IAddUserRequestJsValidator _modelValidator;
+
 
         private AddUserRequestJson _model = null!;
         private AddUserResponseJson _response = null!;
@@ -39,105 +35,34 @@ namespace SchoolAssistant.Logic.UsersManagement
 
         public AddUserService(
             IUserRepository userRepo,
-            IRepository<StudentRegisterRecord> studentRegRecRepo,
-            IRepository<Teacher> teacherRepo,
-            IRepository<Parent> parentRepo,
-            IPasswordDeformationService deformationSvc)
+            IPasswordDeformationService deformationSvc,
+            IAddUserRequestJsValidator modelValidator)
         {
             _userRepo = userRepo;
-            _studentRegRecRepo = studentRegRecRepo;
-            _teacherRepo = teacherRepo;
-            _parentRepo = parentRepo;
             _deformationSvc = deformationSvc;
+            _modelValidator = modelValidator;
         }
 
         public async Task<AddUserResponseJson> AddAsync(AddUserRequestJson model)
         {
             _model = model;
-            _response = new AddUserResponseJson();
 
-            if (!await ValidateAsync())
+            bool validationResult = await _modelValidator.ValidateAsync(_model).ConfigureAwait(false);
+            _response = _modelValidator.Response;
+
+            if (!validationResult)
                 return _response;
 
-            await CreateUserAsync();
+
+            _related = _modelValidator.SideEffects.Related;
+
+            await CreateUserAsync().ConfigureAwait(false);
 
             if (_response.success)
                 _response.passwordDeformed = _deformationSvc.GetDeformed(_temporaryPassword!);
 
             return _response;
         }
-
-        private async Task<bool> ValidateAsync()
-        {
-            if (_model is null)
-                return ValidationFail("Błąd! Brakuje modelu danych");
-
-            if (String.IsNullOrWhiteSpace(_model.userName))
-                return ValidationFail("Brakuje nazwy użytkownika");
-
-            if (_model.userName.Contains(' '))
-                return ValidationFail("Nazwa użytkownika nie powinna zawierać odstępów");
-
-            if (await _userRepo.ExistsAsync(x => x.NormalizedUserName == _model.userName.ToUpper()))
-                return ValidationFail("Istnieje już użytkownik o tej nazwie");
-
-            if (String.IsNullOrWhiteSpace(_model.email))
-                return ValidationFail("Brakuje adresu email");
-
-            if (!_emailValidator.IsValid(_model.email))
-                return ValidationFail("Nieprawidłowy adres email");
-
-            if (await _userRepo.ExistsAsync(x => x.NormalizedEmail == _model.email.ToUpper()))
-                return ValidationFail("Istnieje już użytkownik z tym adresem email");
-
-            if (!await ValidateRelatedEntity())
-                return false;
-
-            return true;
-        }
-
-        private async Task<bool> ValidateRelatedEntity()
-        {
-            if (!Enum.IsDefined(_model.relatedType))
-                return ValidationFail("Błąd! Nieprawidłowy typ powiązanego obiektu");
-
-            switch (_model.relatedType)
-            {
-                case UserTypeForManagement.Student:
-                    await FetchRelatedEntityAsync(_studentRegRecRepo);
-                    break;
-                case UserTypeForManagement.Teacher:
-                    await FetchRelatedEntityAsync(_teacherRepo);
-                    break;
-                case UserTypeForManagement.Parent:
-                    await FetchRelatedEntityAsync(_parentRepo);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
-            if (_related is null)
-                return ValidationFail("Błąd! Powiązany obiekt nie istenieje");
-
-            if (_related.User is not null)
-                return ValidationFail("Błąd! Powiązany obiekt ma już użytkownika");
-
-            return true;
-        }
-
-        private async Task FetchRelatedEntityAsync<TRelated>(IRepository<TRelated> repo)
-            where TRelated : DbEntity, IHasUser
-        {
-            _related = await repo.GetByIdAsync(_model.relatedId);
-        }
-
-        /// <returns> <c>false</c> </returns>
-        private bool ValidationFail(string msg)
-        {
-            _response.message = msg;
-            return false;
-        }
-
 
         private async Task CreateUserAsync()
         {
@@ -151,19 +76,21 @@ namespace SchoolAssistant.Logic.UsersManagement
                 PhoneNumber = _model.phoneNumber
             };
 
-            SetUsersRelatedEntity();
+            SetTypeSpecific();
 
-            if (!await CreateUserEntityAsync())
+            if (!await CreateUserEntityAsync().ConfigureAwait(false))
                 return;
 
-            if (!await AddTemporaryPasswordToUser())
+            await AddRoleAsync().ConfigureAwait(false);
+
+            if (!await AddTemporaryPasswordAsync().ConfigureAwait(false))
             {
                 _userRepo.Remove(_user);
-                await _userRepo.SaveAsync();
+                await _userRepo.SaveAsync().ConfigureAwait(false);
             }
         }
 
-        private void SetUsersRelatedEntity()
+        private void SetTypeSpecific()
         {
             switch (_model.relatedType)
             {
@@ -186,20 +113,33 @@ namespace SchoolAssistant.Logic.UsersManagement
 
         private async Task<bool> CreateUserEntityAsync()
         {
-            var result = await _userRepo.Manager.CreateAsync(_user!);
+            var result = await _userRepo.Manager.CreateAsync(_user!).ConfigureAwait(false);
             if (!result.Succeeded)
-                return ValidationFail(ParseIdentityErrors(result));
+            {
+                _response.message = ParseIdentityErrors(result);
+                return false;
+            }
 
             return true;
         }
 
-        private async Task<bool> AddTemporaryPasswordToUser()
+        private async Task AddRoleAsync()
+        {
+            var attr = _user!.Type.GetUserTypeAttribute();
+
+            await _userRepo.Manager.AddToRoleAsync(_user, attr.RoleName).ConfigureAwait(false);
+        }
+
+        private async Task<bool> AddTemporaryPasswordAsync()
         {
             _temporaryPassword = PasswordHelper.GenerateRandom();
 
-            var result = await _userRepo.Manager.AddPasswordAsync(_user!, _temporaryPassword);
+            var result = await _userRepo.Manager.AddPasswordAsync(_user!, _temporaryPassword).ConfigureAwait(false);
             if (!result.Succeeded)
-                return ValidationFail(ParseIdentityErrors(result));
+            {
+                _response.message = ParseIdentityErrors(result);
+                return false;
+            }
 
             return true;
         }
