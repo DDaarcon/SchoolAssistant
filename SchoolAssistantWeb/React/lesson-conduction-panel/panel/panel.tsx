@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { enumAssignSwitch } from "../../shared/enum-help";
-import StoreAndSaveService from "../services/store-and-save-service";
+import StoreService from "../services/store-and-save-service";
 import TogglePanelService from "../services/toggle-panel-service";
 import Anchor from "./components/anchor";
 import Clock from "./components/clock";
@@ -79,8 +79,8 @@ export default class Panel extends React.Component<PanelProps, PanelState> {
         )
     }
 
-    private get _startTime() { return StoreAndSaveService.startTime; }
-    private get _duration() { return StoreAndSaveService.duration; }
+    private get _startTime() { return StoreService.startTime; }
+    private get _duration() { return StoreService.duration; }
 
     private changeContent = (content: LessonCondPanelContent) => {
         if (this.state.contentType == content)

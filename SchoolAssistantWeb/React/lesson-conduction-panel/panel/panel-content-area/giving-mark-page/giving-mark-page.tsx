@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
 import MarkInput from "../../../marks/mark-input";
-import StoreAndSaveService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-and-save-service";
 import GiveMarkModel from "./give-mark-model";
 import StudentSelectionEntry from "./student-selection-entry";
 import './giving-mark-page.css';
@@ -97,7 +97,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                 </div>
 
                 <div className="student-selection-list">
-                    {StoreAndSaveService.students.map(student => (
+                    {StoreService.students.map(student => (
                         <StudentSelectionEntry
                             key={student.id}
                             selected={this.state.data.studentId == student.id}

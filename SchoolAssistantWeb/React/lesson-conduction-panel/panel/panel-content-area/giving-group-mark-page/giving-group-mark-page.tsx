@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Input, SubmitButton, TextArea } from "../../../../shared/form-controls";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
-import StoreAndSaveService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-and-save-service";
 import GiveGroupMarkModel from "./give-group-mark-model";
 import StudentMarkInsertionEntry from "./student-mark-insertion-entry";
 import './giving-group-mark-page.css';
@@ -77,7 +77,7 @@ export default class GivingGroupMarkPage extends ModCompBase<GiveGroupMarkModel,
                 </div>
 
                 <div className="student-mark-insertion-list">
-                    {StoreAndSaveService.students.map(student => (
+                    {StoreService.students.map(student => (
                         <StudentMarkInsertionEntry
                             key={student.id}
                             mark={this.state.data.marks[student.id]}

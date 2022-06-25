@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import PresenceStatus from "../../../enums/presence-status";
 import ParticipatingStudentModel from "../../../interfaces/participating-student-model";
-import StoreAndSaveService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-and-save-service";
 import './attendance-edition.css';
 import AttendanceEntry from "./attendance-entry";
 
@@ -16,14 +16,14 @@ export default class AttendanceEdition extends React.Component<AttendanceEdition
         super(props);
 
         this.state = {
-            data: StoreAndSaveService.students
+            data: StoreService.students
         }
     }
 
     render() {
         return (
             <div className="attendance-edition-list">
-                {StoreAndSaveService.students.map(student => (
+                {StoreService.students.map(student => (
                     <AttendanceEntry
                         key={student.id}
                         selectPresence={this.onPresenceSelected}

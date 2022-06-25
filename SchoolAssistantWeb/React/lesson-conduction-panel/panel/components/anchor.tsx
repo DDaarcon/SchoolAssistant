@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import LessonTimerService from "../../services/lesson-timer-service";
-import StoreAndSaveService from "../../services/store-and-save-service";
+import StoreService from "../../services/store-and-save-service";
 import TogglePanelService from "../../services/toggle-panel-service";
 import './anchor.css';
 
@@ -42,8 +42,8 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
     componentDidMount() {
         if (!LessonTimerService.isSetUp)
             LessonTimerService.setUp(
-                StoreAndSaveService.startTime,
-                StoreAndSaveService.duration
+                StoreService.startTime,
+                StoreService.duration
             );
 
         LessonTimerService.onUpdate(() => this.forceUpdate());

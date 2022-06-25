@@ -1,10 +1,8 @@
 ﻿import LessonConductionPanelModel from "../interfaces/lesson-conduction-panel-model";
+import LessonDetailsEditModel from "../panel/panel-content-area/lesson-details-edition/lesson-details-edit-model";
 
 
-class StoreAndSaveServiceImplementation {
-
-
-
+class StoreServiceImplementation {
 
     private _model?: LessonConductionPanelModel;
     public assignModel(model: LessonConductionPanelModel) {
@@ -31,6 +29,11 @@ class StoreAndSaveServiceImplementation {
 
     public get subjectName() { return this._model?.subjectName; }
 
+    public updateDetails(model: LessonDetailsEditModel) {
+        if (!this._model) return;
+
+        this._model.topic = model.topic;
+    }
 }
-const StoreAndSaveService = new StoreAndSaveServiceImplementation;
-export default StoreAndSaveService;
+const StoreService = new StoreServiceImplementation;
+export default StoreService;

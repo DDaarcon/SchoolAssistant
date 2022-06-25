@@ -3,7 +3,7 @@ import server from "../../../../scheduled-lessons-list/server";
 import { SubmitButton, TextInput } from "../../../../shared/form-controls";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
 import { ResponseJson } from "../../../../shared/server-connection";
-import StoreAndSaveService from "../../../services/store-and-save-service";
+import StoreService from "../../../services/store-and-save-service";
 import LessonDetailsEditModel from "./lesson-details-edit-model";
 
 type LessonDetailsEditionProps = {}
@@ -18,8 +18,8 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
 
         this.state = {
             data: {
-                id: StoreAndSaveService.lessonId,
-                topic: StoreAndSaveService.topic ?? ""
+                id: StoreService.lessonId,
+                topic: StoreService.topic ?? ""
             }
         }
 
@@ -61,9 +61,10 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
         const res = await server.postAsync<ResponseJson>("LessonDetails", {}, this.state.data);
 
         // TODO: handle server errors
-        if (!res.success)
+        if (res.success)
+            StoreService.updateDetails(this.state.data);
+        else
             console.debug(res.message);
-
 
     }
 
