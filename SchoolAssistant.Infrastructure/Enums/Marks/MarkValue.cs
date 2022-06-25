@@ -1,6 +1,6 @@
-﻿namespace SchoolAssistant.DAL.Enums
+﻿namespace SchoolAssistant.Infrastructure.Enums.Marks
 {
-    public enum MainMark
+    public enum MarkValue
     {
         F = 1,
         E,

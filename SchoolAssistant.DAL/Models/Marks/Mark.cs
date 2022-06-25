@@ -1,8 +1,8 @@
-﻿using SchoolAssistant.DAL.Enums;
-using SchoolAssistant.DAL.Models.Shared;
+﻿using SchoolAssistant.DAL.Models.Shared;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
+using SchoolAssistant.Infrastructure.Enums.Marks;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Marks
@@ -29,7 +29,7 @@ namespace SchoolAssistant.DAL.Models.Marks
 
         public DateTime IssueDate { get; set; }
 
-        public MainMark Main { get; set; }
+        public MarkValue Main { get; set; }
         public MarkPrefix? Prefix { get; set; }
         public int? Weight { get; set; }
     }

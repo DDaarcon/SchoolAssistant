@@ -1,7 +1,7 @@
 ﻿import MarkModel from "../../../marks/mark-model";
 
 export default interface GiveMarkModel {
-    id: number;
+    lessonId: number;
     mark?: MarkModel;
     description: string;
     weight?: number;

@@ -22,7 +22,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
 
         this.state = {
             data: {
-                id: StoreService.lessonId,
+                lessonId: StoreService.lessonId,
                 description: ""
             }
         };
@@ -126,7 +126,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
         if (res.success) {
             this.setState({
                 data: {
-                    id: this.state.data.id,
+                    lessonId: this.state.data.lessonId,
                     description: "",
                     mark: undefined,
                     studentId: undefined,

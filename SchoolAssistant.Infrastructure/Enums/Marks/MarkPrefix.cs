@@ -1,4 +1,4 @@
-﻿namespace SchoolAssistant.DAL.Enums
+﻿namespace SchoolAssistant.Infrastructure.Enums.Marks
 {
     public enum MarkPrefix
     {

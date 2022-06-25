@@ -548,6 +548,8 @@ namespace SchoolAssistans.Tests.DbEntities
                 int? fromHour = null,
                 int? toHour = null)
         {
+            // TODO: generate classes with students
+
             var class4f = await FakeData.Class_4f_0Students_RandomSchedule(year, orgClassRepo, teacherRepo, fromHour, toHour);
             var class5f = await FakeData.Class_5f_0Students_RandomScheduleAddedSeparately(year, orgClassRepo, teacherRepo, lessonRepo, fromHour, toHour);
 
