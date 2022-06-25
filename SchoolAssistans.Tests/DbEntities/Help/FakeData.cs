@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.SchoolYears;
@@ -10,6 +11,8 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.Infrastructure.Enums.Attendance;
+using SchoolAssistant.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -531,6 +534,54 @@ namespace SchoolAssistans.Tests.DbEntities
 
         #endregion
 
+
+        #region Periodic lessons and held lessons
+
+        public static async Task<(
+            OrganizationalClass class4f,
+            OrganizationalClass class5f
+            )> ScheduleOf_4f_5f_Classes_WithLessonEntities(
+                SchoolYear year,
+                IRepository<OrganizationalClass> orgClassRepo,
+                IRepository<Teacher> teacherRepo,
+                IRepository<PeriodicLesson> lessonRepo,
+                int? fromHour = null,
+                int? toHour = null)
+        {
+            var class4f = await FakeData.Class_4f_0Students_RandomSchedule(year, orgClassRepo, teacherRepo, fromHour, toHour);
+            var class5f = await FakeData.Class_5f_0Students_RandomScheduleAddedSeparately(year, orgClassRepo, teacherRepo, lessonRepo, fromHour, toHour);
+
+            var periLessons = await lessonRepo.AsListAsync();
+            var schoolYearId = year.Id;
+
+            foreach (var periLesson in periLessons)
+            {
+                var pastLessonDates = periLesson.GetOccurrences(DateTime.Now.AddMonths(-12), DateTime.Now);
+
+                var lessons = pastLessonDates.Select(x => new Lesson
+                {
+                    Date = x,
+                    FromScheduleId = periLesson.Id,
+                    SchoolYearId = schoolYearId,
+                    Topic = "Some topic",
+                    PresenceOfStudents = periLesson.ParticipatingOrganizationalClass!.Students.Select(x => new Presence
+                    {
+                        SchoolYearId = schoolYearId,
+                        StudentId = x.Id,
+                        Status = PresenceStatus.Present
+                    }).ToList()
+                }).ToList();
+
+                periLesson.TakenLessons = lessons;
+                lessonRepo.Update(periLesson);
+            }
+
+            await lessonRepo.SaveAsync();
+
+            return (class4f, class5f);
+        }
+
+        #endregion
 
 
         public static int[] RandomAmountOfRandomInts(int from, int to)

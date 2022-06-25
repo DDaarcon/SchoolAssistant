@@ -6,6 +6,8 @@ namespace SchoolAssistant.DAL.Models.Lessons
 {
     public class Lesson : SchoolYearDbEntity
     {
+
+        // TODO: examine every usage to make sure only UTC/Local is used
         /// <summary> Date, when lesson should occur, according to schedule (<see cref="PeriodicLesson"/>) </summary>
         public DateTime Date { get; set; }
         /// <summary> Date, when lesson actually occured, when it is different than scheduled date </summary>

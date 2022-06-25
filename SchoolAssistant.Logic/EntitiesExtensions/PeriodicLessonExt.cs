@@ -75,6 +75,13 @@ namespace SchoolAssistant.Logic
             return TimeOnly.FromDateTime(occurance.Value);
         }
 
+        public static TimeOnly? GetTimeLocal(this PeriodicLesson lesson)
+        {
+            var occurance = lesson.GetNextOccurrence();
+            if (occurance is null) return null;
+            return TimeOnly.FromDateTime(occurance.Value.ToLocalTime());
+        }
+
 
 
         public static bool IsValidOccurrence(this PeriodicLesson lesson, DateTime occurrence)

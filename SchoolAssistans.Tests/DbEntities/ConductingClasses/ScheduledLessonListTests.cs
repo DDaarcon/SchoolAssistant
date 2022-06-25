@@ -11,12 +11,10 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Attendance;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic;
-using SchoolAssistant.Logic.ConductingClasses;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Logic.Help;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,35 +48,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         {
             await _configRepo.Records.DefaultLessonDuration.SetAndSaveAsync(_DefDuration);
 
-            _orgClass1 = await FakeData.Class_4f_0Students_RandomSchedule(await _Year, _orgClassRepo, _teacherRepo);
-            _orgClass2 = await FakeData.Class_5f_0Students_RandomScheduleAddedSeparately(await _Year, _orgClassRepo, _teacherRepo, _periLessonRepo);
-
-            var periLessons = await _periLessonRepo.AsListAsync();
-            var schoolYearId = (await _Year).Id;
-
-            foreach (var periLesson in periLessons)
-            {
-                var pastLessonDates = periLesson.GetOccurrences(DateTime.Now.AddMonths(-12), DateTime.Now);
-
-                var lessons = pastLessonDates.Select(x => new Lesson
-                {
-                    Date = x,
-                    FromScheduleId = periLesson.Id,
-                    SchoolYearId = schoolYearId,
-                    Topic = "Some topic",
-                    PresenceOfStudents = periLesson.ParticipatingOrganizationalClass!.Students.Select(x => new Presence
-                    {
-                        SchoolYearId = schoolYearId,
-                        StudentId = x.Id,
-                        Status = PresenceStatus.Present
-                    }).ToList()
-                }).ToList();
-
-                periLesson.TakenLessons = lessons;
-                _periLessonRepo.Update(periLesson);
-            }
-
-            await _periLessonRepo.SaveAsync();
+            (_orgClass1, _orgClass2) = await FakeData.ScheduleOf_4f_5f_Classes_WithLessonEntities(await _Year, _orgClassRepo, _teacherRepo, _periLessonRepo);
 
             Assert.IsTrue(await _periLessonRepo.ExistsAsync(x => x.TakenLessons.Any()));
         }
@@ -249,42 +219,48 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
 
         private void AssertEntriesMatchEntities(ScheduledLessonListEntryJson[] entries, IEnumerable<PeriodicLesson> entities, DateTime from, DateTime to, bool mustHaveClasses, bool mustNotHaveClasses)
         {
-            Assert.IsTrue(entries.All(x => {
-                var entitiesTimes = entities.Select(x => x.GetOccurrences(from, to).ToList()).ToList();
-                var date = DatesHelper.FromTicksJs(x.startTimeTk);
+            foreach (var entry in entries)
+            {
+                var date = DatesHelper.FromTicksJs(entry.startTimeTk).ToLocalTime();
+                var time = TimeOnly.FromDateTime(date);
 
-                return entities.Any(d =>
+                var entityTimes = entities.Select(x => (x.GetTime(), x.GetDayOfWeek()));
+                var entityTimesLocal = entities.Select(x => (x.GetTimeLocal(), x.GetDayOfWeek()));
+
+                if (!entities.Any(d =>
                 {
-                    var times = d.GetOccurrences(from, to);
-                    if (!times.Any(y =>
-                    {
-                        return y.GetTicksJs() == x.startTimeTk;
-                    }))
+
+                    var entityTime = d.GetTime();
+                    var dayOfWeek = d.GetDayOfWeek();
+                    if (entityTime != time || dayOfWeek != date.DayOfWeek)
                         return false;
 
-                    bool baseCheck = x.className == d.ParticipatingOrganizationalClass?.Name
-                        && x.subjectName == d.Subject.Name
-                        && x.duration == (d.CustomDuration ?? _DefDuration);
+                    bool baseCheck = entry.className == d.ParticipatingOrganizationalClass?.Name
+                        && entry.subjectName == d.Subject.Name
+                        && entry.duration == (d.CustomDuration ?? _DefDuration);
 
                     if (!baseCheck)
                         return false;
 
-                    if (x.heldClasses != null && mustNotHaveClasses)
+                    if (entry.heldClasses != null && mustNotHaveClasses)
                         return false;
 
-                    if (x.heldClasses != null)
+                    if (entry.heldClasses != null)
                         return _lessonRepo.Exists(l =>
                             l.FromScheduleId == d.Id
-                            && l.Date == DatesHelper.FromTicksJs(x.startTimeTk)
-                            && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == x.heldClasses.amountOfPresentStudents
-                            && l.Topic == x.heldClasses.topic);
+                            && l.Date == DatesHelper.FromTicksJs(entry.startTimeTk).ToLocalTime()
+                            && l.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present) == entry.heldClasses.amountOfPresentStudents
+                            && l.Topic == entry.heldClasses.topic);
 
-                    if (x.heldClasses == null && mustHaveClasses)
+                    if (entry.heldClasses == null && mustHaveClasses)
                         return false;
 
                     return true;
-                });
-            }));
+                }))
+                {
+                    Assert.Fail($"fail entry at {DatesHelper.FromTicksJs(entry.startTimeTk)} {(entry.heldClasses is not null ? "and should have classes" : "and should not have classes")}");
+                }
+            };
         }
     }
 }

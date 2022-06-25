@@ -2,11 +2,6 @@
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 {
@@ -19,6 +14,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
     [Injectable]
     public class StartLessonService : IStartLessonService
     {
+        // TODO: tests
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepositoryBySchoolYear<PeriodicLesson> _periodicLessonRepo;
         private readonly IRepositoryBySchoolYear<Lesson> _lessonRepo;

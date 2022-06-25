@@ -87,7 +87,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
             var scheduled = await _perioLessonRepo.AsQueryableByYear
                 .ByCurrent()
                 .Where(x => x.LecturerId == _teacherId)
-                .Include(x => x.TakenLessons.Where(x => 
+                .Include(x => x.TakenLessons.Where(x =>
                     _model.From.HasValue ? x.Date >= _model.From.Value : true
                     && _model.To.HasValue ? x.Date <= _model.To.Value : true))
                 .ToListAsync();
@@ -132,6 +132,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
 
         private HeldClassesJson? ToHeldClassesModel(Lesson? lesson)
         {
+            // TODO: in case of missing presence entity count all users anyway
             if (lesson is null) return null;
             return new HeldClassesJson
             {

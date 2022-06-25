@@ -9,6 +9,7 @@ namespace SchoolAssistant.DAL.Models.Lessons
 {
     public class PeriodicLesson : SchoolYearDbEntity
     {
+        // TODO: examine every usage to make sure only UTC/Local is used
         public string CronPeriodicity { get; set; } = null!;
 
         public int? CustomDuration { get; set; }
