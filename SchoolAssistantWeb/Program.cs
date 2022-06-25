@@ -48,7 +48,6 @@ builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation()
     .AddRazorPagesOptions(options =>
     {
-        options.Conventions.AuthorizeFolder("/Dashboard");
         options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
         options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
     })
