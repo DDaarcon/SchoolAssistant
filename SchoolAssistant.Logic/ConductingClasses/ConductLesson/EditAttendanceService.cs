@@ -45,6 +45,12 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 
         private async Task<bool> FetchAndValidateAsync()
         {
+            if (_model is null)
+            {
+                _response.message = "Brakuje modelu danych";
+                return false;
+            }
+
             _model.students ??= Array.Empty<StudentPresenceEditJson>();
 
             _lesson = (await _lessonRepo.AsQueryableByYear.ByCurrent()

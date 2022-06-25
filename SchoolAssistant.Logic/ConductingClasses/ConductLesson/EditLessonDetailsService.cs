@@ -39,6 +39,12 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 
         private async Task<bool> FetchAndValidateAsync()
         {
+            if (_model is null)
+            {
+                _response.message = "Brakuje modelu danych";
+                return false;
+            }
+
             if (String.IsNullOrEmpty(_model.topic))
             {
                 _response.message = "Należy wprowadzić temat zajęć";

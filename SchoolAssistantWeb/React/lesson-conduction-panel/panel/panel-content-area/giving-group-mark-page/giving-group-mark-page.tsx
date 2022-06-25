@@ -5,6 +5,9 @@ import StoreService from "../../../services/store-service";
 import GiveGroupMarkModel from "./give-group-mark-model";
 import StudentMarkInsertionEntry from "./student-mark-insertion-entry";
 import './giving-group-mark-page.css';
+import SaveButtonService from "../../../services/save-button-service";
+import server from "../../../../scheduled-lessons-list/server";
+import { ResponseJson } from "../../../../shared/server-connection";
 
 type GivingGroupMarkPageProps = {}
 type GivingGroupMarkPageState = {
@@ -18,6 +21,7 @@ export default class GivingGroupMarkPage extends ModCompBase<GiveGroupMarkModel,
 
         this.state = {
             data: {
+                lessonId: StoreService.lessonId,
                 description: '',
                 marks: {}
             }
@@ -41,19 +45,15 @@ export default class GivingGroupMarkPage extends ModCompBase<GiveGroupMarkModel,
                 }
             }
         });
+
+        SaveButtonService.show();
+        SaveButtonService.setAction(this.submitAsync);
     }
 
     render() {
         return (
-            <form className="giving-group-mark-page"
-                onSubmit={this.submitAsync}
-            >
+            <form className="giving-group-mark-page">
                 <div className="giving-group-mark-details">
-                    <SubmitButton
-                        value="Zapisz"
-                        containerClassName="giving-group-mark-submit-btn"
-                    />
-
                     <TextArea
                         label="Opis"
                         name="description-input"
@@ -90,12 +90,30 @@ export default class GivingGroupMarkPage extends ModCompBase<GiveGroupMarkModel,
         )
     }
 
-    private submitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
-        event.preventDefault();
+    private submitAsync = async () => {
 
         if (!this._validator.validate()) {
             this.forceUpdate();
             return;
+        }
+
+        const { marks, ...rest } = this.state.data;
+        const res = await server.postAsync<ResponseJson>("GroupMark", {}, {
+            ...rest,
+            marks: Object.keys(marks).map(id => ({
+                studentId: id,
+                mark: marks[id]
+            }))
+        });
+
+        if (res.success) {
+            this.setState({
+                data: {
+                    lessonId: this.state.data.lessonId,
+                    description: "",
+                    marks: {}
+                }
+            });
         }
     }
 

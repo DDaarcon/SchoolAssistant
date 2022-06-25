@@ -19,6 +19,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         private readonly IStartLessonService _startLessonSvc;
         private readonly IEditLessonDetailsService _editDetailsSvc;
         private readonly IEditAttendanceService _editAttendanceSvc;
+        private readonly IGiveMarkService _giveMarkSvc;
 
         private User _user = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
@@ -30,7 +31,8 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc,
             IStartLessonService startLessonSvc,
             IEditLessonDetailsService editDetailsSvc,
-            IEditAttendanceService editAttendanceSvc)
+            IEditAttendanceService editAttendanceSvc,
+            IGiveMarkService giveMarkSvc)
         {
             _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
@@ -38,6 +40,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             _startLessonSvc = startLessonSvc;
             _editDetailsSvc = editDetailsSvc;
             _editAttendanceSvc = editAttendanceSvc;
+            _giveMarkSvc = giveMarkSvc;
         }
 
         public async Task OnGetAsync()
@@ -83,6 +86,12 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         public async Task<JsonResult> OnPostAttendanceAsync([FromBody] AttendanceEditJson model)
         {
             var res = await _editAttendanceSvc.EditAsync(model).ConfigureAwait(false);
+            return new JsonResult(res);
+        }
+
+        public async Task<JsonResult> OnPostMarkAsync([FromBody] GiveMarkJson model)
+        {
+            var res = await _giveMarkSvc.GiveAsync(model).ConfigureAwait(false);
             return new JsonResult(res);
         }
 
