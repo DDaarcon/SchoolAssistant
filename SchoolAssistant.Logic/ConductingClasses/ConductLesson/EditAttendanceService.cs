@@ -35,10 +35,10 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
             _model = model;
             _response = new ResponseJson();
 
-            if (!await FetchAndValidateAsync())
+            if (!await FetchAndValidateAsync().ConfigureAwait(false))
                 return _response;
 
-            await ModifyAttendanceAsync();
+            await ModifyAttendanceAsync().ConfigureAwait(false);
 
             return _response;
         }
@@ -50,7 +50,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
             _lesson = (await _lessonRepo.AsQueryableByYear.ByCurrent()
                 .Include(x => x.FromSchedule).ThenInclude(x => x.ParticipatingOrganizationalClass).ThenInclude(x => x.Students)
                 .Include(x => x.PresenceOfStudents)
-                .FirstOrDefaultAsync(x => x.Id == _model.id))!;
+                .FirstOrDefaultAsync(x => x.Id == _model.id).ConfigureAwait(false))!;
 
             if (_lesson is null)
             {
@@ -94,7 +94,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
                 presenceEntity.Status = studentEditModel.presence!.Value;
             }
 
-            await _lessonRepo.SaveAsync();
+            await _lessonRepo.SaveAsync().ConfigureAwait(false);
         }
     }
 }

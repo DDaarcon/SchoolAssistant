@@ -18,6 +18,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
 
         private readonly IStartLessonService _startLessonSvc;
         private readonly IEditLessonDetailsService _editDetailsSvc;
+        private readonly IEditAttendanceService _editAttendanceSvc;
 
         private User _user = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
@@ -28,13 +29,15 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             IFetchScheduledLessonListEntriesService scheduledLessonsListSvc,
             IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc,
             IStartLessonService startLessonSvc,
-            IEditLessonDetailsService editDetailsSvc)
+            IEditLessonDetailsService editDetailsSvc,
+            IEditAttendanceService editAttendanceSvc)
         {
             _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
             _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
             _startLessonSvc = startLessonSvc;
             _editDetailsSvc = editDetailsSvc;
+            _editAttendanceSvc = editAttendanceSvc;
         }
 
         public async Task OnGetAsync()
@@ -79,7 +82,8 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
 
         public async Task<JsonResult> OnPostAttendanceAsync([FromBody] AttendanceEditJson model)
         {
-            return null;
+            var res = await _editAttendanceSvc.EditAsync(model).ConfigureAwait(false);
+            return new JsonResult(res);
         }
 
 
