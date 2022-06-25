@@ -22,9 +22,9 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
         private IRepositoryBySchoolYear<PeriodicLesson> _periLessonRepo = null!;
-        private IRepository<Lesson> _lessonRepo = null!;
+        private IRepositoryBySchoolYear<Lesson> _lessonRepo = null!;
 
-        private IEditLessonDetailsService _service;
+        private IEditLessonDetailsService _service = null!;
 
         private OrganizationalClass _orgClass1 = null!;
         private OrganizationalClass _orgClass2 = null!;
@@ -55,9 +55,9 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _teacherRepo = new Repository<Teacher>(_Context, null);
             _periLessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
-            _lessonRepo = new Repository<Lesson>(_Context, null);
+            _lessonRepo = new RepositoryBySchoolYear<Lesson>(_Context, null, _schoolYearRepo);
 
-            _service = new EditLessonDetailsService();
+            _service = new EditLessonDetailsService(_lessonRepo);
         }
 
         private DateTime _Monday => DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek + 1).AddHours(-DateTime.Now.Hour + 8);
@@ -74,7 +74,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var res = await _service.Edit(new LessonDetailsEditJson
+            var res = await _service.EditAsync(new LessonDetailsEditJson
             {
                 id = lesson!.Id,
                 topic = "some new topic, never happened before"
@@ -87,7 +87,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         }
 
         [Test]
-        public async Task ShouldAddTopicToExistingLesson()
+        public async Task ShouldAddTopicToExistingLesson_WHenLessonWithoutTopicExists()
         {
             using var timer = new TestTimer();
 
@@ -95,7 +95,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Pass("lesson without topic does not have to exist, ignore test case");
 
-            var res = await _service.Edit(new LessonDetailsEditJson
+            var res = await _service.EditAsync(new LessonDetailsEditJson
             {
                 id = lesson!.Id,
                 topic = "some new topic, never happened before"
@@ -111,7 +111,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         public async Task ShouldFail_WhenLessonIdIsinvalid()
         {
             using var timer = new TestTimer();
-            var res = await _service.Edit(new LessonDetailsEditJson
+            var res = await _service.EditAsync(new LessonDetailsEditJson
             {
                 id = 99999,
                 topic = "some new topic, never happened before"
@@ -130,7 +130,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var res = await _service.Edit(new LessonDetailsEditJson
+            var res = await _service.EditAsync(new LessonDetailsEditJson
             {
                 id = 99999,
                 topic = null
@@ -149,7 +149,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var res = await _service.Edit(new LessonDetailsEditJson
+            var res = await _service.EditAsync(new LessonDetailsEditJson
             {
                 id = 99999,
                 topic = ""

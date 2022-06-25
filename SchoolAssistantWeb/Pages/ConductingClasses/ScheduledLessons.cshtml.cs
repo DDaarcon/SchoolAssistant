@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.Infrastructure.Models.ConductingClasses.ConductLesson;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
-using SchoolAssistant.Logic.ConductingClasses;
 using SchoolAssistant.Logic.ConductingClasses.ConductLesson;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 
@@ -17,6 +17,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         private readonly IFetchScheduledLessonListConfigService _scheduledLessonsListConfigSvc;
 
         private readonly IStartLessonService _startLessonSvc;
+        private readonly IEditLessonDetailsService _editDetailsSvc;
 
         private User _user = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
@@ -26,12 +27,14 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             IUserRepository userRepo,
             IFetchScheduledLessonListEntriesService scheduledLessonsListSvc,
             IFetchScheduledLessonListConfigService scheduledLessonsListConfigSvc,
-            IStartLessonService startLessonSvc)
+            IStartLessonService startLessonSvc,
+            IEditLessonDetailsService editDetailsSvc)
         {
             _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
             _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
             _startLessonSvc = startLessonSvc;
+            _editDetailsSvc = editDetailsSvc;
         }
 
         public async Task OnGetAsync()
@@ -66,6 +69,14 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
                 message = success ? null : "Nie odnaleziono zajêæ"
             });
         }
+
+
+        public async Task<JsonResult> OnPostLessonDetailsAsync(LessonDetailsEditJson model)
+        {
+            var res = await _editDetailsSvc.EditAsync(model).ConfigureAwait(false);
+            return new JsonResult(res);
+        }
+
 
         private async Task FetchUserAsync()
         {

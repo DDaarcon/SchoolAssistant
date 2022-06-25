@@ -20,6 +20,9 @@ class StoreAndSaveServiceImplementation {
         return this._startTimeBackingField;
     }
 
+
+    public get lessonId() { return this._model?.lessonId; }
+
     public get duration() { return this._model?.duration; }
 
     public get topic() { return this._model?.topic; }

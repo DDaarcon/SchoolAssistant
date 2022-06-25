@@ -1,6 +1,8 @@
 ﻿import React from "react";
-import { TextInput } from "../../../../shared/form-controls";
+import server from "../../../../scheduled-lessons-list/server";
+import { SubmitButton, TextInput } from "../../../../shared/form-controls";
 import ModCompBase from "../../../../shared/form-controls/mod-comp-base";
+import { ResponseJson } from "../../../../shared/server-connection";
 import StoreAndSaveService from "../../../services/store-and-save-service";
 import LessonDetailsEditModel from "./lesson-details-edit-model";
 
@@ -16,14 +18,21 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
 
         this.state = {
             data: {
+                id: StoreAndSaveService.lessonId,
                 topic: StoreAndSaveService.topic ?? ""
             }
         }
+
+        this._validator.setRules({
+            topic: {
+                notNull: true, notEmpty: 'Należy wprowadzić temat zajęć'
+            }
+        });
     }
 
     render() {
         return (
-            <form onSubmit={this.submit}>
+            <form onSubmit={this.submitAsync}>
 
                 <TextInput
                     label="Temat zajęć"
@@ -33,11 +42,28 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
                     value={this.state.data.topic}
                 />
 
+                <SubmitButton
+                    value="Zapisz"
+                />
+
             </form>
         )
     }
 
-    private submit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
+    private submitAsync: React.FormEventHandler<HTMLFormElement> = async (ev) => {
+        ev.preventDefault();
+
+        if (!this._validator.validate()) {
+            this.forceUpdate();
+            return;
+        }
+
+        const res = await server.postAsync<ResponseJson>("LessonDetails", {}, this.state.data);
+
+        // TODO: handle server errors
+        if (!res.success)
+            console.debug(res.message);
+
 
     }
 
