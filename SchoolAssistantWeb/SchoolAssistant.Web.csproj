@@ -59,7 +59,7 @@
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edit-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edition.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
-    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\student-presence-model.ts" />
+    <None Remove="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\student-presence-edit-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\give-group-mark-model.ts" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\giving-group-mark-page.tsx" />
     <None Remove="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\student-mark-insertion-entry.tsx" />
@@ -307,7 +307,7 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edit-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-edition.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\attendance-entry.tsx" />
-    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\student-presence-model.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\attendance-edition\student-presence-edit-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\give-group-mark-model.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\giving-group-mark-page.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel-content-area\giving-group-mark-page\student-mark-insertion-entry.tsx" />

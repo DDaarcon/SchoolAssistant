@@ -77,6 +77,11 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             return new JsonResult(res);
         }
 
+        public async Task<JsonResult> OnPostAttendanceAsync([FromBody] AttendanceEditJson model)
+        {
+            return null;
+        }
+
 
         private async Task FetchUserAsync()
         {

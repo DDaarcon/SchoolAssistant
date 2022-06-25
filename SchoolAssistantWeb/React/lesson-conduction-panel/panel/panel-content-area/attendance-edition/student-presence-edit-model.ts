@@ -1,6 +1,6 @@
 ﻿import PresenceStatus from "../../../enums/presence-status";
 
-export default interface StudentPresenceModel {
+export default interface StudentPresenceEditModel {
     id: number;
     presence: PresenceStatus;
 }

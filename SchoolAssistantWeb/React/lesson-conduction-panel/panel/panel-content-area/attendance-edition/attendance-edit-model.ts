@@ -1,6 +1,6 @@
-﻿import StudentPresenceModel from "./student-presence-model";
+﻿import StudentPresenceEditModel from "./student-presence-edit-model";
 
 export default interface AttendanceEditModel {
     id: number;
-    students: StudentPresenceModel[];
+    students: StudentPresenceEditModel[];
 }
