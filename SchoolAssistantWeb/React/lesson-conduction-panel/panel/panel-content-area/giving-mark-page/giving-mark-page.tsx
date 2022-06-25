@@ -5,7 +5,10 @@ import StoreService from "../../../services/store-service";
 import GiveMarkModel from "./give-mark-model";
 import StudentSelectionEntry from "./student-selection-entry";
 import './giving-mark-page.css';
-import { Input, SubmitButton, TextArea } from "../../../../shared/form-controls";
+import { Input, TextArea } from "../../../../shared/form-controls";
+import SaveButtonService from "../../../services/save-button-service";
+import server from "../../../../scheduled-lessons-list/server";
+import { ResponseJson } from "../../../../shared/server-connection";
 
 type GivingMarkPageProps = {}
 type GivingMarkPageState = {
@@ -19,6 +22,7 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
 
         this.state = {
             data: {
+                id: StoreService.lessonId,
                 description: ""
             }
         };
@@ -49,6 +53,9 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                 }
             }
         });
+
+        SaveButtonService.show();
+        SaveButtonService.setAction(this.submitAsync);
     }
 
     render() {
@@ -67,10 +74,6 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
                             errorMessages={this._validator.getErrorMsgsFor('mark')}
                             warningMessages={this._validator.getWarningMsgsFor('mark')}
                             containerClassName="one-mark-input"
-                        />
-
-                        <SubmitButton
-                            value="Zapisz"
                         />
                     </div>
 
@@ -111,12 +114,25 @@ export default class GivingMarkPage extends ModCompBase<GiveMarkModel, GivingMar
     }
 
 
-    private submitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
-        event.preventDefault();
+    private submitAsync = async () => {
 
         if (!this._validator.validate()) {
             this.forceUpdate();
             return;
+        }
+
+        const res = await server.postAsync<ResponseJson>("Mark", {}, this.state.data);
+
+        if (res.success) {
+            this.setState({
+                data: {
+                    id: this.state.data.id,
+                    description: "",
+                    mark: undefined,
+                    studentId: undefined,
+                    weight: undefined
+                }
+            })
         }
     }
 
