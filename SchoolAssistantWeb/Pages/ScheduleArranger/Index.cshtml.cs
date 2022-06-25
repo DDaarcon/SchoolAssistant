@@ -9,7 +9,7 @@ using SchoolAssistant.Logic.ScheduleArranger;
 
 namespace SchoolAssistant.Web.Pages.ScheduleArranger
 {
-    [Authorize(Roles = "Administration, Headmaster")]
+    [Authorize(Roles = "Administration, Headmaster, SuperAdmin")]
     public class ScheduleArrangerModel : PageModel
     {
         private readonly IFetchSchedArrConfigService _fetchConfigService;

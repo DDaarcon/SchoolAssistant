@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ConductLesson;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsList;
@@ -10,9 +8,8 @@ using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 
 namespace SchoolAssistant.Web.Pages.ConductingClasses
 {
-    public class ScheduledLessonsModel : PageModel
+    public class ScheduledLessonsModel : MyPageModel
     {
-        private readonly IUserRepository _userRepo;
         private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
         private readonly IFetchScheduledLessonListConfigService _scheduledLessonsListConfigSvc;
 
@@ -22,7 +19,6 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         private readonly IGiveMarkService _giveMarkSvc;
         private readonly IGiveGroupMarkService _giveGroupMarkSvc;
 
-        private User _user = null!;
         public ScheduledLessonListEntriesJson ScheduledLessonListEntries { get; set; } = null!;
         public ScheduledLessonListConfigJson ScheduledLessonListConfig { get; set; } = null!;
 
@@ -34,9 +30,8 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             IEditLessonDetailsService editDetailsSvc,
             IEditAttendanceService editAttendanceSvc,
             IGiveMarkService giveMarkSvc,
-            IGiveGroupMarkService giveGroupMarkSvc)
+            IGiveGroupMarkService giveGroupMarkSvc) : base(userRepo)
         {
-            _userRepo = userRepo;
             _scheduledLessonsListSvc = scheduledLessonsListSvc;
             _scheduledLessonsListConfigSvc = scheduledLessonsListConfigSvc;
             _startLessonSvc = startLessonSvc;
@@ -50,7 +45,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         {
             await FetchUserAsync().ConfigureAwait(false);
 
-            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, new FetchScheduledLessonsRequestModel
+            ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_User!.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now.AddDays(-1),
                 LimitTo = 30
@@ -59,11 +54,12 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         }
 
 
+
         public async Task<JsonResult> OnGetEntriesAsync(FetchScheduledLessonsRequestJson model)
         {
             await FetchUserAsync().ConfigureAwait(false);
 
-            var entries = await _scheduledLessonsListSvc.GetModelForTeacherAsync(_user.TeacherId!.Value, model).ConfigureAwait(false);
+            var entries = await _scheduledLessonsListSvc.GetModelForTeacherAsync(_User!.TeacherId!.Value, model).ConfigureAwait(false);
             return new JsonResult(entries);
         }
 
@@ -71,7 +67,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         {
             await FetchUserAsync().ConfigureAwait(false);
 
-            var success = await _startLessonSvc.TryStartLessonAtAsync(scheduledTimeUtc.ToLocalTime(), _user.Teacher!).ConfigureAwait(false);
+            var success = await _startLessonSvc.TryStartLessonAtAsync(scheduledTimeUtc.ToLocalTime(), _User!.Teacher!).ConfigureAwait(false);
 
             return new JsonResult(new ResponseJson
             {
@@ -102,23 +98,6 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         {
             var res = await _giveGroupMarkSvc.GiveAsync(model).ConfigureAwait(false);
             return new JsonResult(res);
-        }
-
-
-        private async Task FetchUserAsync()
-        {
-            _user = await _userRepo.Manager.GetUserAsync(User).ConfigureAwait(false);
-
-            if (_user is null)
-            {
-                // TODO: redirect to error page
-                throw new NotImplementedException();
-            }
-            if (_user.Teacher is null)
-            {
-                // TODO: redirect to error page
-                throw new NotImplementedException();
-            }
         }
     }
 }

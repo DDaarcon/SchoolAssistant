@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using SchoolAssistant.DAL.Models.AppStructure;
+using Microsoft.AspNetCore.Mvc;
 using SchoolAssistant.DAL.Models.StudentsParents;
+using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.MarksOverview;
 using SchoolAssistant.Infrastructure.Models.ScheduleDisplay;
 using SchoolAssistant.Infrastructure.Models.ScheduleShared;
@@ -11,15 +10,13 @@ using SchoolAssistant.Logic.ScheduleDisplay;
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
     [Authorize(Roles = "Student")]
-    public class StudentModel : PageModel
+    public class StudentModel : MyPageModel
     {
-        private readonly UserManager<User> _userManager;
         private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
         private readonly IStudentScheduleService _scheduleSvc;
 
 
-        private User _user = null!;
-        private Student _student = null!;
+        private Student? _student;
 
         public ScheduleConfigJson ScheduleConfig { get; set; } = null!;
         public ScheduleDayLessonsJson[] ScheduleLessons { get; set; } = null!;
@@ -27,25 +24,26 @@ namespace SchoolAssistant.Web.Pages.Dashboard
         public MarksOverviewModel MarksOverview { get; set; } = new MarksOverviewModel();
 
         public StudentModel(
-            UserManager<User> userManager,
+            IUserRepository userRepo,
             IFetchSchedDisplayConfigService fetchScheduleConfigSvc,
-            IStudentScheduleService scheduleSvc)
+            IStudentScheduleService scheduleSvc) : base(userRepo)
         {
-            _userManager = userManager;
             _fetchScheduleConfigSvc = fetchScheduleConfigSvc;
             _scheduleSvc = scheduleSvc;
         }
 
-        // TODO: verify if user
-        // TODO: check authorization on every controller
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            await FetchUserAndStudentForCurrentYearAsync().ConfigureAwait(false);
+            if (!await FetchAndValidateIfUserOfTypeAsync(DAL.Enums.UserType.Student).ConfigureAwait(false))
+                return RedirectToStart;
 
-            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_user).ConfigureAwait(false);
+            if (!FetchAndValidateStudentForCurrentYear())
+                throw new Exception("Not found student for a current SchoolYear in the database");
 
-            ScheduleLessons = _scheduleSvc.GetModel(_student)!;
+            ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_User!).ConfigureAwait(false);
+
+            ScheduleLessons = _scheduleSvc.GetModel(_student!)!;
 
 
             MarksOverview.Marks = new List<MarkForOverviewModel>()
@@ -67,26 +65,15 @@ namespace SchoolAssistant.Web.Pages.Dashboard
                     Mark = "-5", Subject = "Some long subject name to check long names", Issuer = "Tomasz Kowalczykowiañskowski"
                 }
             };
+
+            return Page();
         }
 
-        private async Task FetchUserAndStudentForCurrentYearAsync()
+        private bool FetchAndValidateStudentForCurrentYear()
         {
-            _user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            _student = _User!.Student?.StudentInstances.FirstOrDefault(x => x.SchoolYear.Current);
 
-            if (_user is null)
-            {
-                // TODO: redirect to error page
-                throw new NotImplementedException();
-            }
-
-            var student = _user!.Student?.StudentInstances.FirstOrDefault(x => x.SchoolYear.Current);
-
-            if (student is null)
-            {
-                // TODO: redirect to error page
-                throw new NotImplementedException();
-            }
-            _student = student;
+            return _student is not null;
         }
     }
 }

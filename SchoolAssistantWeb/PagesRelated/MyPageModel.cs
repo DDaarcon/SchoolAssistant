@@ -20,9 +20,15 @@ namespace SchoolAssistant.Web
 
 
         protected User? _User { get; set; }
-        protected async Task<bool> FetchAndValidateIfUserOfTypeAsync(UserType type)
+
+        protected async Task FetchUserAsync()
         {
             _User = (await _userRepo.GetCurrentAsync().ConfigureAwait(false))!;
+        }
+
+        protected async Task<bool> FetchAndValidateIfUserOfTypeAsync(UserType type)
+        {
+            await FetchUserAsync().ConfigureAwait(false);
 
             return _User.IsOfType(type);
         }
