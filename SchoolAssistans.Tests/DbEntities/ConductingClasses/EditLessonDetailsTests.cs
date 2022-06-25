@@ -60,8 +60,6 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _service = new EditLessonDetailsService(_lessonRepo);
         }
 
-        private DateTime _Monday => DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek + 1).AddHours(-DateTime.Now.Hour + 8);
-
         private int _DefDuration => 45;
 
 
