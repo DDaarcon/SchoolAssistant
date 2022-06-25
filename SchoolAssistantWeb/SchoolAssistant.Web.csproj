@@ -72,6 +72,8 @@
     <None Remove="React\lesson-conduction-panel\panel\panel.tsx" />
     <None Remove="React\lesson-conduction-panel\services\lesson-timer-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\save-button-service.ts" />
+    <None Remove="React\lesson-conduction-panel\services\store-service-help\attendance-store-service.ts" />
+    <None Remove="React\lesson-conduction-panel\services\store-service-help\base-specific-store-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\store-service-help\lesson-details-store-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\store-service.ts" />
     <None Remove="React\lesson-conduction-panel\services\toggle-panel-service.ts" />
@@ -318,6 +320,8 @@
     <TypeScriptCompile Include="React\lesson-conduction-panel\panel\panel.tsx" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\lesson-timer-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\save-button-service.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-service-help\attendance-store-service.ts" />
+    <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-service-help\base-specific-store-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-service-help\lesson-details-store-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\store-service.ts" />
     <TypeScriptCompile Include="React\lesson-conduction-panel\services\toggle-panel-service.ts" />

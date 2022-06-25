@@ -41,12 +41,12 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
             _lessonRepo = lessonRepo;
         }
 
-        public Task<ScheduleDayLessonsJson<LessonJson>[]?> GetModelForCurrentYearAsync(long teacherId)
+        public async Task<ScheduleDayLessonsJson<LessonJson>[]?> GetModelForCurrentYearAsync(long teacherId)
         {
             _forCurrentYear = true;
             _teacherId = teacherId;
 
-            return ExecuteAsync();
+            return await ExecuteAsync();
         }
 
         public async Task<ScheduleDayLessonsJson<LessonJson>[]?> GetModelAsync(long teacherId, long schoolYearId)
@@ -54,13 +54,13 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
             return await GetModelAsync(teacherId, (await _schoolYearRepo.GetByIdAsync(schoolYearId))!);
         }
 
-        public Task<ScheduleDayLessonsJson<LessonJson>[]?> GetModelAsync(long teacherId, SchoolYear schoolYear)
+        public async Task<ScheduleDayLessonsJson<LessonJson>[]?> GetModelAsync(long teacherId, SchoolYear schoolYear)
         {
             _forCurrentYear = false;
             _teacherId = teacherId;
             _schoolYear = schoolYear;
 
-            return ExecuteAsync();
+            return await ExecuteAsync();
         }
 
         private async Task<ScheduleDayLessonsJson<LessonJson>[]?> ExecuteAsync()

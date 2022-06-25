@@ -7,6 +7,10 @@ class SaveButtonServiceImplementance {
         this._button = button;
     }
 
+    public change(show: boolean) {
+        if (show) this.show();
+        else this.hide();
+    }
 
     public show() {
         this._button?.setState({ shown: true });

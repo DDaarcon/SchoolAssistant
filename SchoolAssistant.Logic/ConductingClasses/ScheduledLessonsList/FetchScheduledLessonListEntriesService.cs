@@ -136,9 +136,9 @@ namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
             if (lesson is null) return null;
             return new HeldClassesJson
             {
-                topic = lesson.Topic,
+                topic = lesson.Topic ?? "",
                 amountOfPresentStudents = lesson.PresenceOfStudents.Count(x => x.Status == PresenceStatus.Present),
-                amountOfAllStudents = lesson.PresenceOfStudents.Count
+                amountOfAllStudents = lesson.FromSchedule.ParticipatingOrganizationalClass?.Students.Count ?? 0
             };
         }
 

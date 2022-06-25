@@ -1,24 +1,17 @@
 ﻿import LessonConductionPanelModel from "../../interfaces/lesson-conduction-panel-model";
 import LessonDetailsEditModel from "../../panel/panel-content-area/lesson-details-edition/lesson-details-edit-model";
+import BaseSpecificStoreService from "./base-specific-store-service";
 
-export default class LessonDetailsStoreService {
+export default class LessonDetailsStoreService extends BaseSpecificStoreService<LessonDetailsEditModel> {
 
     constructor(
-        private _getMainModel: () => LessonConductionPanelModel)
+        getMainModel: () => LessonConductionPanelModel)
     {
-
+        super(getMainModel)
     }
 
-    private get _mainModel() { return this._getMainModel(); }
 
-    private _model: LessonDetailsEditModel | undefined;
-
-    public get model() {
-        this._model ??= this._defaultModel;
-        return this._model;
-    }
-
-    private get _defaultModel() {
+    protected get _defaultModel() {
         const main = this._mainModel;
         return {
             id: main.lessonId,
@@ -27,29 +20,21 @@ export default class LessonDetailsStoreService {
     }
 
     public anyChangesToMainModel() {
-        const main = this._mainModel;
-        if (!main || !this._model)
+        if (!this.areMainAndSpecificModelPresent())
             return false;
+
+        const main = this._getMainModel();
 
         let diff = main.topic != this._model.topic;
 
         return diff;
     }
 
-    public update(model: LessonDetailsEditModel) {
-        this._model = model;
-    }
-
     public applyToMain() {
-        const main = this._mainModel;
-        if (!main || !this._model)
+        if (!this.areMainAndSpecificModelPresent())
             return;
 
         this._mainModel.topic = this._model.topic;
-        this._model = undefined;
-    }
-
-    public abortChanges() {
         this._model = undefined;
     }
 }

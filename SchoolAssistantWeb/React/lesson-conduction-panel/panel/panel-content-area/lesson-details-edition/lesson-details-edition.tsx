@@ -32,8 +32,6 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
     }
 
     render() {
-        this.preRenderOperations();
-
         return (
             <form>
 
@@ -47,6 +45,10 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
 
             </form>
         )
+    }
+
+    componentWillUpdate() {
+        this.preRenderOperations();
     }
 
     private submitAsync = async () => {
@@ -74,11 +76,6 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
     private preRenderOperations() {
         StoreService.lessonDetailsSvc.update(this.state.data);
 
-        if (StoreService.lessonDetailsSvc.anyChangesToMainModel()) {
-            SaveButtonService.show();
-        }
-        else {
-            SaveButtonService.hide();
-        } 
+        SaveButtonService.change(StoreService.lessonDetailsSvc.anyChangesToMainModel());
     }
 }
