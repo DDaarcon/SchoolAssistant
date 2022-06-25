@@ -1,15 +1,10 @@
 ﻿using AppConfigurationEFCore;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ConductLesson;
 using SchoolAssistant.Logic.Help;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 {
@@ -59,13 +54,13 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 
         public async Task<LessonConductionPanelJson?> GetModelAsync()
         {
-            if (!await ValidateConductedLessonIdAsync())
+            if (!await ValidateConductedLessonIdAsync().ConfigureAwait(false))
                 return null;
 
-            if (!await ValidateWithDatabaseAndFetchAsync())
+            if (!await ValidateWithDatabaseAndFetchAsync().ConfigureAwait(false))
                 return null;
 
-            return await ConstructModelAsync();
+            return await ConstructModelAsync().ConfigureAwait(false);
         }
 
         private async Task<bool> ValidateConductedLessonIdAsync()
@@ -89,7 +84,12 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
             if (user is null || user.Teacher is null)
                 return false;
 
-            _conductedLesson = await _lessonRepo.GetByIdAndCurrentYearAsync(_conductedLessonId!.Value).ConfigureAwait(false);
+            _conductedLesson = await _lessonRepo.AsQueryableByYear.ByCurrent()
+                .Include(x => x.PresenceOfStudents)
+                .Include(x => x.SchoolYear)
+                .Include(x => x.FromSchedule).ThenInclude(x => x.ParticipatingOrganizationalClass).ThenInclude(x => x.Students)
+                .Include(x => x.FromSchedule).ThenInclude(x => x.Subject)
+                .FirstOrDefaultAsync(x => x.Id == _conductedLessonId!.Value).ConfigureAwait(false);
             if (_conductedLesson is null)
                 return false;
 

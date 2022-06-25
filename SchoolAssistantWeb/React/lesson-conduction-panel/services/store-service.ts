@@ -1,5 +1,6 @@
 ﻿import LessonConductionPanelModel from "../interfaces/lesson-conduction-panel-model";
 import LessonDetailsEditModel from "../panel/panel-content-area/lesson-details-edition/lesson-details-edit-model";
+import LessonDetailsStoreService from "./store-service-help/lesson-details-store-service";
 
 
 class StoreServiceImplementation {
@@ -8,7 +9,6 @@ class StoreServiceImplementation {
     public assignModel(model: LessonConductionPanelModel) {
         this._model = model;
     }
-
 
     public get students() { return this._model?.students; }
 
@@ -29,11 +29,10 @@ class StoreServiceImplementation {
 
     public get subjectName() { return this._model?.subjectName; }
 
-    public updateDetails(model: LessonDetailsEditModel) {
-        if (!this._model) return;
 
-        this._model.topic = model.topic;
-    }
+    private _lessonDetailsSvc: LessonDetailsStoreService = new LessonDetailsStoreService(() => this._model);
+    public get lessonDetailsSvc() { return this._lessonDetailsSvc; }
+
 }
 const StoreService = new StoreServiceImplementation;
 export default StoreService;

@@ -17,11 +17,9 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
     constructor(props) {
         super(props);
 
+        const data = StoreService.lessonDetailsSvc.model;
         this.state = {
-            data: {
-                id: StoreService.lessonId,
-                topic: StoreService.topic ?? ""
-            }
+            data
         }
 
         this._validator.setRules({
@@ -30,11 +28,12 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
             }
         });
 
-        SaveButtonService.hide();
         SaveButtonService.setAction(this.submitAsync);
     }
 
     render() {
+        this.preRenderOperations();
+
         return (
             <form>
 
@@ -61,7 +60,7 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
 
         // TODO: handle server errors
         if (res.success) {
-            StoreService.updateDetails(this.state.data);
+            StoreService.lessonDetailsSvc.applyToMain();
             SaveButtonService.hide();
         }
         else
@@ -70,8 +69,16 @@ export default class LessonDetailsEdition extends ModCompBase<LessonDetailsEditM
 
     private changeTopic = (value: string) => {
         this.setStateFnData(data => data.topic = value);
+    }
 
-        if (StoreService.topic != this.state.data.topic)
+    private preRenderOperations() {
+        StoreService.lessonDetailsSvc.update(this.state.data);
+
+        if (StoreService.lessonDetailsSvc.anyChangesToMainModel()) {
             SaveButtonService.show();
+        }
+        else {
+            SaveButtonService.hide();
+        } 
     }
 }
