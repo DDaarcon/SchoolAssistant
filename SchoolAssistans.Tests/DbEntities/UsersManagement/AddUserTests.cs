@@ -15,6 +15,7 @@ using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.General.Other;
 using SchoolAssistant.Logic.UsersManagement;
+using SchoolAssistant.Logic.UsersManagement._Validation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         private IUserRepository _userRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
         private readonly IPasswordDeformationService _deformationSvc = new PasswordDeformationService(null);
+        private IDefaultDataSeeder _seeder = null!;
 
 
         private OrganizationalClass _orgClass1 = null!;
@@ -47,6 +49,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
         protected override async Task CleanDataAfterEveryTestAsync()
         {
+            await TestDatabase.ClearDataAsync<Role>();
             await TestDatabase.ClearDataAsync<User>();
             await TestDatabase.ClearDataAsync<Teacher>();
             await TestDatabase.ClearDataAsync<Subject>();
@@ -57,6 +60,8 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
         protected override async Task SetupDataForEveryTestAsync()
         {
+            await _seeder.SeedRolesAsync().ConfigureAwait(false);
+
             _orgClass1 = await FakeData.Class_2a_Mechanics_15Students(await _Year, _orgClassRepo);
             _studentUsers = await FakeData.UsersWithRandomStudents(_userRepo, 5);
 
@@ -69,16 +74,20 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             var userManager = TestServices.GetService<UserManager<User>>();
             var httpContextAccessor = TestServices.GetService<IHttpContextAccessor>();
 
+            var roleManager = TestServices.GetService<RoleManager<Role>>();
+
             _orgClassRepo = new Repository<OrganizationalClass>(_Context, null);
             _userRepo = new UserRepository(_Context, null, userManager, httpContextAccessor);
             _teacherRepo = new Repository<Teacher>(_Context, null);
             var studentRepo = new Repository<StudentRegisterRecord>(_Context, null);
             var parentRepo = new Repository<Parent>(_Context, null);
 
+            _seeder = new DefaultDataSeeder(roleManager, userManager, _configRepo);
+
+            var validator = new AddUserRequestJsValidator(_userRepo, studentRepo, _teacherRepo, parentRepo);
+
             _addUserSvc = new AddUserService(
-                _userRepo,
-                studentRepo, _teacherRepo, parentRepo,
-                _deformationSvc);
+                _userRepo, _deformationSvc, validator);
         }
 
 
