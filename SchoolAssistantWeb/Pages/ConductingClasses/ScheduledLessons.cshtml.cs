@@ -71,7 +71,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         }
 
 
-        public async Task<JsonResult> OnPostLessonDetailsAsync(LessonDetailsEditJson model)
+        public async Task<JsonResult> OnPostLessonDetailsAsync([FromBody] LessonDetailsEditJson model)
         {
             var res = await _editDetailsSvc.EditAsync(model).ConfigureAwait(false);
             return new JsonResult(res);
