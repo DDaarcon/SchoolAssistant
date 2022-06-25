@@ -33,6 +33,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
         protected override async Task CleanDataAfterEveryTestAsync()
         {
             await TestDatabase.ClearDataAsync<Presence>();
+            await TestDatabase.ClearDataAsync<Mark>();
             await TestDatabase.ClearDataAsync<Lesson>();
             await TestDatabase.ClearDataAsync<PeriodicLesson>();
             await TestDatabase.ClearDataAsync<Teacher>();
@@ -80,8 +81,9 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             _periLessonRepo = new RepositoryBySchoolYear<PeriodicLesson>(_Context, null, _schoolYearRepo);
             _lessonRepo = new RepositoryBySchoolYear<Lesson>(_Context, null, _schoolYearRepo);
             _markRepo = new RepositoryBySchoolYear<Mark>(_Context, null, _schoolYearRepo);
+            var studentRepo = new RepositoryBySchoolYear<Student>(_Context, null, _schoolYearRepo);
 
-            _service = new GiveMarkService();
+            _service = new GiveMarkService(_lessonRepo, studentRepo, _markRepo);
         }
 
         private int _DefDuration => 45;
@@ -111,7 +113,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -146,7 +148,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -182,7 +184,8 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -224,11 +227,11 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
-                lessonId = 9999,
+                lessonId = 99999,
                 description = "Descriptive description",
                 mark = new MarkJson
                 {
@@ -251,7 +254,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -278,7 +281,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -300,7 +303,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -326,7 +329,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
@@ -353,7 +356,7 @@ namespace SchoolAssistans.Tests.DbEntities.ConductingClasses
             if (lesson is null)
                 Assert.Fail("lesson with topic should exist, badly prepared test data");
 
-            var studentId = lesson.PresenceOfStudents.First().StudentId;
+            var studentId = lesson.FromSchedule.ParticipatingOrganizationalClass.Students.First().Id;
 
             var res = await _service.GiveAsync(new GiveMarkJson
             {
