@@ -5,6 +5,7 @@
     background-color: #c5ffc5;
     border-radius: 10px;
     transition: 0.3s;
+    font-size: 80%;
 }
 
 .sched-disp-lesson-tile:hover {
