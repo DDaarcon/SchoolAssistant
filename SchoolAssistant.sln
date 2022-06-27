@@ -41,7 +41,6 @@ Global
 		{43591406-C720-4A1A-AD25-F461BE23EE6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43591406-C720-4A1A-AD25-F461BE23EE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43591406-C720-4A1A-AD25-F461BE23EE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43591406-C720-4A1A-AD25-F461BE23EE6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
