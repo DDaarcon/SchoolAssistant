@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Database
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("AzureSQLConnection");
 builder.Services.AddDbContext<SADbContext>(options =>
     options.UseSqlServer(connectionString).UseLazyLoadingProxies());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
