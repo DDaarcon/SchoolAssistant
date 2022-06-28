@@ -8,4 +8,5 @@
     position: absolute !important;
     border-top: 1px solid darkgrey;
     width: 100%;
+    text-align: center;
 }

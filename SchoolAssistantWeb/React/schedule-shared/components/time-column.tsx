@@ -49,38 +49,42 @@ export default class TimeColumn extends React.Component<TimeColumnProps, TimeCol
     }
 
     private addWholeHoursByConfig() {
-        const hours = this._wholeHoursToDisplay;
-
         const offsetIncrement = (60 / this.props.cellDuration) * this.props.cellHeight;
-        let offset = 0;
 
-        for (const hour of hours) {
-            this._timeLables.push(this.timeLabel({ hour, minutes: 0 }, offset));
-            offset += offsetIncrement;
-        }
+        this.addWholeHours(offsetIncrement);
     }
 
     private addWholeHoursByHeight() {
-        const hours = this._wholeHoursToDisplay;
+        const hours = this._wholeHoursInRangeFromProps;
         if (!hours.length) return;
 
         const offsetIncrement = (this.props.scheduleHeight ?? 0) / hours.length;
+
+        this.addWholeHours(offsetIncrement);
+    }
+
+    private addWholeHours(incrementTopOffsetForEachHour: number) {
+        const hours = this._wholeHoursInRangeFromProps;
+        if (!hours.length) return;
+
         let offset = 0;
 
         for (const hour of hours) {
             this._timeLables.push(this.timeLabel({ hour, minutes: 0 }, offset));
-            offset += offsetIncrement;
+            offset += incrementTopOffsetForEachHour;
         }
     }
 
-    private get _wholeHoursToDisplay() {
+
+
+    private get _wholeHoursInRangeFromProps() {
         return Array.from({
             length: this.props.endHour - this.props.startHour
         }, (_, i) => this.props.startHour + i);
     }
 
     private timeLabel = (time: Time, top: number) => (
-        <div className="sched-time-label"
+        <div className="sched-time-label my-text-shadow"
             key={`${time.hour}${time.minutes}`}
             style={{ top }}
         >
