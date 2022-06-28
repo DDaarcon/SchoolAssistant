@@ -1,5 +1,7 @@
 ﻿@{
     bool hideNavbar = (ViewData["HideNavbar"] as bool?) ?? false;
+    string? version = ViewData["ProjectVersion"] as string;
+    bool hasVersion = version is not null;
 }
 
 <!DOCTYPE html>
@@ -7,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SchoolAssistantWeb</title>
+    <title>School Assistant @(hasVersion ? $"({version})" : "")</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/dist/shared.css" asp-append-version="true" />

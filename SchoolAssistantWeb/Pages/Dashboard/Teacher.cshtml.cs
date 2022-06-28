@@ -41,6 +41,8 @@ namespace SchoolAssistant.Web.Pages.Dashboard
             if (!await FetchAndValidateIfUserOfTypeAsync(UserType.Teacher).ConfigureAwait(false))
                 return RedirectToStart;
 
+            SetVersionInViewData();
+
             ScheduleConfig = await _fetchScheduleConfigSvc.FetchForAsync(_User!).ConfigureAwait(false);
             ScheduleLessons = (await _scheduleSvc.GetModelForCurrentYearAsync(_User.TeacherId!.Value).ConfigureAwait(false))!;
 

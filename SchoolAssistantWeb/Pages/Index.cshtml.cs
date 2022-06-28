@@ -1,31 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Enums;
-using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Repositories;
 
 namespace SchoolAssistant.Web.Pages
 {
     [Authorize]
-    public class IndexModel : PageModel
+    public class IndexModel : MyPageModel
     {
-        private readonly UserManager<User> _userManager;
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(
-            UserManager<User> userManager,
-            ILogger<IndexModel> logger)
+            IUserRepository userRepo,
+            ILogger<IndexModel> logger) : base(userRepo)
         {
-            _userManager = userManager;
             _logger = logger;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
+            await FetchUserAsync().ConfigureAwait(false);
 
-            return user.Type switch
+            SetVersionInViewData();
+
+            return _User?.Type switch
             {
                 UserType.Student => RedirectToPage("Dashboard/Student"),
                 UserType.Teacher => RedirectToPage("Dashboard/Teacher"),

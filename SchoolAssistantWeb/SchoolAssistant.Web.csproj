@@ -7,6 +7,8 @@
     <UserSecretsId>aspnet-SchoolAssistantWeb-52F90A5F-B66A-4D10-859B-A2D25A2D9E50</UserSecretsId>
     <OutputType>Exe</OutputType>
 	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+
+	<AssemblyVersion>1.0.0</AssemblyVersion>
   </PropertyGroup>
 
     <!-- React.NET -->

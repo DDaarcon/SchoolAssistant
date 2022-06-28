@@ -4,6 +4,7 @@ using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Logic;
+using System.Reflection;
 
 namespace SchoolAssistant.Web
 {
@@ -33,6 +34,10 @@ namespace SchoolAssistant.Web
             return _User.IsOfType(type);
         }
 
-
+        protected void SetVersionInViewData()
+        {
+            string? ver = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+            ViewData["ProjectVersion"] = ver;
+        }
     }
 }
