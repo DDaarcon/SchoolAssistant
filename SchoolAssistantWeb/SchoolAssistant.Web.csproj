@@ -11,7 +11,7 @@
 	<AssemblyVersion>1.0.0</AssemblyVersion>
   </PropertyGroup>
 
-    <!-- React.NET -->
+    <!-- React.NET files -->
 
     <ItemGroup>
 	    <None Remove="React\**\*" />
@@ -20,12 +20,18 @@
     <ItemGroup>
 	    <TypeScriptCompile Include="React\**\*.tsx" />
 	    <TypeScriptCompile Include="React\**\*.ts" />
+	    <TypeScriptCompile Include="React\**\*.css" />
     </ItemGroup>
 
     <ItemGroup>
 	    <Folder Include="wwwroot\dist\" />
     </ItemGroup>
 	
+	
+	
+	
+	
+	<!-- Referenced projects -->
 	
   <ItemGroup>
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
