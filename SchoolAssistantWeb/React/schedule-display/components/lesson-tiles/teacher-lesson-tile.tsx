@@ -21,7 +21,7 @@ export default class TeacherLessonTile extends LessonTile {
         return (
             <div className="sched-teac-lesson-inner-container">
 
-                <div className={"sched-teac-lesson-subject"}>
+                <div className={"sched-teac-lesson-main-cnt"}>
                     {`${studentClassName} ${this.props.lesson.subject.name}`}
                 </div>
 
