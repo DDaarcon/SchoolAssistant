@@ -35,7 +35,11 @@ namespace SchoolAssistant.DAL.Attributes
         public static UserTypeAttribute? GetUserTypeAttribute(this UserType userType)
         {
             var type = typeof(UserType);
+
             var memInfo = type.GetMember(userType.ToString());
+            if (memInfo.Length < 1)
+                return null;
+
             var attributes = memInfo[0].GetCustomAttributes(typeof(UserTypeAttribute), false);
             return (attributes.Length > 0) ? (UserTypeAttribute)attributes[0] : null;
         }
