@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Repositories;
@@ -9,6 +10,7 @@ using SchoolAssistant.Logic.ScheduleDisplay;
 
 namespace SchoolAssistant.Web.Pages.Dashboard
 {
+    [Authorize(Roles = "Teacher")]
     public class TeacherModel : MyPageModel
     {
         private readonly IFetchSchedDisplayConfigService _fetchScheduleConfigSvc;
