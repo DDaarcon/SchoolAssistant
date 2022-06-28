@@ -1,0 +1,381 @@
+/*!********************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-shared/components/time-column.css ***!
+  \********************************************************************************************************************************/
+.sched-time-column {
+    position: relative !important;
+    flex-basis: 65px;
+    border-right: 1px solid;
+}
+
+.sched-time-label {
+    position: absolute !important;
+    border-top: 1px solid darkgrey;
+    width: 100%;
+}
+/*!********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css ***!
+  \********************************************************************************************************************************************************/
+.sa-lesson-tile {
+    position: absolute !important;
+    width: 98%;
+    left: 1%;
+    z-index: 1;
+}
+
+.sa-lesson-tile-behind {
+    z-index: -1 !important;
+}
+
+
+
+
+.sa-placed-lesson {
+    border-radius: 10px;
+    padding: 2px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    background-color: #befa867a;
+    transition: width 0.5s, left 0.5s, background-color 0.5s;
+    border-color: #e8fde8;
+    border-style: outset;
+    border-width: 1.5px;
+}
+
+.sa-placed-lesson:not(.sa-lesson-tile-behind):hover {
+    width: 120%;
+    left: -10%;
+    background-color: #befa86ee;
+    z-index: 5;
+    transition: width 1s, left 1s, background-color 1s;
+    transition-delay: 0.25s;
+}
+
+
+.sa-placed-lesson > div {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sa-lesson-subject {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.sa-lesson-time {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8em;
+}
+
+.sa-lesson-lecturer {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.9em;
+    text-align: right;
+    padding-right: 2px;
+}
+
+.sa-lesson-room {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.8em;
+    text-align: right;
+    padding-right: 2px;
+}
+
+/*!**************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/other-lesson-tiles.css ***!
+  \**************************************************************************************************************************************************************/
+.sa-lessons-teacher-busy, .sa-lessons-room-busy {
+    background-color: #a7030367;
+    border-radius: 10px;
+    padding: 2px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
+.sa-lessons-teacher-busy div {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 1em;
+    text-align: right;
+}
+
+.sa-lessons-room-busy div {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.9em;
+    text-align: right;
+}
+
+
+
+
+
+
+.sa-lesson-placing-shadow {
+    padding: 5px;
+    text-align: center;
+    background-color: #6cff986d;
+    border-radius: 10px;
+}
+
+/*!***************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-mod-comp/lesson-mod-comp.css ***!
+  \***************************************************************************************************************************************************************************/
+.lesson-mod-comp-layout {
+    display: flex;
+    column-gap: 15px;
+}
+
+.lmc-inputs {
+    flex-basis: 300px;
+}
+
+.lmc-right-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.lmc-right-panel > h4 {
+    text-align: center;
+}
+
+.lmc-overlap-container {
+    flex-grow: 1;
+}
+
+.lmc-right-bottom {
+    display: flex;
+    gap: 15px;
+}
+
+.lmc-save-btn {
+    flex: 2;
+    border: 3px outset #daf4d5;
+    border-radius: 5px;
+    background-color: #e5ffbe;
+    padding: 3px;
+    transition: background-color 0.5s, color 0.5s, border 0.5s;
+}
+
+.lmc-save-btn:disabled {
+    background-color: #ffd1d1;
+    color: #5c5c5c;
+    border: 2px outset #ff0000;
+}
+
+.lmc-remove-btn {
+    flex: 1;
+    border: 3px outset #ea7373;
+    border-radius: 5px;
+    background-color: #ffd1d1;
+    padding: 3px;
+}
+
+.lmc-overlap-pad {
+    display: grid;
+    width: 100%;
+    grid-template-columns: [start] 50px [infoStart] auto [infoCenter] auto [infoEnd] 30px [end];
+    grid-template-rows: [top] 50% [center] 50% [bottom];
+    border: 4px solid;
+    border-radius: 4px;
+    border-color: #fff6f6;
+    background-color: #ffe8e8;
+    margin-bottom: 10px;
+}
+
+.lmc-op-class {
+    grid-column-start: start;
+    grid-column-end: infoStart;
+    grid-row-start: top;
+    grid-row-end: bottom;
+    font-size: 2em;
+    text-align: center;
+}
+.lmc-op-subject {
+    grid-column-start: infoStart;
+    grid-column-end: infoCenter;
+    grid-row-start: top;
+    grid-row-end: center;
+    text-align: center;
+}
+.lmc-op-time {
+    grid-column-start: infoStart;
+    grid-column-end: infoCenter;
+    grid-row-start: center;
+    grid-row-end: bottom;
+    text-align: center;
+}
+.lmc-op-lecturer {
+    grid-column-start: infoCenter;
+    grid-column-end: infoEnd;
+    grid-row-start: top;
+    grid-row-end: center;
+    text-align: center;
+}
+.lmc-op-room {
+    grid-column-start: infoCenter;
+    grid-column-end: infoEnd;
+    grid-row-start: center;
+    grid-row-end: bottom;
+    text-align: center;
+}
+.lmc-op-more {
+    grid-column-start: infoEnd;
+    grid-column-end: end;
+    grid-row-start: top;
+    grid-row-end: bottom;
+    justify-content: center;
+}
+
+.lmc-op-more-btn {
+    font-size: 1.8em;
+    width: 100%;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+
+/*!*********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/selector/lesson-prefab.css ***!
+  \*********************************************************************************************************************************************************/
+.sa-lesson-prefab, .sa-add-lesson-prefab {
+    margin: 5px;
+    border-radius: 10px;
+    border: 3px solid #3cb37177;
+    background-color: #3cb37177;
+}
+
+.sa-lesson-prefab {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    cursor: grab;
+}
+
+.sa-lesson-prefab:active {
+    background-color: #3cb37144;
+    border-color: #3cb37144;
+}
+
+.sa-lesson-prefab-subject {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.sa-lesson-prefab-bottom > div {
+    width: 49%;
+}
+
+.sa-lesson-prefab-lecturer {
+    float: left;
+    text-align: left;
+}
+
+.sa-lesson-prefab-room {
+    float: right;
+    text-align: right;
+}
+
+
+
+.sa-add-lesson-prefab {
+    cursor: pointer;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa-add-lesson-prefab i {
+    transform: translateY(0px) scale(1.4);
+}
+
+/*!*********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/schedule-arranger-page.css ***!
+  \*********************************************************************************************************************************************************/
+body > .container {
+    max-width: 100%;
+}
+
+
+.schedule-arranger-page {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+.schedule-arranger-timeline {
+    flex-grow: 6;
+}
+
+.schedule-arranger-selector {
+    flex-basis: 200px;
+}
+
+.sa-schedule-day-column {
+    position: relative !important;
+    flex-grow: 1;
+    border-right: 1px solid;
+}
+
+
+
+.sa-schedule-cell {
+    z-index: 20;
+}
+
+.sa-whole-hour-line {
+    width: 100%;
+    height: 1px;
+    background-color: #6565652e;
+}
+
+
+
+.sa-day-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: -30px;
+    font-size: 1.2em;
+}
+
+/*!**************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/class-selector.css ***!
+  \**************************************************************************************************************************/
+.sa-selector-classes {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 30px
+}
+
+.sa-selector-classes > h2 {
+    flex-basis: 100%;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.sa-selector-class-entry {
+    height: 150px;
+}
+
+.sa-selector-class-name {
+    display: block;
+    font-size: 3.5em;
+    text-shadow: -1px 1px 2px rgb(255, 255, 255);
+}
+
+.sa-selector-class-spec {
+    font-size: 2em;
+}
+
+
+/*# sourceMappingURL=schedule_arranger.css.map*/

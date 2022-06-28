@@ -1,0 +1,372 @@
+/*!****************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/form-controls/form-controls.css ***!
+  \****************************************************************************************************************************/
+.my-form-group {
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.my-form-group > input[type='checkbox'] {
+    display: inline-block;
+    margin-right: 5px;
+    transform: scale(0.8);
+}
+
+.warning-msg {
+    color: #a9b400;
+}
+/*!**************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/form-controls/label-value.css ***!
+  \**************************************************************************************************************************/
+.label-value {
+    display: flex;
+    width: 350px;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.lab-val-label-container, .lab-val-value-container {
+    width: 50%;
+}
+
+.lab-val-label {
+    float: right;
+    text-align: right;
+    font-size: 0.8em;
+    margin-right: 5px;
+    color: #767676;
+}
+
+.lab-val-label-container {
+    display: flex;
+    justify-content: end;
+    align-items: self-end;
+}
+
+/*!**************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/modals/modals.css ***!
+  \**************************************************************************************************************/
+.modal-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100px;
+    z-index: 11;
+    padding: 20px;
+    background-color: var(--theme-color-1);
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px #0000002b;
+}
+
+.modal-dismiss-listener {
+    width: 100%;
+    height: 100%;
+}
+
+.modal-bg-scroll {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    background-color: #0000002e;
+}
+
+.modal-close-btn {
+    cursor: pointer;
+    color: black;
+    float: right;
+    transform: translate(10px, -16px) scale(1.2);
+}
+
+.modal-close-btn:hover {
+    color: #9a0000;
+}
+
+
+.confirmation-modal-buttons {
+    display: flex;
+    column-gap: 15%;
+}
+.confirmation-modal-buttons button {
+    flex: 1;
+    border: 1px solid black;
+}
+
+.confirmation-modal-confirm-btn {
+    background-color: #e4fbe2;
+    border-color: #01740c !important;
+}
+
+.confirmation-modal-decline-btn {
+    background-color: #fbe2e2;
+    border-color: #6a0101 !important;
+}
+/*!*******************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/loader.css ***!
+  \*******************************************************************************************************/
+#loader-dots #dot1 {
+    animation: load 1s infinite;
+}
+
+#loader-dots #dot2 {
+    animation: load 1s infinite;
+    animation-delay: 0.2s;
+}
+
+#loader-dots #dot3 {
+    animation: load 1s infinite;
+    animation-delay: 0.4s;
+}
+
+@keyframes load {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+.loader-div-whole-space,
+.loader-absolute {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-absolute {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: #8a8a8a4e;
+}
+
+/*!************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/lists/lists.css ***!
+  \************************************************************************************************************/
+.dm-list {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+
+.dm-list thead tr th {
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.dm-list tbody tr.data-row td {
+    border-top-width: 2.5px;
+    border-radius: 3px;
+    border-left-width: 1px;
+}
+
+.dm-list tbody tr.single-standing-row td {
+    border-bottom-width: 2.5px;
+}
+
+.dm-list tbody tr.data-row td:first-child {
+    border-left-width: 2.5px;
+}
+
+.dm-list tbody tr.data-row td:last-child {
+    border-right-width: 2.5px;
+}
+
+.dm-list tbody .dm-modification-component-container {
+    border-bottom-width: 1px;
+    border-left-width: 2.5px;
+    border-right-width: 2.5px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.dm-list tr:not(.even-row) td,
+.dm-list tr.data-row:not(.even-row) td {
+    border-color: var(--theme-color-1-darker);
+}
+
+.dm-list tr.even-row td,
+.dm-list tr.data-row.even-row td {
+    border-color: var(--theme-color-2-darker) !important;
+}
+
+
+.dm-list tbody tr.data-row td:first-child,
+.dm-list thead th:first-child {
+    padding-left: 10px;
+}
+
+.dm-list tbody tr.data-row td {
+    padding: 5px;
+}
+
+/* Row colors */
+.dm-list tbody tr.data-row:not(.even-row),
+.dm-list tbody tr:not(.even-row) .dm-modification-component-container {
+    background-color: #f9f4f3;
+}
+
+.dm-list tbody tr.data-row.even-row,
+.dm-list tbody tr.even-row .dm-modification-component-container {
+    background-color: #fff7f9;
+}
+
+.dm-list tbody tr.separation-row td {
+    height: 3px;
+}
+
+.dm-list tbody tr.group-header-row th {
+    background-color: #c0c0c0;
+    padding: 5px;
+    border-radius: 5px;
+    transform: translateX(-10px);
+}
+
+
+
+
+.dm-modification-component-container {
+    padding: 10px;
+}
+
+.dm-ei-row-cell {
+    border-left-width: 2.5px !important;
+    border-bottom-width: 2.5px;
+}
+
+.dm-ei-row-button {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+/*!********************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/top-bar.css ***!
+  \********************************************************************************************************/
+:root {
+    --top-bar-height: 40px;
+    --top-bar-outline-color: #d3f2d4;
+}
+
+.top-bar-container {
+    height: var(--top-bar-height);
+}
+
+.top-bar {
+    width: 100%;
+    height: var(--top-bar-height);
+    position: absolute;
+    left: 0;
+    box-shadow: 
+        0px -18px 27px 1px var(--top-bar-outline-color) inset,
+        0px 4px 4px 1px var(--top-bar-outline-color);
+    padding: 3px;
+    padding-left: 20px;
+}
+
+.top-bar-go-back-btn {
+    height: 100%;
+    width: 100px;
+    border-radius: 40% 5% 5% 40% / 49% 50% 50% 51%;
+    border: 0;
+    box-shadow: 0px 0px 3px 2px inset #b9b9b9;
+    text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
+    font-weight: bold;
+}
+
+/*!***************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/components/buttons/buttons.css ***!
+  \***************************************************************************************************************************/
+
+/* General */
+
+.my-button {
+    background-color: #ffffff74;
+    margin: 3px;
+    padding-right: 10px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 1px 1px 6px -2px #00000076;
+
+    transition: all 0.4s;
+}
+
+.my-button:hover {
+    transform: scale(0.96);
+}
+
+.my-button:active {
+    box-shadow: 1px 1px 6px -2px #00000076,
+        inset 0px -50px 40px 0px #1fd4d474;
+}
+
+
+
+
+
+/* IconLabelButton */
+
+
+.icon-label-button {
+}
+
+.icon-label-button i {
+    padding: 5px;
+    border-radius: 50%;
+    margin-right: 5px;
+    box-shadow: 0px 0px 0px 0px #00000000;
+    transition: all 0.2s;
+}
+
+.icon-label-button:hover i {
+    box-shadow: 0px 0px 20px -8px #000000;
+}
+
+.icon-label-button:active i {
+    transform: scale(0.8);
+}
+
+.icon-small i {
+    font-size: 1em !important;
+}
+.icon-normal i {
+    font-size: 1.3em !important;
+}
+.icon-large i {
+    font-size: 1.8em !important;
+}
+.icon-above i {
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*# sourceMappingURL=shared.css.map*/

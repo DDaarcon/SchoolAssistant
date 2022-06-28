@@ -1,0 +1,335 @@
+/*!********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/components/background-area.css ***!
+  \********************************************************************************************************************************************/
+.lcp-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #85858545;
+}
+
+.lcp-bg-hide {
+    display: none;
+}
+/*!*****************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/lesson-conduction-panel.css ***!
+  \*****************************************************************************************************************************************/
+.lcp-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 100vh;
+    width: 100vw;
+
+    background-color: #85858545;
+}
+/*!*****************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/components/anchor.css ***!
+  \*****************************************************************************************************************************************/
+.lcp-anchor {
+    position: absolute;
+
+    background-color: #7be1a8a6;
+    border: 0;
+    border-radius: 20px;
+    bottom: 40px;
+    left: -100px;
+
+    box-shadow:
+        2px 2px 5px 0px #0000003c,
+        inset 8px 8px 10px 0px #ffffff30,
+        inset 2px 2px 5px 0px #ffffff6a;
+
+    transition: all 0.3s;
+}
+
+.lcp-anchor:hover {
+    background-color: #a0efc3a6;
+    box-shadow: 2px 2px 5px 0px #0000003c, 
+        inset 8px 8px 10px 0px #ffffff22,
+        inset 2px 2px 5px 0px #ffffff2d;
+}
+
+.lcp-anchor > div {
+    display: flex;
+    flex-direction: column;
+
+    margin: 5px;
+    font-size: 1.1em;
+}
+
+.lcp-anchor > div > span:first-child {
+    font-weight: 500;
+}
+
+/*!****************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/components/clock.css ***!
+  \****************************************************************************************************************************************/
+.lcp-clock {
+    display: inline-grid;
+    height: 1.5em;
+    font-size: 5em;
+    grid-template-rows: 100%;
+    grid-template-columns: repeat(3, 1fr) 0.33em repeat(2, 1fr);
+    font-family: "Lucida Sans Unicode", "Lucida Sans", Arial, sans-serif;
+    text-shadow: 5px 5px 3px #00000039;
+    margin-right: 30px;
+    margin-left: 20px;
+}
+
+.lcp-clock > div:nth-child(1) {
+    grid-column: 6 / span 1;
+    grid-row: 1;
+}
+
+.lcp-clock > div:nth-child(2) {
+    grid-column: 5 / span 1;
+    grid-row: 1;
+}
+
+.lcp-clock > div:nth-child(3) {
+    grid-column: 4 / span 1;
+    grid-row: 1;
+}
+
+.lcp-clock > div:nth-child(4) {
+    grid-column: 3 / span 1;
+    grid-row: 1;
+}
+
+.lcp-clock > div:nth-child(5) {
+    grid-column: 2 / span 1;
+    grid-row: 1;
+}
+
+.lcp-clock > div:nth-child(6) {
+    grid-column: 1 / span 1;
+    grid-row: 1;
+}
+
+/*!*******************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/components/controls.css ***!
+  \*******************************************************************************************************************************************/
+.lcp-controls-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    flex: 1;
+}
+/*!*******************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/components/info-row.css ***!
+  \*******************************************************************************************************************************************/
+.lcp-info-row {
+    text-align: right;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.lcp-info-row-class-name {
+    margin-right: 10px;
+    font-weight: 500;
+    font-size: 1.2em;
+}
+
+/*!**********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/components/save-button.css ***!
+  \**********************************************************************************************************************************************/
+.lcp-save-btn-hidden {
+    opacity: 0;
+    cursor: default;
+}
+
+/*!********************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/attendance-edition/attendance-edition.css ***!
+  \********************************************************************************************************************************************************************************/
+.attendance-edition-list {
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    height: 100%;
+}
+
+/*!******************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/attendance-edition/attendance-entry.css ***!
+  \******************************************************************************************************************************************************************************/
+.attendance-entry {
+    padding: 10px;
+    display: flex;
+    background-color: #ffffffa6;
+}
+
+.attendance-entry > span:nth-child(1) {
+    width: 5%;
+}
+
+.presence-options {
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly
+}
+
+.selected-presence,
+.selected-presence:hover {
+    color: #00ae17;
+}
+
+.not-selected-presence {
+    color: #bababa
+}
+
+.none-presence-selected {
+    color: #e10000;
+}
+/*!**********************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/giving-group-mark-page/student-mark-insertion-entry.css ***!
+  \**********************************************************************************************************************************************************************************************/
+.student-mark-insertion-entry {
+    padding: 10px 15px;
+    border: 0;
+    background-color: #ffffffa6;
+    display: flex;
+    align-items: baseline;
+    border-radius: 3px;
+    transition: all 0.5s;
+}
+
+.student-mark-insertion-entry > span {
+    margin-right: 10px;
+}
+
+.student-mark-insertion-entry-inserted {
+    background-color: #adffb7ff;
+    box-shadow: inset 0px 0px 2px 3px #4bea5fff;
+}
+
+.student-mark-insertion-input-container {
+    width: 80px;
+}
+
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/giving-group-mark-page/giving-group-mark-page.css ***!
+  \****************************************************************************************************************************************************************************************/
+.student-mark-insertion-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-content: space-evenly;
+}
+
+.giving-group-mark-details {
+    margin-bottom: 20px;
+}
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/giving-mark-page/student-selection-entry.css ***!
+  \***********************************************************************************************************************************************************************************/
+.student-selection-entry {
+    padding: 10px 15px;
+    border: 0;
+    background-color: #ffffffa6;
+    display: flex;
+    align-items: flex-start;
+    border-radius: 3px;
+    transition: all 0.5s;
+}
+
+.student-selection-entry > span {
+    margin-right: 10px;
+}
+
+.student-selection-entry-selected {
+    background-color: #5eff73ff;
+    box-shadow: inset 0px 0px 2px 3px #0ae026ff;
+}
+
+/*!****************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/giving-mark-page/giving-mark-page.css ***!
+  \****************************************************************************************************************************************************************************/
+.student-selection-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-content: space-evenly;
+}
+
+.giving-mark-details {
+    margin-bottom: 20px;
+}
+
+.giving-mark-details-first-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-right: 10px;
+}
+
+.one-mark-input {
+    width: 100px;
+}
+/*!*************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel-content-area/panel-content-area.css ***!
+  \*************************************************************************************************************************************************************/
+.lcp-content-area {
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+
+    transition: all 0.3s;
+    opacity: 1;
+}
+
+.lcp-content-area-hidden {
+    opacity: 0;
+}
+
+/*!*****************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/lesson-conduction-panel/panel/panel.css ***!
+  \*****************************************************************************************************************************/
+.lcp-panel-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    height: 100vh;
+
+    transition: all 0.5s;
+    transition-timing-function: ease-in-out;
+    
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 25px;
+    
+    max-width: calc(100% - 200px);
+}
+
+.lcp-panel-container-hide {
+    transform: translateX(100%);
+}
+
+
+
+.lcp-panel {
+    background-color: #7be1d8e1;
+    padding: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #7be1a8e1;
+    box-shadow: 0px 0px 15px 0px #7be1a8e1;
+}
+
+
+.lcp-panel-top {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.lcp-panel-top-left {
+    display: flex;
+    flex-direction: column;
+}
+
+/*# sourceMappingURL=lesson_conduction_panel.css.map*/

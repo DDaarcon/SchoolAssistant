@@ -1,0 +1,128 @@
+/*!********************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-shared/components/time-column.css ***!
+  \********************************************************************************************************************************/
+.sched-time-column {
+    position: relative !important;
+    flex-basis: 65px;
+    border-right: 1px solid;
+}
+
+.sched-time-label {
+    position: absolute !important;
+    border-top: 1px solid darkgrey;
+    width: 100%;
+}
+/*!**********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/lesson-tiles/lesson-tile.css ***!
+  \**********************************************************************************************************************************************/
+.sched-disp-lesson-tile {
+    color: #000000;
+    position: absolute;
+    width: 100%;
+    background-color: #c5ffc5;
+    border-radius: 10px;
+    transition: 0.3s;
+    font-size: 80%;
+}
+
+.sched-disp-lesson-tile:hover {
+    background-color: #c5ffc536;
+}
+/*!******************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/lesson-tiles/student-lesson-tile.css ***!
+  \******************************************************************************************************************************************************/
+.sched-stud-lesson-inner-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.sched-stud-lesson-subject {
+    font-size: 1.5em;
+    align-self: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.sched-stud-lesson-expandable {
+    position: absolute;
+    top: calc(100% - 10px);
+    left: 0;
+    width: 100%;
+    height: 0;
+    transition: all 0.3s;
+    transition-delay: 0s;
+    overflow: hidden;
+    background-color: #c5ffc58f;
+    border-bottom: 10px;
+}
+
+.sched-stud-lesson-expandable > label-value:first-child {
+    margin-top: 10px;
+}
+
+.sched-stud-lesson-expandable.expanded {
+    height: 60px;
+    transition-delay: 0.3s;
+}
+
+/*!******************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/lesson-tiles/teacher-lesson-tile.css ***!
+  \******************************************************************************************************************************************************/
+.sched-teac-lesson-inner-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.sched-teac-lesson-subject {
+    font-size: 1.5em;
+    align-self: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.sched-teac-lesson-expandable {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    transition: all 0.3s;
+    transition-delay: 0s;
+    overflow: hidden;
+    background-color: #c5ffc58f;
+    border-bottom: 10px;
+}
+
+.sched-teac-lesson-expandable > label-value:first-child {
+    margin-top: 10px;
+}
+
+.sched-teac-lesson-expandable.expanded {
+    height: 50px;
+    z-index: 100;
+    transition-delay: 0.3s;
+}
+
+/*!******************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/timeline.css ***!
+  \******************************************************************************************************************************/
+.schedule-display-timeline {
+    height: 100%;
+}
+
+/*!*******************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/schedule.css ***!
+  \*******************************************************************************************************************/
+
+
+/*# sourceMappingURL=schedule_display.css.map*/

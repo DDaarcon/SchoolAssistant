@@ -364,4 +364,4 @@ FodyWeavers.xsd
 
 **/React/**/*.js
 **/React/**/*.js.map
-**/wwwroot/dist
+**/wwwroot/dist/*.map

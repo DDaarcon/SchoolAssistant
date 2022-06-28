@@ -1,0 +1,72 @@
+/*!*****************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/users-management/users-catalog/controls/users-type-controls.css ***!
+  \*****************************************************************************************************************************************************/
+.user-type-btn {
+    box-shadow: rgb(0 0 0 / 40%) 1px 1px 3px 1px inset;
+    margin-right: 10px;
+}
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/users-management/users-creation-form/related-object-selector/related-object-entry-fields.css ***!
+  \**********************************************************************************************************************************************************************************/
+.rel-obj-ent-last-name {
+
+}
+
+.rel-obj-ent-first-name {
+}
+
+/*!******************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/users-management/users-creation-form/related-object-selector.css ***!
+  \******************************************************************************************************************************************************/
+.related-object-selector {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+    flex-wrap: wrap;
+}
+
+.related-object-entry {
+    margin-bottom: 20px;
+    flex-basis: 30%;
+    display: flex;
+    gap: 10px;
+    padding: 10px 10px;
+}
+
+.related-object-entry-field {
+
+}
+/*!************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/users-management/users-creation-form/user-created-page.css ***!
+  \************************************************************************************************************************************************/
+.user-created-page > h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-created-page-rows {
+    display: flex;
+}
+
+.usr-crea-page-user-info-row {
+
+}
+
+.usr-crea-page-messages-row {
+    flex-grow: 1;
+}
+/*!*************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/users-management/users-creation-form/user-type-selector.css ***!
+  \*************************************************************************************************************************************************/
+.user-type-selector {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.user-type-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+}
+
+/*# sourceMappingURL=users_management.css.map*/

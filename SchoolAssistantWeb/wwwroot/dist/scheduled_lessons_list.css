@@ -1,0 +1,238 @@
+/*!*******************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/components/row.css ***!
+  \*******************************************************************************************************************************/
+.scheduled-lessons-list-body > tr {
+    box-shadow: inset 0 0 10em #ffffff91, inset 0 -3em 3em rgba(0,0,0,0.1), 0 0 0 2px rgb(255,255,255, 0.1);
+    text-shadow: #909164ad 0px 4px 6px;
+    transition: all 1s, font-size 0s;
+}
+.scheduled-lessons-list-body > tr > td > span {
+    transition: all 1s;
+}
+
+#incoming-lesson {
+    background-color: #95ff7d8a;
+}
+
+.see-upcomming-btn:hover {
+    background-color: #2eff6547 !important;
+}
+
+
+
+.sll-entry-button-cell button {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 100%;
+    width: 100%;
+    font-size: 0.8em;
+    background-color: #8dfff517;
+    border: 0;
+    box-shadow: inset 0 0 10px #ffffff91, inset 0 -3em 2em rgba(12, 40, 60, 0.03), 0 0 0 1px rgb(255,255,255, 0.1);
+    white-space: nowrap;
+    transition: all 0.3s;
+}
+
+.sll-entry-button-cell > button:hover {
+    transform: scale(1.1);
+}
+
+.see-omitted-btn {
+}
+
+.see-past-details-btn {
+}
+
+.conduct-btn {
+}
+
+.conduct-btn:hover {
+    background-color: #ffb05957 !important;
+}
+
+
+.squeezed {
+    height: 0px;
+    font-size: 0;
+}
+.squeezed td {
+    transform: scale(0);
+}
+/*!*************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/components/list-body.css ***!
+  \*************************************************************************************************************************************/
+.scheduled-lessons-list-body {
+    box-shadow: inset 0 -3em 3em rgba(231, 231, 231,0.41), 0 0 0 2px rgb(255,255,255, 0.5), 0.3em 0.3em 1em rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
+
+.scheduled-lessons-list-body tr td:last-child {
+    position: relative;
+    width: 170px;
+}
+
+/*!*************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/components/list-head.css ***!
+  \*************************************************************************************************************************************/
+.scheduled-lessons-list thead tr {
+    box-shadow: inset 0 10em 3em rgba(231, 231, 231,0.1), 0 0 0 2px rgb(255,255,255), 0.3em 0.3em 1em rgba(0,0,0,0.3);
+    height: 35px;
+    text-shadow: #0000004f 0px 2px 6px;
+    border-radius: 5px;
+}
+
+/*!***************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/scheduled-lessons-list.css ***!
+  \***************************************************************************************************************************************/
+.scheduled-lessons-list {
+    width: 100%;
+    height: 100%;
+}
+
+.scheduled-lessons-list > tr > td {
+    vertical-align: middle;
+}
+
+.scheduled-lessons-list tr :is(th, td) > span {
+    margin-left: 20px;
+}
+
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/components-controls/load-lessons-buttons/load-lessons-button.css ***!
+  \*****************************************************************************************************************************************************************************/
+.sll-load-lessons-whole-btn {
+    height: 70px;
+    width: 100%;
+}
+
+.sll-load-lessons-btn {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    border-width: 0px;
+    border-color: #ffd0a5;
+    border-style: solid;
+    transition: all 0.5s;
+    background: transparent;
+    font-family: 'Lucida Sans Unicode', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 600;
+    text-shadow: 0px 2px 3px #00000034;
+}
+.sll-load-lessons-btn.hover {
+    text-shadow: 0px 0px 0px #00000000;
+    border-color: #feb069;
+}
+
+
+.sll-load-lessons-btn-upright {
+    border-top-width: 3px;
+    box-shadow: inset 0px 35px 40px -40px #ffa81e;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 7px;
+}
+.sll-load-lessons-btn-upright.hover {
+    box-shadow: inset 0px 20px 30px -40px #ffa81e;
+}
+
+
+.sll-load-lessons-btn-upside-down {
+    border-bottom-width: 3px;
+    box-shadow: inset 0px -35px 40px -40px #ffa81e;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 7px;
+}
+.sll-load-lessons-btn-upside-down.hover {
+    box-shadow: inset 0px -20px 30px -40px #ffa81e;
+}
+
+
+.sll-load-lessons-btn-5 {
+}
+
+.sll-load-lessons-btn-10,
+.sll-load-lessons-btn-20,
+.sll-load-lessons-btn-50 {
+}
+
+.sll-load-lessons-btn-inner {
+    flex-grow: 1;
+}
+.sll-load-lessons-btn-right-edge {
+    flex-basis: 35px;
+}
+
+.sll-load-lessons-inner-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
+}
+
+.sll-load-lessons-btn-val {
+    text-align: center;
+    margin-top: 5px;
+}
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/components-controls/load-lessons-buttons/load-lessons-button-icon.css ***!
+  \**********************************************************************************************************************************************************************************/
+.all-load-button-icon-box {
+    position: absolute;
+    left: 10px;
+}
+.all-load-button-icon-box-upright {
+    bottom: 0;
+    transform: rotateZ(-90deg) scale(1.3);
+}
+.all-load-button-icon-box-upside-down {
+    top: 0;
+    transform: rotateZ(90deg) scale(1.3);
+}
+
+.sll-load-button-icon {
+    --anim-dist: 2em;
+    animation-name: arrow-animation-upright;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes arrow-animation-upright {
+    0%, 100% {
+        opacity: 1;
+        transform: translateX(calc(var(--anim-dist) * 0.25));
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateX(calc(var(--anim-dist) * 0.75));
+    }
+
+    79.99% {
+        opacity: 0;
+        transform: translateX(calc(var(--anim-dist) * 1));
+    }
+
+    80% {
+        opacity: 0;
+        transform: translateX(calc(var(--anim-dist) * 0));
+    }
+}
+
+.sll-load-button-icon-upright {
+    
+}
+/*!************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/scheduled-lessons-list-controls.css ***!
+  \************************************************************************************************************************************************/
+.sll-controls-layout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sll-filters-panel {
+    flex-grow: 1;
+}
+
+/*# sourceMappingURL=scheduled_lessons_list.css.map*/

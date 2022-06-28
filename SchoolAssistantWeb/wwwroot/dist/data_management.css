@@ -1,0 +1,51 @@
+/*!***************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/data-management/students/students.css ***!
+  \***************************************************************************************************************************/
+.dm-students-class-info-panel {
+    width: 100%;
+    height: 100px;
+}
+
+.dm-students-class-info-panel div {
+    display: inline;
+}
+
+.dm-cip-name {
+    width: 100px;
+    font-size: 4em;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+.dm-cip-spec {
+    font-size: 2em;
+}
+
+/*!********************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/data-management/navigation.css ***!
+  \********************************************************************************************************************/
+.dm-navigation-bar {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: -16px;
+    border-bottom: 1px solid;
+}
+
+.dm-navigation-item {
+    padding: 7px;
+    cursor: pointer;
+}
+
+.dm-navigation-item-active {
+    border-bottom: 2px solid;
+}
+
+/*!**************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/data-management/main.css ***!
+  \**************************************************************************************************************/
+body > .container {
+    max-width: 100%;
+}
+
+
+/*# sourceMappingURL=data_management.css.map*/
