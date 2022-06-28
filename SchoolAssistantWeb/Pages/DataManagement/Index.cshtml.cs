@@ -14,7 +14,7 @@ using SchoolAssistant.Logic.DataManagement.Subjects;
 
 namespace SchoolAssistant.Web.Pages.DataManagement
 {
-    [Authorize(Roles = "Administration, Headmaster, SuperAdmin")]
+    [Authorize(Roles = "Administration, Headmaster, SystemAdmin")]
     public class DataManagementModel : PageModel
     {
         private readonly ISubjectsDataManagementService _subjectsService;

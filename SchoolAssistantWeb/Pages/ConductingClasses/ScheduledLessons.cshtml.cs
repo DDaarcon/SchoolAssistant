@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.ConductingClasses.ConductLesson;
@@ -8,6 +9,7 @@ using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
 
 namespace SchoolAssistant.Web.Pages.ConductingClasses
 {
+    [Authorize(Roles = "Teacher")]
     public class ScheduledLessonsModel : MyPageModel
     {
         private readonly IFetchScheduledLessonListEntriesService _scheduledLessonsListSvc;
@@ -45,6 +47,7 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
         {
             await FetchUserAsync().ConfigureAwait(false);
 
+            // TODO: currently works only for teacher
             ScheduledLessonListEntries = (await _scheduledLessonsListSvc.GetModelForTeacherAsync(_User!.TeacherId!.Value, new FetchScheduledLessonsRequestModel
             {
                 From = DateTime.Now.AddDays(-1),

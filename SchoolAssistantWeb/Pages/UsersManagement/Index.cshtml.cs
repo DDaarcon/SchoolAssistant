@@ -6,7 +6,7 @@ using SchoolAssistant.Logic.UsersManagement;
 
 namespace SchoolAssistant.Web.Pages.UsersManagement
 {
-    [Authorize(Roles = "Administration, Headmaster, SuperAdmin")]
+    [Authorize(Roles = "Administration, Headmaster, SystemAdmin")]
     public class UsersManagementModel : PageModel
     {
         private readonly IFetchUserListEntriesService _fetchEntriesSvc;
