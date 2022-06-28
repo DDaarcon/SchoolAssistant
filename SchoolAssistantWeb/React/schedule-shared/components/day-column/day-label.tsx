@@ -8,7 +8,7 @@ type DayLabelProps = {
 }
 const DayLabel = (props: DayLabelProps) => {
     return (
-        <div className="sched-timeline-day-label raised-bar">
+        <div className="sched-timeline-day-label my-raised-bar">
             {nameForDayOfWeek(props.day)}
         </div>
     )

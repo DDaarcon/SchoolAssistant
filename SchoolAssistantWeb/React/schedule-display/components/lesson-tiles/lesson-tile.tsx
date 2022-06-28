@@ -49,7 +49,7 @@ export default abstract class LessonTile extends React.Component<LessonTileProps
         }
 
         return (
-            <div className="sched-disp-lesson-tile raised-bar"
+            <div className="sched-disp-lesson-tile my-raised-bar"
                 style={style}
                 onMouseEnter={this.mouseEntered}
                 onMouseLeave={this.mouseLeft}

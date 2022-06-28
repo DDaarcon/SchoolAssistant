@@ -1,6 +1,8 @@
 ﻿:root {
-    --schedule-day-label-offset: 30px;
+    /* used also in whole schedule height calculation */
+    --schedule-day-label-offset: 25px;
 }
+
 
 .sched-timeline-day-label {
     position: absolute;
@@ -8,4 +10,9 @@
     text-align: center;
     top: calc(-1 * var(--schedule-day-label-offset));
     font-size: 1.2em;
+    transform: scale(0.96);
+
+    box-shadow: 0 0 0 2px rgb(255 255 255), 0.2em 0.1em 0.7em rgb(0 0 0 / 30%);
+
+    font-size: 1em;
 }
