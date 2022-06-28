@@ -6,15 +6,6 @@ import './teacher-lesson-tile.css';
 
 export default class TeacherLessonTile extends LessonTile {
     protected getInnerComponents(): JSX.Element {
-        const labelValueStyle: React.CSSProperties = {
-            width: '100%',
-            fontSize: '0.8em',
-            marginBottom: 0
-        };
-
-        const labelStyle: React.CSSProperties = {
-            width: '20%',
-        };
 
         const studentClassName = this.props.lesson.orgClass?.name ?? this.props.lesson.subjClass?.name;
 
@@ -28,15 +19,15 @@ export default class TeacherLessonTile extends LessonTile {
                 <div className={"sched-teac-lesson-expandable " + (this.state.hover ? "expanded" : "")}>
                     <LabelValue
                         label="czas"
-                        valueComp={displayTime(this.props.lesson.time)}
-                        outerStyle={labelValueStyle}
-                        labelOuterStyle={labelStyle}
+                        value={displayTime(this.props.lesson.time)}
+                        containerClassName="label-value-lessson-details-teac"
+                        labelContainerClassName="lab-val-lab-lesson-details-teac"
                     />
                     <LabelValue
                         label="miejsce"
-                        valueComp={this.props.lesson.room.name}
-                        outerStyle={labelValueStyle}
-                        labelOuterStyle={labelStyle}
+                        value={this.props.lesson.room.name}
+                        containerClassName="label-value-lessson-details-teac"
+                        labelContainerClassName="lab-val-lab-lesson-details-teac"
                     />
                 </div>
             </div>

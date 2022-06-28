@@ -35,7 +35,7 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
 
                         <LabelValue
                             label="Nazwisko i imię"
-                            valueComp={
+                            value={
                                 <span>
                                     {`${this.props.user.lastName} ${this.props.user.firstName}`}
                                 </span>
@@ -43,7 +43,7 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
                         />
                         <LabelValue
                             label="Nazwa użytkownika"
-                            valueComp={
+                            value={
                                 <span>
                                     {this.props.user.userName}
                                 </span>
@@ -51,7 +51,7 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
                         />
                         <LabelValue
                             label="Email"
-                            valueComp={
+                            value={
                                 <span>
                                     {this.props.user.email}
                                 </span>
@@ -59,7 +59,7 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
                         />
                         <LabelValue
                             label="Hasło"
-                            valueComp={
+                            value={
                                 <span>
                                     {this.passwordInfoComponent()}
                                 </span>

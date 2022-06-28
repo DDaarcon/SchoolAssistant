@@ -6,16 +6,6 @@ import './student-lesson-tile.css';
 
 export default class StudentLessonTile extends LessonTile {
     protected getInnerComponents(): JSX.Element {
-        const labelValueStyle: React.CSSProperties = {
-            width: '100%',
-            fontSize: '0.8em',
-            marginBottom: 0
-        };
-
-        const labelStyle: React.CSSProperties = {
-            width: '20%',
-        };
-
 
         return (
             <div className="sched-stud-lesson-inner-container">
@@ -27,21 +17,21 @@ export default class StudentLessonTile extends LessonTile {
                 <div className={"sched-stud-lesson-expandable " + (this.state.hover ? "expanded" : "")}>
                     <LabelValue
                         label="czas"
-                        valueComp={displayTime(this.props.lesson.time)}
-                        outerStyle={labelValueStyle}
-                        labelOuterStyle={labelStyle}
+                        value={displayTime(this.props.lesson.time)}
+                        containerClassName="label-value-lesson-details-stud"
+                        labelContainerClassName="lab-val-lab-lesson-details-stud"
                     />
                     <LabelValue
                         label="miejsce"
-                        valueComp={this.props.lesson.room.name}
-                        outerStyle={labelValueStyle}
-                        labelOuterStyle={labelStyle}
+                        value={this.props.lesson.room.name}
+                        containerClassName="label-value-lesson-details-stud"
+                        labelContainerClassName="lab-val-lab-lesson-details-stud"
                     />
                     <LabelValue
                         label="wykł."
-                        valueComp={this.props.lesson.lecturer.name}
-                        outerStyle={labelValueStyle}
-                        labelOuterStyle={labelStyle}
+                        value={this.props.lesson.lecturer.name}
+                        containerClassName="label-value-lesson-details-stud"
+                        labelContainerClassName="lab-val-lab-lesson-details-stud"
                     />
                 </div>
             </div>

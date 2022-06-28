@@ -35,3 +35,12 @@
     transition-delay: 1s;
     z-index:1000;
 }
+
+.label-value-lessson-details-teac {
+    width: 100%;
+    font-size: 0.8em;
+    margin-bottom: 0;
+}
+.lab-val-lab-lesson-details-teac {
+    width: 20%;
+}
