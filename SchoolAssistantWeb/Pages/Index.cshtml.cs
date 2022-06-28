@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.DAL.Enums;
@@ -6,7 +7,7 @@ using SchoolAssistant.DAL.Models.AppStructure;
 
 namespace SchoolAssistant.Web.Pages
 {
-    //[Authorize]
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly UserManager<User> _userManager;
@@ -23,8 +24,6 @@ namespace SchoolAssistant.Web.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User).ConfigureAwait(false);
-
-            return Page();
 
             return user.Type switch
             {
