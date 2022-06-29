@@ -126,8 +126,8 @@ label {
     box-shadow: inset var(--initial-side-indent) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) #ffffff, inset calc(var(--initial-side-indent) * -1) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) #ffffff;
     background-color: #cdff003d;
     transition-timing-function: linear;
-    border-left: 2px solid;
-    border-right: 2px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
     border-color: #ffffffff;
 }
 
@@ -144,8 +144,7 @@ label {
     --initial-bottom-indent: -20px;
     --initial-blur: 20px;
     --initial-central-indent: -30px;
-    transition-duration: 0.15s;
-    transition: border-color 1s, all 0.15s;
+    transition: all 0.15s;
     border-color: #afcf1d8c;
 }
 
