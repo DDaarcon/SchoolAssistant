@@ -4,6 +4,6 @@ export default interface ScheduleTimelineConfig {
     startHour: number;
     endHour: number;
 
-    daysToHide?: DayOfWeek[];
+    hiddenDays?: DayOfWeek[];
     defaultLessonDuration: number;
 }

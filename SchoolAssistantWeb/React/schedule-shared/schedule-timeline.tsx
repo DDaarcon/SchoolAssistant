@@ -52,7 +52,7 @@ export default class ScheduleTimeline extends React.Component<ScheduleTimelinePr
 
 
     protected get _daysOfWeek() {
-        const except = this.props.config.daysToHide ?? [];
+        const except = this.props.config.hiddenDays ?? [];
 
         return getEnumValues(DayOfWeek)
             .filter(x => !except.includes(x)) as DayOfWeek[];

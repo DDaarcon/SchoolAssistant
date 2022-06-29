@@ -19,5 +19,8 @@ namespace SchoolAssistant.DAL.Help.AppConfiguration
 
         [RecordKey("minutesBeforeLessonConsideredClose")]
         public VTRecordHandler<int> MinutesBeforeLessonConsideredClose { get; set; } = null!;
+
+        [RecordKey("hiddenDays")]
+        public RecordHandler<IEnumerable<DayOfWeek>> HiddenDays { get; set; } = null!;
     }
 }

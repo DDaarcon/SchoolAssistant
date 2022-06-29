@@ -80,7 +80,10 @@ builder.Services.AddSession(options =>
 
 #endregion
 
-builder.Services.AddAppConfiguration<SADbContext, AppConfigRecords>();
+builder.Services.AddAppConfiguration<SADbContext, AppConfigRecords>(opt =>
+{
+    opt.Add(new DaysOfWeekRecordHandlerRule());
+});
 
 builder.Services.AddAllInjectable();
 

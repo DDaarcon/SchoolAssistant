@@ -49,8 +49,8 @@ namespace SchoolAssistant.DAL
 
         public async Task SeedRolesAndAdminAsync()
         {
-            await SeedRolesAsync();
-            await SeedSystemAdminAsync();
+            await SeedRolesAsync().ConfigureAwait(false);
+            await SeedSystemAdminAsync().ConfigureAwait(false);
         }
 
         public async Task SeedRolesAsync()
@@ -60,7 +60,7 @@ namespace SchoolAssistant.DAL
 
             foreach (var description in descriptions)
             {
-                var role = await _roleManager.FindByNameAsync(description.RoleName);
+                var role = await _roleManager.FindByNameAsync(description.RoleName).ConfigureAwait(false);
 
                 if (role is null)
                 {
@@ -71,27 +71,27 @@ namespace SchoolAssistant.DAL
                     };
 
                     description.CopyPermissionsTo(role);
-                    await _roleManager.CreateAsync(role);
+                    await _roleManager.CreateAsync(role).ConfigureAwait(false);
                 }
                 else
                 {
                     description.CopyPermissionsTo(role);
-                    await _roleManager.UpdateAsync(role);
+                    await _roleManager.UpdateAsync(role).ConfigureAwait(false);
                 }
             }
         }
 
         public async Task SeedSystemAdminAsync()
         {
-            var user = await _userManager.FindByNameAsync(_systemAdmin.UserName);
+            var user = await _userManager.FindByNameAsync(_systemAdmin.UserName).ConfigureAwait(false);
 
             if (user is null)
             {
                 user = _systemAdmin;
-                await _userManager.CreateAsync(user);
-                await _userManager.AddPasswordAsync(user, _systemAdminPassword);
+                await _userManager.CreateAsync(user).ConfigureAwait(false);
+                await _userManager.AddPasswordAsync(user, _systemAdminPassword).ConfigureAwait(false);
 
-                await _userManager.AddToRoleAsync(user, UserType.SystemAdmin.GetUserTypeAttribute()!.RoleName);
+                await _userManager.AddToRoleAsync(user, UserType.SystemAdmin.GetUserTypeAttribute()!.RoleName).ConfigureAwait(false);
             }
         }
 
@@ -100,17 +100,18 @@ namespace SchoolAssistant.DAL
         {
             var results = new bool[]
             {
-                await _configRepo.Records.ScheduleArrangerCellHeight.SetIfEmptyAsync(5),
-                await _configRepo.Records.ScheduleArrangerCellDuration.SetIfEmptyAsync(5),
-                await _configRepo.Records.DefaultLessonDuration.SetIfEmptyAsync(45),
-                await _configRepo.Records.ScheduleStartHour.SetIfEmptyAsync(7),
-                await _configRepo.Records.ScheduleEndhour.SetIfEmptyAsync(18),
-                await _configRepo.Records.DefaultRoomName.SetIfEmptyAsync("Sala"),
-                await _configRepo.Records.MinutesBeforeLessonConsideredClose.SetIfEmptyAsync(5)
+                await _configRepo.Records.ScheduleArrangerCellHeight.SetIfEmptyAsync(5).ConfigureAwait(false),
+                await _configRepo.Records.ScheduleArrangerCellDuration.SetIfEmptyAsync(5).ConfigureAwait(false),
+                await _configRepo.Records.DefaultLessonDuration.SetIfEmptyAsync(45).ConfigureAwait(false),
+                await _configRepo.Records.ScheduleStartHour.SetIfEmptyAsync(7).ConfigureAwait(false),
+                await _configRepo.Records.ScheduleEndhour.SetIfEmptyAsync(18).ConfigureAwait(false),
+                await _configRepo.Records.DefaultRoomName.SetIfEmptyAsync("Sala").ConfigureAwait(false),
+                await _configRepo.Records.MinutesBeforeLessonConsideredClose.SetIfEmptyAsync(5).ConfigureAwait(false),
+                await _configRepo.Records.HiddenDays.SetIfEmptyAsync(new DayOfWeek[] { DayOfWeek.Sunday, DayOfWeek.Saturday }).ConfigureAwait(false)
             };
 
             if (results.Any(x => x))
-                await _configRepo.SaveAsync();
+                await _configRepo.SaveAsync().ConfigureAwait(false);
         }
     }
 }

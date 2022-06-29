@@ -24,11 +24,12 @@ namespace SchoolAssistant.Logic.ScheduleArranger
         {
             return new ScheduleArrangerConfigJson
             {
-                defaultLessonDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync() ?? 45,
-                cellDuration = await _configRepo.Records.ScheduleArrangerCellDuration.GetAsync() ?? 5,
-                cellHeight = await _configRepo.Records.ScheduleArrangerCellHeight.GetAsync() ?? 5,
-                startHour = await _configRepo.Records.ScheduleStartHour.GetAsync() ?? 7,
-                endHour = await _configRepo.Records.ScheduleEndhour.GetAsync() ?? 18
+                defaultLessonDuration = await _configRepo.Records.DefaultLessonDuration.GetAsync().ConfigureAwait(false) ?? 45,
+                cellDuration = await _configRepo.Records.ScheduleArrangerCellDuration.GetAsync().ConfigureAwait(false) ?? 5,
+                cellHeight = await _configRepo.Records.ScheduleArrangerCellHeight.GetAsync().ConfigureAwait(false) ?? 5,
+                startHour = await _configRepo.Records.ScheduleStartHour.GetAsync().ConfigureAwait(false) ?? 7,
+                endHour = await _configRepo.Records.ScheduleEndhour.GetAsync().ConfigureAwait(false) ?? 18,
+                hiddenDays = (await _configRepo.Records.HiddenDays.GetAsync().ConfigureAwait(false) ?? Enumerable.Empty<DayOfWeek>()).ToArray()
             };
         }
     }
