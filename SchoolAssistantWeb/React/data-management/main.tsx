@@ -63,7 +63,12 @@ export default class DataManagementMainScreen extends React.Component<MainScreen
 
 const WelcomeScreen = () => {
     return (
-        <h4>Zarządzanie danymi tttttt</h4>
+        <div className="dm-welcome-screen">
+            <h4>Zarządzanie danymi aplikacji</h4>
+            <p>
+                Przejdź pod jedną z powyższych zakładek aby wprowadzać, modyfikować oraz usuwać informacje.
+            </p>
+        </div>
     )
 }
 
