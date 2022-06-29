@@ -53,7 +53,11 @@ export default class MainScreen extends React.Component<MainScreenProps, MainScr
     }
 
     componentDidMount() {
-        TopBar.Ref.setGoBackAction(() => this.setState({ pageComponent: this._classSelectorComponent }));
+        TopBar.Ref.hideGoBack();
+        TopBar.Ref.setGoBackAction(() => {
+            TopBar.Ref.hideGoBack();
+            this.setState({ pageComponent: this._classSelectorComponent })
+        });
     }
 
     changeScreen = (pageComponent: JSX.Element) => {

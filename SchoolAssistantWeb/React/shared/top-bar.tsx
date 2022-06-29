@@ -31,8 +31,10 @@ class TopBarImpl extends React.Component<TopBarProps, TopBarState> {
         )
     }
 
+    private _goBackBtnRef: HTMLButtonElement;
     private _renderGoBackBtn = () => (
         <button
+            ref={ref => this._goBackBtnRef = ref}
             className="top-bar-go-back-btn"
             onClick={() => this._goBack()}
         >
@@ -46,6 +48,16 @@ class TopBarImpl extends React.Component<TopBarProps, TopBarState> {
 
     public setGoBackAction(action: () => void) {
         this._goBack = action;
+    }
+
+    private readonly HIDE_GO_BACK_BTN_CLASS = "top-bar-go-back-btn-hide";
+
+    public hideGoBack() {
+        this._goBackBtnRef.classList.add(this.HIDE_GO_BACK_BTN_CLASS);
+    }
+
+    public showGoBack() {
+        this._goBackBtnRef.classList.remove(this.HIDE_GO_BACK_BTN_CLASS);
     }
 }
 

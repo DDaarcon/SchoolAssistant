@@ -41,3 +41,6 @@
         6px 2px 6px 0px #808080;
 }
 
+.top-bar-go-back-btn-hide {
+    transform: translateX(-200px) !important;
+}

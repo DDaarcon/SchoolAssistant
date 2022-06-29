@@ -4,6 +4,7 @@ import ClassLessons from "./interfaces/class-lessons";
 import './schedule-arranger-page/schedule-arranger-page.css';
 import { scheduleArrangerConfig } from "./main";
 import ScheduleArrangerTimeline from "./schedule-arranger-page/schedule-arranger-timeline";
+import TopBar from "../shared/top-bar";
 
 type ScheduleArrangerPageProps = {
     classData: ClassLessons;
@@ -25,5 +26,9 @@ export default class ScheduleArrangerPage extends React.Component<ScheduleArrang
                 />
             </div>
         )
+    }
+
+    componentDidMount() {
+        TopBar.Ref.showGoBack();
     }
 }
