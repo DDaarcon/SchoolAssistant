@@ -24,7 +24,7 @@ namespace SchoolAssistant.Web
 
         protected async Task FetchUserAsync()
         {
-            _User = (await _userRepo.GetCurrentAsync().ConfigureAwait(false))!;
+            _User = (await _userRepo.GetCurrentUserCachedAsync().ConfigureAwait(false))!;
         }
 
         protected async Task<bool> FetchAndValidateIfUserOfTypeAsync(UserType type)

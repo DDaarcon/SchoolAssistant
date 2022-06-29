@@ -80,7 +80,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ConductLesson
 
         private async Task<bool> ValidateWithDatabaseAndFetchAsync()
         {
-            var user = await _userRepo.GetCurrentAsync().ConfigureAwait(false);
+            var user = await _userRepo.GetCurrentUserCachedAsync().ConfigureAwait(false);
             if (user is null || user.Teacher is null)
                 return false;
 

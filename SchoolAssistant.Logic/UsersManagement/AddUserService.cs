@@ -60,7 +60,7 @@ namespace SchoolAssistant.Logic.UsersManagement
 
             if (_response.success)
             {
-                var currentUser = await _userRepo.GetCurrentAsync().ConfigureAwait(false);
+                var currentUser = await _userRepo.GetCurrentUserCachedAsync().ConfigureAwait(false);
                 (bool success, string? encrypted) = await _deformationSvc.GetEncryptedAsync(_temporaryPassword!, currentUser?.Id.ToString()).ConfigureAwait(false);
 
                 if (success)
