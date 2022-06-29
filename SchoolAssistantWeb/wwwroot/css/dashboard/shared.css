@@ -2,8 +2,10 @@
     background-color: #e6fffb;
 }
 
-.dashboard-item-green {
-    background-color: #ebffed;
+.dashboard-item-white-glow {
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px 5px #f8f8f8;
+    border-radius: 10px;
 }
 
 
