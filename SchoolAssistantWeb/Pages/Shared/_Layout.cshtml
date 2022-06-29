@@ -2,6 +2,8 @@
     bool hideNavbar = (ViewData["HideNavbar"] as bool?) ?? false;
     string? version = ViewData["ProjectVersion"] as string;
     bool hasVersion = version is not null;
+
+    ViewDataHelper.For(ViewData);
 }
 
 <!DOCTYPE html>
@@ -28,31 +30,66 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">SchoolAssistant.Web</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    School Assistant
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/DataManagement/Index">Manage your data</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/ScheduleArranger/Index">Manage schedules</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/UsersManagement/Index">Manage users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/UsersManagement/CreateUser">Add user</a>
-                        </li>
+                        @if (ViewDataHelper.EnableDataManagement)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/DataManagement/Index">Zarządzanie danymi</a>
+                            </li>
+                        }
+                        @if (ViewDataHelper.EnableScheduleArranger)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/ScheduleArranger/Index">Zarządzanie planem lekcji</a>
+                            </li>
+                        }
+                        @{
+                            bool showAnyOfUsersLists =
+                                ViewDataHelper.EnableUsersList
+                                || ViewDataHelper.EnableUsersListStudents
+                                || ViewDataHelper.EnableUsersListTeachers;
+
+                            bool showUsersButton = 
+                                showAnyOfUsersLists
+                                || ViewDataHelper.EnableUsersManagement;
+                        }
+                        @if (showUsersButton)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle"
+                                    id="navbarDropdown" 
+                                    role="button" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-haspopup="true" 
+                                    aria-expanded="false"
+                                >
+                                    Użytkownicy
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @if (showAnyOfUsersLists)
+                                    {
+                                        <a class="dropdown-item" asp-area="" asp-page="/UsersManagement/Index">
+                                            Lista
+                                        </a>    
+                                    }
+                                    @if (ViewDataHelper.EnableUsersManagement)
+                                    {
+                                        <a class="dropdown-item" asp-area="" asp-page="/UsersManagement/CreateUser">
+                                            Dodaj użytkownika
+                                        </a>  
+                                    }
+                                </div>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -74,9 +111,6 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script src="~/dist/runtime.bundle.js" asp-append-version="true"></script>
     <script src="~/dist/vendor.bundle.js" asp-append-version="true"></script>
@@ -86,6 +120,9 @@
     
     <partial name="../ConductingClasses/PanelInitialization/_Scripts" />
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @Html.ReactInitJavaScript()
 </body>
 </html>

@@ -95,3 +95,61 @@ label {
     border-radius: 4px;
     text-shadow: var(--text-shadow-my-values);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Navbar item hover/click effect */
+
+.nav-item {
+    --initial-side-indent: 30px;
+    --initial-bottom-indent: -15px;
+    --initial-blur: 10px;
+    --initial-central-indent: 20px;
+    transition: all 0.5s;
+    box-shadow: inset var(--initial-side-indent) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) #ffffff, inset calc(var(--initial-side-indent) * -1) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) #ffffff;
+    background-color: #cdff003d;
+    transition-timing-function: linear;
+    border-left: 2px solid;
+    border-right: 2px solid;
+    border-color: #ffffffff;
+}
+
+.nav-item:hover {
+    --initial-side-indent: 20px;
+    --initial-bottom-indent: -15px;
+    --initial-blur: 10px;
+    --initial-central-indent: 10px;
+    transition-duration: 0.3s;
+}
+
+.nav-item:active {
+    --initial-side-indent: 20px;
+    --initial-bottom-indent: -20px;
+    --initial-blur: 20px;
+    --initial-central-indent: -30px;
+    transition-duration: 0.15s;
+    transition: border-color 1s, all 0.15s;
+    border-color: #afcf1d8c;
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+}

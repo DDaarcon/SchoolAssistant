@@ -28,6 +28,7 @@ namespace SchoolAssistant.DAL.Repositories
         void Remove(User entity);
 
         Task<User?> GetCurrentAsync();
+        ValueTask<User?> GetCurrentUserCachedAsync();
 
         UserManager<User> Manager { get; }
     }
@@ -104,6 +105,15 @@ namespace SchoolAssistant.DAL.Repositories
             return await Manager.GetUserAsync(_HttpContext.User).ConfigureAwait(false);
         }
 
+
+        private User? _cachedCurrentUser;
+        public async ValueTask<User?> GetCurrentUserCachedAsync()
+        {
+            if (_cachedCurrentUser is null)
+                _cachedCurrentUser = await GetCurrentAsync().ConfigureAwait(false);
+
+            return _cachedCurrentUser;
+        }
 
         public void UseIndependentDbContext()
         {

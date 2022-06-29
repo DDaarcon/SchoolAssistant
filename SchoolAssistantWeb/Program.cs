@@ -54,6 +54,7 @@ builder.Services.AddRazorPages()
     .AddMvcOptions(options =>
     {
         options.Filters.Add<EnableLessonConductionPanelAsyncPageFilter>();
+        options.Filters.Add<NavbarLinksAsyncPageFilter>();
     });
 
 builder.Services.ConfigureApplicationCookie(options =>
