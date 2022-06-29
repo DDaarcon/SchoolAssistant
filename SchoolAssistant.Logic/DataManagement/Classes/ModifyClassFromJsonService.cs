@@ -69,7 +69,8 @@ namespace SchoolAssistant.Logic.DataManagement.Classes
             _model.distinction = _model.distinction?.Trim();
 
             if (await _repo.AsQueryable().AnyAsync(x =>
-                x.Grade == _model.grade
+                x.Id != _model.id
+                && x.Grade == _model.grade
                 && x.Distinction == _model.distinction))
             {
                 _response.message = "Klasa z takim numerem i identyfikatorem już istnieje";

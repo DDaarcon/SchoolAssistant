@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import { Input, SubmitButton } from "../../shared/form-controls";
+import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import ModCompProps from "../../shared/lists/interfaces/shared-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
-import Validator from "../../shared/validator";
 import { server } from "../main";
 import ClassDetails from "./interfaces/class-details";
 import ClassModificationData from "./interfaces/class-modification-data";
@@ -13,8 +13,7 @@ type ClassModCompState = {
     awaitingData: boolean;
     data: ClassDetails;
 }
-export default class ClassModComp extends React.Component<ClassModCompProps, ClassModCompState> {
-    private _validator = new Validator<ClassDetails>();
+export default class ClassModComp extends ModCompBase<ClassDetails, ClassModCompProps, ClassModCompState> {
 
     constructor(props) {
         super(props);
@@ -28,7 +27,6 @@ export default class ClassModComp extends React.Component<ClassModCompProps, Cla
             }
         }
 
-        this._validator.forModelGetter(() => this.state.data);
         this._validator.setRules({
             grade: {
                 notNull: true, other: (model, prop) => {
@@ -52,45 +50,6 @@ export default class ClassModComp extends React.Component<ClassModCompProps, Cla
             this.fetchAsync();
     }
 
-    private async fetchAsync() {
-        let response = await server.getAsync<ClassModificationData>("ClassModificationData", {
-            id: this.props.recordId
-        });
-
-        this.setState({ data: response.data, awaitingData: false });
-    }
-
-    createOnTextChangeHandler: (property: keyof ClassDetails) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
-        return (event) => {
-            const value = event.target.value;
-
-            this.setState(prevState => {
-                const data: ClassDetails = { ...prevState.data };
-                data[property] = (value as unknown) as never;
-                return { data };
-            });
-
-            this.props.onMadeAnyChange();
-        }
-    }
-
-    onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
-        event.preventDefault();
-
-        if (!this._validator.validate()) {
-            this.forceUpdate();
-            return;
-        }
-
-        let response = await server.postAsync<ResponseJson>("ClassData", undefined, {
-            ...this.state.data
-        });
-
-        if (response.success)
-            await this.props.reloadAsync();
-        else
-            console.debug(response);
-    }
 
     render() {
         if (this.state.awaitingData)
@@ -136,5 +95,46 @@ export default class ClassModComp extends React.Component<ClassModCompProps, Cla
                 </form>
             </div>
         )
+    }
+
+
+    private async fetchAsync() {
+        let response = await server.getAsync<ClassModificationData>("ClassModificationData", {
+            id: this.props.recordId
+        });
+
+        this.setState({ data: response.data, awaitingData: false });
+    }
+
+    createOnTextChangeHandler: (property: keyof ClassDetails) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
+        return (event) => {
+            const value = event.target.value;
+
+            this.setState(prevState => {
+                const data: ClassDetails = { ...prevState.data };
+                data[property] = (value as unknown) as never;
+                return { data };
+            });
+
+            this.props.onMadeAnyChange();
+        }
+    }
+
+    onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
+
+        if (!this._validator.validate()) {
+            this.forceUpdate();
+            return;
+        }
+
+        let response = await server.postAsync<ResponseJson>("ClassData", undefined, {
+            ...this.state.data
+        });
+
+        if (response.success)
+            await this.props.reloadAsync();
+        else
+            console.debug(response);
     }
 }
