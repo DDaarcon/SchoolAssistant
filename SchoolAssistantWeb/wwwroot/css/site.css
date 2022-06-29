@@ -8,23 +8,28 @@
 
 
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
-  background-color: var(--bg-color);
+    margin-bottom: 60px;
+    background-color: var(--bg-color);
+    text-shadow: var(--text-shadow-my-values-light);
+}
+
+button {
+    text-shadow: var(--text-shadow-my-values-light);
 }
 
 
@@ -71,11 +76,16 @@ label {
 
 :root {
     --text-shadow-my-values: #0000004f 0px 2px 6px;
+    --text-shadow-my-values-light: #00000030 0px 2px 7px;
 }
 
 
 .my-text-shadow {
     text-shadow: var(--text-shadow-my-values);
+}
+
+.my-text-shadow-light {
+    text-shadow: var(--text-shadow-my-values-light);
 }
 
 .my-raised-bar {
