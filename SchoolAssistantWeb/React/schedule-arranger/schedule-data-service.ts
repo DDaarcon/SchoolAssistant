@@ -36,7 +36,6 @@ class ScheduleArrangerDataService {
     getTeacherName = (id: number) => this.teachers.find(x => x.id == id).shortName;
     getRoomName = (id: number) => this.rooms.find(x => x.id == id).name;
 
-    isTileDragged: boolean = false;
 
     getTeacherAndRoomLessonsAsync = async (teacherId: number, roomId: number, apply: (teacher?: DayLessons<Lesson>[], room?: DayLessons<Lesson>[]) => void) => {
         const teacher = this.teachers.find(x => x.id == teacherId);
@@ -110,6 +109,8 @@ class ScheduleArrangerDataService {
         return undefined;
     }
 
+
+
     async removeLessonAndGetResultAsync(id: number) {
         const dayAndLesson = this.getLessonById(id);
         if (!dayAndLesson) return true;
@@ -137,6 +138,8 @@ class ScheduleArrangerDataService {
         return response.success;
     }
 
+
+
     private async fetchFromServerAsync(teacher?: ScheduleTeacherEntry, room?: ScheduleRoomEntry): Promise<boolean> {
         const fetchTeacher = teacher != undefined && teacher?.lessons == undefined,
             fetchRoom = room != undefined && room?.lessons == undefined;
@@ -155,6 +158,8 @@ class ScheduleArrangerDataService {
         }
         return true;
     }
+
+
 }
 const dataService = new ScheduleArrangerDataService;
 export default dataService;

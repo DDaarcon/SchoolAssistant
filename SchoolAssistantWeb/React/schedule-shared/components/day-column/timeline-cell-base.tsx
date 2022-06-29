@@ -8,32 +8,48 @@ export type TimelineCellBaseProps = {
     cellIndex: number;
     time: Time;
     height: number;
+    containerProps?: React.HTMLAttributes<HTMLDivElement>;
+    className?: string;
 }
 export type TimelineCellBaseState = {
 
 }
-export default abstract class TimelineCellBase
+
+/*
+ * Small piece of whole DayColumn. SchedArr uses those elements for detecting time, when lesson should be inserted
+ * 
+ */
+
+export default class TimelineCellBase
     <TProps extends TimelineCellBaseProps,
     TState extends TimelineCellBaseState> extends React.Component<TProps, TState> {
-
-    private get _wholeHour() { return this.props.time.minutes == 0; }
-
-    protected getContainerProps?(): React.HTMLAttributes<HTMLDivElement>;
 
     render() {
         let style: React.CSSProperties = {
             height: this.props.height
         }
 
+        const customContainerProps = this.props.containerProps ?? this.getContainerProps?.();
+
+        let className = "sched-timeline-cell";
+        if (this._isWholeHour)
+            className += " sched-timeline-cell-whole-hour";
+        if (this.props.className)
+            className += " " + this.props.className;
+
         return (
-            <div className={"sched-timeline-cell" + (this._wholeHour ? " sched-timeline-cell-whole-hour" : "")}
+            <div className={className}
                 style={style}
-                {...this.getContainerProps?.()}
+                {...customContainerProps ?? {}}
             >
-                {this._wholeHour
+                {this._isWholeHour
                     ? <div className="sched-timeline-whole-hour-line"></div>
                     : undefined}
             </div>
         )
     }
+
+    private get _isWholeHour() { return this.props.time.minutes == 0; }
+
+    protected getContainerProps?(): React.HTMLAttributes<HTMLDivElement>;
 }

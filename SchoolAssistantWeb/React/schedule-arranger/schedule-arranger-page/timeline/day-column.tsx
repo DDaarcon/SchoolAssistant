@@ -15,7 +15,7 @@ type DayColumnProps = DayColumnBaseProps<ScheduleArrangerConfig, LessonTimelineE
     teacherBusyLessons?: LessonTimelineEntry[];
     roomBusyLessons?: LessonTimelineEntry[];
 
-    addLesson: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
+    addLesson: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
     editStoredLesson: (model: LessonEditModel) => void;
 }
 type DayColumnState = DayColumnBaseState & {
@@ -86,9 +86,9 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
     }
 
 
-    addLesson = (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+    addLesson = (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
         this.hideLessonShadow();
-        this.props.addLesson(dayIndicator, cellIndex, time, data);
+        this.props.addLesson(dayIndicator, cellIndex, time);
     }
 
     onEntered = (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {

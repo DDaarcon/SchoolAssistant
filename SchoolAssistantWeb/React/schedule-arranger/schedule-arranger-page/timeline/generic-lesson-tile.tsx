@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import Time from "../../../schedule-shared/interfaces/shared/time";
 import { scheduleArrangerConfig } from "../../main";
-import dataService from "../../schedule-data-service";
+import PlacingAssistantService from "../services/placing-assistant-service";
 import './lesson-tiles.css';
 import './other-lesson-tiles.css';
 
@@ -36,7 +36,7 @@ export default class GenericLessonTile extends React.Component<GenericLessonTile
         }
 
         return (
-            <button className={`sa-lesson-tile ${dataService.isTileDragged ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
+            <button className={`sa-lesson-tile ${PlacingAssistantService.isPlacing ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
                 style={style}
                 onClick={this.props.onPress}
             >

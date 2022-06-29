@@ -7,10 +7,10 @@ import LessonTimelineEntry from '../../schedule-shared/interfaces/lesson-timelin
 import Time from '../../schedule-shared/interfaces/shared/time';
 import ScheduleTimeline from '../../schedule-shared/schedule-timeline';
 import { AddLessonResponse } from '../interfaces/add-lesson-response';
-import LessonPrefab from '../interfaces/lesson-prefab';
 import ScheduleArrangerConfig from '../interfaces/page-model-to-react/schedule-arranger-config';
 import { scheduleArrangerConfig, server } from '../main';
 import dataService from '../schedule-data-service';
+import PlacingAssistantService from './services/placing-assistant-service';
 import DayColumn from './timeline/day-column';
 import LessonEditModel from './timeline/interfaces/lesson-edit-model';
 
@@ -29,8 +29,9 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
         dataService.assignDaysFromProps(this.props.data);
 
-        addEventListener('dragBegan', (event: CustomEvent) => this.initiateShowingOtherLessonsShadows(event));
-        addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
+        PlacingAssistantService.handlers.hideOtherLessons = this.hideOtherLessonsShadows;
+        PlacingAssistantService.handlers.showOtherLessons = this.initiateShowingOtherLessonsShadowsAsync;
+
         addEventListener('timeline-lessons-rerender', this.rerender);
 
         this.state = {}
@@ -71,10 +72,9 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
 
 
-    private addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
-        this.hideOtherLessonsShadows();
+    private addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
 
-        const prefab: LessonPrefab | undefined = JSON.parse(data.getData("prefab"));
+        const prefab = PlacingAssistantService.getPrefabAndDismiss();
 
         const lessons = await dataService.getOverlappingLessonsAsync({
             day: dayIndicator,
@@ -140,8 +140,8 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
 
 
-    private initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
-        const data: LessonPrefab = event.detail;
+    private initiateShowingOtherLessonsShadowsAsync = async () => {
+        const data = PlacingAssistantService.prefab;
 
         await dataService.getTeacherAndRoomLessonsAsync(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
     }
@@ -153,8 +153,10 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
         this.setState(prevState => {
             let { teacherBusyLessons, roomBusyLessons } = prevState;
 
-            teacherBusyLessons ?? (teacherBusyLessons = teacher);
-            roomBusyLessons ?? (roomBusyLessons = room);
+            if (teacher)
+                teacherBusyLessons = teacher;
+            if (room)
+                roomBusyLessons = room;
 
             return { teacherBusyLessons, roomBusyLessons };
         });

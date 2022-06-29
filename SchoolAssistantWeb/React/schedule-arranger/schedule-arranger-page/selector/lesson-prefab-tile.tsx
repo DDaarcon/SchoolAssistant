@@ -1,36 +1,31 @@
 ﻿import React from "react";
 import LessonPrefab from "../../interfaces/lesson-prefab";
-import dataService from "../../schedule-data-service";
+import PlacingAssistantService from "../services/placing-assistant-service";
 import './lesson-prefab.css';
 
 type ScheduleLessonPrefabTileProps = {
     data: LessonPrefab;
 }
 type ScheduleLessonPrefabTileState = {
-
+    selected: boolean;
 }
 export default class LessonPrefabTile extends React.Component<ScheduleLessonPrefabTileProps, ScheduleLessonPrefabTileState> {
 
-    onStart: React.DragEventHandler<HTMLDivElement> = (event) => {
-        event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
-        dataService.isTileDragged = true;
-        dispatchEvent(new CustomEvent('dragBegan', {
-            detail: this.props.data
-        }));
-    }
+    constructor(props) {
+        super(props);
 
-    onEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
-        dataService.isTileDragged = false;
-        dispatchEvent(new Event("hideLessonShadow"));
-        dispatchEvent(new Event("clearOtherLessons"));
+        this.state = {
+            selected: false
+        }
     }
 
     render() {
         return (
-            <div className="sa-lesson-prefab"
+            <div className={this._className}
                 draggable
-                onDragStart={this.onStart}
-                onDragEnd={this.onEnd}
+                onDragStart={this.dragStart}
+                onDragEnd={this.dragEnd}
+                onClick={this.clicked}
             >
                 <span className="sa-lesson-prefab-subject">
                     {this.props.data.subject.name}
@@ -45,5 +40,35 @@ export default class LessonPrefabTile extends React.Component<ScheduleLessonPref
                 </div>
             </div>
         )
+    }
+
+    private get _className() {
+        let className = "sa-lesson-prefab";
+        if (this.state.selected)
+            className += " sa-lesson-prefab-selected";
+
+        return className;
+    }
+
+
+    private dragStart: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
+
+        PlacingAssistantService.startWithDrag(this.props.data);
+    }
+
+    private dragEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
+        PlacingAssistantService.dismiss();
+    }
+
+    private clicked: React.MouseEventHandler<HTMLDivElement> = (event) => {
+        this.setState({ selected: true });
+
+        PlacingAssistantService.startWithSelect(this.props.data, this.deselect);
+    }
+
+
+    private deselect = () => {
+        this.setState({ selected: false });
     }
 }

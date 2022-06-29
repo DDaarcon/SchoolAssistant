@@ -2,29 +2,42 @@
 import TimelineCellBase, { TimelineCellBaseProps, TimelineCellBaseState } from "../../../schedule-shared/components/day-column/timeline-cell-base";
 import DayOfWeek from "../../../schedule-shared/enums/day-of-week";
 import Time from "../../../schedule-shared/interfaces/shared/time";
+import PlacingAssistantService from "../services/placing-assistant-service";
 
 type TimelineCellProps = TimelineCellBaseProps & {
-    dropped: (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => void;
+    dropped: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
     entered: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
 }
-type TimelineCellState = TimelineCellBaseState & {
+type TimelineCellState = {
 
 }
-export default class TimelineCell extends TimelineCellBase<TimelineCellProps, TimelineCellState> {
-    onDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
+
+export default class TimelineCell extends React.Component<TimelineCellProps, TimelineCellState> {
+
+    render() {
+        const { dropped, entered, ...rest } = this.props;
+
+        return (
+            <TimelineCellBase
+                {...rest}
+                containerProps={this.getContainerProps()}
+            />
+        )
+    }
+
+    private onDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
         this.props.dropped(
             this.props.dayIndicator,
             this.props.cellIndex,
-            this.props.time,
-            event.dataTransfer
+            this.props.time
         );
     }
 
-    onDragOver: React.DragEventHandler<HTMLDivElement> = (event) => {
+    private onDragOver: React.DragEventHandler<HTMLDivElement> = (event) => {
         event.preventDefault();
     }
 
-    onDragEnter: React.DragEventHandler<HTMLDivElement> = (_) => {
+    private onDragEnter: React.DragEventHandler<HTMLDivElement> = (_) => {
         this.props.entered(
             this.props.dayIndicator,
             this.props.cellIndex,
@@ -32,11 +45,33 @@ export default class TimelineCell extends TimelineCellBase<TimelineCellProps, Ti
         );
     }
 
-    protected override getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
+    private onMouseEnter: React.MouseEventHandler<HTMLDivElement> = (ev) => {
+        if (!PlacingAssistantService.isPlacingBySelection)
+            return;
+        this.props.entered(
+            this.props.dayIndicator,
+            this.props.cellIndex,
+            this.props.time
+        );
+    }
+
+    private onClick: React.MouseEventHandler<HTMLDivElement> = (ev) => {
+        if (!PlacingAssistantService.isPlacingBySelection)
+            return;
+        this.props.dropped(
+            this.props.dayIndicator,
+            this.props.cellIndex,
+            this.props.time
+        );
+    }
+
+    private getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
         return {
             onDrop: this.onDrop,
             onDragOver: this.onDragOver,
-            onDragEnter: this.onDragEnter
+            onDragEnter: this.onDragEnter,
+            onMouseEnter: this.onMouseEnter,
+            onClick: this.onClick
         }
     }
 }
