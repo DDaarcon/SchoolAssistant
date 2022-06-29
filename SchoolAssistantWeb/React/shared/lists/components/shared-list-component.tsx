@@ -72,6 +72,7 @@ export default abstract class SharedListComponent<
             enable={this.state?.loading}
             size={LoaderSize.Medium}
             type={LoaderType.Absolute}
+            className="list-loader"
         />);
 
     renderColumnSetting = (index: number, style?: React.CSSProperties) => {

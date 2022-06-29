@@ -1,1 +1,13 @@
-﻿
+﻿.schedule-display-conainer {
+    height: 100%;
+    position: relative;
+}
+
+.schedule-display-loader {
+    transition-duration: 1.5s;
+    z-index:1000;
+}
+
+.schedule-display-loader-hide {
+    opacity: 0;
+}

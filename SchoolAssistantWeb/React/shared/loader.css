@@ -1,13 +1,13 @@
-﻿#loader-dots #dot1 {
+﻿.loader-dots #dot1 {
     animation: load 1s infinite;
 }
 
-#loader-dots #dot2 {
+.loader-dots #dot2 {
     animation: load 1s infinite;
     animation-delay: 0.2s;
 }
 
-#loader-dots #dot3 {
+.loader-dots #dot3 {
     animation: load 1s infinite;
     animation-delay: 0.4s;
 }
@@ -40,5 +40,8 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: #8a8a8a4e;
+}
+
+.loader-inline {
+    display: inline;
 }
