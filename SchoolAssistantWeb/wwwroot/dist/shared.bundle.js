@@ -9225,6 +9225,7 @@ class SharedListComponent extends react_1.default.Component {
             this._madeAnyChange = true;
         };
         this.loadAsync = () => __awaiter(this, void 0, void 0, function* () {
+            this._madeAnyChange = false;
             this.setState(Object.assign(Object.assign({}, this.closeAllModCompState()), { loading: true }));
             const newData = yield this.props.loadDataAsync();
             this.setState({

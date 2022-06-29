@@ -160,13 +160,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
+const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
 const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
-const validator_1 = __importDefault(__webpack_require__(/*! ../../shared/validator */ "./React/shared/validator.ts"));
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
-class ClassModComp extends react_1.default.Component {
+class ClassModComp extends mod_comp_base_1.default {
     constructor(props) {
         super(props);
-        this._validator = new validator_1.default();
         this.createOnTextChangeHandler = (property) => {
             return (event) => {
                 const value = event.target.value;
@@ -198,7 +197,6 @@ class ClassModComp extends react_1.default.Component {
                 specialization: ''
             }
         };
-        this._validator.forModelGetter(() => this.state.data);
         this._validator.setRules({
             grade: {
                 notNull: true, other: (model, prop) => {
@@ -223,14 +221,6 @@ class ClassModComp extends react_1.default.Component {
         if (this.props.recordId)
             this.fetchAsync();
     }
-    fetchAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let response = yield main_1.server.getAsync("ClassModificationData", {
-                id: this.props.recordId
-            });
-            this.setState({ data: response.data, awaitingData: false });
-        });
-    }
     render() {
         if (this.state.awaitingData)
             return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
@@ -240,6 +230,14 @@ class ClassModComp extends react_1.default.Component {
                 react_1.default.createElement(form_controls_1.Input, { name: "distinction-input", label: "Dodatkowe rozr\u00F3\u017Cnienie", value: this.state.data.distinction, onChange: this.createOnTextChangeHandler('distinction'), errorMessages: this._validator.getErrorMsgsFor('distinction'), type: "text" }),
                 react_1.default.createElement(form_controls_1.Input, { name: "specialization-input", label: "Kierunek", value: this.state.data.specialization, onChange: this.createOnTextChangeHandler('specialization'), errorMessages: this._validator.getErrorMsgsFor('specialization'), type: "text" }),
                 react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz" }))));
+    }
+    fetchAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = yield main_1.server.getAsync("ClassModificationData", {
+                id: this.props.recordId
+            });
+            this.setState({ data: response.data, awaitingData: false });
+        });
     }
 }
 exports["default"] = ClassModComp;
@@ -722,14 +720,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
+const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
 const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
-const validator_1 = __importDefault(__webpack_require__(/*! ../../shared/validator */ "./React/shared/validator.ts"));
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
-class StaffPersonModComp extends react_1.default.Component {
+class StaffPersonModComp extends mod_comp_base_1.default {
     constructor(props) {
         super(props);
-        this._validator = new validator_1.default();
-        this.createOnTextChangeHandler = (property) => {
+        this.createTextChangeHandler = (property) => {
             return (event) => {
                 const value = event.target.value;
                 this.setState(prevState => {
@@ -750,7 +747,7 @@ class StaffPersonModComp extends react_1.default.Component {
                 this.props.onMadeAnyChange();
             };
         };
-        this.onSubmitAsync = (event) => __awaiter(this, void 0, void 0, function* () {
+        this.submitAsync = (event) => __awaiter(this, void 0, void 0, function* () {
             event.preventDefault();
             if (!this._validator.validate()) {
                 this.forceUpdate();
@@ -771,13 +768,14 @@ class StaffPersonModComp extends react_1.default.Component {
             },
             availableSubjects: []
         };
-        this._validator.forModelGetter(() => this.state.data);
         this._validator.setRules({
             firstName: { notNull: true, notEmpty: true },
             lastName: { notNull: true, notEmpty: true },
             additionalSubjectsIds: {
                 other: (model, prop) => {
-                    if (model.additionalSubjectsIds.some(x => model.mainSubjectsIds.includes(x)))
+                    var _a;
+                    if (((_a = model.additionalSubjectsIds) === null || _a === void 0 ? void 0 : _a.length)
+                        && model.additionalSubjectsIds.some(x => model.mainSubjectsIds.includes(x)))
                         return {
                             on: prop,
                             error: "Ten sam przedmiot nie może być jednocześnie głównym i dodatkowym"
@@ -789,13 +787,23 @@ class StaffPersonModComp extends react_1.default.Component {
             this.fetchAsync();
         this.fetchSubjectsAsync();
     }
-    get _mainSubjectOptions() { return this.getSubjectOptions(this.state.data.mainSubjectsIds); }
-    get _additionalSubjectOptions() { return this.getSubjectOptions(this.state.data.additionalSubjectsIds); }
-    getSubjectOptions(from) {
-        return this.state.availableSubjects.filter(x => from === null || from === void 0 ? void 0 : from.includes(x.id)).map(x => ({
-            label: x.name,
-            value: x.id
-        }));
+    render() {
+        if (this.state.awaitingPersonData)
+            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
+        return (react_1.default.createElement("div", null,
+            react_1.default.createElement("form", { onSubmit: this.submitAsync },
+                react_1.default.createElement(form_controls_1.Input, { name: "first-name-input", label: "Imi\u0119", value: this.state.data.firstName, onChange: this.createTextChangeHandler('firstName'), errorMessages: this._validator.getErrorMsgsFor('firstName'), type: "text" }),
+                react_1.default.createElement(form_controls_1.Input, { name: "second-name-input", label: "Drugie imi\u0119", value: this.state.data.secondName, onChange: this.createTextChangeHandler('secondName'), errorMessages: this._validator.getErrorMsgsFor('secondName'), type: "text" }),
+                react_1.default.createElement(form_controls_1.Input, { name: "last-name-input", label: "Nazwisko", value: this.state.data.lastName, onChange: this.createTextChangeHandler('lastName'), errorMessages: this._validator.getErrorMsgsFor('lastName'), type: "text" }),
+                react_1.default.createElement(form_controls_1.Multiselect, { name: "main-subejcts-input", label: "G\u0142\u00F3wne przedmioty", value: this._mainSubjectOptions, onChangeId: this.createOnSubjectsChangeHandler('mainSubjectsIds'), errorMessages: this._validator.getErrorMsgsFor('mainSubjectsIds'), options: this.state.availableSubjects.map(x => ({
+                        label: x.name,
+                        value: x.id
+                    })) }),
+                react_1.default.createElement(form_controls_1.Multiselect, { name: "additional-subejcts-input", label: "Dodatkowe przedmioty", value: this._additionalSubjectOptions, onChangeId: this.createOnSubjectsChangeHandler('additionalSubjectsIds'), errorMessages: this._validator.getErrorMsgsFor('additionalSubjectsIds'), options: this.state.availableSubjects.map(x => ({
+                        label: x.name,
+                        value: x.id
+                    })) }),
+                react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz" }))));
     }
     fetchAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -812,23 +820,13 @@ class StaffPersonModComp extends react_1.default.Component {
             this.setState({ availableSubjects });
         });
     }
-    render() {
-        if (this.state.awaitingPersonData)
-            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
-        return (react_1.default.createElement("div", null,
-            react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
-                react_1.default.createElement(form_controls_1.Input, { name: "first-name-input", label: "Imi\u0119", value: this.state.data.firstName, onChange: this.createOnTextChangeHandler('firstName'), errorMessages: this._validator.getErrorMsgsFor('firstName'), type: "text" }),
-                react_1.default.createElement(form_controls_1.Input, { name: "second-name-input", label: "Drugie imi\u0119", value: this.state.data.secondName, onChange: this.createOnTextChangeHandler('secondName'), errorMessages: this._validator.getErrorMsgsFor('secondName'), type: "text" }),
-                react_1.default.createElement(form_controls_1.Input, { name: "last-name-input", label: "Nazwisko", value: this.state.data.lastName, onChange: this.createOnTextChangeHandler('lastName'), errorMessages: this._validator.getErrorMsgsFor('lastName'), type: "text" }),
-                react_1.default.createElement(form_controls_1.Multiselect, { name: "main-subejcts-input", label: "G\u0142\u00F3wne przedmioty", value: this._mainSubjectOptions, onChangeId: this.createOnSubjectsChangeHandler('mainSubjectsIds'), errorMessages: this._validator.getErrorMsgsFor('mainSubjectsIds'), options: this.state.availableSubjects.map(x => ({
-                        label: x.name,
-                        value: x.id
-                    })) }),
-                react_1.default.createElement(form_controls_1.Multiselect, { name: "additional-subejcts-input", label: "Dodatkowe przedmioty", value: this._additionalSubjectOptions, onChangeId: this.createOnSubjectsChangeHandler('additionalSubjectsIds'), errorMessages: this._validator.getErrorMsgsFor('additionalSubjectsIds'), options: this.state.availableSubjects.map(x => ({
-                        label: x.name,
-                        value: x.id
-                    })) }),
-                react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz" }))));
+    get _mainSubjectOptions() { return this.getSubjectOptions(this.state.data.mainSubjectsIds); }
+    get _additionalSubjectOptions() { return this.getSubjectOptions(this.state.data.additionalSubjectsIds); }
+    getSubjectOptions(from) {
+        return this.state.availableSubjects.filter(x => from === null || from === void 0 ? void 0 : from.includes(x.id)).map(x => ({
+            label: x.name,
+            value: x.id
+        }));
     }
 }
 exports["default"] = StaffPersonModComp;
