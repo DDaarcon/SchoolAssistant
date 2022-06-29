@@ -3,14 +3,9 @@ using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Logic.General.Other
 {
-    public interface IPasswordDeformationService
-    {
-        string GetDeformed(string password);
-        string GetReadable(string deformed);
-    }
 
-    [Injectable]
-    public class PasswordDeformationService : IPasswordDeformationService
+    //[Injectable]
+    public class PasswordDeformationService : ITextCryptographicService
     {
         private readonly IConfiguration? _config;
 
@@ -30,6 +25,16 @@ namespace SchoolAssistant.Logic.General.Other
             _increaseBy = passwordDefSec?.GetValue<int>("increaseCharBy") ?? 10;
             _shiftBytesBy = passwordDefSec?.GetValue<int>("shiftCharBytesBy") ?? 3;
             _decreaseBy = passwordDefSec?.GetValue<int>("decreaseCharBy") ?? 15;
+        }
+
+        Task<(bool keyIsStored, string? encrypted)> ITextCryptographicService.GetEncryptedAsync(string text, string id)
+        {
+            return Task.FromResult((false, GetDeformed(text)));
+        }
+
+        Task<string?> ITextCryptographicService.GetDecryptedAsync(string text, string id)
+        {
+            return Task.FromResult(GetReadable(text));
         }
 
         public string GetDeformed(string password)

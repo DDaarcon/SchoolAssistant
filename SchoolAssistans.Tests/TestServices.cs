@@ -50,6 +50,17 @@ namespace SchoolAssistans.Tests
             Collection.AddTransient<TService, TServiceImplementation>();
         }
 
+        public static void AddService<TService>(TService implementation)
+            where TService : class
+        {
+            AddService(services => implementation);
+        }
+        public static void AddService<TService>(Func<IServiceProvider, TService> createMethod)
+            where TService : class
+        {
+            Collection.AddTransient(createMethod);
+        }
+
         public static void Clear() => Collection.Clear();
     }
 }

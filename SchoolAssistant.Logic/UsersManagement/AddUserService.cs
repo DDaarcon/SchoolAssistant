@@ -21,7 +21,7 @@ namespace SchoolAssistant.Logic.UsersManagement
     public class AddUserService : IAddUserService
     {
         private readonly IUserRepository _userRepo;
-        private readonly IPasswordDeformationService _deformationSvc;
+        private readonly ITextCryptographicService _deformationSvc;
 
         private readonly IAddUserRequestJsValidator _modelValidator;
 
@@ -35,7 +35,7 @@ namespace SchoolAssistant.Logic.UsersManagement
 
         public AddUserService(
             IUserRepository userRepo,
-            IPasswordDeformationService deformationSvc,
+            ITextCryptographicService deformationSvc,
             IAddUserRequestJsValidator modelValidator)
         {
             _userRepo = userRepo;
@@ -59,7 +59,13 @@ namespace SchoolAssistant.Logic.UsersManagement
             await CreateUserAsync().ConfigureAwait(false);
 
             if (_response.success)
-                _response.passwordDeformed = _deformationSvc.GetDeformed(_temporaryPassword!);
+            {
+                var currentUser = await _userRepo.GetCurrentAsync().ConfigureAwait(false);
+                (bool success, string? encrypted) = await _deformationSvc.GetEncryptedAsync(_temporaryPassword!, currentUser?.Id.ToString()).ConfigureAwait(false);
+
+                if (success)
+                    _response.passwordDeformed = encrypted;
+            }
 
             return _response;
         }

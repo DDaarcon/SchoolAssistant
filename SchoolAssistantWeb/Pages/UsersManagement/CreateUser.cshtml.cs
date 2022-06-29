@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.General.Other;
 using SchoolAssistant.Logic.UsersManagement;
@@ -8,18 +8,19 @@ using SchoolAssistant.Logic.UsersManagement;
 namespace SchoolAssistant.Web.Pages.UsersManagement
 {
     [Authorize(Roles = "Administration, Headmaster, SystemAdmin")]
-    public class CreateUserModel : PageModel
+    public class CreateUserModel : MyPageModel
     {
         private readonly IFetchUserListEntriesService _fetchUserListEntriesSvc;
         private readonly IFetchUserRelatedObjectsService _fetchRelatedObjectsSvc;
         private readonly IAddUserService _addUserSvc;
-        private readonly IPasswordDeformationService _deformationSvc;
+        private readonly ITextCryptographicService _deformationSvc;
 
         public CreateUserModel(
             IFetchUserListEntriesService fetchUserListEntriesSvc,
             IFetchUserRelatedObjectsService fetchRelatedObjectsSvc,
             IAddUserService addUserSvc,
-            IPasswordDeformationService deformationSvc)
+            ITextCryptographicService deformationSvc,
+            IUserRepository userRepo) : base(userRepo)
         {
             _fetchUserListEntriesSvc = fetchUserListEntriesSvc;
             _fetchRelatedObjectsSvc = fetchRelatedObjectsSvc;
@@ -50,11 +51,12 @@ namespace SchoolAssistant.Web.Pages.UsersManagement
         }
 
         // TODO: sometimes returns invalid password
-        public JsonResult OnGetUnscramblePassword(string deformed)
+        public async Task<JsonResult> OnGetUnscramblePasswordAsync(string deformed)
         {
+            await FetchUserAsync().ConfigureAwait(false);
             return new JsonResult(new
             {
-                readablePassword = _deformationSvc.GetReadable(deformed)
+                readablePassword = await _deformationSvc.GetDecryptedAsync(deformed, _User.Id.ToString()).ConfigureAwait(false)
             });
         }
     }

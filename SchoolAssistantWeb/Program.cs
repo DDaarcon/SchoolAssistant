@@ -73,7 +73,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    //options.IdleTimeout = default 20 minutes;
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
     //options.Cookie.HttpOnly = true;
     //options.Cookie.IsEssential = true;
 });
@@ -86,8 +86,6 @@ builder.Services.AddAppConfiguration<SADbContext, AppConfigRecords>(opt =>
 });
 
 builder.Services.AddAllInjectable();
-
-// TODO: EntityFramework might be unnecessarily referenced
 
 var app = builder.Build();
 

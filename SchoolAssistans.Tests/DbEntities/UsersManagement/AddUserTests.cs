@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Enums;
@@ -14,6 +15,7 @@ using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.General.Other;
+using SchoolAssistant.Logic.General.Other.Help;
 using SchoolAssistant.Logic.UsersManagement;
 using SchoolAssistant.Logic.UsersManagement._Validation;
 using System.Collections.Generic;
@@ -29,7 +31,9 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         private IRepository<OrganizationalClass> _orgClassRepo = null!;
         private IUserRepository _userRepo = null!;
         private IRepository<Teacher> _teacherRepo = null!;
-        private readonly IPasswordDeformationService _deformationSvc = new PasswordDeformationService(null);
+
+        private Mock<IHttpContextAccessor> _contextAccessorMock = null!;
+        private ITextCryptographicService _deformationSvc = null!;
         private IDefaultDataSeeder _seeder = null!;
 
 
@@ -38,6 +42,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
         private IEnumerable<Teacher> _teachers = null!;
         private IList<User> _teacherUsers = null!;
 
+        private string _id = 123.ToString();
 
         [OneTimeSetUp]
         public void Setup()
@@ -45,6 +50,16 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             TestServices.Collection.AddIdentity<User, Role>().AddEntityFrameworkStores<SADbContext>();
             TestServices.AddService<ILogger<UserManager<User>>, Logger<UserManager<User>>>();
             TestServices.AddService<ILogger<RoleManager<Role>>, Logger<RoleManager<Role>>>();
+
+            _contextAccessorMock = new Mock<IHttpContextAccessor>();
+            var ctxMock = new Mock<HttpContext>();
+            var sessionMock = new MockedSession();
+
+
+            ctxMock.Setup(x => x.Session).Returns(sessionMock);
+            _contextAccessorMock.Setup(x => x.HttpContext).Returns(ctxMock.Object);
+
+            TestServices.AddService<IHttpContextAccessor>(_contextAccessorMock.Object);
         }
 
         protected override async Task CleanDataAfterEveryTestAsync()
@@ -67,6 +82,8 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             _teachers = await FakeData._XRandom_Teachers(_teacherRepo, 15);
             _teacherUsers = await FakeData.UsersWithRandomTeachers(_userRepo, _teacherRepo, 15);
+
+            _deformationSvc = new TextCryptographicService(_contextAccessorMock.Object, new CryptographicTools());
         }
 
         protected override void SetupServices()
@@ -112,7 +129,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             var user = await _userRepo.Manager.FindByNameAsync(username);
             Assert.IsNotNull(user);
-            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, _deformationSvc.GetReadable(res.passwordDeformed)));
+            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, await _deformationSvc.GetDecryptedAsync(res.passwordDeformed, _id)));
             Assert.AreEqual(UserType.Student, user.Type);
             Assert.IsTrue(student.Id == user.Student?.Id || student.Id == user.StudentId);
             Assert.AreEqual(email, user.Email);
@@ -138,7 +155,7 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
 
             var user = await _userRepo.Manager.FindByNameAsync(username);
             Assert.IsNotNull(user);
-            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, _deformationSvc.GetReadable(res.passwordDeformed)));
+            Assert.IsTrue(await _userRepo.Manager.CheckPasswordAsync(user, await _deformationSvc.GetDecryptedAsync(res.passwordDeformed, _id)));
             Assert.AreEqual(UserType.Teacher, user.Type);
             Assert.IsTrue(teacher.Id == user.Teacher?.Id || teacher.Id == user.TeacherId);
             Assert.AreEqual(email, user.Email);
