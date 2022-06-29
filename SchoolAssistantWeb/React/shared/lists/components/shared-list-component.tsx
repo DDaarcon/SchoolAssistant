@@ -58,6 +58,7 @@ export default abstract class SharedListComponent<
     }
 
     loadAsync = async () => {
+        this._madeAnyChange = false;
         this.setState({ ...this.closeAllModCompState(), loading: true });
         const newData = await this.props.loadDataAsync();
         this.setState({
