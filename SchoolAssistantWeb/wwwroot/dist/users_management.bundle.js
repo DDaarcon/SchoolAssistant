@@ -714,10 +714,10 @@ class UserCreatedPage extends react_1.default.Component {
             react_1.default.createElement("h2", null, "Utworzono u\u017Cytkownika"),
             react_1.default.createElement("div", { className: "user-created-page-rows" },
                 react_1.default.createElement("div", { className: "usr-crea-page-user-info-row" },
-                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwisko i imi\u0119", valueComp: react_1.default.createElement("span", null, `${this.props.user.lastName} ${this.props.user.firstName}`) }),
-                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", valueComp: react_1.default.createElement("span", null, this.props.user.userName) }),
-                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Email", valueComp: react_1.default.createElement("span", null, this.props.user.email) }),
-                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", valueComp: react_1.default.createElement("span", null, this.passwordInfoComponent()) })),
+                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwisko i imi\u0119", value: react_1.default.createElement("span", null, `${this.props.user.lastName} ${this.props.user.firstName}`) }),
+                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: react_1.default.createElement("span", null, this.props.user.userName) }),
+                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Email", value: react_1.default.createElement("span", null, this.props.user.email) }),
+                    react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: react_1.default.createElement("span", null, this.passwordInfoComponent()) })),
                 react_1.default.createElement("div", { className: "usr-crea-page-messages-row" },
                     react_1.default.createElement("p", null, "Uzytkownik zosta\u0142 utworzony. Na adres podany adres email zosta\u0142o wys\u0142ane has\u0142o tymczasowe has\u0142o. Po zalogowaniu si\u0119 u\u017Cytkownik powinnien je zmieni\u0107.")))));
     }

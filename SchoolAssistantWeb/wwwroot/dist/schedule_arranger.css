@@ -1,3 +1,110 @@
+/*!*********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/selector/lesson-prefab.css ***!
+  \*********************************************************************************************************************************************************/
+.sa-lesson-prefab, .sa-add-lesson-prefab {
+    margin: 5px;
+    border-radius: 10px;
+    border: 3px solid #3cb37177;
+    background-color: #3cb37177;
+}
+
+.sa-lesson-prefab {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    cursor: grab;
+}
+
+.sa-lesson-prefab:active {
+    background-color: #3cb37144;
+    border-color: #3cb37144;
+}
+
+.sa-lesson-prefab-subject {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.sa-lesson-prefab-bottom > div {
+    width: 49%;
+}
+
+.sa-lesson-prefab-lecturer {
+    float: left;
+    text-align: left;
+}
+
+.sa-lesson-prefab-room {
+    float: right;
+    text-align: right;
+}
+
+
+
+.sa-add-lesson-prefab {
+    cursor: pointer;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa-add-lesson-prefab i {
+    transform: translateY(0px) scale(1.4);
+}
+
+/*!*********************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/schedule-arranger-page.css ***!
+  \*********************************************************************************************************************************************************/
+body > .container {
+    max-width: 100%;
+}
+
+
+.schedule-arranger-page {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+.schedule-arranger-timeline {
+    flex-grow: 6;
+}
+
+.schedule-arranger-selector {
+    flex-basis: 200px;
+}
+
+.sa-schedule-day-column {
+    position: relative !important;
+    flex-grow: 1;
+    border-right: 1px solid;
+}
+
+
+
+.sa-schedule-cell {
+    z-index: 20;
+}
+
+.sa-whole-hour-line {
+    width: 100%;
+    height: 1px;
+    background-color: #6565652e;
+}
+
+
+
+.sa-day-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: -30px;
+    font-size: 1.2em;
+}
+
 /*!********************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-shared/components/time-column.css ***!
   \********************************************************************************************************************************/
@@ -11,6 +118,7 @@
     position: absolute !important;
     border-top: 1px solid darkgrey;
     width: 100%;
+    text-align: center;
 }
 /*!********************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css ***!
@@ -239,113 +347,6 @@
     padding: 0;
     background-color: transparent;
     border: 0;
-}
-
-/*!*********************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/selector/lesson-prefab.css ***!
-  \*********************************************************************************************************************************************************/
-.sa-lesson-prefab, .sa-add-lesson-prefab {
-    margin: 5px;
-    border-radius: 10px;
-    border: 3px solid #3cb37177;
-    background-color: #3cb37177;
-}
-
-.sa-lesson-prefab {
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8em;
-    cursor: grab;
-}
-
-.sa-lesson-prefab:active {
-    background-color: #3cb37144;
-    border-color: #3cb37144;
-}
-
-.sa-lesson-prefab-subject {
-    text-align: center;
-    font-size: 1.3em;
-    font-weight: 600;
-}
-
-.sa-lesson-prefab-bottom > div {
-    width: 49%;
-}
-
-.sa-lesson-prefab-lecturer {
-    float: left;
-    text-align: left;
-}
-
-.sa-lesson-prefab-room {
-    float: right;
-    text-align: right;
-}
-
-
-
-.sa-add-lesson-prefab {
-    cursor: pointer;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sa-add-lesson-prefab i {
-    transform: translateY(0px) scale(1.4);
-}
-
-/*!*********************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/schedule-arranger-page.css ***!
-  \*********************************************************************************************************************************************************/
-body > .container {
-    max-width: 100%;
-}
-
-
-.schedule-arranger-page {
-    display: flex;
-    flex-direction: row;
-    column-gap: 10px;
-}
-
-.schedule-arranger-timeline {
-    flex-grow: 6;
-}
-
-.schedule-arranger-selector {
-    flex-basis: 200px;
-}
-
-.sa-schedule-day-column {
-    position: relative !important;
-    flex-grow: 1;
-    border-right: 1px solid;
-}
-
-
-
-.sa-schedule-cell {
-    z-index: 20;
-}
-
-.sa-whole-hour-line {
-    width: 100%;
-    height: 1px;
-    background-color: #6565652e;
-}
-
-
-
-.sa-day-label {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    top: -30px;
-    font-size: 1.2em;
 }
 
 /*!**************************************************************************************************************************!*\

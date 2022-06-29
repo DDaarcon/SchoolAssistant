@@ -8794,17 +8794,27 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 __webpack_require__(/*! ./label-value.css */ "./React/shared/form-controls/label-value.css");
 const LabelValue = (props) => {
-    var _a, _b, _c, _d, _e;
-    const outerStyle = (_a = props.outerStyle) !== null && _a !== void 0 ? _a : {};
-    if (props.width)
-        outerStyle.width = props.width;
-    return (react_1.default.createElement("div", { className: "label-value", style: outerStyle },
-        react_1.default.createElement("div", { className: "lab-val-label-container", style: (_b = props.labelOuterStyle) !== null && _b !== void 0 ? _b : {} },
-            react_1.default.createElement("span", { className: "lab-val-label", style: (_c = props.labelStyle) !== null && _c !== void 0 ? _c : {} }, props.label)),
-        react_1.default.createElement("div", { className: "lab-val-value-container", style: (_d = props.valueOuterStyle) !== null && _d !== void 0 ? _d : {} },
-            react_1.default.createElement("div", { className: "lab-val-value", style: (_e = props.valueStyle) !== null && _e !== void 0 ? _e : {} }, props.valueComp))));
+    const getClassName = (_for) => {
+        if (props[_for])
+            return LVbaseClassNames[_for] + " " + props[_for];
+        return LVbaseClassNames[_for];
+    };
+    return (react_1.default.createElement("div", Object.assign({ className: getClassName('containerClassName') }, props.width != undefined ? {
+        style: { width: props.width }
+    } : {}),
+        react_1.default.createElement("div", { className: getClassName('labelContainerClassName') },
+            react_1.default.createElement("span", { className: getClassName('labelClassName') }, props.label)),
+        react_1.default.createElement("div", { className: getClassName('valueContainerClassName') },
+            react_1.default.createElement("div", { className: getClassName('valueClassName') }, props.value))));
 };
 exports["default"] = LabelValue;
+const LVbaseClassNames = {
+    containerClassName: "label-value",
+    labelContainerClassName: "lab-val-label-container",
+    labelClassName: "lab-val-label",
+    valueContainerClassName: "lab-val-value-container",
+    valueClassName: "lab-val-value"
+};
 
 
 /***/ }),
@@ -9222,7 +9232,7 @@ class SharedListComponent extends react_1.default.Component {
                 loading: false
             });
         });
-        this.LoaderComponent = (react_1.default.createElement(loader_1.default, { enable: (_a = this.state) === null || _a === void 0 ? void 0 : _a.loading, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.Absolute }));
+        this.LoaderComponent = (react_1.default.createElement(loader_1.default, { enable: (_a = this.state) === null || _a === void 0 ? void 0 : _a.loading, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.Absolute, className: "list-loader" }));
         this.renderColumnSetting = (index, style) => {
             if (style)
                 return (react_1.default.createElement("col", { key: index, style: style }));
@@ -9520,6 +9530,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Loader = exports.LoaderSize = exports.LoaderType = void 0;
 const React = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const enum_switch_1 = __webpack_require__(/*! ./enum-help/enum-switch */ "./React/shared/enum-help/enum-switch.ts");
 __webpack_require__(/*! ./loader.css */ "./React/shared/loader.css");
 var LoaderType;
 (function (LoaderType) {
@@ -9533,24 +9544,18 @@ var LoaderSize;
     LoaderSize[LoaderSize["Medium"] = 1] = "Medium";
     LoaderSize[LoaderSize["Small"] = 2] = "Small";
 })(LoaderSize = exports.LoaderSize || (exports.LoaderSize = {}));
-const Loader = (props) => {
+exports.Loader = React.forwardRef((props, ref) => {
     let sizeStyle;
-    switch (props.size) {
-        case LoaderSize.Large:
-            sizeStyle = {};
-            break;
-        case LoaderSize.Medium:
-            sizeStyle = {
-                transform: 'scale(0.5)'
-            };
-            break;
-        default:
-            sizeStyle = {
-                transform: 'scale(0.3)'
-            };
-            break;
-    }
-    const dots = (React.createElement("svg", { style: sizeStyle, id: "loader-dots", width: "132px", height: "58px", viewBox: "0 0 132 58", version: "1.1", xmlns: "http://www.w3.org/2000/svg", xmlnsXlink: "http://www.w3.org/1999/xlink" },
+    (0, enum_switch_1.enumSwitch)(LoaderSize, props.size, {
+        Large: () => sizeStyle = {},
+        Medium: () => sizeStyle = {
+            transform: 'scale(0.5)'
+        },
+        _: () => sizeStyle = {
+            transform: 'scale(0.3)'
+        }
+    });
+    const dots = (React.createElement("svg", { style: sizeStyle, className: "loader-dots", width: "132px", height: "58px", viewBox: "0 0 132 58", version: "1.1", xmlns: "http://www.w3.org/2000/svg", xmlnsXlink: "http://www.w3.org/1999/xlink" },
         React.createElement("title", null, "dots"),
         React.createElement("desc", null, "Created with Sketch."),
         React.createElement("defs", null),
@@ -9561,16 +9566,15 @@ const Loader = (props) => {
                 React.createElement("circle", { id: "dot3", cx: "105", cy: "30", r: "13" })))));
     if (!props.enable)
         return (React.createElement(React.Fragment, null));
-    switch (props.type) {
-        case LoaderType.DivWholeSpace:
-            return (React.createElement("div", { className: "loader-div-whole-space" }, dots));
-        case LoaderType.Absolute:
-            return (React.createElement("div", { className: "loader-absolute" }, dots));
-        default:
-            return (React.createElement(React.Fragment, null, dots));
-    }
-};
-exports.Loader = Loader;
+    let className = (0, enum_switch_1.enumAssignSwitch)(LoaderType, props.type, {
+        DivWholeSpace: "loader-div-whole-space",
+        Absolute: "loader-absolute",
+        _: "loader-inline"
+    });
+    if (props.className)
+        className += " " + props.className;
+    return (React.createElement("div", { className: className, ref: ref }, dots));
+});
 exports["default"] = exports.Loader;
 
 

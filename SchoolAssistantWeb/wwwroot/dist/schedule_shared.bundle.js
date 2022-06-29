@@ -37,10 +37,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./React/schedule-shared/timeline-base.css":
-/*!*************************************************!*\
-  !*** ./React/schedule-shared/timeline-base.css ***!
-  \*************************************************/
+/***/ "./React/schedule-shared/schedule-timeline.css":
+/*!*****************************************************!*\
+  !*** ./React/schedule-shared/schedule-timeline.css ***!
+  \*****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -61,8 +61,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.III = exports.II = exports.I = void 0;
-const timeline_base_1 = __importDefault(__webpack_require__(/*! ./schedule-shared/timeline-base */ "./React/schedule-shared/timeline-base.tsx"));
-exports.I = timeline_base_1.default;
+const schedule_timeline_1 = __importDefault(__webpack_require__(/*! ./schedule-shared/schedule-timeline */ "./React/schedule-shared/schedule-timeline.tsx"));
+exports.I = schedule_timeline_1.default;
 const day_column_base_1 = __importDefault(__webpack_require__(/*! ./schedule-shared/components/day-column-base */ "./React/schedule-shared/components/day-column-base.tsx"));
 exports.II = day_column_base_1.default;
 const timeline_cell_base_1 = __importDefault(__webpack_require__(/*! ./schedule-shared/components/day-column/timeline-cell-base */ "./React/schedule-shared/components/day-column/timeline-cell-base.tsx"));
@@ -121,7 +121,7 @@ const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules
 const weekdays_function_1 = __webpack_require__(/*! ../../help/weekdays-function */ "./React/schedule-shared/help/weekdays-function.ts");
 __webpack_require__(/*! ./day-label.css */ "./React/schedule-shared/components/day-column/day-label.css");
 const DayLabel = (props) => {
-    return (react_1.default.createElement("div", { className: "sched-timeline-day-label raised-bar" }, (0, weekdays_function_1.nameForDayOfWeek)(props.day)));
+    return (react_1.default.createElement("div", { className: "sched-timeline-day-label my-raised-bar" }, (0, weekdays_function_1.nameForDayOfWeek)(props.day)));
 };
 exports["default"] = DayLabel;
 
@@ -211,10 +211,10 @@ exports.nameForDayOfWeek = nameForDayOfWeek;
 
 /***/ }),
 
-/***/ "./React/schedule-shared/timeline-base.tsx":
-/*!*************************************************!*\
-  !*** ./React/schedule-shared/timeline-base.tsx ***!
-  \*************************************************/
+/***/ "./React/schedule-shared/schedule-timeline.tsx":
+/*!*****************************************************!*\
+  !*** ./React/schedule-shared/schedule-timeline.tsx ***!
+  \*****************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -223,27 +223,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const enum_help_1 = __webpack_require__(/*! ../shared/enum-help */ "./React/shared/enum-help.ts");
 const day_of_week_1 = __importDefault(__webpack_require__(/*! ./enums/day-of-week */ "./React/schedule-shared/enums/day-of-week.ts"));
-__webpack_require__(/*! ./timeline-base.css */ "./React/schedule-shared/timeline-base.css");
-class ScheduleTimelineBase extends react_1.default.Component {
+__webpack_require__(/*! ./schedule-timeline.css */ "./React/schedule-shared/schedule-timeline.css");
+class ScheduleTimeline extends react_1.default.Component {
     constructor(props) {
         super(props);
-        this.getDaysOfWeekIterable = (with6th = false, with0th = false) => Object.values(day_of_week_1.default).map(x => parseInt(x)).filter(x => !isNaN(x) && (with0th || x != 0) && (with6th || x != 6));
-        this.state = this.getInitialState();
-    }
-    getInitialState() {
-        return {};
     }
     render() {
         var _a;
-        if (!this.getDayColumnComponent)
-            throw new Error("Overriding `getDayColumnComponent` is mandatory");
-        return (react_1.default.createElement("div", { className: "schedule-timeline " + this.className, ref: ref => this.containerElement = ref }, (_a = this.getTimeColumnComponent) === null || _a === void 0 ? void 0 :
-            _a.call(this),
-            this.getDaysOfWeekIterable().map(day => this.getDayColumnComponent(day))));
+        return (react_1.default.createElement("div", { className: this._fullClassName, ref: ref => this._containerElement = ref }, (_a = this.props.timeColumn) !== null && _a !== void 0 ? _a : react_1.default.createElement(react_1.default.Fragment, null),
+            this._daysOfWeek.map(day => this.props.dayColumnFactory(day))));
+    }
+    componentDidMount() {
+        if (this._containerElement && this.props.getReferenceOnMount)
+            this.props.getReferenceOnMount(this._containerElement);
+    }
+    get _fullClassName() {
+        let className = "schedule-timeline";
+        if (this.props.className)
+            className += " " + this.props.className;
+        return className;
+    }
+    get _daysOfWeek() {
+        var _a;
+        const except = (_a = this.props.config.hiddenDays) !== null && _a !== void 0 ? _a : [];
+        return (0, enum_help_1.getEnumValues)(day_of_week_1.default)
+            .filter(x => !except.includes(x));
     }
 }
-exports["default"] = ScheduleTimelineBase;
+exports["default"] = ScheduleTimeline;
 
 
 /***/ })

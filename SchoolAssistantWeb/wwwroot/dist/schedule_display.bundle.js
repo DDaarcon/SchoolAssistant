@@ -37,10 +37,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./React/schedule-display/components/timeline.css":
-/*!********************************************************!*\
-  !*** ./React/schedule-display/components/timeline.css ***!
-  \********************************************************/
+/***/ "./React/schedule-display/components/schedule-display-timeline.css":
+/*!*************************************************************************!*\
+  !*** ./React/schedule-display/components/schedule-display-timeline.css ***!
+  \*************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -188,7 +188,7 @@ class LessonTile extends react_1.default.Component {
             top: this.calcTopOffset(),
             height: this.calcHeight()
         };
-        return (react_1.default.createElement("div", { className: "sched-disp-lesson-tile raised-bar", style: style, onMouseEnter: this.mouseEntered, onMouseLeave: this.mouseLeft }, this.getInnerComponents()));
+        return (react_1.default.createElement("div", { className: "sched-disp-lesson-tile my-raised-bar", style: style, onMouseEnter: this.mouseEntered, onMouseLeave: this.mouseLeft }, this.getInnerComponents()));
     }
 }
 exports["default"] = LessonTile;
@@ -214,20 +214,12 @@ const lesson_tile_1 = __importDefault(__webpack_require__(/*! ./lesson-tile */ "
 __webpack_require__(/*! ./student-lesson-tile.css */ "./React/schedule-display/components/lesson-tiles/student-lesson-tile.css");
 class StudentLessonTile extends lesson_tile_1.default {
     getInnerComponents() {
-        const labelValueStyle = {
-            width: '100%',
-            fontSize: '0.8em',
-            marginBottom: 0
-        };
-        const labelStyle = {
-            width: '20%',
-        };
         return (react_1.default.createElement("div", { className: "sched-stud-lesson-inner-container" },
             react_1.default.createElement("div", { className: "sched-stud-lesson-subject" }, this.props.lesson.subject.name),
             react_1.default.createElement("div", { className: "sched-stud-lesson-expandable " + (this.state.hover ? "expanded" : "") },
-                react_1.default.createElement(form_controls_1.LabelValue, { label: "czas", valueComp: (0, time_functions_1.displayTime)(this.props.lesson.time), outerStyle: labelValueStyle, labelOuterStyle: labelStyle }),
-                react_1.default.createElement(form_controls_1.LabelValue, { label: "miejsce", valueComp: this.props.lesson.room.name, outerStyle: labelValueStyle, labelOuterStyle: labelStyle }),
-                react_1.default.createElement(form_controls_1.LabelValue, { label: "wyk\u0142.", valueComp: this.props.lesson.lecturer.name, outerStyle: labelValueStyle, labelOuterStyle: labelStyle }))));
+                react_1.default.createElement(form_controls_1.LabelValue, { label: "czas", value: (0, time_functions_1.displayTime)(this.props.lesson.time), containerClassName: "label-value-lesson-details-stud", labelContainerClassName: "lab-val-lab-lesson-details-stud" }),
+                react_1.default.createElement(form_controls_1.LabelValue, { label: "miejsce", value: this.props.lesson.room.name, containerClassName: "label-value-lesson-details-stud", labelContainerClassName: "lab-val-lab-lesson-details-stud" }),
+                react_1.default.createElement(form_controls_1.LabelValue, { label: "wyk\u0142.", value: this.props.lesson.lecturer.name, containerClassName: "label-value-lesson-details-stud", labelContainerClassName: "lab-val-lab-lesson-details-stud" }))));
     }
 }
 exports["default"] = StudentLessonTile;
@@ -254,20 +246,12 @@ __webpack_require__(/*! ./teacher-lesson-tile.css */ "./React/schedule-display/c
 class TeacherLessonTile extends lesson_tile_1.default {
     getInnerComponents() {
         var _a, _b, _c;
-        const labelValueStyle = {
-            width: '100%',
-            fontSize: '0.8em',
-            marginBottom: 0
-        };
-        const labelStyle = {
-            width: '20%',
-        };
         const studentClassName = (_b = (_a = this.props.lesson.orgClass) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : (_c = this.props.lesson.subjClass) === null || _c === void 0 ? void 0 : _c.name;
         return (react_1.default.createElement("div", { className: "sched-teac-lesson-inner-container" },
-            react_1.default.createElement("div", { className: "sched-teac-lesson-subject" }, `${studentClassName} ${this.props.lesson.subject.name}`),
+            react_1.default.createElement("div", { className: "sched-teac-lesson-main-cnt" }, `${studentClassName} ${this.props.lesson.subject.name}`),
             react_1.default.createElement("div", { className: "sched-teac-lesson-expandable " + (this.state.hover ? "expanded" : "") },
-                react_1.default.createElement(form_controls_1.LabelValue, { label: "czas", valueComp: (0, time_functions_1.displayTime)(this.props.lesson.time), outerStyle: labelValueStyle, labelOuterStyle: labelStyle }),
-                react_1.default.createElement(form_controls_1.LabelValue, { label: "miejsce", valueComp: this.props.lesson.room.name, outerStyle: labelValueStyle, labelOuterStyle: labelStyle }))));
+                react_1.default.createElement(form_controls_1.LabelValue, { label: "czas", value: (0, time_functions_1.displayTime)(this.props.lesson.time), containerClassName: "label-value-lessson-details-teac", labelContainerClassName: "lab-val-lab-lesson-details-teac" }),
+                react_1.default.createElement(form_controls_1.LabelValue, { label: "miejsce", value: this.props.lesson.room.name, containerClassName: "label-value-lessson-details-teac", labelContainerClassName: "lab-val-lab-lesson-details-teac" }))));
     }
 }
 exports["default"] = TeacherLessonTile;
@@ -314,6 +298,54 @@ exports["default"] = LessonsByDay;
 
 /***/ }),
 
+/***/ "./React/schedule-display/components/schedule-display-timeline.tsx":
+/*!*************************************************************************!*\
+  !*** ./React/schedule-display/components/schedule-display-timeline.tsx ***!
+  \*************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const time_column_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/components/time-column */ "./React/schedule-shared/components/time-column.tsx"));
+const time_column_variant_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/enums/time-column-variant */ "./React/schedule-shared/enums/time-column-variant.ts"));
+const schedule_timeline_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/schedule-timeline */ "./React/schedule-shared/schedule-timeline.tsx"));
+const day_column_1 = __importDefault(__webpack_require__(/*! ./day-column */ "./React/schedule-display/components/day-column.tsx"));
+__webpack_require__(/*! ./schedule-display-timeline.css */ "./React/schedule-display/components/schedule-display-timeline.css");
+class ScheduleDisplayTimeline extends react_1.default.Component {
+    constructor(props) {
+        super(props);
+        this.dayColumnFactory = (day) => {
+            var _a, _b;
+            const lessons = (_b = (_a = this.props.data.find(x => x.dayIndicator == day)) === null || _a === void 0 ? void 0 : _a.lessons) !== null && _b !== void 0 ? _b : [];
+            return (react_1.default.createElement(day_column_1.default, { key: day, scheduleHeight: this.state.scheduleHeight, config: this.props.config, dayIndicator: day, lessons: lessons }));
+        };
+        this.HIDDEN_CLASS_NAME = "schedule-hidden";
+        this.state = {
+            scheduleHeight: 200
+        };
+    }
+    render() {
+        return (react_1.default.createElement("div", { className: this._fullClassName, ref: ref => this._containerRef = ref },
+            react_1.default.createElement(schedule_timeline_1.default, { config: this.props.config, dayColumnFactory: this.dayColumnFactory, timeColumn: react_1.default.createElement(time_column_1.default, Object.assign({}, this.props.config, { scheduleHeight: this.state.scheduleHeight, variant: time_column_variant_1.default.WholeHoursByHeight })), getReferenceOnMount: ref => this._scheduleRef = ref })));
+    }
+    get _fullClassName() {
+        let className = `schedule-display-timeline-container ${this.HIDDEN_CLASS_NAME}`;
+        return className;
+    }
+    componentDidMount() {
+        this._containerRef.classList.remove(this.HIDDEN_CLASS_NAME);
+        this.setState({ scheduleHeight: this._scheduleRef.clientHeight });
+    }
+}
+exports["default"] = ScheduleDisplayTimeline;
+
+
+/***/ }),
+
 /***/ "./React/schedule-display/components/timeline-cell.tsx":
 /*!*************************************************************!*\
   !*** ./React/schedule-display/components/timeline-cell.tsx ***!
@@ -329,48 +361,6 @@ const timeline_cell_base_1 = __importDefault(__webpack_require__(/*! ../../sched
 class TimelineCell extends timeline_cell_base_1.default {
 }
 exports["default"] = TimelineCell;
-
-
-/***/ }),
-
-/***/ "./React/schedule-display/components/timeline.tsx":
-/*!********************************************************!*\
-  !*** ./React/schedule-display/components/timeline.tsx ***!
-  \********************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const time_column_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/components/time-column */ "./React/schedule-shared/components/time-column.tsx"));
-const time_column_variant_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/enums/time-column-variant */ "./React/schedule-shared/enums/time-column-variant.ts"));
-const timeline_base_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/timeline-base */ "./React/schedule-shared/timeline-base.tsx"));
-const day_column_1 = __importDefault(__webpack_require__(/*! ./day-column */ "./React/schedule-display/components/day-column.tsx"));
-__webpack_require__(/*! ./timeline.css */ "./React/schedule-display/components/timeline.css");
-class ScheduleDisplayTimeline extends timeline_base_1.default {
-    constructor(props) {
-        super(props);
-        this.className = "schedule-display-timeline";
-    }
-    getInitialState() {
-        return { scheduleHeight: 200 };
-    }
-    getDayColumnComponent(day) {
-        var _a, _b;
-        const lessons = (_b = (_a = this.props.data.find(x => x.dayIndicator == day)) === null || _a === void 0 ? void 0 : _a.lessons) !== null && _b !== void 0 ? _b : [];
-        return (react_1.default.createElement(day_column_1.default, { key: day, scheduleHeight: this.state.scheduleHeight, config: this.props.config, dayIndicator: day, lessons: lessons }));
-    }
-    getTimeColumnComponent() {
-        return (react_1.default.createElement(time_column_1.default, Object.assign({}, this.props.config, { scheduleHeight: this.state.scheduleHeight, variant: time_column_variant_1.default.WholeHoursByHeight })));
-    }
-    componentDidMount() {
-        this.setState({ scheduleHeight: this.containerElement.clientHeight });
-    }
-}
-exports["default"] = ScheduleDisplayTimeline;
 
 
 /***/ }),
@@ -400,19 +390,59 @@ exports["default"] = ScheduleViewerType;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const timeline_1 = __importDefault(__webpack_require__(/*! ./components/timeline */ "./React/schedule-display/components/timeline.tsx"));
+const loader_1 = __importStar(__webpack_require__(/*! ../shared/loader */ "./React/shared/loader.tsx"));
+const schedule_display_timeline_1 = __importDefault(__webpack_require__(/*! ./components/schedule-display-timeline */ "./React/schedule-display/components/schedule-display-timeline.tsx"));
 __webpack_require__(/*! ./schedule.css */ "./React/schedule-display/schedule.css");
 class Schedule extends react_1.default.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showLoader: true
+        };
     }
     render() {
-        return (react_1.default.createElement(timeline_1.default, { config: this.props.config, data: this.props.lessons }));
+        return (react_1.default.createElement("div", { className: "schedule-display-conainer" },
+            react_1.default.createElement(schedule_display_timeline_1.default, { config: this.props.config, data: this.props.lessons }),
+            this._loader));
+    }
+    get _loader() {
+        return this.state.showLoader ?
+            react_1.default.createElement(loader_1.default, { enable: true, type: loader_1.LoaderType.Absolute, size: loader_1.LoaderSize.Medium, className: "schedule-display-loader", ref: ref => this._loaderRef = ref })
+            : react_1.default.createElement(react_1.default.Fragment, null);
+    }
+    componentDidMount() {
+        this._loaderRef.classList.add('schedule-display-loader-hide');
+        setTimeout(() => {
+            this.setState({ showLoader: false });
+        }, 1500);
     }
 }
 exports["default"] = Schedule;
@@ -454,7 +484,7 @@ __webpack_require__(/*! ./time-column.css */ "./React/schedule-shared/components
 class TimeColumn extends react_1.default.Component {
     constructor() {
         super(...arguments);
-        this.timeLabel = (time, top) => (react_1.default.createElement("div", { className: "sched-time-label", key: `${time.hour}${time.minutes}`, style: { top } }, (0, time_functions_1.displayTime)(time)));
+        this.timeLabel = (time, top) => (react_1.default.createElement("div", { className: "sched-time-label my-text-shadow", key: `${time.hour}${time.minutes}`, style: { top } }, (0, time_functions_1.displayTime)(time)));
     }
     render() {
         this._timeLables = [];
@@ -473,27 +503,28 @@ class TimeColumn extends react_1.default.Component {
         }
     }
     addWholeHoursByConfig() {
-        const hours = this._wholeHoursToDisplay;
         const offsetIncrement = (60 / this.props.cellDuration) * this.props.cellHeight;
-        let offset = 0;
-        for (const hour of hours) {
-            this._timeLables.push(this.timeLabel({ hour, minutes: 0 }, offset));
-            offset += offsetIncrement;
-        }
+        this.addWholeHours(offsetIncrement);
     }
     addWholeHoursByHeight() {
         var _a;
-        const hours = this._wholeHoursToDisplay;
+        const hours = this._wholeHoursInRangeFromProps;
         if (!hours.length)
             return;
         const offsetIncrement = ((_a = this.props.scheduleHeight) !== null && _a !== void 0 ? _a : 0) / hours.length;
+        this.addWholeHours(offsetIncrement);
+    }
+    addWholeHours(incrementTopOffsetForEachHour) {
+        const hours = this._wholeHoursInRangeFromProps;
+        if (!hours.length)
+            return;
         let offset = 0;
         for (const hour of hours) {
             this._timeLables.push(this.timeLabel({ hour, minutes: 0 }, offset));
-            offset += offsetIncrement;
+            offset += incrementTopOffsetForEachHour;
         }
     }
-    get _wholeHoursToDisplay() {
+    get _wholeHoursInRangeFromProps() {
         return Array.from({
             length: this.props.endHour - this.props.startHour
         }, (_, i) => this.props.startHour + i);

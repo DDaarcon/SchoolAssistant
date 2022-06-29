@@ -11,6 +11,7 @@
     position: absolute !important;
     border-top: 1px solid darkgrey;
     width: 100%;
+    text-align: center;
 }
 /*!**********************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/lesson-tiles/lesson-tile.css ***!
@@ -21,12 +22,14 @@
     width: 100%;
     background-color: #c5ffc5;
     border-radius: 10px;
-    transition: 0.3s;
     font-size: 80%;
+    transition-duration: 1s;
 }
 
 .sched-disp-lesson-tile:hover {
     background-color: #c5ffc536;
+    transform: scale(1.1);
+    z-index: 1000;
 }
 /*!******************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/lesson-tiles/student-lesson-tile.css ***!
@@ -70,6 +73,15 @@
     transition-delay: 0.3s;
 }
 
+.label-value-lesson-details-stud {
+    width: 100%;
+    font-size: 0.8em;
+    margin-bottom: 0;
+}
+.lab-val-lab-lesson-details-stud {
+    width: 20%;
+}
+
 /*!******************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/lesson-tiles/teacher-lesson-tile.css ***!
   \******************************************************************************************************************************************************/
@@ -79,7 +91,7 @@
     height: 100%;
 }
 
-.sched-teac-lesson-subject {
+.sched-teac-lesson-main-cnt {
     font-size: 1.5em;
     align-self: center;
     text-align: center;
@@ -92,37 +104,61 @@
 
 .sched-teac-lesson-expandable {
     position: absolute;
-    top: 100%;
+    top: 90%;
     left: 0;
     width: 100%;
     height: 0;
     transition: all 0.3s;
-    transition-delay: 0s;
     overflow: hidden;
-    background-color: #c5ffc58f;
+    background-color: #c5ffc5cc;
     border-bottom: 10px;
-}
-
-.sched-teac-lesson-expandable > label-value:first-child {
-    margin-top: 10px;
+    box-shadow: 0px 5px 5px -5px #a7ffa7c9;
 }
 
 .sched-teac-lesson-expandable.expanded {
     height: 50px;
-    z-index: 100;
-    transition-delay: 0.3s;
+    top: 130%;
+    box-shadow: 0px 0px 5px 5px #c5ffc5cc;
+    transition-delay: 1s;
+    z-index:1000;
 }
 
-/*!******************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/timeline.css ***!
-  \******************************************************************************************************************************/
-.schedule-display-timeline {
+.label-value-lessson-details-teac {
+    width: 100%;
+    font-size: 0.8em;
+    margin-bottom: 0;
+}
+.lab-val-lab-lesson-details-teac {
+    width: 20%;
+}
+
+/*!***********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/components/schedule-display-timeline.css ***!
+  \***********************************************************************************************************************************************/
+.schedule-display-timeline-container {
     height: 100%;
+    transition-delay: 0.7s;
+    transition-duration: 0.7s;
 }
 
+.schedule-hidden {
+    opacity: 0;
+}
 /*!*******************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-display/schedule.css ***!
   \*******************************************************************************************************************/
+.schedule-display-conainer {
+    height: 100%;
+    position: relative;
+}
 
+.schedule-display-loader {
+    transition-duration: 1.5s;
+    z-index:1000;
+}
+
+.schedule-display-loader-hide {
+    opacity: 0;
+}
 
 /*# sourceMappingURL=schedule_display.css.map*/

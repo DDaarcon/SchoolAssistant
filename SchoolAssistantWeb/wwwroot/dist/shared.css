@@ -114,16 +114,16 @@
 /*!*******************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/loader.css ***!
   \*******************************************************************************************************/
-#loader-dots #dot1 {
+.loader-dots #dot1 {
     animation: load 1s infinite;
 }
 
-#loader-dots #dot2 {
+.loader-dots #dot2 {
     animation: load 1s infinite;
     animation-delay: 0.2s;
 }
 
-#loader-dots #dot3 {
+.loader-dots #dot3 {
     animation: load 1s infinite;
     animation-delay: 0.4s;
 }
@@ -156,7 +156,10 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: #8a8a8a4e;
+}
+
+.loader-inline {
+    display: inline;
 }
 
 /*!************************************************************************************************************!*\
@@ -266,6 +269,10 @@
     padding-right: 5px;
 }
 
+
+.list-loader {
+    background-color: #8a8a8a4e;
+}
 
 /*!********************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/top-bar.css ***!
