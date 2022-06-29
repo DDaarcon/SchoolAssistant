@@ -1,10 +1,10 @@
 ﻿import React from "react";
 import { MultiValue } from "react-select";
 import { Input, Multiselect, OnChangeIdHandler, Option, SubmitButton } from "../../shared/form-controls";
+import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
 import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
-import Validator from "../../shared/validator";
 import { server } from "../main";
 import SubjectListEntry from "../subjects/interfaces/subject-list-entry";
 import StaffPersonDetails from "./interfaces/staff-person-details";
@@ -16,18 +16,7 @@ type StaffPersonModCompState = {
     data: StaffPersonDetails;
     availableSubjects: SubjectListEntry[];
 }
-export default class StaffPersonModComp extends React.Component<StaffPersonModCompProps, StaffPersonModCompState> {
-    private _validator = new Validator<StaffPersonDetails>();
-
-    private get _mainSubjectOptions() { return this.getSubjectOptions(this.state.data.mainSubjectsIds); }
-    private get _additionalSubjectOptions() { return this.getSubjectOptions(this.state.data.additionalSubjectsIds); }
-
-    private getSubjectOptions(from: number[]): MultiValue<Option<number>> {
-        return this.state.availableSubjects.filter(x => from?.includes(x.id)).map(x => ({
-            label: x.name,
-            value: x.id
-        }));
-    }
+export default class StaffPersonModComp extends ModCompBase<StaffPersonDetails, StaffPersonModCompProps, StaffPersonModCompState> {
 
     constructor(props) {
         super(props);
@@ -42,13 +31,13 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
             availableSubjects: []
         }
 
-        this._validator.forModelGetter(() => this.state.data);
         this._validator.setRules({
             firstName: { notNull: true, notEmpty: true },
             lastName: { notNull: true, notEmpty: true },
             additionalSubjectsIds: {
                 other: (model, prop) => {
-                    if (model.additionalSubjectsIds.some(x => model.mainSubjectsIds.includes(x)))
+                    if (model.additionalSubjectsIds?.length
+                        && model.additionalSubjectsIds.some(x => model.mainSubjectsIds.includes(x)))
                         return {
                             on: prop,
                             error: "Ten sam przedmiot nie może być jednocześnie głównym i dodatkowym"
@@ -63,65 +52,6 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
         this.fetchSubjectsAsync();
     }
 
-    private async fetchAsync() {
-        let data = await server.getAsync<StaffPersonDetails>("StaffPersonDetails", {
-            id: this.props.recordId,
-            groupId: this.props.groupId
-        });
-
-        this.setState({ data, awaitingPersonData: false });
-    }
-
-    private async fetchSubjectsAsync() {
-        let availableSubjects = await server.getAsync<SubjectListEntry[]>("AvailableSubjects");
-
-        this.setState({ availableSubjects })
-    }
-
-    createOnTextChangeHandler: (property: keyof StaffPersonListEntry) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
-        return (event) => {
-            const value = event.target.value;
-
-            this.setState(prevState => {
-                const data = { ...prevState.data };
-                data[property] = value;
-                return { data };
-            });
-
-            this.props.onMadeAnyChange();
-        }
-    }
-
-    createOnSubjectsChangeHandler: (property: keyof StaffPersonListEntry) => OnChangeIdHandler<number> = (property) => {
-        return (values) => {
-            this.setState(prevState => {
-                const data = { ...prevState.data };
-                data[property] = values;
-                return { data };
-            });
-
-            this.props.onMadeAnyChange();
-        }
-    }
-
-    onSubmitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
-        event.preventDefault();
-
-        if (!this._validator.validate()) {
-            this.forceUpdate();
-            return;
-        }
-
-        let response = await server.postAsync<ResponseJson>("StaffPersonData", undefined, {
-            ...this.state.data,
-            groupId: this.props.groupId
-        });
-
-        if (response.success)
-            await this.props.reloadAsync();
-        else
-            console.debug(response);
-    }
 
     render() {
         if (this.state.awaitingPersonData)
@@ -135,12 +65,12 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
 
         return (
             <div>
-                <form onSubmit={this.onSubmitAsync}>
+                <form onSubmit={this.submitAsync}>
                     <Input
                         name="first-name-input"
                         label="Imię"
                         value={this.state.data.firstName}
-                        onChange={this.createOnTextChangeHandler('firstName')}
+                        onChange={this.createTextChangeHandler('firstName')}
                         errorMessages={this._validator.getErrorMsgsFor('firstName')}
                         type="text"
                     />
@@ -148,7 +78,7 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
                         name="second-name-input"
                         label="Drugie imię"
                         value={this.state.data.secondName}
-                        onChange={this.createOnTextChangeHandler('secondName')}
+                        onChange={this.createTextChangeHandler('secondName')}
                         errorMessages={this._validator.getErrorMsgsFor('secondName')}
                         type="text"
                     />
@@ -156,7 +86,7 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
                         name="last-name-input"
                         label="Nazwisko"
                         value={this.state.data.lastName}
-                        onChange={this.createOnTextChangeHandler('lastName')}
+                        onChange={this.createTextChangeHandler('lastName')}
                         errorMessages={this._validator.getErrorMsgsFor('lastName')}
                         type="text"
                     />
@@ -190,4 +120,76 @@ export default class StaffPersonModComp extends React.Component<StaffPersonModCo
             </div>
         )
     }
+
+
+    private async fetchAsync() {
+        let data = await server.getAsync<StaffPersonDetails>("StaffPersonDetails", {
+            id: this.props.recordId,
+            groupId: this.props.groupId
+        });
+
+        this.setState({ data, awaitingPersonData: false });
+    }
+
+    private async fetchSubjectsAsync() {
+        let availableSubjects = await server.getAsync<SubjectListEntry[]>("AvailableSubjects");
+
+        this.setState({ availableSubjects })
+    }
+
+    createTextChangeHandler: (property: keyof StaffPersonListEntry) => React.ChangeEventHandler<HTMLInputElement> = (property) => {
+        return (event) => {
+            const value = event.target.value;
+
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data[property] = value;
+                return { data };
+            });
+
+            this.props.onMadeAnyChange();
+        }
+    }
+
+    createOnSubjectsChangeHandler: (property: keyof StaffPersonListEntry) => OnChangeIdHandler<number> = (property) => {
+        return (values) => {
+            this.setState(prevState => {
+                const data = { ...prevState.data };
+                data[property] = values;
+                return { data };
+            });
+
+            this.props.onMadeAnyChange();
+        }
+    }
+
+    private submitAsync: React.FormEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
+
+        if (!this._validator.validate()) {
+            this.forceUpdate();
+            return;
+        }
+
+        let response = await server.postAsync<ResponseJson>("StaffPersonData", undefined, {
+            ...this.state.data,
+            groupId: this.props.groupId
+        });
+
+        if (response.success)
+            await this.props.reloadAsync();
+        else
+            console.debug(response);
+    }
+
+    private get _mainSubjectOptions() { return this.getSubjectOptions(this.state.data.mainSubjectsIds); }
+    private get _additionalSubjectOptions() { return this.getSubjectOptions(this.state.data.additionalSubjectsIds); }
+
+    private getSubjectOptions(from: number[]): MultiValue<Option<number>> {
+        return this.state.availableSubjects.filter(x => from?.includes(x.id)).map(x => ({
+            label: x.name,
+            value: x.id
+        }));
+    }
+
 }
