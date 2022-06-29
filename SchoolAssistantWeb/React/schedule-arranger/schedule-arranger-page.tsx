@@ -1,9 +1,9 @@
 ﻿import * as React from "react";
-import ScheduleArrangerTimeline from './schedule-arranger-page/timeline'
 import ScheduleArrangerSelector from "./schedule-arranger-page/selector";
 import ClassLessons from "./interfaces/class-lessons";
 import './schedule-arranger-page/schedule-arranger-page.css';
 import { scheduleArrangerConfig } from "./main";
+import ScheduleArrangerTimeline from "./schedule-arranger-page/schedule-arranger-timeline";
 
 type ScheduleArrangerPageProps = {
     classData: ClassLessons;

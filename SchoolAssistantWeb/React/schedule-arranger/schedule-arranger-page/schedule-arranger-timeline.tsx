@@ -5,7 +5,7 @@ import TimeColumnVariant from '../../schedule-shared/enums/time-column-variant';
 import DayLessons from '../../schedule-shared/interfaces/day-lessons';
 import LessonTimelineEntry from '../../schedule-shared/interfaces/lesson-timeline-entry';
 import Time from '../../schedule-shared/interfaces/shared/time';
-import ScheduleTimelineBase, { ScheduleTimelineBaseProps, ScheduleTimelineBaseState } from '../../schedule-shared/timeline-base';
+import ScheduleTimeline from '../../schedule-shared/schedule-timeline';
 import { AddLessonResponse } from '../interfaces/add-lesson-response';
 import LessonPrefab from '../interfaces/lesson-prefab';
 import ScheduleArrangerConfig from '../interfaces/page-model-to-react/schedule-arranger-config';
@@ -14,14 +14,15 @@ import dataService from '../schedule-data-service';
 import DayColumn from './timeline/day-column';
 import LessonEditModel from './timeline/interfaces/lesson-edit-model';
 
-type ScheduleArrangerTimelineProps = ScheduleTimelineBaseProps<ScheduleArrangerConfig, LessonTimelineEntry> & {
-
+type ScheduleArrangerTimelineProps = {
+    config: ScheduleArrangerConfig;
+    data: DayLessons<LessonTimelineEntry>[];
 }
-type ScheduleArrangerTimelineState = ScheduleTimelineBaseState & {
+type ScheduleArrangerTimelineState = {
     teacherBusyLessons?: DayLessons[];
     roomBusyLessons?: DayLessons[];
 }
-export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState, ScheduleArrangerConfig, LessonTimelineEntry> {
+export default class ScheduleArrangerTimeline extends React.Component<ScheduleArrangerTimelineProps, ScheduleArrangerTimelineState> {
 
     constructor(props) {
         super(props);
@@ -32,10 +33,26 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
         addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
         addEventListener('timeline-lessons-rerender', this.rerender);
 
-        this.className = "schedule-arranger-timeline";
+        this.state = {}
     }
 
-    protected override getDayColumnComponent(day: DayOfWeek): JSX.Element {
+    render() {
+        return (
+            <ScheduleTimeline
+                config={this.props.config}
+                className="schedule-arranger-timeline"
+                dayColumnFactory={this.dayColumnFactory}
+                timeColumn={
+                    <TimeColumn
+                        {...this.props.config}
+                        variant={TimeColumnVariant.WholeHoursByCellSpec}
+                    />
+                }
+            />
+        )
+    }
+
+    private dayColumnFactory = (day: DayOfWeek): JSX.Element => {
         return (
             <DayColumn
                 key={day}
@@ -50,17 +67,11 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
         )
     }
 
-    protected override getTimeColumnComponent(): JSX.Element {
-        return (
-            <TimeColumn
-                {...this.props.config}
-                variant={TimeColumnVariant.WholeHoursByCellSpec}
-            />
-        )
-    }
 
 
-    addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
+
+
+    private addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time, data: DataTransfer) => {
         this.hideOtherLessonsShadows();
 
         const prefab: LessonPrefab | undefined = JSON.parse(data.getData("prefab"));
@@ -92,7 +103,7 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
     }
 
 
-    editLesson = (model: LessonEditModel) => {
+    private editLesson = (model: LessonEditModel) => {
         const dayAndLesson = dataService.getLessonById(model.id);
         if (!dayAndLesson)
             return;
@@ -129,14 +140,14 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
 
 
 
-    initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
+    private initiateShowingOtherLessonsShadows = async (event: CustomEvent) => {
         const data: LessonPrefab = event.detail;
 
         await dataService.getTeacherAndRoomLessonsAsync(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
     }
 
 
-    displayOtherLessonsShadows = (teacher?: DayLessons[], room?: DayLessons[]) => {
+    private displayOtherLessonsShadows = (teacher?: DayLessons[], room?: DayLessons[]) => {
         if (!teacher && !room) return;
 
         this.setState(prevState => {
@@ -150,7 +161,7 @@ export default class ScheduleArrangerTimeline extends ScheduleTimelineBase<Sched
     }
 
 
-    hideOtherLessonsShadows = () => {
+    private hideOtherLessonsShadows = () => {
         this.setState({
             teacherBusyLessons: undefined,
             roomBusyLessons: undefined

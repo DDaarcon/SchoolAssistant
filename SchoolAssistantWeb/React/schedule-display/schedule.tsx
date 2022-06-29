@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import DayLessons from '../schedule-shared/interfaces/day-lessons';
-import ScheduleDisplayTimeline from './components/timeline';
+import ScheduleDisplayTimeline from "./components/schedule-display-timeline";
 import ScheduleConfig from "./interfaces/schedule-config";
 import './schedule.css';
 
