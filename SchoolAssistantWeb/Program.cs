@@ -48,7 +48,6 @@ builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation()
     .AddRazorPagesOptions(options =>
     {
-        options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
         options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
     })
     .AddMvcOptions(options =>
@@ -60,7 +59,7 @@ builder.Services.AddRazorPages()
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
-    options.LogoutPath = $"/Identity/Account/Logout";
+    options.LogoutPath = $"/Index";
     options.AccessDeniedPath = $"/Index";
 });
 
@@ -144,8 +143,8 @@ app.MapRazorPages();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 var seeder = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDefaultDataSeeder>();
-await seeder.SeedRolesAndAdminAsync();
-await seeder.SeedAppConfigAsync();
+await seeder.SeedRolesAndAdminAsync().ConfigureAwait(false);
+await seeder.SeedAppConfigAsync().ConfigureAwait(false);
 
 #endregion
 
