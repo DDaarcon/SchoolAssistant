@@ -10089,14 +10089,21 @@ class TopBarImpl extends react_1.default.Component {
             };
             return (react_1.default.createElement("div", { className: "top-bar", style: style }, this._renderGoBackBtn()));
         };
-        this._renderGoBackBtn = () => (react_1.default.createElement("button", { className: "top-bar-go-back-btn", onClick: () => this._goBack() }, "Wr\u00F3\u0107"));
+        this._renderGoBackBtn = () => (react_1.default.createElement("button", { ref: ref => this._goBackBtnRef = ref, className: "top-bar-go-back-btn", onClick: () => this._goBack() }, "Wr\u00F3\u0107"));
         this.NAVBAR_BOTTOM_MARGIN = 16;
+        this.HIDE_GO_BACK_BTN_CLASS = "top-bar-go-back-btn-hide";
     }
     render() {
         return (react_1.default.createElement("div", { className: "top-bar-container" }, this._renderBar()));
     }
     setGoBackAction(action) {
         this._goBack = action;
+    }
+    hideGoBack() {
+        this._goBackBtnRef.classList.add(this.HIDE_GO_BACK_BTN_CLASS);
+    }
+    showGoBack() {
+        this._goBackBtnRef.classList.remove(this.HIDE_GO_BACK_BTN_CLASS);
     }
 }
 class TopBar extends react_1.default.Component {

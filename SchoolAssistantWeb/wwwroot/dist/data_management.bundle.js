@@ -348,7 +348,9 @@ class DataManagementMainScreen extends react_1.default.Component {
 }
 exports["default"] = DataManagementMainScreen;
 const WelcomeScreen = () => {
-    return (react_1.default.createElement("h4", null, "Zarz\u0105dzanie danymi tttttt"));
+    return (react_1.default.createElement("div", { className: "dm-welcome-screen" },
+        react_1.default.createElement("h4", null, "Zarz\u0105dzanie danymi aplikacji"),
+        react_1.default.createElement("p", null, "Przejd\u017A pod jedn\u0105 z powy\u017Cszych zak\u0142adek aby wprowadza\u0107, modyfikowa\u0107 oraz usuwa\u0107 informacje.")));
 };
 
 

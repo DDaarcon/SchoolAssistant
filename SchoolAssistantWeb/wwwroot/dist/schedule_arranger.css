@@ -16,6 +16,10 @@
     cursor: grab;
 }
 
+.sa-lesson-prefab-selected {
+    background-color: #8af8bb77;
+}
+
 .sa-lesson-prefab:active {
     background-color: #3cb37144;
     border-color: #3cb37144;

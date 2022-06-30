@@ -179,7 +179,11 @@ class MainScreen extends react_1.default.Component {
         schedule_data_service_1.default.rooms = this.props.rooms;
     }
     componentDidMount() {
-        top_bar_1.default.Ref.setGoBackAction(() => this.setState({ pageComponent: this._classSelectorComponent }));
+        top_bar_1.default.Ref.hideGoBack();
+        top_bar_1.default.Ref.setGoBackAction(() => {
+            top_bar_1.default.Ref.hideGoBack();
+            this.setState({ pageComponent: this._classSelectorComponent });
+        });
     }
     render() {
         return (react_1.default.createElement("div", { className: "schedule-arranger-main" },
@@ -232,11 +236,15 @@ const selector_1 = __importDefault(__webpack_require__(/*! ./schedule-arranger-p
 __webpack_require__(/*! ./schedule-arranger-page/schedule-arranger-page.css */ "./React/schedule-arranger/schedule-arranger-page/schedule-arranger-page.css");
 const main_1 = __webpack_require__(/*! ./main */ "./React/schedule-arranger/main.tsx");
 const schedule_arranger_timeline_1 = __importDefault(__webpack_require__(/*! ./schedule-arranger-page/schedule-arranger-timeline */ "./React/schedule-arranger/schedule-arranger-page/schedule-arranger-timeline.tsx"));
+const top_bar_1 = __importDefault(__webpack_require__(/*! ../shared/top-bar */ "./React/shared/top-bar.tsx"));
 class ScheduleArrangerPage extends React.Component {
     render() {
         return (React.createElement("div", { className: "schedule-arranger-page" },
             React.createElement(selector_1.default, { data: this.props.classData.data }),
             React.createElement(schedule_arranger_timeline_1.default, { config: main_1.scheduleArrangerConfig, data: this.props.classData.data })));
+    }
+    componentDidMount() {
+        top_bar_1.default.Ref.showGoBack();
     }
 }
 exports["default"] = ScheduleArrangerPage;
@@ -270,6 +278,7 @@ const time_column_variant_1 = __importDefault(__webpack_require__(/*! ../../sche
 const schedule_timeline_1 = __importDefault(__webpack_require__(/*! ../../schedule-shared/schedule-timeline */ "./React/schedule-shared/schedule-timeline.tsx"));
 const main_1 = __webpack_require__(/*! ../main */ "./React/schedule-arranger/main.tsx");
 const schedule_data_service_1 = __importDefault(__webpack_require__(/*! ../schedule-data-service */ "./React/schedule-arranger/schedule-data-service.ts"));
+const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ./services/placing-assistant-service */ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts"));
 const day_column_1 = __importDefault(__webpack_require__(/*! ./timeline/day-column */ "./React/schedule-arranger/schedule-arranger-page/timeline/day-column.tsx"));
 class ScheduleArrangerTimeline extends react_1.default.Component {
     constructor(props) {
@@ -278,9 +287,8 @@ class ScheduleArrangerTimeline extends react_1.default.Component {
             var _a, _b, _c, _d, _e, _f;
             return (react_1.default.createElement(day_column_1.default, { key: day, dayIndicator: day, config: this.props.config, lessons: (_b = (_a = schedule_data_service_1.default.lessons.find(x => x.dayIndicator == day)) === null || _a === void 0 ? void 0 : _a.lessons) !== null && _b !== void 0 ? _b : [], teacherBusyLessons: (_d = (_c = this.state.teacherBusyLessons) === null || _c === void 0 ? void 0 : _c.find(x => x.dayIndicator == day)) === null || _d === void 0 ? void 0 : _d.lessons, roomBusyLessons: (_f = (_e = this.state.roomBusyLessons) === null || _e === void 0 ? void 0 : _e.find(x => x.dayIndicator == day)) === null || _f === void 0 ? void 0 : _f.lessons, addLesson: this.addLesson, editStoredLesson: this.editLesson }));
         };
-        this.addLesson = (dayIndicator, cellIndex, time, data) => __awaiter(this, void 0, void 0, function* () {
-            this.hideOtherLessonsShadows();
-            const prefab = JSON.parse(data.getData("prefab"));
+        this.addLesson = (dayIndicator, cellIndex, time) => __awaiter(this, void 0, void 0, function* () {
+            const prefab = placing_assistant_service_1.default.getPrefabAndDismiss();
             const lessons = yield schedule_data_service_1.default.getOverlappingLessonsAsync({
                 day: dayIndicator,
                 time,
@@ -332,8 +340,8 @@ class ScheduleArrangerTimeline extends react_1.default.Component {
                 };
             this.rerender();
         };
-        this.initiateShowingOtherLessonsShadows = (event) => __awaiter(this, void 0, void 0, function* () {
-            const data = event.detail;
+        this.initiateShowingOtherLessonsShadowsAsync = () => __awaiter(this, void 0, void 0, function* () {
+            const data = placing_assistant_service_1.default.prefab;
             yield schedule_data_service_1.default.getTeacherAndRoomLessonsAsync(data.lecturer.id, data.room.id, this.displayOtherLessonsShadows);
         });
         this.displayOtherLessonsShadows = (teacher, room) => {
@@ -341,8 +349,10 @@ class ScheduleArrangerTimeline extends react_1.default.Component {
                 return;
             this.setState(prevState => {
                 let { teacherBusyLessons, roomBusyLessons } = prevState;
-                teacherBusyLessons !== null && teacherBusyLessons !== void 0 ? teacherBusyLessons : (teacherBusyLessons = teacher);
-                roomBusyLessons !== null && roomBusyLessons !== void 0 ? roomBusyLessons : (roomBusyLessons = room);
+                if (teacher)
+                    teacherBusyLessons = teacher;
+                if (room)
+                    roomBusyLessons = room;
                 return { teacherBusyLessons, roomBusyLessons };
             });
         };
@@ -354,8 +364,8 @@ class ScheduleArrangerTimeline extends react_1.default.Component {
         };
         this.rerender = () => this.forceUpdate();
         schedule_data_service_1.default.assignDaysFromProps(this.props.data);
-        addEventListener('dragBegan', (event) => this.initiateShowingOtherLessonsShadows(event));
-        addEventListener('clearOtherLessons', this.hideOtherLessonsShadows);
+        placing_assistant_service_1.default.handlers.hideOtherLessons = this.hideOtherLessonsShadows;
+        placing_assistant_service_1.default.handlers.showOtherLessons = this.initiateShowingOtherLessonsShadowsAsync;
         addEventListener('timeline-lessons-rerender', this.rerender);
         this.state = {};
     }
@@ -537,34 +547,125 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const schedule_data_service_1 = __importDefault(__webpack_require__(/*! ../../schedule-data-service */ "./React/schedule-arranger/schedule-data-service.ts"));
+const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../services/placing-assistant-service */ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts"));
 __webpack_require__(/*! ./lesson-prefab.css */ "./React/schedule-arranger/schedule-arranger-page/selector/lesson-prefab.css");
 class LessonPrefabTile extends react_1.default.Component {
-    constructor() {
-        super(...arguments);
-        this.onStart = (event) => {
+    constructor(props) {
+        super(props);
+        this.dragStart = (event) => {
             event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
-            schedule_data_service_1.default.isTileDragged = true;
-            dispatchEvent(new CustomEvent('dragBegan', {
-                detail: this.props.data
-            }));
+            placing_assistant_service_1.default.startWithDrag(this.props.data);
         };
-        this.onEnd = (event) => {
-            schedule_data_service_1.default.isTileDragged = false;
-            dispatchEvent(new Event("hideLessonShadow"));
-            dispatchEvent(new Event("clearOtherLessons"));
+        this.dragEnd = (event) => {
+            placing_assistant_service_1.default.dismiss();
+        };
+        this.clicked = (event) => {
+            this.setState({ selected: true });
+            placing_assistant_service_1.default.startWithSelect(this.props.data, this.deselect);
+        };
+        this.deselect = () => {
+            this.setState({ selected: false });
+        };
+        this.state = {
+            selected: false
         };
     }
     render() {
         var _a;
-        return (react_1.default.createElement("div", { className: "sa-lesson-prefab", draggable: true, onDragStart: this.onStart, onDragEnd: this.onEnd },
+        return (react_1.default.createElement("div", { className: this._className, draggable: true, onDragStart: this.dragStart, onDragEnd: this.dragEnd, onClick: this.clicked },
             react_1.default.createElement("span", { className: "sa-lesson-prefab-subject" }, this.props.data.subject.name),
             react_1.default.createElement("div", { className: "sa-lesson-prefab-bottom" },
                 react_1.default.createElement("div", { className: "sa-lesson-prefab-lecturer" }, this.props.data.lecturer.name),
                 react_1.default.createElement("div", { className: "sa-lesson-prefab-room" }, (_a = this.props.data.room) === null || _a === void 0 ? void 0 : _a.name))));
     }
+    get _className() {
+        let className = "sa-lesson-prefab";
+        if (this.state.selected)
+            className += " sa-lesson-prefab-selected";
+        return className;
+    }
 }
 exports["default"] = LessonPrefabTile;
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts":
+/*!**********************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class PlacingAssistantServiceImplementation {
+    constructor() {
+        this.handlers = {};
+    }
+    startWithDrag(prefab) {
+        this.clear();
+        this._currentyPlaced = prefab;
+        this._method = PlacingMethod.Dragging;
+        this.callRequiredHandler('showOtherLessons');
+    }
+    startWithSelect(prefab, deselect) {
+        if (prefab == this._currentyPlaced) {
+            this.dismiss();
+            return;
+        }
+        this.clear();
+        this._currentyPlaced = prefab;
+        this._method = PlacingMethod.Selecting;
+        this.handlers.deselectPrefabTile = deselect;
+        this.callRequiredHandler('showOtherLessons');
+    }
+    dismiss() {
+        if (!this.isPlacing)
+            return;
+        this.clear();
+        dispatchEvent(new Event("hideLessonShadow"));
+        this.callRequiredHandler('hideOtherLessons');
+    }
+    get isPlacing() {
+        return this._method != undefined
+            && this._currentyPlaced != undefined;
+    }
+    get isPlacingByDrag() {
+        return this.isPlacing && this._method == PlacingMethod.Dragging;
+    }
+    get isPlacingBySelection() {
+        return this.isPlacing && this._method == PlacingMethod.Selecting;
+    }
+    get prefab() { return this._currentyPlaced; }
+    getPrefabAndDismiss() {
+        const prefab = this._currentyPlaced;
+        this.dismiss();
+        return prefab;
+    }
+    callRequiredHandler(prop) {
+        if (!this.handlers[prop])
+            throw new Error(`Handler ${prop} is required`);
+        this.handlers[prop]();
+    }
+    clear() {
+        var _a, _b;
+        if (!this.isPlacing)
+            return;
+        if (this.isPlacingBySelection) {
+            (_b = (_a = this.handlers).deselectPrefabTile) === null || _b === void 0 ? void 0 : _b.call(_a);
+            this.handlers.deselectPrefabTile = undefined;
+        }
+        this._currentyPlaced = undefined;
+        this._method = undefined;
+    }
+}
+const PlacingAssistantService = new PlacingAssistantServiceImplementation;
+exports["default"] = PlacingAssistantService;
+var PlacingMethod;
+(function (PlacingMethod) {
+    PlacingMethod[PlacingMethod["Dragging"] = 0] = "Dragging";
+    PlacingMethod[PlacingMethod["Selecting"] = 1] = "Selecting";
+})(PlacingMethod || (PlacingMethod = {}));
 
 
 /***/ }),
@@ -591,9 +692,9 @@ class DayColumn extends day_column_base_1.default {
     constructor(props) {
         super(props);
         this._iAmCallingHideShadow = false;
-        this.addLesson = (dayIndicator, cellIndex, time, data) => {
+        this.addLesson = (dayIndicator, cellIndex, time) => {
             this.hideLessonShadow();
-            this.props.addLesson(dayIndicator, cellIndex, time, data);
+            this.props.addLesson(dayIndicator, cellIndex, time);
         };
         this.onEntered = (dayIndicator, cellIndex, time) => {
             this._iAmCallingHideShadow = true;
@@ -659,7 +760,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const main_1 = __webpack_require__(/*! ../../main */ "./React/schedule-arranger/main.tsx");
-const schedule_data_service_1 = __importDefault(__webpack_require__(/*! ../../schedule-data-service */ "./React/schedule-arranger/schedule-data-service.ts"));
+const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../services/placing-assistant-service */ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts"));
 __webpack_require__(/*! ./lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css");
 __webpack_require__(/*! ./other-lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/other-lesson-tiles.css");
 class GenericLessonTile extends react_1.default.Component {
@@ -679,7 +780,7 @@ class GenericLessonTile extends react_1.default.Component {
             top: this.calcTopOffset(),
             height: this.calcHeight()
         };
-        return (react_1.default.createElement("button", { className: `sa-lesson-tile ${schedule_data_service_1.default.isTileDragged ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`, style: style, onClick: this.props.onPress }, this.props.children));
+        return (react_1.default.createElement("button", { className: `sa-lesson-tile ${placing_assistant_service_1.default.isPlacing ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`, style: style, onClick: this.props.onPress }, this.props.children));
     }
 }
 exports["default"] = GenericLessonTile;
@@ -1094,16 +1195,29 @@ exports["default"] = TeacherBusyLessons;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const timeline_cell_base_1 = __importDefault(__webpack_require__(/*! ../../../schedule-shared/components/day-column/timeline-cell-base */ "./React/schedule-shared/components/day-column/timeline-cell-base.tsx"));
-class TimelineCell extends timeline_cell_base_1.default {
+const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../services/placing-assistant-service */ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts"));
+class TimelineCell extends react_1.default.Component {
     constructor() {
         super(...arguments);
         this.onDrop = (event) => {
-            this.props.dropped(this.props.dayIndicator, this.props.cellIndex, this.props.time, event.dataTransfer);
+            this.props.dropped(this.props.dayIndicator, this.props.cellIndex, this.props.time);
         };
         this.onDragOver = (event) => {
             event.preventDefault();
@@ -1111,12 +1225,28 @@ class TimelineCell extends timeline_cell_base_1.default {
         this.onDragEnter = (_) => {
             this.props.entered(this.props.dayIndicator, this.props.cellIndex, this.props.time);
         };
+        this.onMouseEnter = (ev) => {
+            if (!placing_assistant_service_1.default.isPlacingBySelection)
+                return;
+            this.props.entered(this.props.dayIndicator, this.props.cellIndex, this.props.time);
+        };
+        this.onClick = (ev) => {
+            if (!placing_assistant_service_1.default.isPlacingBySelection)
+                return;
+            this.props.dropped(this.props.dayIndicator, this.props.cellIndex, this.props.time);
+        };
+    }
+    render() {
+        const _a = this.props, { dropped, entered } = _a, rest = __rest(_a, ["dropped", "entered"]);
+        return (react_1.default.createElement(timeline_cell_base_1.default, Object.assign({}, rest, { containerProps: this.getContainerProps() })));
     }
     getContainerProps() {
         return {
             onDrop: this.onDrop,
             onDragOver: this.onDragOver,
-            onDragEnter: this.onDragEnter
+            onDragEnter: this.onDragEnter,
+            onMouseEnter: this.onMouseEnter,
+            onClick: this.onClick
         };
     }
 }
@@ -1156,7 +1286,6 @@ class ScheduleArrangerDataService {
         this.getSubjectName = (id) => this.subjects.find(x => x.id == id).name;
         this.getTeacherName = (id) => this.teachers.find(x => x.id == id).shortName;
         this.getRoomName = (id) => this.rooms.find(x => x.id == id).name;
-        this.isTileDragged = false;
         this.getTeacherAndRoomLessonsAsync = (teacherId, roomId, apply) => __awaiter(this, void 0, void 0, function* () {
             const teacher = this.teachers.find(x => x.id == teacherId);
             const room = this.rooms.find(x => x.id == roomId);

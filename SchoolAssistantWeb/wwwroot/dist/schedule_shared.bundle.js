@@ -141,17 +141,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 __webpack_require__(/*! ./timeline-cell-base.css */ "./React/schedule-shared/components/day-column/timeline-cell-base.css");
+/*
+ * Small piece of whole DayColumn. SchedArr uses those elements for detecting time, when lesson should be inserted
+ *
+ */
 class TimelineCellBase extends react_1.default.Component {
-    get _wholeHour() { return this.props.time.minutes == 0; }
     render() {
-        var _a;
+        var _a, _b;
         let style = {
             height: this.props.height
         };
-        return (react_1.default.createElement("div", Object.assign({ className: "sched-timeline-cell" + (this._wholeHour ? " sched-timeline-cell-whole-hour" : ""), style: style }, (_a = this.getContainerProps) === null || _a === void 0 ? void 0 : _a.call(this)), this._wholeHour
+        const customContainerProps = (_a = this.props.containerProps) !== null && _a !== void 0 ? _a : (_b = this.getContainerProps) === null || _b === void 0 ? void 0 : _b.call(this);
+        let className = "sched-timeline-cell";
+        if (this._isWholeHour)
+            className += " sched-timeline-cell-whole-hour";
+        if (this.props.className)
+            className += " " + this.props.className;
+        return (react_1.default.createElement("div", Object.assign({ className: className, style: style }, customContainerProps !== null && customContainerProps !== void 0 ? customContainerProps : {}), this._isWholeHour
             ? react_1.default.createElement("div", { className: "sched-timeline-whole-hour-line" })
             : undefined));
     }
+    get _isWholeHour() { return this.props.time.minutes == 0; }
 }
 exports["default"] = TimelineCellBase;
 

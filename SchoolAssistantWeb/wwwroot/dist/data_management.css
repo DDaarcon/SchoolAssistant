@@ -47,5 +47,10 @@ body > .container {
     max-width: 100%;
 }
 
+.dm-welcome-screen {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    text-align: center;
+}
 
 /*# sourceMappingURL=data_management.css.map*/
