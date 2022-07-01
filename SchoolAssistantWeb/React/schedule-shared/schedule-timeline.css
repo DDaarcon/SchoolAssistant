@@ -1,6 +1,19 @@
 ﻿.schedule-timeline {
     height: 100%;
+}
+
+.schedule-timeline-holder {
     display: flex;
     flex-direction: row;
     margin-top: 25px;
+}
+
+@media(max-width: 780px) {
+    .schedule-timeline-holder {
+        width: 900px;
+    }
+
+    .schedule-timeline {
+        overflow-x: auto;
+    }
 }

@@ -26,10 +26,11 @@ export default class ScheduleTimeline extends React.Component<ScheduleTimelinePr
             <div className={this._fullClassName}
                 ref={ref => this._containerElement = ref}
             >
+                <div className="schedule-timeline-holder">
+                    {this.props.timeColumn ?? <></>}
 
-                {this.props.timeColumn ?? <></>}
-
-                {this._daysOfWeek.map(day => this.props.dayColumnFactory!(day))}
+                    {this._daysOfWeek.map(day => this.props.dayColumnFactory!(day))}
+                </div>
             </div>
         )
     }

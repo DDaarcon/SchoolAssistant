@@ -17,6 +17,28 @@
     flex-basis: 200px;
 }
 
+@media(max-width: 780px) {
+
+    .schedule-arranger-page {
+        flex-flow: column;
+    }
+
+    .schedule-arranger-selector {
+        display: flex;
+        flex: 1 1;
+        flex-flow: row wrap;
+        align-items: flex-start;
+    }
+
+    .schedule-arranger-selector > div {
+        flex: 1 1 160px;
+        align-self: center;
+    }
+}
+
+
+
+
 .sa-schedule-day-column {
     position: relative !important;
     flex-grow: 1;
