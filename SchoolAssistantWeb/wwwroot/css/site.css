@@ -1,9 +1,10 @@
 :root {
-    --bg-color: #E5F7F8;
+    --bg-color: #eafff3;
     --theme-color-1: #FBDDD5;
     --theme-color-1-darker: #EBB9AE;
     --theme-color-2: #EBA3B7;
     --theme-color-2-darker: #D38BA1;
+    --navbar-color: #ddffd3;
 }
 
 
@@ -123,12 +124,14 @@ label {
     --initial-blur: 10px;
     --initial-central-indent: 20px;
     transition: all 0.5s;
-    box-shadow: inset var(--initial-side-indent) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) #ffffff, inset calc(var(--initial-side-indent) * -1) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) #ffffff;
+    box-shadow: 
+        inset var(--initial-side-indent) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) var(--navbar-color),
+        inset calc(var(--initial-side-indent) * -1) var(--initial-bottom-indent) var(--initial-blur) var(--initial-central-indent) var(--navbar-color);
     background-color: #cdff003d;
     transition-timing-function: linear;
     border-left: 1px solid;
     border-right: 1px solid;
-    border-color: #ffffffff;
+    border-color: var(--navbar-color);
 }
 
 .nav-item:hover {
@@ -149,6 +152,7 @@ label {
 }
 
 .navbar {
+    background-color: var(--navbar-color);
     padding-top: 0;
     padding-bottom: 0;
 }
