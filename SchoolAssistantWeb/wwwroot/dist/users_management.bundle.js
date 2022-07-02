@@ -546,7 +546,6 @@ __webpack_require__(/*! ./related-object-selector.css */ "./React/users-manageme
 const top_bar_1 = __importDefault(__webpack_require__(/*! ../../shared/top-bar */ "./React/shared/top-bar.tsx"));
 class RelatedObjectSelector extends react_1.default.Component {
     render() {
-        top_bar_1.default.Ref.setGoBackAction(this.props.backToTypeSelect);
         return (react_1.default.createElement("div", { className: "related-object-selector" }, this.renderObjectsList()));
     }
     renderObjectsList() {
@@ -559,6 +558,10 @@ class RelatedObjectSelector extends react_1.default.Component {
                 return (react_1.default.createElement(related_objects_lists_spec_1.ParentObjectsList, { selectObject: this.props.selectRelatedObject }));
             default: throw new Error("Not implemented yet");
         }
+    }
+    componentDidMount() {
+        top_bar_1.default.Ref.showGoBack();
+        top_bar_1.default.Ref.setGoBackAction(this.props.backToTypeSelect);
     }
 }
 exports["default"] = RelatedObjectSelector;
@@ -709,7 +712,6 @@ class UserCreatedPage extends react_1.default.Component {
         this.state = {};
     }
     render() {
-        top_bar_1.default.Ref.setGoBackAction(this.props.returnToSelector);
         return (react_1.default.createElement("div", { className: "user-created-page" },
             react_1.default.createElement("h2", null, "Utworzono u\u017Cytkownika"),
             react_1.default.createElement("div", { className: "user-created-page-rows" },
@@ -720,6 +722,10 @@ class UserCreatedPage extends react_1.default.Component {
                     react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: react_1.default.createElement("span", null, this.passwordInfoComponent()) })),
                 react_1.default.createElement("div", { className: "usr-crea-page-messages-row" },
                     react_1.default.createElement("p", null, "Uzytkownik zosta\u0142 utworzony. Na adres podany adres email zosta\u0142o wys\u0142ane has\u0142o tymczasowe has\u0142o. Po zalogowaniu si\u0119 u\u017Cytkownik powinnien je zmieni\u0107.")))));
+    }
+    componentDidMount() {
+        top_bar_1.default.Ref.showGoBack();
+        top_bar_1.default.Ref.setGoBackAction(this.props.returnToSelector);
     }
     printStars() {
         let count = this.props.user.passwordDeformed.length;
@@ -833,13 +839,16 @@ class UserDetailsForm extends mod_comp_base_1.default {
         });
     }
     render() {
-        top_bar_1.default.Ref.setGoBackAction(this.props.backToObjectSelect);
         return (react_1.default.createElement("form", { onSubmit: this.submitAsync },
             this.renderRelatedObjectInfo(),
             react_1.default.createElement(form_controls_1.Input, { label: "Nazwa u\u017Cytkownika", name: "username-input", value: this.state.data.userName, onChange: this.changeUserName, errorMessages: this._validator.getErrorMsgsFor('userName'), type: "text" }),
             react_1.default.createElement(form_controls_1.Input, { label: "Adres email", name: "email-input", value: this.state.data.email, onChange: this.changeEmail, errorMessages: this._validator.getErrorMsgsFor('email'), type: "email" }),
             react_1.default.createElement(form_controls_1.Input, { label: "Numer telefonu", name: "phone-number-input", value: this.state.data.phoneNumber, onChange: this.changePhoneNumber, errorMessages: this._validator.getErrorMsgsFor('phoneNumber'), type: "tel" }),
             react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz" })));
+    }
+    componentDidMount() {
+        top_bar_1.default.Ref.showGoBack();
+        top_bar_1.default.Ref.setGoBackAction(this.props.backToObjectSelect);
     }
 }
 exports["default"] = UserDetailsForm;
@@ -859,6 +868,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const top_bar_1 = __importDefault(__webpack_require__(/*! ../../shared/top-bar */ "./React/shared/top-bar.tsx"));
 const user_type_functions_1 = __webpack_require__(/*! ../help/user-type-functions */ "./React/users-management/help/user-type-functions.ts");
 __webpack_require__(/*! ./user-type-selector.css */ "./React/users-management/users-creation-form/user-type-selector.css");
 class UserTypeSelector extends react_1.default.Component {
@@ -868,6 +878,10 @@ class UserTypeSelector extends react_1.default.Component {
     }
     render() {
         return (react_1.default.createElement("div", { className: "user-type-selector" }, this._enabledTypes.map(type => react_1.default.createElement("button", { key: type, className: "user-type-btn tiled-btn", onClick: () => this.props.selectType(type) }, (0, user_type_functions_1.getLabelForUserType)(type)))));
+    }
+    componentDidMount() {
+        top_bar_1.default.Ref.hideGoBack();
+        top_bar_1.default.Ref.removeGoBackAction();
     }
 }
 exports["default"] = UserTypeSelector;
