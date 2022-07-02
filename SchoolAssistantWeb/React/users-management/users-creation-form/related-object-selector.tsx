@@ -15,8 +15,6 @@ type RelatedObjectSelectorState = {}
 export default class RelatedObjectSelector extends React.Component<RelatedObjectSelectorProps, RelatedObjectSelectorState> {
 
     render() {
-        TopBar.Ref.setGoBackAction(this.props.backToTypeSelect);
-
         return (
             <div className="related-object-selector">
                 {this.renderObjectsList()}
@@ -46,5 +44,10 @@ export default class RelatedObjectSelector extends React.Component<RelatedObject
                 );
             default: throw new Error("Not implemented yet");
         }
+    }
+
+    componentDidMount() {
+        TopBar.Ref.showGoBack();
+        TopBar.Ref.setGoBackAction(this.props.backToTypeSelect);
     }
 }

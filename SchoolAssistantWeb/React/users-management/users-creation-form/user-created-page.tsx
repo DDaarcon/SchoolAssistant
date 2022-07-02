@@ -23,8 +23,6 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
     }
 
     render() {
-        TopBar.Ref.setGoBackAction(this.props.returnToSelector);
-
         return (
             <div className="user-created-page">
                 <h2>
@@ -79,6 +77,10 @@ export default class UserCreatedPage extends React.Component<UserCreatedPageProp
         )
     }
 
+    componentDidMount() {
+        TopBar.Ref.showGoBack();
+        TopBar.Ref.setGoBackAction(this.props.returnToSelector);
+    }
 
     private passwordInfoComponent = () => {
         if (this.state.readablePassword == undefined)

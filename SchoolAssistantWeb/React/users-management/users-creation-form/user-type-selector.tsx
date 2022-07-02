@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import TopBar from "../../shared/top-bar";
 import UserTypeForManagement from "../enums/user-type-for-management";
 import { getEnabledUserTypes, getLabelForUserType } from "../help/user-type-functions";
 import './user-type-selector.css';
@@ -34,5 +35,10 @@ export default class UserTypeSelector extends React.Component<UserTypeSelectorPr
 
             </div>
         )
+    }
+
+    componentDidMount() {
+        TopBar.Ref.hideGoBack();
+        TopBar.Ref.removeGoBackAction();
     }
 }

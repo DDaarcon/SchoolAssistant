@@ -56,8 +56,6 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
     }
 
     render() {
-        TopBar.Ref.setGoBackAction(this.props.backToObjectSelect);
-
         return (
             <form onSubmit={this.submitAsync}>
 
@@ -95,6 +93,11 @@ export default class UserDetailsForm extends ModCompBase<AddUserRequest, UserDet
                 />
             </form>
         )
+    }
+
+    componentDidMount() {
+        TopBar.Ref.showGoBack();
+        TopBar.Ref.setGoBackAction(this.props.backToObjectSelect);
     }
 
     private renderRelatedObjectInfo = () => {
