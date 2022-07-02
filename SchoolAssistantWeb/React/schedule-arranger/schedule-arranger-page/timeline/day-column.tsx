@@ -83,10 +83,19 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
     }
     protected override getAdditionalComponents(): JSX.Element | JSX.Element[] {
         return [
-            <OccupiedRoomGroup lessons={this.props.roomBusyLessons} key="rooms" />,
-            <OccupiedTeacherGroup lessons={this.props.teacherBusyLessons} key="teachers" />,
-            <PlacingShadow time={this.state.shadowFor} key="placingShadow" />,
-            <TouchPlacingConfirm time={this.state.confirmationFor } key="touchPlacingConfirm" />
+            <OccupiedRoomGroup
+                lessons={this.props.roomBusyLessons}
+                key="rooms" />,
+            <OccupiedTeacherGroup
+                lessons={this.props.teacherBusyLessons}
+                key="teachers" />,
+            <PlacingShadow
+                time={this.state.shadowFor}
+                key="placingShadow" />,
+            <TouchPlacingConfirm
+                time={this.state.confirmationFor}
+                key="touchPlacingConfirm"
+                onConfirm={this.confirmedByTouch} />
         ]
     }
 
@@ -105,6 +114,12 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
 
         this.setState({ confirmationFor: time });
     }
+
+    private confirmedByTouch = () => {
+        this.props.addLesson(this.props.dayIndicator, this.state.confirmationFor);
+    }
+
+
 
 
     private callHidePlacingHelpersForOtherColumns() {

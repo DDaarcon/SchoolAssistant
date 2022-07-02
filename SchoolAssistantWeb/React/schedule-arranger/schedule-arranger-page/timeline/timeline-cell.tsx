@@ -89,6 +89,9 @@ export default class TimelineCell extends React.Component<TimelineCellProps, Tim
     private _awaitNextTouchEvent = false;
 
     private fingerIsDown: React.TouchEventHandler<HTMLDivElement> = (ev) => {
+        if (!PlacingAssistantService.isPlacingBySelection)
+            return;
+
         this._awaitNextTouchEvent = true;
         this._preventCLick = true;
     }

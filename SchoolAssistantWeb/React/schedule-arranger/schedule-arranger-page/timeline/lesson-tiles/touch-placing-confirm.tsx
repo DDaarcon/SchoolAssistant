@@ -7,6 +7,7 @@ import GenericLessonTile from "./generic-lesson-tile";
 
 type TouchPlacingConfirmProps = {
     time?: Time;
+    onConfirm: () => void;
 }
 
 export default class TouchPlacingConfirm extends React.Component<TouchPlacingConfirmProps> {
@@ -24,7 +25,7 @@ export default class TouchPlacingConfirm extends React.Component<TouchPlacingCon
                 <IconButton
                     label="Zatwierdź"
                     faIcon="fa-solid fa-check"
-                    onClick={() => console.log("submit")}
+                    onClick={this.props.onConfirm}
                 />
             </GenericLessonTile>
         )
