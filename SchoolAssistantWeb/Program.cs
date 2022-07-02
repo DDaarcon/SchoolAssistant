@@ -18,7 +18,7 @@ var secrets = new ConfigurationBuilder()
 
 #region Database
 
-var connectionString = secrets["AZURE_SQL_CONNECTION_STRING"];
+var connectionString = secrets["AzureSqlConnectionString"];
 builder.Services.AddDbContext<SADbContext>(options =>
     options.UseSqlServer(connectionString).UseLazyLoadingProxies());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
