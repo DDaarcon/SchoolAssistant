@@ -156,3 +156,25 @@ label {
     padding-top: 0;
     padding-bottom: 0;
 }
+
+
+
+
+
+
+
+
+
+/* Login page */
+
+.login-panel {
+    margin-top: 100px;
+}
+
+.login-panel form > h1 {
+    text-align: center;
+}
+
+.login-panel form > .form-floating {
+    margin-bottom: 10px;
+}
