@@ -12,9 +12,13 @@ using SchoolAssistant.Web.PagesRelated.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var secrets = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .Build();
+
 #region Database
 
-var connectionString = builder.Configuration.GetConnectionString("AzureSQLConnection");
+var connectionString = secrets["AZURE_SQL_CONNECTION_STRING"];
 builder.Services.AddDbContext<SADbContext>(options =>
     options.UseSqlServer(connectionString).UseLazyLoadingProxies());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
