@@ -84,7 +84,7 @@ namespace SchoolAssistant.Logic.General.Other
             }
         }
 
-        #region Fetching (or generating) key
+        #region Encode
 
         private ValueTask GenerateKeyAsync()
         {
@@ -94,6 +94,19 @@ namespace SchoolAssistant.Logic.General.Other
             return ValueTask.CompletedTask;
         }
 
+        private async Task SaveKeyToSessionAsync()
+        {
+            _session.Set(_SessionId, _tools.Key);
+            await _session.CommitAsync().ConfigureAwait(false);
+
+            _storedInSession = true;
+        }
+
+
+        #endregion
+
+        #region Decode
+
         private async ValueTask FetchKeyFromSessionAsync()
         {
             await _session.LoadAsync().ConfigureAwait(false);
@@ -101,18 +114,6 @@ namespace SchoolAssistant.Logic.General.Other
 
             if (key is null) throw new CryptographicProcessException("Not found key in session");
             _tools.Key = key;
-        }
-
-        #endregion
-
-        #region Updating Session storage
-
-        private async Task SaveKeyToSessionAsync()
-        {
-            _session.Set(_SessionId, _tools.Key);
-            await _session.CommitAsync().ConfigureAwait(false);
-
-            _storedInSession = true;
         }
 
         private async Task RemoveKeyFromSessionAsync()
