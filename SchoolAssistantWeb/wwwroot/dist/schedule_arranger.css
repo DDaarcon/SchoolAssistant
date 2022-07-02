@@ -81,6 +81,28 @@ body > .container {
     flex-basis: 200px;
 }
 
+@media(max-width: 780px) {
+
+    .schedule-arranger-page {
+        flex-flow: column;
+    }
+
+    .schedule-arranger-selector {
+        display: flex;
+        flex: 1 1;
+        flex-flow: row wrap;
+        align-items: flex-start;
+    }
+
+    .schedule-arranger-selector > div {
+        flex: 1 1 160px;
+        align-self: center;
+    }
+}
+
+
+
+
 .sa-schedule-day-column {
     position: relative !important;
     flex-grow: 1;
@@ -124,9 +146,9 @@ body > .container {
     width: 100%;
     text-align: center;
 }
-/*!********************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css ***!
-  \********************************************************************************************************************************************************/
+/*!*********************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/lesson-tiles.css ***!
+  \*********************************************************************************************************************************************************************/
 .sa-lesson-tile {
     position: absolute !important;
     width: 98%;
@@ -197,9 +219,9 @@ body > .container {
     padding-right: 2px;
 }
 
-/*!**************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/other-lesson-tiles.css ***!
-  \**************************************************************************************************************************************************************/
+/*!***************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/other-lesson-tiles.css ***!
+  \***************************************************************************************************************************************************************************/
 .sa-lessons-teacher-busy, .sa-lessons-room-busy {
     background-color: #a7030367;
     border-radius: 10px;
@@ -235,6 +257,24 @@ body > .container {
     border-radius: 10px;
 }
 
+.sa-lesson-touch-placing-confirm {
+    display: flex;
+    flex-direction: row;
+}
+
+.sa-lesson-touch-placing-confirm {
+    z-index: 100;
+}
+
+.sa-lesson-touch-placing-confirm > h4 {
+    flex: 1;
+    align-self: center;
+    text-align: center;
+}
+
+.sa-lesson-touch-placing-confirm > button {
+    flex: 0 1 40px;
+}
 /*!***************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-arranger/schedule-arranger-page/timeline/lesson-mod-comp/lesson-mod-comp.css ***!
   \***************************************************************************************************************************************************************************/
@@ -359,7 +399,7 @@ body > .container {
 .sa-selector-classes {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 30px
+    gap: 30px
 }
 
 .sa-selector-classes > h2 {

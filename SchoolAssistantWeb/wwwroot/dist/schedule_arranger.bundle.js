@@ -1,6 +1,44 @@
 "use strict";
 (this["webpackChunkschoolassistant"] = this["webpackChunkschoolassistant"] || []).push([["schedule_arranger"],{
 
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.js":
+/*!****************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.js ***!
+  \****************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const main_1 = __webpack_require__(/*! ../../main */ "./React/schedule-arranger/main.tsx");
+class GenericLessonTile extends react_1.default.Component {
+    calcTopOffset() {
+        const minutes = (this.props.time.hour - main_1.scheduleArrangerConfig.startHour) * 60 + this.props.time.minutes;
+        const cells = minutes / main_1.scheduleArrangerConfig.cellDuration;
+        return cells * main_1.scheduleArrangerConfig.cellHeight;
+    }
+    calcHeight() {
+        var _a;
+        const duration = (_a = this.props.customDuration) !== null && _a !== void 0 ? _a : main_1.scheduleArrangerConfig.defaultLessonDuration;
+        const cells = duration / main_1.scheduleArrangerConfig.cellDuration;
+        return cells * main_1.scheduleArrangerConfig.cellHeight;
+    }
+    render() {
+        let style = {
+            top: this.calcTopOffset(),
+            height: this.calcHeight()
+        };
+        return (react_1.default.createElement("div", { className: `sa-lesson-tile ${this.props.className}`, style: style }, this.props.children));
+    }
+}
+exports["default"] = GenericLessonTile;
+//# sourceMappingURL=generic-lesson-tile.js.map
+
+/***/ }),
+
 /***/ "./React/schedule-arranger/class-selector.css":
 /*!****************************************************!*\
   !*** ./React/schedule-arranger/class-selector.css ***!
@@ -49,10 +87,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css":
-/*!**********************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css ***!
-  \**********************************************************************************/
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/lesson-tiles.css":
+/*!***********************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/lesson-tiles.css ***!
+  \***********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -61,10 +99,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/other-lesson-tiles.css":
-/*!****************************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/other-lesson-tiles.css ***!
-  \****************************************************************************************/
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/other-lesson-tiles.css":
+/*!*****************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/other-lesson-tiles.css ***!
+  \*****************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -287,7 +325,7 @@ class ScheduleArrangerTimeline extends react_1.default.Component {
             var _a, _b, _c, _d, _e, _f;
             return (react_1.default.createElement(day_column_1.default, { key: day, dayIndicator: day, config: this.props.config, lessons: (_b = (_a = schedule_data_service_1.default.lessons.find(x => x.dayIndicator == day)) === null || _a === void 0 ? void 0 : _a.lessons) !== null && _b !== void 0 ? _b : [], teacherBusyLessons: (_d = (_c = this.state.teacherBusyLessons) === null || _c === void 0 ? void 0 : _c.find(x => x.dayIndicator == day)) === null || _d === void 0 ? void 0 : _d.lessons, roomBusyLessons: (_f = (_e = this.state.roomBusyLessons) === null || _e === void 0 ? void 0 : _e.find(x => x.dayIndicator == day)) === null || _f === void 0 ? void 0 : _f.lessons, addLesson: this.addLesson, editStoredLesson: this.editLesson }));
         };
-        this.addLesson = (dayIndicator, cellIndex, time) => __awaiter(this, void 0, void 0, function* () {
+        this.addLesson = (dayIndicator, time) => __awaiter(this, void 0, void 0, function* () {
             const prefab = placing_assistant_service_1.default.getPrefabAndDismiss();
             const lessons = yield schedule_data_service_1.default.getOverlappingLessonsAsync({
                 day: dayIndicator,
@@ -552,14 +590,13 @@ __webpack_require__(/*! ./lesson-prefab.css */ "./React/schedule-arranger/schedu
 class LessonPrefabTile extends react_1.default.Component {
     constructor(props) {
         super(props);
-        this.dragStart = (event) => {
-            event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
+        this.dragStart = event => {
             placing_assistant_service_1.default.startWithDrag(this.props.data);
         };
-        this.dragEnd = (event) => {
+        this.dragEnd = event => {
             placing_assistant_service_1.default.dismiss();
         };
-        this.clicked = (event) => {
+        this.clicked = event => {
             this.setState({ selected: true });
             placing_assistant_service_1.default.startWithSelect(this.props.data, this.deselect);
         };
@@ -623,7 +660,7 @@ class PlacingAssistantServiceImplementation {
         if (!this.isPlacing)
             return;
         this.clear();
-        dispatchEvent(new Event("hideLessonShadow"));
+        dispatchEvent(new Event("hidePlacingHelpers"));
         this.callRequiredHandler('hideOtherLessons');
     }
     get isPlacing() {
@@ -683,30 +720,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const day_column_base_1 = __importDefault(__webpack_require__(/*! ../../../schedule-shared/components/day-column-base */ "./React/schedule-shared/components/day-column-base.tsx"));
-const lesson_placing_shadow_1 = __importDefault(__webpack_require__(/*! ./lesson-placing-shadow */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-placing-shadow.tsx"));
+const occupied_room_group_1 = __importDefault(__webpack_require__(/*! ./lesson-tiles/occupied-room-group */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/occupied-room-group.tsx"));
+const occupied_teacher_group_1 = __importDefault(__webpack_require__(/*! ./lesson-tiles/occupied-teacher-group */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/occupied-teacher-group.tsx"));
+const placing_shadow_1 = __importDefault(__webpack_require__(/*! ./lesson-tiles/placing-shadow */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placing-shadow.tsx"));
+const touch_placing_confirm_1 = __importDefault(__webpack_require__(/*! ./lesson-tiles/touch-placing-confirm */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/touch-placing-confirm.tsx"));
 const lessons_by_day_1 = __importDefault(__webpack_require__(/*! ./lessons-by-day */ "./React/schedule-arranger/schedule-arranger-page/timeline/lessons-by-day.tsx"));
-const room_busy_lessons_1 = __importDefault(__webpack_require__(/*! ./room-busy-lessons */ "./React/schedule-arranger/schedule-arranger-page/timeline/room-busy-lessons.tsx"));
-const teacher_busy_lessons_1 = __importDefault(__webpack_require__(/*! ./teacher-busy-lessons */ "./React/schedule-arranger/schedule-arranger-page/timeline/teacher-busy-lessons.tsx"));
 const timeline_cell_1 = __importDefault(__webpack_require__(/*! ./timeline-cell */ "./React/schedule-arranger/schedule-arranger-page/timeline/timeline-cell.tsx"));
 class DayColumn extends day_column_base_1.default {
     constructor(props) {
         super(props);
-        this._iAmCallingHideShadow = false;
-        this.addLesson = (dayIndicator, cellIndex, time) => {
-            this.hideLessonShadow();
-            this.props.addLesson(dayIndicator, cellIndex, time);
-        };
-        this.onEntered = (dayIndicator, cellIndex, time) => {
-            this._iAmCallingHideShadow = true;
-            dispatchEvent(new Event('hideLessonShadow'));
-            this._iAmCallingHideShadow = false;
+        this._iAmCallingHidePlacingHelpers = false;
+        this.mouseEntered = (dayIndicator, time) => {
+            if (this.state.confirmationFor)
+                return;
+            this.callHidePlacingHelpersForOtherColumns();
             this.setState({ shadowFor: time });
         };
-        this.hideLessonShadow = () => {
-            if (this.state.shadowFor && !this._iAmCallingHideShadow)
-                this.setState({ shadowFor: undefined });
+        this.touched = (dayIndicator, time) => {
+            this.callHidePlacingHelpersForOtherColumns();
+            this.setState({ confirmationFor: time });
         };
-        addEventListener('hideLessonShadow', () => this.hideLessonShadow());
+        this.confirmedByTouch = () => {
+            this.props.addLesson(this.props.dayIndicator, this.state.confirmationFor);
+        };
+        this.hidePlacingHelpers = () => {
+            if ((this.state.shadowFor || this.state.confirmationFor)
+                && !this._iAmCallingHidePlacingHelpers) {
+                this.setState({ shadowFor: undefined, confirmationFor: undefined });
+            }
+        };
+        addEventListener('hidePlacingHelpers', () => this.hidePlacingHelpers());
         this.instantiateCells();
     }
     instantiateCells() {
@@ -725,65 +768,30 @@ class DayColumn extends day_column_base_1.default {
     }
     getContainerProps() {
         return {
-            onDragEnd: this.hideLessonShadow
+            onDragEnd: this.hidePlacingHelpers
         };
     }
     getLessonsDisplayComponent() {
         return (react_1.default.createElement(lessons_by_day_1.default, { lessons: this.props.lessons, day: this.props.dayIndicator, editStoredLesson: this.props.editStoredLesson }));
     }
     getTimelineCellComponent(time, index) {
-        return (react_1.default.createElement(timeline_cell_1.default, { key: index, height: this.props.config.cellHeight, dayIndicator: this.props.dayIndicator, cellIndex: index, dropped: this.props.addLesson, entered: this.onEntered, time: time }));
+        return (react_1.default.createElement(timeline_cell_1.default, { key: index, height: this.props.config.cellHeight, dayIndicator: this.props.dayIndicator, time: time, cellIndex: index, dropped: this.props.addLesson, mouseEntered: this.mouseEntered, touched: this.touched }));
     }
     getAdditionalComponents() {
         return [
-            react_1.default.createElement(room_busy_lessons_1.default, { lessons: this.props.roomBusyLessons, key: "rooms" }),
-            react_1.default.createElement(teacher_busy_lessons_1.default, { lessons: this.props.teacherBusyLessons, key: "teachers" }),
-            react_1.default.createElement(lesson_placing_shadow_1.default, { time: this.state.shadowFor, key: "thisClass" })
+            react_1.default.createElement(occupied_room_group_1.default, { lessons: this.props.roomBusyLessons, key: "rooms" }),
+            react_1.default.createElement(occupied_teacher_group_1.default, { lessons: this.props.teacherBusyLessons, key: "teachers" }),
+            react_1.default.createElement(placing_shadow_1.default, { time: this.state.shadowFor, key: "placingShadow" }),
+            react_1.default.createElement(touch_placing_confirm_1.default, { time: this.state.confirmationFor, key: "touchPlacingConfirm", onConfirm: this.confirmedByTouch })
         ];
+    }
+    callHidePlacingHelpersForOtherColumns() {
+        this._iAmCallingHidePlacingHelpers = true;
+        dispatchEvent(new Event('hidePlacingHelpers'));
+        this._iAmCallingHidePlacingHelpers = false;
     }
 }
 exports["default"] = DayColumn;
-
-
-/***/ }),
-
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.tsx":
-/*!*****************************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.tsx ***!
-  \*****************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const main_1 = __webpack_require__(/*! ../../main */ "./React/schedule-arranger/main.tsx");
-const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../services/placing-assistant-service */ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts"));
-__webpack_require__(/*! ./lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles.css");
-__webpack_require__(/*! ./other-lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/other-lesson-tiles.css");
-class GenericLessonTile extends react_1.default.Component {
-    calcTopOffset() {
-        const minutes = (this.props.time.hour - main_1.scheduleArrangerConfig.startHour) * 60 + this.props.time.minutes;
-        const cells = minutes / main_1.scheduleArrangerConfig.cellDuration;
-        return cells * main_1.scheduleArrangerConfig.cellHeight;
-    }
-    calcHeight() {
-        var _a;
-        const duration = (_a = this.props.customDuration) !== null && _a !== void 0 ? _a : main_1.scheduleArrangerConfig.defaultLessonDuration;
-        const cells = duration / main_1.scheduleArrangerConfig.cellDuration;
-        return cells * main_1.scheduleArrangerConfig.cellHeight;
-    }
-    render() {
-        let style = {
-            top: this.calcTopOffset(),
-            height: this.calcHeight()
-        };
-        return (react_1.default.createElement("button", { className: `sa-lesson-tile ${placing_assistant_service_1.default.isPlacing ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`, style: style, onClick: this.props.onPress }, this.props.children));
-    }
-}
-exports["default"] = GenericLessonTile;
 
 
 /***/ }),
@@ -1060,10 +1068,10 @@ exports["default"] = OverlappingLessonPad;
 
 /***/ }),
 
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-placing-shadow.tsx":
-/*!*******************************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-placing-shadow.tsx ***!
-  \*******************************************************************************************/
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx":
+/*!******************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx ***!
+  \******************************************************************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1072,10 +1080,102 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const time_functions_1 = __webpack_require__(/*! ../../../schedule-shared/help/time-functions */ "./React/schedule-shared/help/time-functions.ts");
-const main_1 = __webpack_require__(/*! ../../main */ "./React/schedule-arranger/main.tsx");
-const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.tsx"));
-class LessonPlacingShadow extends react_1.default.Component {
+const main_1 = __webpack_require__(/*! ../../../main */ "./React/schedule-arranger/main.tsx");
+const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../../services/placing-assistant-service */ "./React/schedule-arranger/schedule-arranger-page/services/placing-assistant-service.ts"));
+__webpack_require__(/*! ./lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/lesson-tiles.css");
+__webpack_require__(/*! ./other-lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/other-lesson-tiles.css");
+class GenericLessonTile extends react_1.default.Component {
+    render() {
+        let style = {
+            top: this.calcTopOffset(),
+            height: this.calcHeight()
+        };
+        return (react_1.default.createElement("div", { className: `sa-lesson-tile ${this._showBehind ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`, style: style }, this.props.children));
+    }
+    calcTopOffset() {
+        const minutes = (this.props.time.hour - main_1.scheduleArrangerConfig.startHour) * 60 + this.props.time.minutes;
+        const cells = minutes / main_1.scheduleArrangerConfig.cellDuration;
+        return cells * main_1.scheduleArrangerConfig.cellHeight;
+    }
+    calcHeight() {
+        var _a;
+        const duration = (_a = this.props.customDuration) !== null && _a !== void 0 ? _a : main_1.scheduleArrangerConfig.defaultLessonDuration;
+        const cells = duration / main_1.scheduleArrangerConfig.cellDuration;
+        return cells * main_1.scheduleArrangerConfig.cellHeight;
+    }
+    get _showBehind() {
+        return !this.props.forceAbove && placing_assistant_service_1.default.isPlacing;
+    }
+}
+exports["default"] = GenericLessonTile;
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/occupied-room-group.tsx":
+/*!******************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/occupied-room-group.tsx ***!
+  \******************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx"));
+const OccupiedRoomGroup = (props) => {
+    if (!props.lessons)
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    return (react_1.default.createElement(react_1.default.Fragment, null, props.lessons.map(x => (react_1.default.createElement(generic_lesson_tile_1.default, { className: "sa-lessons-room-busy", key: x.id, time: x.time },
+        react_1.default.createElement("div", null, x.room.name))))));
+};
+exports["default"] = OccupiedRoomGroup;
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/occupied-teacher-group.tsx":
+/*!*********************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/occupied-teacher-group.tsx ***!
+  \*********************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx"));
+const OccupiedTeacherGroup = (props) => {
+    if (!props.lessons)
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    return (react_1.default.createElement(react_1.default.Fragment, null, props.lessons.map(x => (react_1.default.createElement(generic_lesson_tile_1.default, { className: "sa-lessons-teacher-busy", key: x.id, time: x.time },
+        react_1.default.createElement("div", null, x.lecturer.name))))));
+};
+exports["default"] = OccupiedTeacherGroup;
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placing-shadow.tsx":
+/*!*************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placing-shadow.tsx ***!
+  \*************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const time_functions_1 = __webpack_require__(/*! ../../../../schedule-shared/help/time-functions */ "./React/schedule-shared/help/time-functions.ts");
+const main_1 = __webpack_require__(/*! ../../../main */ "./React/schedule-arranger/main.tsx");
+const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx"));
+class PlacingShadow extends react_1.default.Component {
     render() {
         if (!this.props.time)
             return react_1.default.createElement(react_1.default.Fragment, null);
@@ -1083,10 +1183,43 @@ class LessonPlacingShadow extends react_1.default.Component {
             react_1.default.createElement("h4", null,
                 (0, time_functions_1.displayTime)(this.props.time),
                 " - ",
-                (0, time_functions_1.displayTime)((0, time_functions_1.sumTimes)(this.props.time, { hour: 0, minutes: main_1.scheduleArrangerConfig.defaultLessonDuration })))));
+                (0, time_functions_1.displayTime)((0, time_functions_1.sumTimeAndMinutes)(this.props.time, main_1.scheduleArrangerConfig.defaultLessonDuration)))));
     }
 }
-exports["default"] = LessonPlacingShadow;
+exports["default"] = PlacingShadow;
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/touch-placing-confirm.tsx":
+/*!********************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/touch-placing-confirm.tsx ***!
+  \********************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const time_functions_1 = __webpack_require__(/*! ../../../../schedule-shared/help/time-functions */ "./React/schedule-shared/help/time-functions.ts");
+const components_1 = __webpack_require__(/*! ../../../../shared/components */ "./React/shared/components.ts");
+const main_1 = __webpack_require__(/*! ../../../main */ "./React/schedule-arranger/main.tsx");
+const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx"));
+class TouchPlacingConfirm extends react_1.default.Component {
+    render() {
+        if (!this.props.time)
+            return react_1.default.createElement(react_1.default.Fragment, null);
+        return (react_1.default.createElement(generic_lesson_tile_1.default, { time: this.props.time, className: "sa-lesson-touch-placing-confirm", forceAbove: true },
+            react_1.default.createElement("h4", null,
+                (0, time_functions_1.displayTime)(this.props.time),
+                " - ",
+                (0, time_functions_1.displayTime)((0, time_functions_1.sumTimeAndMinutes)(this.props.time, main_1.scheduleArrangerConfig.defaultLessonDuration))),
+            react_1.default.createElement(components_1.IconButton, { label: "Zatwierd\u017A", faIcon: "fa-solid fa-check", onClick: this.props.onConfirm })));
+    }
+}
+exports["default"] = TouchPlacingConfirm;
 
 
 /***/ }),
@@ -1105,7 +1238,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const time_functions_1 = __webpack_require__(/*! ../../../schedule-shared/help/time-functions */ "./React/schedule-shared/help/time-functions.ts");
 const modals_1 = __webpack_require__(/*! ../../../shared/modals */ "./React/shared/modals.ts");
-const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.tsx"));
+const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.js"));
 const lesson_mod_comp_1 = __importDefault(__webpack_require__(/*! ./lesson-mod-comp/lesson-mod-comp */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-mod-comp/lesson-mod-comp.tsx"));
 class LessonsByDay extends react_1.default.Component {
     constructor() {
@@ -1140,54 +1273,6 @@ exports["default"] = LessonsByDay;
 
 /***/ }),
 
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/room-busy-lessons.tsx":
-/*!***************************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/room-busy-lessons.tsx ***!
-  \***************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.tsx"));
-const RoomBusyLessons = (props) => {
-    if (!props.lessons)
-        return react_1.default.createElement(react_1.default.Fragment, null);
-    return (react_1.default.createElement(react_1.default.Fragment, null, props.lessons.map(x => (react_1.default.createElement(generic_lesson_tile_1.default, { className: "sa-lessons-room-busy", key: x.id, time: x.time },
-        react_1.default.createElement("div", null, x.room.name))))));
-};
-exports["default"] = RoomBusyLessons;
-
-
-/***/ }),
-
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/teacher-busy-lessons.tsx":
-/*!******************************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/teacher-busy-lessons.tsx ***!
-  \******************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.tsx"));
-const TeacherBusyLessons = (props) => {
-    if (!props.lessons)
-        return react_1.default.createElement(react_1.default.Fragment, null);
-    return (react_1.default.createElement(react_1.default.Fragment, null, props.lessons.map(x => (react_1.default.createElement(generic_lesson_tile_1.default, { className: "sa-lessons-teacher-busy", key: x.id, time: x.time },
-        react_1.default.createElement("div", null, x.lecturer.name))))));
-};
-exports["default"] = TeacherBusyLessons;
-
-
-/***/ }),
-
 /***/ "./React/schedule-arranger/schedule-arranger-page/timeline/timeline-cell.tsx":
 /*!***********************************************************************************!*\
   !*** ./React/schedule-arranger/schedule-arranger-page/timeline/timeline-cell.tsx ***!
@@ -1216,37 +1301,63 @@ const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../s
 class TimelineCell extends react_1.default.Component {
     constructor() {
         super(...arguments);
-        this.onDrop = (event) => {
-            this.props.dropped(this.props.dayIndicator, this.props.cellIndex, this.props.time);
+        this.dropped = (event) => {
+            this.props.dropped(this.props.dayIndicator, this.props.time);
         };
-        this.onDragOver = (event) => {
+        this.draggedOver = (event) => {
             event.preventDefault();
         };
-        this.onDragEnter = (_) => {
-            this.props.entered(this.props.dayIndicator, this.props.cellIndex, this.props.time);
+        this.dragEntered = (_) => {
+            this.props.mouseEntered(this.props.dayIndicator, this.props.time);
         };
-        this.onMouseEnter = (ev) => {
+        this.mouseEntered = (ev) => {
             if (!placing_assistant_service_1.default.isPlacingBySelection)
                 return;
-            this.props.entered(this.props.dayIndicator, this.props.cellIndex, this.props.time);
+            this.props.mouseEntered(this.props.dayIndicator, this.props.time);
         };
-        this.onClick = (ev) => {
+        this._preventCLick = false;
+        this.clicked = () => {
+            if (this._preventCLick) {
+                this._preventCLick = false;
+                return;
+            }
             if (!placing_assistant_service_1.default.isPlacingBySelection)
                 return;
-            this.props.dropped(this.props.dayIndicator, this.props.cellIndex, this.props.time);
+            this.props.dropped(this.props.dayIndicator, this.props.time);
+        };
+        this._awaitNextTouchEvent = false;
+        this.fingerIsDown = (ev) => {
+            if (!placing_assistant_service_1.default.isPlacingBySelection)
+                return;
+            this._awaitNextTouchEvent = true;
+            this._preventCLick = true;
+        };
+        this.fingerMoved = (ev) => {
+            this._awaitNextTouchEvent = false;
+            this._preventCLick = false;
+        };
+        this.fingerIsUp = (ev) => {
+            if (!this._awaitNextTouchEvent)
+                return;
+            this._awaitNextTouchEvent = false;
+            setTimeout(() => this._preventCLick = false, 1000);
+            this.props.touched(this.props.dayIndicator, this.props.time);
         };
     }
     render() {
-        const _a = this.props, { dropped, entered } = _a, rest = __rest(_a, ["dropped", "entered"]);
+        const _a = this.props, { dropped, mouseEntered } = _a, rest = __rest(_a, ["dropped", "mouseEntered"]);
         return (react_1.default.createElement(timeline_cell_base_1.default, Object.assign({}, rest, { containerProps: this.getContainerProps() })));
     }
     getContainerProps() {
         return {
-            onDrop: this.onDrop,
-            onDragOver: this.onDragOver,
-            onDragEnter: this.onDragEnter,
-            onMouseEnter: this.onMouseEnter,
-            onClick: this.onClick
+            onDrop: this.dropped,
+            onDragOver: this.draggedOver,
+            onDragEnter: this.dragEntered,
+            onMouseEnter: this.mouseEntered,
+            onClick: this.clicked,
+            onTouchStart: this.fingerIsDown,
+            onTouchMove: this.fingerMoved,
+            onTouchEnd: this.fingerIsUp
         };
     }
 }
@@ -1517,7 +1628,7 @@ exports["default"] = TimeColumnVariant;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.displayMinutes = exports.displayTime = exports.sumTimes = exports.toMinutes = exports.areTimesOverlappingByDuration = void 0;
+exports.displayMinutes = exports.displayTime = exports.sumTimeAndMinutes = exports.sumTimes = exports.toMinutes = exports.areTimesOverlappingByDuration = void 0;
 const areTimesOverlappingByDuration = (timeAStart, durationA, timeBStart, durationB) => {
     const aStart = (0, exports.toMinutes)(timeAStart);
     const aEnd = aStart + durationA;
@@ -1539,6 +1650,10 @@ const sumTimes = (timeA, timeB) => {
     };
 };
 exports.sumTimes = sumTimes;
+const sumTimeAndMinutes = (time, minutes) => {
+    return (0, exports.sumTimes)(time, { hour: 0, minutes });
+};
+exports.sumTimeAndMinutes = sumTimeAndMinutes;
 const displayTime = (time) => `${time.hour}:${(0, exports.displayMinutes)(time.minutes)}`;
 exports.displayTime = displayTime;
 const displayMinutes = (minutes) => minutes < 10 ? `0${minutes}` : minutes.toString();

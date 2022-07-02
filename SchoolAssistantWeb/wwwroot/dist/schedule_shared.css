@@ -3,11 +3,23 @@
   \***************************************************************************************************************************/
 .schedule-timeline {
     height: 100%;
+}
+
+.schedule-timeline-holder {
     display: flex;
     flex-direction: row;
     margin-top: 25px;
 }
 
+@media(max-width: 780px) {
+    .schedule-timeline-holder {
+        width: 900px;
+    }
+
+    .schedule-timeline {
+        overflow-x: auto;
+    }
+}
 /*!*****************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/schedule-shared/components/day-column/day-label.css ***!
   \*****************************************************************************************************************************************/

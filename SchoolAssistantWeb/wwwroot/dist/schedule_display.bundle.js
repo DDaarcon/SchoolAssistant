@@ -561,7 +561,7 @@ exports["default"] = TimeColumnVariant;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.displayMinutes = exports.displayTime = exports.sumTimes = exports.toMinutes = exports.areTimesOverlappingByDuration = void 0;
+exports.displayMinutes = exports.displayTime = exports.sumTimeAndMinutes = exports.sumTimes = exports.toMinutes = exports.areTimesOverlappingByDuration = void 0;
 const areTimesOverlappingByDuration = (timeAStart, durationA, timeBStart, durationB) => {
     const aStart = (0, exports.toMinutes)(timeAStart);
     const aEnd = aStart + durationA;
@@ -583,6 +583,10 @@ const sumTimes = (timeA, timeB) => {
     };
 };
 exports.sumTimes = sumTimes;
+const sumTimeAndMinutes = (time, minutes) => {
+    return (0, exports.sumTimes)(time, { hour: 0, minutes });
+};
+exports.sumTimeAndMinutes = sumTimeAndMinutes;
 const displayTime = (time) => `${time.hour}:${(0, exports.displayMinutes)(time.minutes)}`;
 exports.displayTime = displayTime;
 const displayMinutes = (minutes) => minutes < 10 ? `0${minutes}` : minutes.toString();

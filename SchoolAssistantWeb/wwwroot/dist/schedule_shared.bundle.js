@@ -242,8 +242,9 @@ class ScheduleTimeline extends react_1.default.Component {
     }
     render() {
         var _a;
-        return (react_1.default.createElement("div", { className: this._fullClassName, ref: ref => this._containerElement = ref }, (_a = this.props.timeColumn) !== null && _a !== void 0 ? _a : react_1.default.createElement(react_1.default.Fragment, null),
-            this._daysOfWeek.map(day => this.props.dayColumnFactory(day))));
+        return (react_1.default.createElement("div", { className: this._fullClassName, ref: ref => this._containerElement = ref },
+            react_1.default.createElement("div", { className: "schedule-timeline-holder" }, (_a = this.props.timeColumn) !== null && _a !== void 0 ? _a : react_1.default.createElement(react_1.default.Fragment, null),
+                this._daysOfWeek.map(day => this.props.dayColumnFactory(day)))));
     }
     componentDidMount() {
         if (this._containerElement && this.props.getReferenceOnMount)
