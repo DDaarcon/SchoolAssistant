@@ -5,31 +5,33 @@ import LessonTimelineEntry from "../../../schedule-shared/interfaces/lesson-time
 import Time from "../../../schedule-shared/interfaces/shared/time";
 import ScheduleArrangerConfig from "../../interfaces/page-model-to-react/schedule-arranger-config";
 import LessonEditModel from "./interfaces/lesson-edit-model";
-import LessonPlacingShadow from "./lesson-placing-shadow";
+import OccupiedRoomGroup from "./lesson-tiles/occupied-room-group";
+import OccupiedTeacherGroup from "./lesson-tiles/occupied-teacher-group";
+import PlacingShadow from "./lesson-tiles/placing-shadow";
+import TouchPlacingConfirm from "./lesson-tiles/touch-placing-confirm";
 import LessonsByDay from "./lessons-by-day";
-import RoomBusyLessons from "./room-busy-lessons";
-import TeacherBusyLessons from "./teacher-busy-lessons";
 import TimelineCell from "./timeline-cell";
 
 type DayColumnProps = DayColumnBaseProps<ScheduleArrangerConfig, LessonTimelineEntry> & {
     teacherBusyLessons?: LessonTimelineEntry[];
     roomBusyLessons?: LessonTimelineEntry[];
 
-    addLesson: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
+    addLesson: (dayIndicator: DayOfWeek, time: Time) => void;
     editStoredLesson: (model: LessonEditModel) => void;
 }
 type DayColumnState = DayColumnBaseState & {
     shadowFor?: Time;
+    confirmationFor?: Time;
 }
 
 export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnState, ScheduleArrangerConfig, LessonTimelineEntry> {
 
-    private _iAmCallingHideShadow = false;
+    private _iAmCallingHidePlacingHelpers = false;
 
     constructor(props) {
         super(props);
 
-        addEventListener('hideLessonShadow', () => this.hideLessonShadow());
+        addEventListener('hidePlacingHelpers', () => this.hidePlacingHelpers());
         this.instantiateCells();
     }
 
@@ -52,7 +54,7 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
 
     protected override getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
         return {
-            onDragEnd: this.hideLessonShadow
+            onDragEnd: this.hidePlacingHelpers
         }
     }
     protected override getLessonsDisplayComponent(): JSX.Element {
@@ -70,39 +72,51 @@ export default class DayColumn extends DayColumnBase<DayColumnProps, DayColumnSt
                 key={index}
                 height={this.props.config.cellHeight}
                 dayIndicator={this.props.dayIndicator}
-                cellIndex={index}
-                dropped={this.props.addLesson}
-                entered={this.onEntered}
                 time={time}
+                cellIndex={index}
+
+                dropped={this.props.addLesson}
+                mouseEntered={this.mouseEntered}
+                touched={this.touched}
             />
         )
     }
     protected override getAdditionalComponents(): JSX.Element | JSX.Element[] {
         return [
-            <RoomBusyLessons lessons={this.props.roomBusyLessons} key="rooms" />,
-            <TeacherBusyLessons lessons={this.props.teacherBusyLessons} key="teachers" />,
-            <LessonPlacingShadow time={this.state.shadowFor} key="thisClass" />
+            <OccupiedRoomGroup lessons={this.props.roomBusyLessons} key="rooms" />,
+            <OccupiedTeacherGroup lessons={this.props.teacherBusyLessons} key="teachers" />,
+            <PlacingShadow time={this.state.shadowFor} key="placingShadow" />,
+            <TouchPlacingConfirm time={this.state.confirmationFor } key="touchPlacingConfirm" />
         ]
     }
 
 
-    addLesson = (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
-        this.hideLessonShadow();
-        this.props.addLesson(dayIndicator, cellIndex, time);
-    }
+    private mouseEntered = (dayIndicator: DayOfWeek, time: Time) => {
+        if (this.state.confirmationFor)
+            return;
 
-    onEntered = (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
-        this._iAmCallingHideShadow = true;
-        dispatchEvent(new Event('hideLessonShadow'));
-        this._iAmCallingHideShadow = false;
+        this.callHidePlacingHelpersForOtherColumns();
 
         this.setState({ shadowFor: time });
     }
 
+    private touched = (dayIndicator: DayOfWeek, time: Time) => {
+        this.callHidePlacingHelpersForOtherColumns();
+
+        this.setState({ confirmationFor: time });
+    }
 
 
-    hideLessonShadow = () => {
-        if (this.state.shadowFor && !this._iAmCallingHideShadow)
-            this.setState({ shadowFor: undefined });
+    private callHidePlacingHelpersForOtherColumns() {
+        this._iAmCallingHidePlacingHelpers = true;
+        dispatchEvent(new Event('hidePlacingHelpers'));
+        this._iAmCallingHidePlacingHelpers = false;
+    }
+    private hidePlacingHelpers = () => {
+        if ((this.state.shadowFor || this.state.confirmationFor)
+            && !this._iAmCallingHidePlacingHelpers) {
+
+            this.setState({ shadowFor: undefined, confirmationFor: undefined });
+        }
     }
 }

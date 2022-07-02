@@ -72,7 +72,7 @@ export default class ScheduleArrangerTimeline extends React.Component<ScheduleAr
 
 
 
-    private addLesson = async (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => {
+    private addLesson = async (dayIndicator: DayOfWeek, time: Time) => {
 
         const prefab = PlacingAssistantService.getPrefabAndDismiss();
 

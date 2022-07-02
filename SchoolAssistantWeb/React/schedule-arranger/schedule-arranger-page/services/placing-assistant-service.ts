@@ -41,7 +41,7 @@ class PlacingAssistantServiceImplementation {
 
         this.clear();
 
-        dispatchEvent(new Event("hideLessonShadow"));
+        dispatchEvent(new Event("hidePlacingHelpers"));
         this.callRequiredHandler('hideOtherLessons');
     }
 

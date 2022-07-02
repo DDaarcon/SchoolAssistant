@@ -51,17 +51,15 @@ export default class LessonPrefabTile extends React.Component<ScheduleLessonPref
     }
 
 
-    private dragStart: React.DragEventHandler<HTMLDivElement> = (event) => {
-        event.dataTransfer.setData("prefab", JSON.stringify(this.props.data));
-
+    private dragStart: React.DragEventHandler<HTMLDivElement> = event => {
         PlacingAssistantService.startWithDrag(this.props.data);
     }
 
-    private dragEnd: React.DragEventHandler<HTMLDivElement> = (event) => {
+    private dragEnd: React.DragEventHandler<HTMLDivElement> = event => {
         PlacingAssistantService.dismiss();
     }
 
-    private clicked: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    private clicked: React.MouseEventHandler<HTMLDivElement> = event => {
         this.setState({ selected: true });
 
         PlacingAssistantService.startWithSelect(this.props.data, this.deselect);

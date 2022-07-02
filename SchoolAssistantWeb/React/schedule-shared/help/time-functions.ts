@@ -23,5 +23,9 @@ export const sumTimes = (timeA: Time, timeB: Time): Time => {
     };
 }
 
+export const sumTimeAndMinutes = (time: Time, minutes: number) => {
+    return sumTimes(time, { hour: 0, minutes });
+}
+
 export const displayTime = (time: Time) => `${time.hour}:${displayMinutes(time.minutes)}`;
 export const displayMinutes = (minutes: number) => minutes < 10 ? `0${minutes}` : minutes.toString();

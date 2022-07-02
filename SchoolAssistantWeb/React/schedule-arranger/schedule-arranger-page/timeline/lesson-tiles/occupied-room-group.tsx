@@ -1,11 +1,11 @@
 ﻿import React from "react";
-import LessonTimelineEntry from "../../../schedule-shared/interfaces/lesson-timeline-entry";
+import LessonTimelineEntry from "../../../../schedule-shared/interfaces/lesson-timeline-entry";
 import GenericLessonTile from "./generic-lesson-tile";
 
-type RoomBusyLessonsProps = {
+type OccupiedRoomGroupProps = {
     lessons?: LessonTimelineEntry[];
 }
-const RoomBusyLessons = (props: RoomBusyLessonsProps) => {
+const OccupiedRoomGroup = (props: OccupiedRoomGroupProps) => {
     if (!props.lessons) return <></>;
     return (
         <>
@@ -22,4 +22,4 @@ const RoomBusyLessons = (props: RoomBusyLessonsProps) => {
         </>
     )
 }
-export default RoomBusyLessons;
+export default OccupiedRoomGroup;

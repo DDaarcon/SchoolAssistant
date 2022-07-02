@@ -32,3 +32,22 @@
     background-color: #6cff986d;
     border-radius: 10px;
 }
+
+.sa-lesson-touch-placing-confirm {
+    display: flex;
+    flex-direction: row;
+}
+
+.sa-lesson-touch-placing-confirm {
+    z-index: 100;
+}
+
+.sa-lesson-touch-placing-confirm > h4 {
+    flex: 1;
+    align-self: center;
+    text-align: center;
+}
+
+.sa-lesson-touch-placing-confirm > button {
+    flex: 0 1 40px;
+}

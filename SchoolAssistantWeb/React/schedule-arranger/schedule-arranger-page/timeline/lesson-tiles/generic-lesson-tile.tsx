@@ -1,7 +1,7 @@
 ﻿import React from "react";
-import Time from "../../../schedule-shared/interfaces/shared/time";
-import { scheduleArrangerConfig } from "../../main";
-import PlacingAssistantService from "../services/placing-assistant-service";
+import Time from "../../../../schedule-shared/interfaces/shared/time";
+import { scheduleArrangerConfig } from "../../../main";
+import PlacingAssistantService from "../../services/placing-assistant-service";
 import './lesson-tiles.css';
 import './other-lesson-tiles.css';
 
@@ -10,12 +10,27 @@ type GenericLessonTileProps = {
     customDuration?: number;
     className?: string;
     children: React.ReactNode;
-    onPress?: () => void;
+    forceAbove?: boolean;
 }
 type GenericLessonTileState = {
 
 }
 export default class GenericLessonTile extends React.Component<GenericLessonTileProps, GenericLessonTileState> {
+
+    render() {
+        let style: React.CSSProperties = {
+            top: this.calcTopOffset(),
+            height: this.calcHeight()
+        }
+
+        return (
+            <div className={`sa-lesson-tile ${this._showBehind ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
+                style={style}
+            >
+                {this.props.children}
+            </div>
+        )
+    }
 
     private calcTopOffset() {
         const minutes = (this.props.time.hour - scheduleArrangerConfig.startHour) * 60 + this.props.time.minutes;
@@ -29,19 +44,7 @@ export default class GenericLessonTile extends React.Component<GenericLessonTile
         return cells * scheduleArrangerConfig.cellHeight;
     }
 
-    render() {
-        let style: React.CSSProperties = {
-            top: this.calcTopOffset(),
-            height: this.calcHeight()
-        }
-
-        return (
-            <button className={`sa-lesson-tile ${PlacingAssistantService.isPlacing ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
-                style={style}
-                onClick={this.props.onPress}
-            >
-                {this.props.children}
-            </button>
-        )
+    private get _showBehind() {
+        return !this.props.forceAbove && PlacingAssistantService.isPlacing;
     }
 }

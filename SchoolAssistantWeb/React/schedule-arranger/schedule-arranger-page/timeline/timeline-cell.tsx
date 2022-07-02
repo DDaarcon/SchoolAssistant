@@ -5,8 +5,9 @@ import Time from "../../../schedule-shared/interfaces/shared/time";
 import PlacingAssistantService from "../services/placing-assistant-service";
 
 type TimelineCellProps = TimelineCellBaseProps & {
-    dropped: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
-    entered: (dayIndicator: DayOfWeek, cellIndex: number, time: Time) => void;
+    dropped: (dayIndicator: DayOfWeek, time: Time) => void;
+    mouseEntered: (dayIndicator: DayOfWeek, time: Time) => void;
+    touched: (dayIndicator: DayOfWeek, time: Time) => void;
 }
 type TimelineCellState = {
 
@@ -15,7 +16,7 @@ type TimelineCellState = {
 export default class TimelineCell extends React.Component<TimelineCellProps, TimelineCellState> {
 
     render() {
-        const { dropped, entered, ...rest } = this.props;
+        const { dropped, mouseEntered, ...rest } = this.props;
 
         return (
             <TimelineCellBase
@@ -24,54 +25,87 @@ export default class TimelineCell extends React.Component<TimelineCellProps, Tim
             />
         )
     }
-
-    private onDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
-        this.props.dropped(
-            this.props.dayIndicator,
-            this.props.cellIndex,
-            this.props.time
-        );
-    }
-
-    private onDragOver: React.DragEventHandler<HTMLDivElement> = (event) => {
-        event.preventDefault();
-    }
-
-    private onDragEnter: React.DragEventHandler<HTMLDivElement> = (_) => {
-        this.props.entered(
-            this.props.dayIndicator,
-            this.props.cellIndex,
-            this.props.time
-        );
-    }
-
-    private onMouseEnter: React.MouseEventHandler<HTMLDivElement> = (ev) => {
-        if (!PlacingAssistantService.isPlacingBySelection)
-            return;
-        this.props.entered(
-            this.props.dayIndicator,
-            this.props.cellIndex,
-            this.props.time
-        );
-    }
-
-    private onClick: React.MouseEventHandler<HTMLDivElement> = (ev) => {
-        if (!PlacingAssistantService.isPlacingBySelection)
-            return;
-        this.props.dropped(
-            this.props.dayIndicator,
-            this.props.cellIndex,
-            this.props.time
-        );
-    }
+    
 
     private getContainerProps(): React.HTMLAttributes<HTMLDivElement> {
         return {
-            onDrop: this.onDrop,
-            onDragOver: this.onDragOver,
-            onDragEnter: this.onDragEnter,
-            onMouseEnter: this.onMouseEnter,
-            onClick: this.onClick
+            onDrop: this.dropped,
+            onDragOver: this.draggedOver,
+            onDragEnter: this.dragEntered,
+            onMouseEnter: this.mouseEntered,
+            onClick: this.clicked,
+            onTouchStart: this.fingerIsDown,
+            onTouchMove: this.fingerMoved,
+            onTouchEnd: this.fingerIsUp
         }
+    }
+
+    private dropped: React.DragEventHandler<HTMLDivElement> = (event) => {
+        this.props.dropped(
+            this.props.dayIndicator,
+            this.props.time
+        );
+    }
+
+    private draggedOver: React.DragEventHandler<HTMLDivElement> = (event) => {
+        event.preventDefault();
+    }
+
+    private dragEntered: React.DragEventHandler<HTMLDivElement> = (_) => {
+        this.props.mouseEntered(
+            this.props.dayIndicator,
+            this.props.time
+        );
+    }
+
+    private mouseEntered: React.MouseEventHandler<HTMLDivElement> = (ev) => {
+        if (!PlacingAssistantService.isPlacingBySelection)
+            return;
+        this.props.mouseEntered(
+            this.props.dayIndicator,
+            this.props.time
+        );
+    }
+
+
+    private _preventCLick = false;
+
+    private clicked: React.MouseEventHandler<HTMLDivElement> = () => {
+        if (this._preventCLick) {
+            this._preventCLick = false;
+            return;
+        }
+
+        if (!PlacingAssistantService.isPlacingBySelection)
+            return;
+
+        this.props.dropped(
+            this.props.dayIndicator,
+            this.props.time
+        );
+    }
+
+
+    private _awaitNextTouchEvent = false;
+
+    private fingerIsDown: React.TouchEventHandler<HTMLDivElement> = (ev) => {
+        this._awaitNextTouchEvent = true;
+        this._preventCLick = true;
+    }
+
+    private fingerMoved: React.TouchEventHandler<HTMLDivElement> = (ev) => {
+        this._awaitNextTouchEvent = false;
+        this._preventCLick = false;
+    }
+    private fingerIsUp: React.TouchEventHandler<HTMLDivElement> = (ev) => {
+        if (!this._awaitNextTouchEvent)
+            return;
+        this._awaitNextTouchEvent = false;
+        setTimeout(() => this._preventCLick = false, 1000);
+
+        this.props.touched(
+            this.props.dayIndicator,
+            this.props.time
+        );
     }
 }
