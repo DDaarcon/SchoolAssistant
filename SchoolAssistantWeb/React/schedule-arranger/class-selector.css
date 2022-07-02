@@ -1,7 +1,7 @@
 ﻿.sa-selector-classes {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 30px
+    gap: 30px
 }
 
 .sa-selector-classes > h2 {
