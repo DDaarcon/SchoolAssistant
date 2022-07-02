@@ -13,17 +13,17 @@ namespace SchoolAssistant.Web
 
 
 
-        public static bool EnableDataManagement => TakeBool(EnableDataManagementLabel);    // 1
+        public static bool EnableDataManagement => TakeBool(EnableDataManagementLabel);
         public static string EnableDataManagementLabel => OfEnableNavLink("DataManagement");
-        public static bool EnableScheduleArranger => TakeBool(EnableScheduleArrangerLabel);    // 2
+        public static bool EnableScheduleArranger => TakeBool(EnableScheduleArrangerLabel);
         public static string EnableScheduleArrangerLabel => OfEnableNavLink("ScheduleArranger");
-        public static bool EnableUsersManagement => TakeBool(EnableUsersManagementLabel);  // 3
+        public static bool EnableUsersManagement => TakeBool(EnableUsersManagementLabel);
         public static string EnableUsersManagementLabel => OfEnableNavLink("UsersManagement");
-        public static bool EnableUsersList => TakeBool(EnableUsersListLabel);  // 3,5
+        public static bool EnableUsersList => TakeBool(EnableUsersListLabel);
         public static string EnableUsersListLabel => OfEnableNavLink("UsersList");
-        public static bool EnableUsersListStudents => TakeBool(EnableUsersListStudentsLabel);  // 3,5
+        public static bool EnableUsersListStudents => TakeBool(EnableUsersListStudentsLabel);
         public static string EnableUsersListStudentsLabel => OfEnableNavLink("UsersListStudents");
-        public static bool EnableUsersListTeachers => TakeBool(EnableUsersListTeachersLabel);  // 3,5
+        public static bool EnableUsersListTeachers => TakeBool(EnableUsersListTeachersLabel);
         public static string EnableUsersListTeachersLabel => OfEnableNavLink("UsersListTeachers");
 
 
