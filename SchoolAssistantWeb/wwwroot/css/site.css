@@ -44,6 +44,11 @@ label {
     font-size: 0.9em;
 }
 
+.footer a {
+    color: inherit;
+}
+
+
 
 
 
