@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 if (builder.Environment.IsProduction())
 {
     builder.Configuration.AddAzureKeyVault(
-        new Uri($"https://{builder.Configuration["KeyVault:Vault"]}.vault.azure.net/"),
+        new Uri(Environment.GetEnvironmentVariable("KEYVAULT_ENDPOINT") ?? throw new EntryPointNotFoundException("Envitonment variable KEYVAULT_ENDPOINT not found")),
         new DefaultAzureCredential(/*new DefaultAzureCredentialOptions
         {
             ManagedIdentityClientId = builder.Configuration["KeyVault:ClientId"]
