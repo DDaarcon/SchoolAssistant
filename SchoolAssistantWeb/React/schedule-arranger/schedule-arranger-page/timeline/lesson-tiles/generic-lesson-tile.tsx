@@ -11,6 +11,8 @@ type GenericLessonTileProps = {
     className?: string;
     children: React.ReactNode;
     forceAbove?: boolean;
+    onPress?: () => void;
+    onTouch?: () => void;
 }
 type GenericLessonTileState = {
 
@@ -26,6 +28,8 @@ export default class GenericLessonTile extends React.Component<GenericLessonTile
         return (
             <div className={`sa-lesson-tile ${this._showBehind ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`}
                 style={style}
+                onClick={this.clicked}
+                onTouchStart={this.touched}
             >
                 {this.props.children}
             </div>
@@ -46,5 +50,24 @@ export default class GenericLessonTile extends React.Component<GenericLessonTile
 
     private get _showBehind() {
         return !this.props.forceAbove && PlacingAssistantService.isPlacing;
+    }
+
+
+    private _preventClick = false;
+    private clicked = () => {
+        if (this._preventClick) {
+            this._preventClick = false;
+            return;
+        }
+        this.props.onPress?.();
+    }
+    private touched = () => {
+        if (this.props.onTouch) {
+            this._preventClick = true;
+            this.props.onTouch();
+        }
+        else {
+            this.props.onPress?.();
+        }
     }
 }
