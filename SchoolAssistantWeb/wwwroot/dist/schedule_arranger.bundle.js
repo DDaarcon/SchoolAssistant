@@ -1,44 +1,6 @@
 "use strict";
 (this["webpackChunkschoolassistant"] = this["webpackChunkschoolassistant"] || []).push([["schedule_arranger"],{
 
-/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.js":
-/*!****************************************************************************************!*\
-  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.js ***!
-  \****************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const main_1 = __webpack_require__(/*! ../../main */ "./React/schedule-arranger/main.tsx");
-class GenericLessonTile extends react_1.default.Component {
-    calcTopOffset() {
-        const minutes = (this.props.time.hour - main_1.scheduleArrangerConfig.startHour) * 60 + this.props.time.minutes;
-        const cells = minutes / main_1.scheduleArrangerConfig.cellDuration;
-        return cells * main_1.scheduleArrangerConfig.cellHeight;
-    }
-    calcHeight() {
-        var _a;
-        const duration = (_a = this.props.customDuration) !== null && _a !== void 0 ? _a : main_1.scheduleArrangerConfig.defaultLessonDuration;
-        const cells = duration / main_1.scheduleArrangerConfig.cellDuration;
-        return cells * main_1.scheduleArrangerConfig.cellHeight;
-    }
-    render() {
-        let style = {
-            top: this.calcTopOffset(),
-            height: this.calcHeight()
-        };
-        return (react_1.default.createElement("div", { className: `sa-lesson-tile ${this.props.className}`, style: style }, this.props.children));
-    }
-}
-exports["default"] = GenericLessonTile;
-//# sourceMappingURL=generic-lesson-tile.js.map
-
-/***/ }),
-
 /***/ "./React/schedule-arranger/class-selector.css":
 /*!****************************************************!*\
   !*** ./React/schedule-arranger/class-selector.css ***!
@@ -103,6 +65,18 @@ __webpack_require__.r(__webpack_exports__);
 /*!*****************************************************************************************************!*\
   !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/other-lesson-tiles.css ***!
   \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placed-lesson.css":
+/*!************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placed-lesson.css ***!
+  \************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1085,12 +1059,34 @@ const placing_assistant_service_1 = __importDefault(__webpack_require__(/*! ../.
 __webpack_require__(/*! ./lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/lesson-tiles.css");
 __webpack_require__(/*! ./other-lesson-tiles.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/other-lesson-tiles.css");
 class GenericLessonTile extends react_1.default.Component {
+    constructor() {
+        super(...arguments);
+        this._preventClick = false;
+        this.clicked = () => {
+            var _a, _b;
+            if (this._preventClick) {
+                this._preventClick = false;
+                return;
+            }
+            (_b = (_a = this.props).onPress) === null || _b === void 0 ? void 0 : _b.call(_a);
+        };
+        this.touched = () => {
+            var _a, _b;
+            if (this.props.onTouch) {
+                this._preventClick = true;
+                this.props.onTouch();
+            }
+            else {
+                (_b = (_a = this.props).onPress) === null || _b === void 0 ? void 0 : _b.call(_a);
+            }
+        };
+    }
     render() {
         let style = {
             top: this.calcTopOffset(),
             height: this.calcHeight()
         };
-        return (react_1.default.createElement("div", { className: `sa-lesson-tile ${this._showBehind ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`, style: style }, this.props.children));
+        return (react_1.default.createElement("div", { className: `sa-lesson-tile ${this._showBehind ? 'sa-lesson-tile-behind' : ''} ${this.props.className}`, style: style, onClick: this.clicked, onTouchStart: this.touched }, this.props.children));
     }
     calcTopOffset() {
         const minutes = (this.props.time.hour - main_1.scheduleArrangerConfig.startHour) * 60 + this.props.time.minutes;
@@ -1156,6 +1152,38 @@ const OccupiedTeacherGroup = (props) => {
         react_1.default.createElement("div", null, x.lecturer.name))))));
 };
 exports["default"] = OccupiedTeacherGroup;
+
+
+/***/ }),
+
+/***/ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placed-lesson.tsx":
+/*!************************************************************************************************!*\
+  !*** ./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placed-lesson.tsx ***!
+  \************************************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const time_functions_1 = __webpack_require__(/*! ../../../../schedule-shared/help/time-functions */ "./React/schedule-shared/help/time-functions.ts");
+const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/generic-lesson-tile.tsx"));
+__webpack_require__(/*! ./placed-lesson.css */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placed-lesson.css");
+class PlacedLesson extends react_1.default.Component {
+    render() {
+        var _a;
+        return (react_1.default.createElement(generic_lesson_tile_1.default, { className: "sa-placed-lesson", time: this._lesson.time, customDuration: this._lesson.customDuration, onPress: () => this.props.openModificationComponent(this._lesson), onTouch: () => { } },
+            react_1.default.createElement("div", { className: "sa-lesson-time" }, (0, time_functions_1.displayTime)(this._lesson.time)),
+            react_1.default.createElement("div", { className: "sa-lesson-subject" }, this._lesson.subject.name),
+            react_1.default.createElement("div", { className: "sa-lesson-lecturer" }, this._lesson.lecturer.name),
+            react_1.default.createElement("div", { className: "sa-lesson-room" }, (_a = this._lesson.room) === null || _a === void 0 ? void 0 : _a.name),
+            react_1.default.createElement("button", { className: "sa-placed-lesson-edit-mobile", onClick: () => this.props.openModificationComponent(this._lesson) }, "Edytuj")));
+    }
+    get _lesson() { return this.props.lesson; }
+}
+exports["default"] = PlacedLesson;
 
 
 /***/ }),
@@ -1236,10 +1264,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const time_functions_1 = __webpack_require__(/*! ../../../schedule-shared/help/time-functions */ "./React/schedule-shared/help/time-functions.ts");
 const modals_1 = __webpack_require__(/*! ../../../shared/modals */ "./React/shared/modals.ts");
-const generic_lesson_tile_1 = __importDefault(__webpack_require__(/*! ./generic-lesson-tile */ "./React/schedule-arranger/schedule-arranger-page/timeline/generic-lesson-tile.js"));
 const lesson_mod_comp_1 = __importDefault(__webpack_require__(/*! ./lesson-mod-comp/lesson-mod-comp */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-mod-comp/lesson-mod-comp.tsx"));
+const placed_lesson_1 = __importDefault(__webpack_require__(/*! ./lesson-tiles/placed-lesson */ "./React/schedule-arranger/schedule-arranger-page/timeline/lesson-tiles/placed-lesson.tsx"));
 class LessonsByDay extends react_1.default.Component {
     constructor() {
         super(...arguments);
@@ -1250,22 +1277,12 @@ class LessonsByDay extends react_1.default.Component {
                     lesson,
                     day: this.props.day,
                     editStoredLesson: this.props.editStoredLesson
-                },
-                style: {
-                    width: '800px'
                 }
             });
         };
     }
     render() {
-        return (react_1.default.createElement(react_1.default.Fragment, null, this.props.lessons.map(lesson => {
-            var _a;
-            return react_1.default.createElement(generic_lesson_tile_1.default, { className: "sa-placed-lesson", key: `${lesson.time.hour}${lesson.time.minutes}`, time: lesson.time, customDuration: lesson.customDuration, onPress: () => this.openModificationComponent(lesson) },
-                react_1.default.createElement("div", { className: "sa-lesson-time" }, (0, time_functions_1.displayTime)(lesson.time)),
-                react_1.default.createElement("div", { className: "sa-lesson-subject" }, lesson.subject.name),
-                react_1.default.createElement("div", { className: "sa-lesson-lecturer" }, lesson.lecturer.name),
-                react_1.default.createElement("div", { className: "sa-lesson-room" }, (_a = lesson.room) === null || _a === void 0 ? void 0 : _a.name));
-        })));
+        return (react_1.default.createElement(react_1.default.Fragment, null, this.props.lessons.map(lesson => react_1.default.createElement(placed_lesson_1.default, { key: `${lesson.time.hour}${lesson.time.minutes}`, lesson: lesson, openModificationComponent: this.openModificationComponent }))));
     }
 }
 exports["default"] = LessonsByDay;
