@@ -39,9 +39,6 @@ export default class LessonsByDay extends React.Component<LessonsByDayProps, Les
                 lesson,
                 day: this.props.day,
                 editStoredLesson: this.props.editStoredLesson
-            },
-            style: {
-                width: '800px'
             }
         })
     }
