@@ -1,4 +1,5 @@
 using AppConfigurationEFCore.Setup;
+using Azure.Identity;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using JavaScriptEngineSwitcher.V8;
 using Microsoft.EntityFrameworkCore;
@@ -6,19 +7,31 @@ using React.AspNet;
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.Infrastructure.AzureKeyVault;
 using SchoolAssistant.Infrastructure.InjectablePattern;
 using SchoolAssistant.Logic.Help;
 using SchoolAssistant.Web.PagesRelated.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var secrets = new ConfigurationBuilder()
-    .AddUserSecrets<Program>()
-    .Build();
+#region Secrets
+
+if (builder.Environment.IsProduction())
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri($"https://{builder.Configuration["KeyVault:Vault"]}.vault.azure.net/"),
+        new DefaultAzureCredential(/*new DefaultAzureCredentialOptions
+        {
+            ManagedIdentityClientId = builder.Configuration["KeyVault:ClientId"]
+        }*/),
+        new PrefixKeyVaultSecretManager("SchoolAssistant"));
+}
+
+#endregion
 
 #region Database
 
-var connectionString = secrets["AzureSqlConnectionString"];
+var connectionString = builder.Configuration["ConnectionString:DefaultConnection"];
 builder.Services.AddDbContext<SADbContext>(options =>
     options.UseSqlServer(connectionString).UseLazyLoadingProxies());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
