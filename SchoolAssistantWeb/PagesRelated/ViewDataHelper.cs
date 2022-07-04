@@ -12,24 +12,34 @@ namespace SchoolAssistant.Web
 
 
 
-
+        #region
         public static bool EnableDataManagement => TakeBool(EnableDataManagementLabel);
-        public static string EnableDataManagementLabel => OfEnableNavLink("DataManagement");
+        public static string EnableDataManagementLabel => GetEnableNavLinkLabelFor("DataManagement");
         public static bool EnableScheduleArranger => TakeBool(EnableScheduleArrangerLabel);
-        public static string EnableScheduleArrangerLabel => OfEnableNavLink("ScheduleArranger");
+        public static string EnableScheduleArrangerLabel => GetEnableNavLinkLabelFor("ScheduleArranger");
         public static bool EnableUsersManagement => TakeBool(EnableUsersManagementLabel);
-        public static string EnableUsersManagementLabel => OfEnableNavLink("UsersManagement");
+        public static string EnableUsersManagementLabel => GetEnableNavLinkLabelFor("UsersManagement");
         public static bool EnableUsersList => TakeBool(EnableUsersListLabel);
-        public static string EnableUsersListLabel => OfEnableNavLink("UsersList");
+        public static string EnableUsersListLabel => GetEnableNavLinkLabelFor("UsersList");
         public static bool EnableUsersListStudents => TakeBool(EnableUsersListStudentsLabel);
-        public static string EnableUsersListStudentsLabel => OfEnableNavLink("UsersListStudents");
+        public static string EnableUsersListStudentsLabel => GetEnableNavLinkLabelFor("UsersListStudents");
         public static bool EnableUsersListTeachers => TakeBool(EnableUsersListTeachersLabel);
-        public static string EnableUsersListTeachersLabel => OfEnableNavLink("UsersListTeachers");
-
+        public static string EnableUsersListTeachersLabel => GetEnableNavLinkLabelFor("UsersListTeachers");
 
 
         private const string ENABLE_NAV_LINK_PREFIX = "Enable";
+        private static string GetEnableNavLinkLabelFor(string what) => ENABLE_NAV_LINK_PREFIX + what;
+        #endregion
+
+
+        #region
+        public static bool IsPreviewModeOn => TakeBool(IsPreviewModeOnLabel);
+        public static string IsPreviewModeOnLabel => "PreviewModeOn";
+        #endregion
+
+
         private static bool TakeBool(string fullLabel) => (_VD[fullLabel] as bool?) ?? false;
-        private static string OfEnableNavLink(string what) => ENABLE_NAV_LINK_PREFIX + what;
+
+
     }
 }

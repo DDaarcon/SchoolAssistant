@@ -71,6 +71,7 @@ builder.Services.AddRazorPages()
     {
         options.Filters.Add<EnableLessonConductionPanelAsyncPageFilter>();
         options.Filters.Add<NavbarLinksAsyncPageFilter>();
+        options.Filters.Add<ControlPreviewModeAsyncPageFilter>();
     });
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -138,7 +139,8 @@ app.UseReact(config =>
         .AddScriptWithoutTransform("~/dist/schedule_display.bundle.js")
         .AddScriptWithoutTransform("~/dist/users_management.bundle.js")
         .AddScriptWithoutTransform("~/dist/scheduled_lessons_list.bundle.js")
-        .AddScriptWithoutTransform("~/dist/lesson_conduction_panel.bundle.js");
+        .AddScriptWithoutTransform("~/dist/lesson_conduction_panel.bundle.js")
+        .AddScriptWithoutTransform("~/dist/preview_helper.bundle.js");
 
 });
 
