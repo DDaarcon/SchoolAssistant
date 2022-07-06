@@ -1,5 +1,7 @@
 ﻿import React from "react";
+import { LabelValue } from "../shared/form-controls";
 import FloatingPin from "./components/floating-pin";
+import LoginMenu from "./components/login-menu";
 import './preview-helper.css';
 
 type PreviewHelperProps = {}
@@ -26,7 +28,7 @@ export default class PreviewHelper extends React.Component<PreviewHelperProps, P
                     attentionGrabbing={this.state.hidden}
                 />
 
-
+                <LoginMenu />
 
             </div>
         )

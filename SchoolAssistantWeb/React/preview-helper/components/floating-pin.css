@@ -12,12 +12,6 @@
     }
 }
 
-.ph-floating-pin-container {
-    width: 10px;
-    height: 10px;
-    background-color: green;
-}
-
 .ph-floating-pin-container-in {
     position: absolute;
     bottom: 100%;
@@ -54,7 +48,7 @@
 .ph-floating-pin-menu-hidden:hover {
     animation-play-state: paused;
     padding-bottom: 10px;
-    background-color: #9fff5454;
+    background-color: #f2f2f2;
 }
 
 .ph-floating-pin > span {
