@@ -31,6 +31,7 @@ namespace SchoolAssistant.Web
         #region
         public readonly static ViewDataBoolGetter IsPreviewModeOn = new ViewDataBoolGetter("PreviewModeOn", GetVD);
         public readonly static ViewDataEnumGetter<PreviewMenuType> PreviewMenuType = new ViewDataEnumGetter<PreviewMenuType>("PreviewMenuType", GetVD);
+        public readonly static ViewDataPreviewLoginsJsonGetter PreviewMenuLogins = new ViewDataPreviewLoginsJsonGetter("PreviewMenuLogins", GetVD);
         #endregion
 
 

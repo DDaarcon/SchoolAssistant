@@ -4,6 +4,8 @@
     {
         public ViewDataBoolGetter(string label, Func<IDictionary<string, object?>> vdGetter) : base(label, vdGetter) { }
 
-        public static implicit operator bool(ViewDataBoolGetter obj) => (obj._Value as bool?) ?? false;
+        public override bool Value => (_Value as bool?) ?? false;
+
+        public static implicit operator bool(ViewDataBoolGetter obj) => obj.Value;
     }
 }

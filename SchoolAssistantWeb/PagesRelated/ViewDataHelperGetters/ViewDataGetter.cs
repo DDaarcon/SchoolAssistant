@@ -16,5 +16,7 @@
         public string Label => _label;
 
         protected object? _Value => _vdGetter()[_label];
+
+        public abstract TStored? Value { get; }
     }
 }

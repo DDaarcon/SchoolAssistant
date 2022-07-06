@@ -72,6 +72,8 @@ namespace SchoolAssistant.DAL.Seeding.Help
         private User? _userTemplate;
         private string? _password;
 
+        private const string CONFIG_PREFIX = "PreviewMode:Logins:";
+
         private void CreateUserTemplateFor(UserType type)
         {
             _userTemplate = type switch
@@ -80,8 +82,8 @@ namespace SchoolAssistant.DAL.Seeding.Help
                 {
                     Email = "system.admin@mail.com",
                     NormalizedEmail = "SYSTEM.ADMIN@MAIL.COM",
-                    UserName = _config["PreviewMode:Logins:Administrator:UserName"],
-                    NormalizedUserName = _config["PreviewMode:Logins:Administrator:UserName"]?.ToUpper(),
+                    UserName = _config[$"{CONFIG_PREFIX}Administrator:UserName"],
+                    NormalizedUserName = _config[$"{CONFIG_PREFIX}Administrator:UserName"]?.ToUpper(),
                     EmailConfirmed = true,
                     PhoneNumber = "+48111111111",
                     PhoneNumberConfirmed = true,
@@ -92,36 +94,36 @@ namespace SchoolAssistant.DAL.Seeding.Help
                 {
                     Email = "sample.teacher@mail.com",
                     NormalizedEmail = "SAMPLE.TEACHER@MAIL.COM",
-                    UserName = _config["PreviewMode:Logins:Teacher:UserName"],
-                    NormalizedUserName = _config["PreviewMode:Logins:Teacher:UserName"]?.ToUpper(),
+                    UserName = _config[$"{CONFIG_PREFIX}Teacher:UserName"],
+                    NormalizedUserName = _config[$"{CONFIG_PREFIX}Teacher:UserName"]?.ToUpper(),
                     EmailConfirmed = true,
                     PhoneNumber = "+48111111111",
                     PhoneNumberConfirmed = true,
                     Type = type,
                     SecurityStamp = Guid.NewGuid().ToString("D"),
-                    TeacherId = long.TryParse(_config["PreviewMode:Logins:Teacher:RelatedEntityId"], out var teacherId) ? teacherId : null
+                    TeacherId = long.TryParse(_config[$"{CONFIG_PREFIX}Teacher:RelatedEntityId"], out var teacherId) ? teacherId : null
                 },
                 UserType.Student => new()
                 {
                     Email = "sample.student@mail.com",
                     NormalizedEmail = "SAMPLE.STUDENT@MAIL.COM",
-                    UserName = _config["PreviewMode:Logins:Student:UserName"],
-                    NormalizedUserName = _config["PreviewMode:Logins:Student:UserName"]?.ToUpper(),
+                    UserName = _config[$"{CONFIG_PREFIX}Student:UserName"],
+                    NormalizedUserName = _config[$"{CONFIG_PREFIX}Student:UserName"]?.ToUpper(),
                     EmailConfirmed = true,
                     PhoneNumber = "+48111111111",
                     PhoneNumberConfirmed = true,
                     Type = type,
                     SecurityStamp = Guid.NewGuid().ToString("D"),
-                    TeacherId = long.TryParse(_config["PreviewMode:Logins:Student:RelatedEntityId"], out var studentId) ? studentId : null
+                    TeacherId = long.TryParse(_config[$"{CONFIG_PREFIX}Student:RelatedEntityId"], out var studentId) ? studentId : null
                 },
                 _ => null,
             };
 
             _password = type switch
             {
-                UserType.SystemAdmin => _config["PreviewMode:Logins:Administrator:Password"],
-                UserType.Teacher => _config["PreviewMode:Logins:Teacher:Password"],
-                UserType.Student => _config["PreviewMode:Logins:Student:Password"],
+                UserType.SystemAdmin => _config[$"{CONFIG_PREFIX}Administrator:Password"],
+                UserType.Teacher => _config[$"{CONFIG_PREFIX}Teacher:Password"],
+                UserType.Student => _config[$"{CONFIG_PREFIX}Student:Password"],
                 _ => null,
             };
         }
