@@ -7,6 +7,7 @@ using React.AspNet;
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Seeding;
 using SchoolAssistant.Infrastructure.AzureKeyVault;
 using SchoolAssistant.Infrastructure.InjectablePattern;
 using SchoolAssistant.Logic.Help;
@@ -20,10 +21,7 @@ if (builder.Environment.IsProduction())
 {
     builder.Configuration.AddAzureKeyVault(
         new Uri(Environment.GetEnvironmentVariable("KEYVAULT_ENDPOINT") ?? throw new EntryPointNotFoundException("Envitonment variable KEYVAULT_ENDPOINT not found")),
-        new DefaultAzureCredential(/*new DefaultAzureCredentialOptions
-        {
-            ManagedIdentityClientId = builder.Configuration["KeyVault:ClientId"]
-        }*/),
+        new DefaultAzureCredential(),
         new PrefixKeyVaultSecretManager("SchoolAssistant"));
 }
 
@@ -162,7 +160,7 @@ app.MapRazorPages();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 var seeder = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDefaultDataSeeder>();
-await seeder.SeedRolesAndAdminAsync().ConfigureAwait(false);
+await seeder.SeedRolesAndUsersAsync().ConfigureAwait(false);
 await seeder.SeedAppConfigAsync().ConfigureAwait(false);
 
 #endregion

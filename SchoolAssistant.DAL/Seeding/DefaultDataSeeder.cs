@@ -1,61 +1,45 @@
 ﻿using AppConfigurationEFCore;
 using Microsoft.AspNetCore.Identity;
 using SchoolAssistant.DAL.Attributes;
-using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Seeding.Help;
 
-namespace SchoolAssistant.DAL
+namespace SchoolAssistant.DAL.Seeding
 {
     public interface IDefaultDataSeeder
     {
         Task SeedAppConfigAsync();
-        Task SeedRolesAndAdminAsync();
+        Task SeedRolesAndUsersAsync();
         Task SeedRolesAsync();
-        Task SeedSystemAdminAsync();
+        Task SeedUsersAsync();
     }
 
     [Injectable(ServiceLifetime.Scoped)]
     public class DefaultDataSeeder : IDefaultDataSeeder
     {
         private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
+        private readonly IUserSeedingService _userSeedingSvc;
         private readonly IAppConfiguration<AppConfigRecords> _configRepo;
-
-        private readonly User _systemAdmin = new()
-        {
-            Email = "fake.email@mail.com",
-            NormalizedEmail = "FAKE.EMAIL@MAIL.COM",
-            UserName = "SuperAdmin",
-            NormalizedUserName = "SUPERADMIN",
-            EmailConfirmed = true,
-            PhoneNumber = "+48111111111",
-            PhoneNumberConfirmed = true,
-            Type = UserType.SystemAdmin,
-            SecurityStamp = Guid.NewGuid().ToString("D")
-        };
-
-        private readonly string _systemAdminPassword = "!SystemAdmin12";
 
         public DefaultDataSeeder(
             RoleManager<Role> roleManager,
-            UserManager<User> userManager,
-            IAppConfiguration<AppConfigRecords> configRepo)
+            IAppConfiguration<AppConfigRecords> configRepo,
+            IUserSeedingService userSeedingSvc)
         {
             _roleManager = roleManager;
-            _userManager = userManager;
             _configRepo = configRepo;
+            _userSeedingSvc = userSeedingSvc;
         }
 
-        public async Task SeedRolesAndAdminAsync()
+        public async Task SeedRolesAndUsersAsync()
         {
             await SeedRolesAsync().ConfigureAwait(false);
-            await SeedSystemAdminAsync().ConfigureAwait(false);
+            await SeedUsersAsync().ConfigureAwait(false);
         }
 
         public async Task SeedRolesAsync()
         {
-            // TODO: verify if needed
             var descriptions = UserTypeHelper.GetUserTypeDescriptions();
 
             foreach (var description in descriptions)
@@ -81,20 +65,11 @@ namespace SchoolAssistant.DAL
             }
         }
 
-        public async Task SeedSystemAdminAsync()
+
+        public async Task SeedUsersAsync()
         {
-            var user = await _userManager.FindByNameAsync(_systemAdmin.UserName).ConfigureAwait(false);
-
-            if (user is null)
-            {
-                user = _systemAdmin;
-                await _userManager.CreateAsync(user).ConfigureAwait(false);
-                await _userManager.AddPasswordAsync(user, _systemAdminPassword).ConfigureAwait(false);
-
-                await _userManager.AddToRoleAsync(user, UserType.SystemAdmin.GetUserTypeAttribute()!.RoleName).ConfigureAwait(false);
-            }
+            await _userSeedingSvc.SeedAllAsync().ConfigureAwait(false);
         }
-
 
         public async Task SeedAppConfigAsync()
         {

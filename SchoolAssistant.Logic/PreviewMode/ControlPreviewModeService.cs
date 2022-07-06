@@ -16,7 +16,7 @@ namespace SchoolAssistant.Logic.PreviewMode
             IConfiguration configuration)
         {
             _configuration = configuration;
-            IsEnabled = bool.TryParse(_configuration["PreviewMode"], out bool enabled) ? enabled : false;
+            IsEnabled = bool.TryParse(_configuration["PreviewMode:Enabled"], out bool enabled) ? enabled : false;
         }
 
         public bool IsEnabled { get; private set; }
