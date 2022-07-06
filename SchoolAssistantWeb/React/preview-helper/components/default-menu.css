@@ -1,0 +1,10 @@
+﻿.ph-default-menu-button {
+    display: block;
+}
+
+.ph-default-menu-button + p {
+    font-size: 0.8em;
+    margin-inline-start: 10px;
+    max-width: 350px;
+    color: #646464;
+}

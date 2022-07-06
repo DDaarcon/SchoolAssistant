@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { enumAssignSwitch } from "../shared/enum-help";
+import DefaultMenu from "./components/default-menu";
 import FloatingPin from "./components/floating-pin";
 import LoginMenu from "./components/login-menu";
 import PreviewMenuType from "./enums/preview-menu-type";
@@ -26,7 +27,7 @@ export default class PreviewHelper extends React.Component<PreviewHelperProps, P
         return (
             <div className={`preview-helper ${this.state.hidden ? 'ph-hidden' : ''}`}>
                 <FloatingPin
-                    textOnHover="Dane logowania i więcej"
+                    textOnHover={this.getTextOnHoverForPin()}
                     onClick={this.toggleVisibility}
                     attentionGrabbing={this.state.hidden}
                 />
@@ -43,7 +44,14 @@ export default class PreviewHelper extends React.Component<PreviewHelperProps, P
     private renderMenu() {
         return enumAssignSwitch<JSX.Element, typeof PreviewMenuType>(PreviewMenuType, this.props?.type, {
             LoginMenu: <LoginMenu />,
-            _: <></>
+            _: <DefaultMenu />
+        })
+    }
+
+    private getTextOnHoverForPin() {
+        return enumAssignSwitch<string, typeof PreviewMenuType>(PreviewMenuType, this.props?.type, {
+            LoginMenu: "Dane logowania",
+            _: "Ustaw podglądowe dane"
         })
     }
 }
