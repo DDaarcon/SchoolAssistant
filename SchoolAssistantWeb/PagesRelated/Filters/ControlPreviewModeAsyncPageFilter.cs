@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolAssistant.Logic.PreviewMode;
+using SchoolAssistant.Web.Areas.Identity.Pages.Account;
 
 namespace SchoolAssistant.Web.PagesRelated.Filters
 {
@@ -28,7 +29,12 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
                 return Task.CompletedTask;
             }
 
-            model.ViewData[ViewDataHelper.IsPreviewModeOnLabel] = _controlSvc.IsEnabled;
+            if (model is LoginModel)
+            {
+
+            }
+
+            model.ViewData[ViewDataHelper.IsPreviewModeOn.Label] = _controlSvc.IsEnabled;
 
             return Task.CompletedTask;
         }

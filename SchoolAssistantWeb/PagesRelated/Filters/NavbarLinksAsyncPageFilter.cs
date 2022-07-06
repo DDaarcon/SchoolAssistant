@@ -60,23 +60,23 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
             toEnable = toEnable.Concat(_user.Type switch
             {
                 UserType.Teacher => Take(
-                    ViewDataHelper.EnableScheduleArrangerLabel,
-                    ViewDataHelper.EnableUsersListLabel),
+                    ViewDataHelper.EnableScheduleArranger.Label,
+                    ViewDataHelper.EnableUsersList.Label),
                 UserType.Administration => Take(
-                    ViewDataHelper.EnableDataManagementLabel,
-                    ViewDataHelper.EnableScheduleArrangerLabel,
-                    ViewDataHelper.EnableUsersListLabel,
-                    ViewDataHelper.EnableUsersManagementLabel),
+                    ViewDataHelper.EnableDataManagement.Label,
+                    ViewDataHelper.EnableScheduleArranger.Label,
+                    ViewDataHelper.EnableUsersList.Label,
+                    ViewDataHelper.EnableUsersManagement.Label),
                 UserType.Headmaster => Take(
-                    ViewDataHelper.EnableDataManagementLabel,
-                    ViewDataHelper.EnableScheduleArrangerLabel,
-                    ViewDataHelper.EnableUsersListLabel,
-                    ViewDataHelper.EnableUsersManagementLabel),
+                    ViewDataHelper.EnableDataManagement.Label,
+                    ViewDataHelper.EnableScheduleArranger.Label,
+                    ViewDataHelper.EnableUsersList.Label,
+                    ViewDataHelper.EnableUsersManagement.Label),
                 UserType.SystemAdmin => Take(
-                    ViewDataHelper.EnableDataManagementLabel,
-                    ViewDataHelper.EnableScheduleArrangerLabel,
-                    ViewDataHelper.EnableUsersListLabel,
-                    ViewDataHelper.EnableUsersManagementLabel),
+                    ViewDataHelper.EnableDataManagement.Label,
+                    ViewDataHelper.EnableScheduleArranger.Label,
+                    ViewDataHelper.EnableUsersList.Label,
+                    ViewDataHelper.EnableUsersManagement.Label),
                 _ => throw new NotImplementedException(),
             });
 

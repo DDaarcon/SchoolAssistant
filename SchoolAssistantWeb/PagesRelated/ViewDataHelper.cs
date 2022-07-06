@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using SchoolAssistant.Infrastructure.Enums.PreviewHelper;
 using SchoolAssistant.Infrastructure.Models.PagesRelated;
+using SchoolAssistant.Web.PagesRelated.ViewDataHelperGetters;
 
 namespace SchoolAssistant.Web
 {
@@ -13,18 +15,12 @@ namespace SchoolAssistant.Web
 
 
         #region
-        public static bool EnableDataManagement => TakeBool(EnableDataManagementLabel);
-        public static string EnableDataManagementLabel => GetEnableNavLinkLabelFor("DataManagement");
-        public static bool EnableScheduleArranger => TakeBool(EnableScheduleArrangerLabel);
-        public static string EnableScheduleArrangerLabel => GetEnableNavLinkLabelFor("ScheduleArranger");
-        public static bool EnableUsersManagement => TakeBool(EnableUsersManagementLabel);
-        public static string EnableUsersManagementLabel => GetEnableNavLinkLabelFor("UsersManagement");
-        public static bool EnableUsersList => TakeBool(EnableUsersListLabel);
-        public static string EnableUsersListLabel => GetEnableNavLinkLabelFor("UsersList");
-        public static bool EnableUsersListStudents => TakeBool(EnableUsersListStudentsLabel);
-        public static string EnableUsersListStudentsLabel => GetEnableNavLinkLabelFor("UsersListStudents");
-        public static bool EnableUsersListTeachers => TakeBool(EnableUsersListTeachersLabel);
-        public static string EnableUsersListTeachersLabel => GetEnableNavLinkLabelFor("UsersListTeachers");
+        public readonly static ViewDataBoolGetter EnableDataManagement = new ViewDataBoolGetter(GetEnableNavLinkLabelFor("DataManagement"), GetVD);
+        public readonly static ViewDataBoolGetter EnableScheduleArranger = new ViewDataBoolGetter(GetEnableNavLinkLabelFor("ScheduleArranger"), GetVD);
+        public readonly static ViewDataBoolGetter EnableUsersManagement = new ViewDataBoolGetter(GetEnableNavLinkLabelFor("UsersManagement"), GetVD);
+        public readonly static ViewDataBoolGetter EnableUsersList = new ViewDataBoolGetter(GetEnableNavLinkLabelFor("UsersList"), GetVD);
+        public readonly static ViewDataBoolGetter EnableUsersListStudents = new ViewDataBoolGetter(GetEnableNavLinkLabelFor("UsersListStudents"), GetVD);
+        public readonly static ViewDataBoolGetter EnableUsersListTeachers = new ViewDataBoolGetter(GetEnableNavLinkLabelFor("UsersListTeachers"), GetVD);
 
 
         private const string ENABLE_NAV_LINK_PREFIX = "Enable";
@@ -33,13 +29,11 @@ namespace SchoolAssistant.Web
 
 
         #region
-        public static bool IsPreviewModeOn => TakeBool(IsPreviewModeOnLabel);
-        public static string IsPreviewModeOnLabel => "PreviewModeOn";
+        public readonly static ViewDataBoolGetter IsPreviewModeOn = new ViewDataBoolGetter("PreviewModeOn", GetVD);
+        public readonly static ViewDataEnumGetter<PreviewMenuType> PreviewMenuType = new ViewDataEnumGetter<PreviewMenuType>("PreviewMenuType", GetVD);
         #endregion
 
 
-        private static bool TakeBool(string fullLabel) => (_VD[fullLabel] as bool?) ?? false;
-
-
+        private static IDictionary<string, object?> GetVD() => _VD;
     }
 }
