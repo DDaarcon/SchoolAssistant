@@ -31,6 +31,10 @@ module.exports = {
 			import: './React/lesson-conduction-panel.ts',
 			dependOn: [ 'react_lib', 'shared' ]
 		},
+		preview_helper: {
+			import: './React/preview-helper.ts',
+			dependOn: [ 'react_lib', 'shared' ]
+		},
 		shared: {
 			import: './React/shared.ts'
 		},
