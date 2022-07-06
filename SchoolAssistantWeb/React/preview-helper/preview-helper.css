@@ -4,4 +4,9 @@
     height: 100px;
     width: 100px;
     left: 0;
+    transition-duration: 0.3s;
+}
+
+.ph-hidden {
+    transform: translateX(-100%);
 }

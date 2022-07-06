@@ -1,14 +1,10 @@
-﻿.ph-floating-pin-container {
-
-}
-
-@keyframes bipping {
+﻿@keyframes bipping {
     0% {
         transform: scale(1);
     }
 
     50% {
-        transform: scale(1.1);
+        transform: scale(1.07);
     }
 
     100% {
@@ -44,6 +40,7 @@
     display: grid;
     grid-template: 1fr / 1fr;
     cursor: pointer;
+    user-select: none;
 }
 
 .ph-floating-pin-bipping {
@@ -54,7 +51,7 @@
     animation-iteration-count: infinite;
 }
 
-.ph-floating-pin:hover {
+.ph-floating-pin-menu-hidden:hover {
     animation-play-state: paused;
     padding-bottom: 10px;
     background-color: #9fff5454;
@@ -66,13 +63,16 @@
     grid-row: 1;
     text-align: center;
 }
+.ph-floating-pin > span:not(:first-child) {
+    opacity: 0;
+}
 
-.ph-floating-pin > span:nth-child(1),
-.ph-floating-pin:hover > span:nth-child(2) {
+.ph-floating-pin-menu-hidden > span:nth-child(1),
+.ph-floating-pin-menu-hidden:hover > span:nth-child(2) {
     opacity: 1;
 }
 
-.ph-floating-pin > span:nth-child(2),
-.ph-floating-pin:hover > span:nth-child(1) {
+.ph-floating-pin-menu-hidden > span:nth-child(2),
+.ph-floating-pin-menu-hidden:hover > span:nth-child(1) {
     opacity: 0;
 }
