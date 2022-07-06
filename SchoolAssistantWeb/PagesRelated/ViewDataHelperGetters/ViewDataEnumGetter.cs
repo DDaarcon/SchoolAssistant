@@ -6,5 +6,6 @@
         public ViewDataEnumGetter(string label, Func<IDictionary<string, object?>> vdGetter) : base(label, vdGetter) { }
 
         public static implicit operator TEnum?(ViewDataEnumGetter<TEnum> obj) => Enum.TryParse<TEnum>(obj._Value?.ToString(), out var value) ? value : null;
+        public static implicit operator int?(ViewDataEnumGetter<TEnum> obj) => (int?)(object?)(TEnum?)obj;
     }
 }

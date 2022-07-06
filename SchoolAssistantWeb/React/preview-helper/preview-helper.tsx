@@ -1,10 +1,13 @@
 ﻿import React from "react";
-import { LabelValue } from "../shared/form-controls";
+import { enumAssignSwitch } from "../shared/enum-help";
 import FloatingPin from "./components/floating-pin";
 import LoginMenu from "./components/login-menu";
+import PreviewMenuType from "./enums/preview-menu-type";
 import './preview-helper.css';
 
-type PreviewHelperProps = {}
+type PreviewHelperProps = {
+    type: PreviewMenuType;
+}
 type PreviewHelperState = {
     hidden: boolean;
 }
@@ -28,13 +31,19 @@ export default class PreviewHelper extends React.Component<PreviewHelperProps, P
                     attentionGrabbing={this.state.hidden}
                 />
 
-                <LoginMenu />
-
+                {this.renderMenu()}
             </div>
         )
     }
 
     private toggleVisibility = () => {
-        this.setState({ hidden: !this.state.hidden })
+        this.setState({ hidden: !this.state.hidden });
+    }
+
+    private renderMenu() {
+        return enumAssignSwitch<JSX.Element, typeof PreviewMenuType>(PreviewMenuType, this.props?.type, {
+            LoginMenu: <LoginMenu />,
+            _: <></>
+        })
     }
 }

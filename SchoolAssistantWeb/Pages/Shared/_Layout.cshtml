@@ -112,7 +112,9 @@
             
             @if (ViewDataHelper.IsPreviewModeOn)
             {
-                @Html.React("Components.PreviewHelper", new {});
+                @Html.React("Components.PreviewHelper", new {
+                    type = (int?)ViewDataHelper.PreviewMenuType
+                });
             }
         </main>
     </div>

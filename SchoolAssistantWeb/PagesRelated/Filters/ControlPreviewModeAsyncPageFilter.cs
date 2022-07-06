@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolAssistant.Infrastructure.Enums.PreviewHelper;
 using SchoolAssistant.Logic.PreviewMode;
 using SchoolAssistant.Web.Areas.Identity.Pages.Account;
 
@@ -31,7 +32,7 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
 
             if (model is LoginModel)
             {
-
+                model.ViewData[ViewDataHelper.PreviewMenuType.Label] = PreviewMenuType.LoginMenu;
             }
 
             model.ViewData[ViewDataHelper.IsPreviewModeOn.Label] = _controlSvc.IsEnabled;
