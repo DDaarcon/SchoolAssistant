@@ -1,0 +1,78 @@
+﻿.ph-floating-pin-container {
+
+}
+
+@keyframes bipping {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.ph-floating-pin-container {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+}
+
+.ph-floating-pin-container-in {
+    position: absolute;
+    bottom: 100%;
+    left: 100%;
+    transform: rotate(90deg);
+    transform-origin: bottom left;
+}
+
+.ph-floating-pin {
+    white-space: nowrap;
+    transition-duration: 0.3s;
+    font-size: 0.75em;
+    background-color: transparent;
+    box-shadow: inset 0px 0px 10px 4px #ffffff;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 11px 11px 0px 0px;
+    display: grid;
+    grid-template: 1fr / 1fr;
+    cursor: pointer;
+}
+
+.ph-floating-pin-bipping {
+    animation-name: bipping;
+    animation-timing-function: linear;
+    animation-duration: 1s;
+    animation-play-state: running;
+    animation-iteration-count: infinite;
+}
+
+.ph-floating-pin:hover {
+    animation-play-state: paused;
+    padding-bottom: 10px;
+    background-color: #9fff5454;
+}
+
+.ph-floating-pin > span {
+    transition-duration: 0.3s;
+    grid-column: 1;
+    grid-row: 1;
+    text-align: center;
+}
+
+.ph-floating-pin > span:nth-child(1),
+.ph-floating-pin:hover > span:nth-child(2) {
+    opacity: 1;
+}
+
+.ph-floating-pin > span:nth-child(2),
+.ph-floating-pin:hover > span:nth-child(1) {
+    opacity: 0;
+}

@@ -20,6 +20,11 @@
     <link rel="stylesheet" href="~/fontawesome/css/fontawesome.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/fontawesome/css/solid.min.css" asp-append-version="true" />
 
+    @if (ViewDataHelper.IsPreviewModeOn)
+    {
+        <link rel="stylesheet" href="~/dist/preview_helper.css" asp-append-version="true" />
+    }
+
     @await RenderSectionAsync("Head", required: false)
     
     <partial name="../ConductingClasses/PanelInitialization/_Styles" />
@@ -104,6 +109,11 @@
             @RenderBody()
 
             <partial name="../ConductingClasses/PanelInitialization/_Panel" />
+            
+            @if (ViewDataHelper.IsPreviewModeOn)
+            {
+                @Html.React("Components.PreviewHelper", new {});
+            }
         </main>
     </div>
 
@@ -121,6 +131,11 @@
     @await RenderSectionAsync("Scripts", required: false)
     
     <partial name="../ConductingClasses/PanelInitialization/_Scripts" />
+
+    @if (ViewDataHelper.IsPreviewModeOn)
+    {
+        <script src="~/dist/preview_helper.bundle.js" asp-append-version="true"></script>
+    }
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

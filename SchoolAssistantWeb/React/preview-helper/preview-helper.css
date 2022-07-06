@@ -1,0 +1,7 @@
+﻿.preview-helper {
+    background-color: red;
+    position: fixed;
+    height: 100px;
+    width: 100px;
+    left: 0;
+}
