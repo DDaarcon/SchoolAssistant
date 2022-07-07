@@ -1,44 +1,55 @@
 ﻿import React from "react";
 import { LabelValue } from "../../shared/form-controls";
+import PreviewLoginsModel from "../interfaces/preview-logins-model";
 import './login-menu.css';
 
-const LoginMenu = (props: {}) => {
+const LoginMenu = (props: {
+    logins: PreviewLoginsModel;
+}) => {
+
+    const DisplayCredentials = ({ header, userName, password }: {
+        header: string;
+        userName?: string;
+        password?: string;
+    }) => {
+        if (!userName || !password)
+            return <></>
+
+        return (
+            <>
+                <p className="ph-login-menu-header">{header}</p>
+                <LabelValue
+                    label="Nazwa użytkownika"
+                    value={userName}
+                    width={260}
+                />
+                <LabelValue
+                    label="Hasło"
+                    value={password}
+                    width={260}
+                />
+            </>
+        )
+    }
+
     return (
         <div className="ph-login-menu">
-            <p className="ph-login-menu-header">Dane logowania administratora</p>
-            <LabelValue
-                label="Nazwa użytkownika"
-                value="SuperAdmin"
-                width={260}
-            />
-            <LabelValue
-                label="Hasło"
-                value="#ndusian22123"
-                width={260}
+            <DisplayCredentials
+                header="Dane logowania administratora"
+                userName={props.logins.administratorUserName}
+                password={props.logins.administratorPassword}
             />
 
-            <p className="ph-login-menu-header">Dane logowania przykładowego ucznia</p>
-            <LabelValue
-                label="Nazwa użytkownika"
-                value="Uczeńńń"
-                width={260}
-            />
-            <LabelValue
-                label="Hasło"
-                value="HasłoUcznia"
-                width={260}
+            <DisplayCredentials
+                header="Dane logowania przykładowego nauczyciela"
+                userName={props.logins.teacherUserName}
+                password={props.logins.teacherPassword}
             />
 
-            <p className="ph-login-menu-header">Dane logowania przykładowego nauczyciela</p>
-            <LabelValue
-                label="Nazwa użytkownika"
-                value="NauczycielLala"
-                width={260}
-            />
-            <LabelValue
-                label="Hasło"
-                value="TajneHasłoNuczyciela"
-                width={260}
+            <DisplayCredentials
+                header="Dane logowania przykładowego ucznia"
+                userName={props.logins.studentUserName}
+                password={props.logins.studentPassword}
             />
         </div>
     )

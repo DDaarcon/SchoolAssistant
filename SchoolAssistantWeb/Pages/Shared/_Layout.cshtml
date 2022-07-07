@@ -113,7 +113,8 @@
             @if (ViewDataHelper.IsPreviewModeOn)
             {
                 @Html.React("Components.PreviewHelper", new {
-                    type = (int?)ViewDataHelper.PreviewMenuType
+                    type = (int?)ViewDataHelper.PreviewMenuType,
+                    logins  = ViewDataHelper.PreviewMenuLogins.Value
                 });
             }
         </main>

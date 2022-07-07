@@ -4,10 +4,12 @@ import DefaultMenu from "./components/default-menu";
 import FloatingPin from "./components/floating-pin";
 import LoginMenu from "./components/login-menu";
 import PreviewMenuType from "./enums/preview-menu-type";
+import PreviewLoginsModel from "./interfaces/preview-logins-model";
 import './preview-helper.css';
 
 type PreviewHelperProps = {
     type: PreviewMenuType;
+    logins?: PreviewLoginsModel;
 }
 type PreviewHelperState = {
     hidden: boolean;
@@ -43,7 +45,11 @@ export default class PreviewHelper extends React.Component<PreviewHelperProps, P
 
     private renderMenu() {
         return enumAssignSwitch<JSX.Element, typeof PreviewMenuType>(PreviewMenuType, this.props?.type, {
-            LoginMenu: <LoginMenu />,
+            LoginMenu: () => this.props.logins != undefined
+                ? <LoginMenu
+                    logins={this.props.logins}
+                />
+                : <DefaultMenu />,
             _: <DefaultMenu />
         })
     }
