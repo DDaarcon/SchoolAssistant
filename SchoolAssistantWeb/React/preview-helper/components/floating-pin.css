@@ -23,8 +23,8 @@
 .ph-floating-pin {
     white-space: nowrap;
     transition-duration: 0.3s;
-    font-size: 0.75em;
-    background-color: transparent;
+    font-size: 0.85em;
+    background-color: yellow;
     box-shadow: inset 0px 0px 10px 4px #ffffff;
     padding-left: 7px;
     padding-right: 7px;
