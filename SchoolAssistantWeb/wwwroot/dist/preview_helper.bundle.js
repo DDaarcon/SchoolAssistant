@@ -137,16 +137,18 @@ const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
 __webpack_require__(/*! ./login-menu.css */ "./React/preview-helper/components/login-menu.css");
 const LoginMenu = (props) => {
+    const DisplayCredentials = ({ header, userName, password }) => {
+        if (!userName || !password)
+            return react_1.default.createElement(react_1.default.Fragment, null);
+        return (react_1.default.createElement(react_1.default.Fragment, null,
+            react_1.default.createElement("p", { className: "ph-login-menu-header" }, header),
+            react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: userName, width: 260 }),
+            react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: password, width: 260 })));
+    };
     return (react_1.default.createElement("div", { className: "ph-login-menu" },
-        react_1.default.createElement("p", { className: "ph-login-menu-header" }, "Dane logowania administratora"),
-        react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: "SuperAdmin", width: 260 }),
-        react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: "#ndusian22123", width: 260 }),
-        react_1.default.createElement("p", { className: "ph-login-menu-header" }, "Dane logowania przyk\u0142adowego ucznia"),
-        react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: "Ucze\u0144\u0144\u0144", width: 260 }),
-        react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: "Has\u0142oUcznia", width: 260 }),
-        react_1.default.createElement("p", { className: "ph-login-menu-header" }, "Dane logowania przyk\u0142adowego nauczyciela"),
-        react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: "NauczycielLala", width: 260 }),
-        react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: "TajneHas\u0142oNuczyciela", width: 260 })));
+        react_1.default.createElement(DisplayCredentials, { header: "Dane logowania administratora", userName: props.logins.administratorUserName, password: props.logins.administratorPassword }),
+        react_1.default.createElement(DisplayCredentials, { header: "Dane logowania przyk\u0142adowego nauczyciela", userName: props.logins.teacherUserName, password: props.logins.teacherPassword }),
+        react_1.default.createElement(DisplayCredentials, { header: "Dane logowania przyk\u0142adowego ucznia", userName: props.logins.studentUserName, password: props.logins.studentPassword })));
 };
 exports["default"] = LoginMenu;
 
@@ -206,7 +208,9 @@ class PreviewHelper extends react_1.default.Component {
     renderMenu() {
         var _a;
         return (0, enum_help_1.enumAssignSwitch)(preview_menu_type_1.default, (_a = this.props) === null || _a === void 0 ? void 0 : _a.type, {
-            LoginMenu: react_1.default.createElement(login_menu_1.default, null),
+            LoginMenu: () => this.props.logins != undefined
+                ? react_1.default.createElement(login_menu_1.default, { logins: this.props.logins })
+                : react_1.default.createElement(default_menu_1.default, null),
             _: react_1.default.createElement(default_menu_1.default, null)
         });
     }
