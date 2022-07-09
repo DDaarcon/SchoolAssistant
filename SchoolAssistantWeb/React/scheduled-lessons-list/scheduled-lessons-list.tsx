@@ -68,7 +68,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
         if (!res)
             return;
 
-        if (res.incomingAtTk)
+        if (res.incomingAtTk && !ScheduledLessonsListState.incomingAtTk)
             ScheduledLessonsListState.incomingAtTk = fixMilisecondsFromServer(res.incomingAtTk);
 
         this.fixDatesInEntries(res.entries);
@@ -102,7 +102,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
         if (!res)
             return;
 
-        if (res.incomingAtTk)
+        if (res.incomingAtTk && !ScheduledLessonsListState.incomingAtTk)
             ScheduledLessonsListState.incomingAtTk = fixMilisecondsFromServer(res.incomingAtTk);
 
         this.fixDatesInEntries(res.entries);
