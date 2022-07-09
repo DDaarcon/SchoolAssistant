@@ -1,7 +1,6 @@
 ﻿import ScheduledLessonListConfig from "./interfaces/scheduled-lessons-list-config";
 
 interface State extends ScheduledLessonListConfig {
-    incomingAt?: Date;
     incomingAtTk?: number;
 }
 

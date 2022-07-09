@@ -7,7 +7,8 @@ import * as VI from './shared/enum-help';
 import * as VII from './shared/lists';
 import * as VIII from './shared/top-bar';
 import * as IIX from './shared/components';
+import * as IX from './shared/dates-help';
 
 export {
-    I, II, III, IV, V, VI, VII, VIII, IIX
+    I, II, III, IV, V, VI, VII, VIII, IIX, IX
 }

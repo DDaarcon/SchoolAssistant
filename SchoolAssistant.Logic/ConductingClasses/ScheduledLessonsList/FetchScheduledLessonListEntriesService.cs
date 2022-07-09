@@ -124,7 +124,7 @@ namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
                         className = lwo.ScheduleLesson.ParticipatingOrganizationalClass!.Name,
                         duration = lwo.ScheduleLesson.CustomDuration ?? _defaultDuration,
                         subjectName = lwo.ScheduleLesson.Subject.Name,
-                        startTimeTk = takenLesson?.ActualDate?.GetTicksJsFakeLocal() ?? date.GetTicksJsFakeLocal(),
+                        startTimeTk = takenLesson?.ActualDate?.GetTicksJs() ?? date.GetTicksJs(),
                         heldClasses = ToHeldClassesModel(takenLesson)
                     };
                 })).OrderBy(x => x.startTimeTk);

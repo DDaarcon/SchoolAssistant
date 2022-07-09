@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { fixDateFromServer, fixMilisecondsFromServer, prepareDateForServer, prepareMilisecondsForServer } from "../shared/dates-help";
 import ListBody from "./components/list-body";
 import ListHead from "./components/list-head";
 import { FetchScheduledLessonsRequest } from "./interfaces/fetch-scheduled-lessons-list";
@@ -22,14 +23,15 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
     constructor(props) {
         super(props);
 
+        this.fixDatesInEntries(this.props.entries.entries);
+
         this.state = {
             entries: this.props.entries.entries
         }
 
         assignToState(this.props.config);
         if (this.props.entries.incomingAtTk) {
-            ScheduledLessonsListState.incomingAtTk = this.props.entries.incomingAtTk;
-            ScheduledLessonsListState.incomingAt = new Date(this.props.entries.incomingAtTk);
+            ScheduledLessonsListState.incomingAtTk = fixMilisecondsFromServer(this.props.entries.incomingAtTk);
         }
 
     }
@@ -52,7 +54,9 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
 
     private async loadOlderLessonsAsync(amount: number): Promise<void> {
         const earliest = this.state.entries.length > 0 ? this.state.entries[0] : null;
-        const toTk = earliest != null ? (earliest.startTimeTk - 1) : undefined;
+        const toTk = earliest != null
+            ? prepareMilisecondsForServer(earliest.startTimeTk - 1)
+            : undefined;
 
         const req: FetchScheduledLessonsRequest = {
             onlyUpcoming: false,
@@ -65,7 +69,9 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
             return;
 
         if (res.incomingAtTk)
-            ScheduledLessonsListState.incomingAt = new Date(res.incomingAtTk);
+            ScheduledLessonsListState.incomingAtTk = fixMilisecondsFromServer(res.incomingAtTk);
+
+        this.fixDatesInEntries(res.entries);
 
         this.setState({
             entries: [
@@ -82,7 +88,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
             const from = new Date(latest.startTimeTk);
             from.setMinutes(from.getMinutes() + latest.duration);
 
-            fromTk = from.getTime();
+            fromTk = prepareDateForServer(from);
         }
 
         const req: FetchScheduledLessonsRequest = {
@@ -97,7 +103,9 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
             return;
 
         if (res.incomingAtTk)
-            ScheduledLessonsListState.incomingAt = new Date(res.incomingAtTk);
+            ScheduledLessonsListState.incomingAtTk = fixMilisecondsFromServer(res.incomingAtTk);
+
+        this.fixDatesInEntries(res.entries);
 
         this.setState({
             entries: [
@@ -105,5 +113,15 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
                 ...res.entries
             ]
         });
+    }
+
+
+
+
+    private fixDatesInEntries(entriesToFix: ScheduledLessonListEntry[]) {
+        for (const entry of entriesToFix) {
+            entry.startTime = fixDateFromServer(entry.startTimeTk);
+            entry.startTimeTk = entry.startTime.getTime();
+        }
     }
 }
