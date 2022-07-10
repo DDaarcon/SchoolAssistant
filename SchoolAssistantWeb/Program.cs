@@ -156,6 +156,23 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+#region Preview mode endpoints
+
+if (bool.TryParse(app.Configuration["PreviewMode:Enabled"], out bool enabled) ? enabled : false)
+{
+    app.MapGet("/ResetDatabsePreview", async (SchoolAssistant.Logic.PreviewMode.IResetDatabaseService resetSvc) =>
+    {
+        await resetSvc.ResetAsync().ConfigureAwait(false);
+    });
+
+    app.MapGet("/CreateLessonNowPreview", async (SchoolAssistant.Logic.PreviewMode.ICreateLessonNowService createLessonSvc) =>
+    {
+
+    });
+}
+
+#endregion
+
 #region Seeding default data
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();

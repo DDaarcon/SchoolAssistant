@@ -1,12 +1,13 @@
 ﻿import React from "react"
 import { ActionButton } from "../../shared/components"
+import ServerConnection from "../../shared/server-connection";
 import './default-menu.css';
 
 
 const DefaultMenu = (props: {}) => {
 
     const resetAppData = () => {
-        console.log("reset data");
+        resetAppDataServer.getAsync<void>(null);
     }
 
     const createLessonNow = () => {
@@ -40,3 +41,6 @@ const DefaultMenu = (props: {}) => {
     )
 }
 export default DefaultMenu;
+
+const resetAppDataServer = new ServerConnection("/ResetDatabsePreview");
+const createLessonNow = new ServerConnection("/CreateLessonNowPreview");
