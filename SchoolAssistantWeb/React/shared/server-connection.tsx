@@ -2,14 +2,14 @@
     constructor(
         private _baseUrl: string) { }
 
-    async getAsync<TResponse>(handler: string, params?: {}) {
+    async getAsync<TResponse>(handler?: string, params?: {}) {
         let response = await fetch(this.prepareUrl(handler, params), {
             method: 'GET'
         });
         return this.parseResponseAsync<TResponse>(response);
     }
 
-    async postAsync<TResponse>(handler: string, params?: {}, body?: {}) {
+    async postAsync<TResponse>(handler?: string, params?: {}, body?: {}) {
         let response = await fetch(this.prepareUrl(handler, params), {
             method: 'POST',
             headers: {
@@ -22,15 +22,18 @@
         return this.parseResponseAsync<TResponse>(response);
     }
 
-    private prepareUrl(handler: string, params?: {}) {
-        let queryStr = `?handler=${handler}`;
+    private prepareUrl(handler?: string, params?: {}) {
+        let queryStr = '?'
+
+        if (handler?.length)
+            queryStr = `?handler=${handler}&`;
 
         if (params) {
             let paramNames = Object.keys(params);
 
-            for (let paramName of paramNames) {
-                queryStr += `&${paramName}=${params[paramName]}`;
-            }
+            const paramsStr = paramNames.map((paramName) => `${paramName}=${params[paramName]}`).join('&');
+
+            queryStr += paramsStr;
         }
 
         return `${this._baseUrl}${queryStr}`;
