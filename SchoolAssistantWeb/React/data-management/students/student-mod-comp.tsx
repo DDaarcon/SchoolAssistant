@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { ActionButton } from "../../shared/components";
 import { Input, Select, OnChangeIdHandler, SubmitButton } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
@@ -178,20 +179,16 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
 
                     {this.state.data.registerRecordId != undefined
                         ? (
-                            <button
-                                type="button"
+                            <ActionButton
+                                label="Edytuj dane ucznia"
                                 onClick={this.openStudentRegisterRecordMCForModification}
-                            >
-                                Edytuj dane ucznia
-                            </button>
+                            />
                         ) : undefined}
 
-                    <button
-                        type="button"
+                    <ActionButton
+                        label="Dodaj nowego ucznia"
                         onClick={this.openStudentRegisterRecordMCForCreation}
-                    >
-                        Dodaj nowego ucznia
-                    </button>
+                    />
 
                     <SubmitButton
                         value="Zapisz"
