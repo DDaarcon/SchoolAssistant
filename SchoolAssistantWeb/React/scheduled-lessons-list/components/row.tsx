@@ -5,6 +5,7 @@ import HeldClasses from "../interfaces/held-classes";
 import OpenPanelRequest from "../interfaces/open-panel-request";
 import ScheduledLessonsListState from "../scheduled-lessons-list-state";
 import server from "../server";
+import RowButton, { RowButtonProps } from "./row-button";
 import './row.css';
 
 
@@ -105,42 +106,34 @@ export default class Row extends React.Component<RowProps, RowState> {
 
 
     private renderButton(): JSX.Element {
+        const buttonProps: RowButtonProps = {
+            onClickAsync: this.openPanelAsync,
+            text: '',
+        }
+
         let closeOrOngoing = this.isSoon() && this.isBeforeEnd();
 
 
         if (closeOrOngoing) {
-            return <button
-                className="conduct-btn"
-                onClick={this.openPanelAsync}
-            >
-                <span>Poprowadź zajęcia</span>
-            </button>
+            buttonProps.text = "Poprowadź zajęcia";
+            buttonProps.className = "conduct-btn";
         }
-        else if (this.props.heldClasses)
-        {
-            return <button
-                className="see-past-details-btn"
-                onClick={this.openPanelAsync}
-            >
-                <span>Szczegóły</span>
-            </button>
+        else if (this.props.heldClasses) {
+            buttonProps.text = "Szczegóły";
+            buttonProps.className = "see-past-details-btn";
         }
         else if (this.props.startTime < new Date()) {
-            return <button
-                className="see-omitted-btn"
-                onClick={this.openPanelAsync}
-            >
-                <span>Uzupełnij</span>
-            </button>
+            buttonProps.text = "Uzupełnij";
+            buttonProps.className = "see-omitted-btn";
         }
         else {
-            return <button
-                className="see-upcomming-btn"
-                onClick={this.openPanelAsync}
-            >
-                <span>Szczegóły nadchodzących</span>
-            </button>
+            buttonProps.text = "Szczegóły nadchodzących";
+            buttonProps.className = "see-upcomming-btn";
         }
+
+        return <RowButton
+            {...buttonProps}
+        />
     }
 
     private openPanelAsync = async () => {
