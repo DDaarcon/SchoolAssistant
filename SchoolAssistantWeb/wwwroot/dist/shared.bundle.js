@@ -8473,7 +8473,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.IIX = exports.VIII = exports.VII = exports.VI = exports.V = exports.IV = exports.III = exports.II = exports.I = void 0;
+exports.IX = exports.IIX = exports.VIII = exports.VII = exports.VI = exports.V = exports.IV = exports.III = exports.II = exports.I = void 0;
 const I = __importStar(__webpack_require__(/*! ./shared/form-controls */ "./React/shared/form-controls.ts"));
 exports.I = I;
 const validator_1 = __importDefault(__webpack_require__(/*! ./shared/validator */ "./React/shared/validator.ts"));
@@ -8492,6 +8492,8 @@ const VIII = __importStar(__webpack_require__(/*! ./shared/top-bar */ "./React/s
 exports.VIII = VIII;
 const IIX = __importStar(__webpack_require__(/*! ./shared/components */ "./React/shared/components.ts"));
 exports.IIX = IIX;
+const IX = __importStar(__webpack_require__(/*! ./shared/dates-help */ "./React/shared/dates-help.ts"));
+exports.IX = IX;
 
 
 /***/ }),
@@ -8589,6 +8591,48 @@ const IconLabelButton = (props) => {
         props.label));
 };
 exports["default"] = IconLabelButton;
+
+
+/***/ }),
+
+/***/ "./React/shared/dates-help.ts":
+/*!************************************!*\
+  !*** ./React/shared/dates-help.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.prepareDateForServer = exports.prepareMilisecondsForServer = exports.fixDateFromServer = exports.fixMilisecondsFromServer = void 0;
+const timezoneOffsetMs = new Date().getTimezoneOffset() * 60000;
+const fixMilisecondsFromServer = (ms) => {
+    return ms + timezoneOffsetMs;
+};
+exports.fixMilisecondsFromServer = fixMilisecondsFromServer;
+const fixDateFromServer = (date) => {
+    if (date instanceof Date)
+        date = date.getTime();
+    if (typeof date != 'number')
+        return undefined;
+    return new Date((0, exports.fixMilisecondsFromServer)(date));
+};
+exports.fixDateFromServer = fixDateFromServer;
+const prepareMilisecondsForServer = (date) => {
+    if (date instanceof Date)
+        date = date.getTime();
+    if (typeof date != 'number')
+        return undefined;
+    return date - timezoneOffsetMs;
+};
+exports.prepareMilisecondsForServer = prepareMilisecondsForServer;
+const prepareDateForServer = (date) => {
+    const ms = (0, exports.prepareMilisecondsForServer)(date);
+    if (ms)
+        return new Date(ms);
+    return undefined;
+};
+exports.prepareDateForServer = prepareDateForServer;
 
 
 /***/ }),
@@ -10046,12 +10090,13 @@ class ServerConnection {
         });
     }
     prepareUrl(handler, params) {
-        let queryStr = `?handler=${handler}`;
+        let queryStr = '?';
+        if (handler === null || handler === void 0 ? void 0 : handler.length)
+            queryStr = `?handler=${handler}&`;
         if (params) {
             let paramNames = Object.keys(params);
-            for (let paramName of paramNames) {
-                queryStr += `&${paramName}=${params[paramName]}`;
-            }
+            const paramsStr = paramNames.map((paramName) => `${paramName}=${params[paramName]}`).join('&');
+            queryStr += paramsStr;
         }
         return `${this._baseUrl}${queryStr}`;
     }

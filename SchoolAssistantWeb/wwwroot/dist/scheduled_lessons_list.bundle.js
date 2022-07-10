@@ -468,6 +468,27 @@ exports["default"] = ListHead;
 
 /***/ }),
 
+/***/ "./React/scheduled-lessons-list/components/row-button.tsx":
+/*!****************************************************************!*\
+  !*** ./React/scheduled-lessons-list/components/row-button.tsx ***!
+  \****************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const RowButton = ({ text, className, onClickAsync }) => {
+    return (react_1.default.createElement("button", { className: `sll-row-button ${className !== null && className !== void 0 ? className : ''}`, onClick: onClickAsync },
+        react_1.default.createElement("span", null, text)));
+};
+exports["default"] = RowButton;
+
+
+/***/ }),
+
 /***/ "./React/scheduled-lessons-list/components/row.tsx":
 /*!*********************************************************!*\
   !*** ./React/scheduled-lessons-list/components/row.tsx ***!
@@ -489,8 +510,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const dates_help_1 = __webpack_require__(/*! ../../shared/dates-help */ "./React/shared/dates-help.ts");
 const scheduled_lessons_list_state_1 = __importDefault(__webpack_require__(/*! ../scheduled-lessons-list-state */ "./React/scheduled-lessons-list/scheduled-lessons-list-state.ts"));
 const server_1 = __importDefault(__webpack_require__(/*! ../server */ "./React/scheduled-lessons-list/server.ts"));
+const row_button_1 = __importDefault(__webpack_require__(/*! ./row-button */ "./React/scheduled-lessons-list/components/row-button.tsx"));
 __webpack_require__(/*! ./row.css */ "./React/scheduled-lessons-list/components/row.css");
 class Row extends react_1.default.Component {
     constructor(props) {
@@ -504,7 +527,7 @@ class Row extends react_1.default.Component {
         };
         this.openPanelAsync = () => __awaiter(this, void 0, void 0, function* () {
             const params = {
-                scheduledTimeUtc: this.props.startTime.toISOString()
+                scheduledTimeTk: (0, dates_help_1.prepareMilisecondsForServer)(this.props.startTime)
             };
             const res = yield server_1.default.getAsync("OpenPanel", params);
             if (res === null || res === void 0 ? void 0 : res.success)
@@ -551,23 +574,28 @@ class Row extends react_1.default.Component {
         return endTime >= now;
     }
     renderButton() {
+        const buttonProps = {
+            onClickAsync: this.openPanelAsync,
+            text: '',
+        };
         let closeOrOngoing = this.isSoon() && this.isBeforeEnd();
         if (closeOrOngoing) {
-            return react_1.default.createElement("button", { className: "conduct-btn", onClick: this.openPanelAsync },
-                react_1.default.createElement("span", null, "Poprowad\u017A zaj\u0119cia"));
+            buttonProps.text = "Poprowadź zajęcia";
+            buttonProps.className = "conduct-btn";
         }
         else if (this.props.heldClasses) {
-            return react_1.default.createElement("button", { className: "see-past-details-btn", onClick: this.openPanelAsync },
-                react_1.default.createElement("span", null, "Szczeg\u00F3\u0142y"));
+            buttonProps.text = "Szczegóły";
+            buttonProps.className = "see-past-details-btn";
         }
         else if (this.props.startTime < new Date()) {
-            return react_1.default.createElement("button", { className: "see-omitted-btn", onClick: this.openPanelAsync },
-                react_1.default.createElement("span", null, "Uzupe\u0142nij"));
+            buttonProps.text = "Uzupełnij";
+            buttonProps.className = "see-omitted-btn";
         }
         else {
-            return react_1.default.createElement("button", { className: "see-upcomming-btn", onClick: this.openPanelAsync },
-                react_1.default.createElement("span", null, "Szczeg\u00F3\u0142y nadchodz\u0105cych"));
+            buttonProps.text = "Szczegóły nadchodzących";
+            buttonProps.className = "see-upcomming-btn";
         }
+        return react_1.default.createElement(row_button_1.default, Object.assign({}, buttonProps));
     }
 }
 exports["default"] = Row;
@@ -675,6 +703,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const dates_help_1 = __webpack_require__(/*! ../shared/dates-help */ "./React/shared/dates-help.ts");
 const list_body_1 = __importDefault(__webpack_require__(/*! ./components/list-body */ "./React/scheduled-lessons-list/components/list-body.tsx"));
 const list_head_1 = __importDefault(__webpack_require__(/*! ./components/list-head */ "./React/scheduled-lessons-list/components/list-head.tsx"));
 const scheduled_lessons_list_state_1 = __importStar(__webpack_require__(/*! ./scheduled-lessons-list-state */ "./React/scheduled-lessons-list/scheduled-lessons-list-state.ts"));
@@ -683,13 +712,13 @@ const server_1 = __importDefault(__webpack_require__(/*! ./server */ "./React/sc
 class ScheduledLessonsList extends react_1.default.Component {
     constructor(props) {
         super(props);
+        this.fixDatesInEntries(this.props.entries.entries);
         this.state = {
             entries: this.props.entries.entries
         };
         (0, scheduled_lessons_list_state_1.assignToState)(this.props.config);
         if (this.props.entries.incomingAtTk) {
-            scheduled_lessons_list_state_1.default.incomingAtTk = this.props.entries.incomingAtTk;
-            scheduled_lessons_list_state_1.default.incomingAt = new Date(this.props.entries.incomingAtTk);
+            scheduled_lessons_list_state_1.default.incomingAtTk = (0, dates_help_1.fixMilisecondsFromServer)(this.props.entries.incomingAtTk);
         }
     }
     componentDidMount() {
@@ -704,7 +733,9 @@ class ScheduledLessonsList extends react_1.default.Component {
     loadOlderLessonsAsync(amount) {
         return __awaiter(this, void 0, void 0, function* () {
             const earliest = this.state.entries.length > 0 ? this.state.entries[0] : null;
-            const toTk = earliest != null ? (earliest.startTimeTk - 1) : undefined;
+            const toTk = earliest != null
+                ? (0, dates_help_1.prepareMilisecondsForServer)(earliest.startTimeTk - 1)
+                : undefined;
             const req = {
                 onlyUpcoming: false,
                 toTk,
@@ -713,8 +744,9 @@ class ScheduledLessonsList extends react_1.default.Component {
             const res = yield server_1.default.getAsync("Entries", req);
             if (!res)
                 return;
-            if (res.incomingAtTk)
-                scheduled_lessons_list_state_1.default.incomingAt = new Date(res.incomingAtTk);
+            if (res.incomingAtTk && !scheduled_lessons_list_state_1.default.incomingAtTk)
+                scheduled_lessons_list_state_1.default.incomingAtTk = (0, dates_help_1.fixMilisecondsFromServer)(res.incomingAtTk);
+            this.fixDatesInEntries(res.entries);
             this.setState({
                 entries: [
                     ...res.entries,
@@ -730,7 +762,7 @@ class ScheduledLessonsList extends react_1.default.Component {
                 const latest = this.state.entries[this.state.entries.length - 1];
                 const from = new Date(latest.startTimeTk);
                 from.setMinutes(from.getMinutes() + latest.duration);
-                fromTk = from.getTime();
+                fromTk = (0, dates_help_1.prepareMilisecondsForServer)(from);
             }
             const req = {
                 onlyUpcoming: false,
@@ -740,8 +772,9 @@ class ScheduledLessonsList extends react_1.default.Component {
             const res = yield server_1.default.getAsync("Entries", req);
             if (!res)
                 return;
-            if (res.incomingAtTk)
-                scheduled_lessons_list_state_1.default.incomingAt = new Date(res.incomingAtTk);
+            if (res.incomingAtTk && !scheduled_lessons_list_state_1.default.incomingAtTk)
+                scheduled_lessons_list_state_1.default.incomingAtTk = (0, dates_help_1.fixMilisecondsFromServer)(res.incomingAtTk);
+            this.fixDatesInEntries(res.entries);
             this.setState({
                 entries: [
                     ...this.state.entries,
@@ -749,6 +782,12 @@ class ScheduledLessonsList extends react_1.default.Component {
                 ]
             });
         });
+    }
+    fixDatesInEntries(entriesToFix) {
+        for (const entry of entriesToFix) {
+            entry.startTime = (0, dates_help_1.fixDateFromServer)(entry.startTimeTk);
+            entry.startTimeTk = entry.startTime.getTime();
+        }
     }
 }
 exports["default"] = ScheduledLessonsList;

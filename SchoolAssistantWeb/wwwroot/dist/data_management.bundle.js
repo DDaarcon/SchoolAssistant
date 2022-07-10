@@ -1240,6 +1240,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const components_1 = __webpack_require__(/*! ../../shared/components */ "./React/shared/components.ts");
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
 const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
 const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
@@ -1360,8 +1361,8 @@ class StudentModComp extends mod_comp_base_1.default {
                         value: x.id
                     })), errorMessages: this._validator.getErrorMsgsFor('registerRecordId') }),
                 this.state.data.registerRecordId != undefined
-                    ? (react_1.default.createElement("button", { type: "button", onClick: this.openStudentRegisterRecordMCForModification }, "Edytuj dane ucznia")) : undefined,
-                react_1.default.createElement("button", { type: "button", onClick: this.openStudentRegisterRecordMCForCreation }, "Dodaj nowego ucznia"),
+                    ? (react_1.default.createElement(components_1.ActionButton, { label: "Edytuj dane ucznia", onClick: this.openStudentRegisterRecordMCForModification })) : undefined,
+                react_1.default.createElement(components_1.ActionButton, { label: "Dodaj nowego ucznia", onClick: this.openStudentRegisterRecordMCForCreation }),
                 react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz" }))));
     }
 }

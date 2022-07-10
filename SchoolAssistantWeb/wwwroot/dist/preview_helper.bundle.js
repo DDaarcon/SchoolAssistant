@@ -79,10 +79,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const components_1 = __webpack_require__(/*! ../../shared/components */ "./React/shared/components.ts");
+const server_connection_1 = __importDefault(__webpack_require__(/*! ../../shared/server-connection */ "./React/shared/server-connection.tsx"));
 __webpack_require__(/*! ./default-menu.css */ "./React/preview-helper/components/default-menu.css");
 const DefaultMenu = (props) => {
     const resetAppData = () => {
-        console.log("reset data");
+        resetAppDataServer.getAsync(null);
     };
     const createLessonNow = () => {
     };
@@ -93,6 +94,8 @@ const DefaultMenu = (props) => {
         react_1.default.createElement("p", null, "Utw\u00F3rz zaj\u0119cia dla przyk\u0142adowego nauczyciela. Aby je poprowadzi\u0107 zaloguj si\u0119 na to konto i wybierz 'Poprowad\u017A zaj\u0119cia' z listy zaj\u0119\u0107.")));
 };
 exports["default"] = DefaultMenu;
+const resetAppDataServer = new server_connection_1.default("/ResetDatabsePreview");
+const createLessonNow = new server_connection_1.default("/CreateLessonNowPreview");
 
 
 /***/ }),
