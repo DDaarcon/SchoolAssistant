@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Rooms
 {
+    [Table("Rooms")]
     public class Room : DbEntity
     {
         public string Name { get; set; } = null!;

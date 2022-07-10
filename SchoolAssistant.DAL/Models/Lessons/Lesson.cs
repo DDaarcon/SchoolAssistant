@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Lessons
 {
+    [Table("Lessons")]
     public class Lesson : SchoolYearDbEntity
     {
 

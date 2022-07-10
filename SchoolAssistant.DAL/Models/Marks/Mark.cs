@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Marks
 {
+    [Table("Marks")]
     public class Mark : SchoolYearDbEntity
     {
         public long StudentId { get; set; }

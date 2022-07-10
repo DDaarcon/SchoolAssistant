@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolAssistant.DAL;
 
@@ -11,9 +12,10 @@ using SchoolAssistant.DAL;
 namespace SchoolAssistant.DAL.Migrations
 {
     [DbContext(typeof(SADbContext))]
-    partial class SADbContextModelSnapshot : ModelSnapshot
+    [Migration("20220710122837_Fixed_table_names_and_removed_unnecessary_teacher_column")]
+    partial class Fixed_table_names_and_removed_unnecessary_teacher_column
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

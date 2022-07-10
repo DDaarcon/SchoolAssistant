@@ -1,5 +1,6 @@
 ﻿using AppConfigurationEFCore;
 using AppConfigurationEFCore.Setup;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,9 @@ using SchoolAssistant.DAL.Attributes;
 using SchoolAssistant.DAL.Enums;
 using SchoolAssistant.DAL.Help.AppConfiguration;
 using SchoolAssistant.DAL.Models.AppStructure;
+using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.DAL.Seeding;
+using SchoolAssistant.DAL.Seeding.Help;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +36,13 @@ namespace SchoolAssistans.Tests.DbEntities
             TestServices.Collection.AddAppConfiguration<SADbContext, AppConfigRecords>();
             var svc = TestServices.GetService<IAppConfiguration<AppConfigRecords>>();
 
-            _dataSeeder = new DefaultDataSeeder(_roleManager, _userManager, svc);
+
+            // TODO: tests to fix
+            var userRepo = new UserRepository(TestDatabase.Context, null, _userManager, TestServices.GetService<IHttpContextAccessor>());
+
+            var userSeedingSvc = new UserSeedingService(null, userRepo, null, null);
+
+            _dataSeeder = new DefaultDataSeeder(_roleManager, svc, userSeedingSvc);
         }
 
         private void RegisterIdentity()
@@ -48,7 +58,7 @@ namespace SchoolAssistans.Tests.DbEntities
         [Test]
         public async Task SeedDefaultRolesAndUsers()
         {
-            await _dataSeeder.SeedRolesAndAdminAsync();
+            await _dataSeeder.SeedRolesAndUsersAsync();
 
             var rolesEnum = Enum.GetValues<UserType>();
             var roles = _roleManager.Roles.ToList();

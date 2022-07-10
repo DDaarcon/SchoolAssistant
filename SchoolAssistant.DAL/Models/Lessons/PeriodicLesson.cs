@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Lessons
 {
+    [Table("PeriodicLessons")]
     public class PeriodicLesson : SchoolYearDbEntity
     {
         // TODO: examine every usage to make sure only UTC/Local is used

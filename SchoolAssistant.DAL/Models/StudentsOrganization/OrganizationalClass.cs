@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.StudentsOrganization
 {
+    [Table("OrganizationalClasses")]
     public class OrganizationalClass : SchoolClass
     {
         public int Grade { get; set; }

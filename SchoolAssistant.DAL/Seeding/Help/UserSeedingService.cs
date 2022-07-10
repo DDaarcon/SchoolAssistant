@@ -17,7 +17,7 @@ namespace SchoolAssistant.DAL.Seeding.Help
     }
 
     [Injectable]
-    internal class UserSeedingService : IUserSeedingService
+    public class UserSeedingService : IUserSeedingService
     {
         private readonly IConfiguration _config;
         private readonly IUserRepository _userRepo;

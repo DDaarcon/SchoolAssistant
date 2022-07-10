@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.StudentsOrganization
 {
+    [Table("SubjectClasses")]
     public class SubjectClass : SchoolClass
     {
         public string Name { get; set; } = null!;

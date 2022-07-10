@@ -8,13 +8,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Staff
 {
+    [Table("Teachers")]
     public class Teacher : StaffPerson, IHasUser
     {
         public virtual ICollection<TeacherToMainSubject> MainSubjects { get; set; } = new List<TeacherToMainSubject>();
         public virtual ICollection<TeacherToAdditionalSubject> AdditionalSubjects { get; set; } = new List<TeacherToAdditionalSubject>();
 
-        public long PupilsId { get; set; }
-        public virtual OrganizationalClass Pupils { get; set; } = null!;
 
         public virtual ICollection<PeriodicLesson> Schedule { get; set; } = new List<PeriodicLesson>();
 

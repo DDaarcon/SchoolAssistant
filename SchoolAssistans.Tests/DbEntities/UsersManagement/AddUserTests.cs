@@ -12,6 +12,8 @@ using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
+using SchoolAssistant.DAL.Seeding;
+using SchoolAssistant.DAL.Seeding.Help;
 using SchoolAssistant.Infrastructure.Enums.Users;
 using SchoolAssistant.Infrastructure.Models.UsersManagement;
 using SchoolAssistant.Logic.General.Other;
@@ -99,7 +101,10 @@ namespace SchoolAssistans.Tests.DbEntities.UsersManagement
             var studentRepo = new Repository<StudentRegisterRecord>(_Context, null);
             var parentRepo = new Repository<Parent>(_Context, null);
 
-            _seeder = new DefaultDataSeeder(roleManager, userManager, _configRepo);
+            // TODO: tests to fix
+            var userSeedingSvc = new UserSeedingService(null, _userRepo, _teacherRepo, studentRepo);
+
+            _seeder = new DefaultDataSeeder(roleManager, _configRepo, userSeedingSvc);
 
             var validator = new AddUserRequestJsValidator(_userRepo, studentRepo, _teacherRepo, parentRepo);
 
