@@ -6,6 +6,7 @@ using SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLessonsLi
 using SchoolAssistant.Infrastructure.Models.Shared.Json;
 using SchoolAssistant.Logic.ConductingClasses.ConductLesson;
 using SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList;
+using SchoolAssistant.Logic.Help;
 
 namespace SchoolAssistant.Web.Pages.ConductingClasses
 {
@@ -66,11 +67,11 @@ namespace SchoolAssistant.Web.Pages.ConductingClasses
             return new JsonResult(entries);
         }
 
-        public async Task<JsonResult> OnGetOpenPanelAsync(DateTime scheduledTimeUtc)
+        public async Task<JsonResult> OnGetOpenPanelAsync(long scheduledTimeTk)
         {
             await FetchUserAsync().ConfigureAwait(false);
 
-            var success = await _startLessonSvc.TryStartLessonAtAsync(scheduledTimeUtc.ToLocalTime(), _User!.Teacher!).ConfigureAwait(false);
+            var success = await _startLessonSvc.TryStartLessonAtAsync(DatesHelper.FromTicksJs(scheduledTimeTk), _User!.Teacher!).ConfigureAwait(false);
 
             return new JsonResult(new ResponseJson
             {

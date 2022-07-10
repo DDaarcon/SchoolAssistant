@@ -18,15 +18,18 @@ export const fixDateFromServer = (date: number | Date): Date | undefined => {
 
 
 
-export const prepareMilisecondsForServer = (ms: number): number => {
-    return ms - timezoneOffsetMs;
-}
-
-export const prepareDateForServer = (date: number | Date): number | undefined => {
+export const prepareMilisecondsForServer = (date: number | Date): number | undefined => {
     if (date instanceof Date)
         date = date.getTime();
     if (typeof date != 'number')
         return undefined;
 
-    return prepareMilisecondsForServer(date);
+    return date - timezoneOffsetMs;
+}
+
+export const prepareDateForServer = (date: number | Date): Date | undefined => {
+    const ms = prepareMilisecondsForServer(date);
+    if (ms)
+        return new Date(ms);
+    return undefined;
 }

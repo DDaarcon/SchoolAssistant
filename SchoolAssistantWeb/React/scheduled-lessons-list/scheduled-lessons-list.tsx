@@ -88,7 +88,7 @@ export default class ScheduledLessonsList extends React.Component<ScheduledLesso
             const from = new Date(latest.startTimeTk);
             from.setMinutes(from.getMinutes() + latest.duration);
 
-            fromTk = prepareDateForServer(from);
+            fromTk = prepareMilisecondsForServer(from);
         }
 
         const req: FetchScheduledLessonsRequest = {

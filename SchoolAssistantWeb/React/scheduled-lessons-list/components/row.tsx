@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import { prepareMilisecondsForServer } from "../../shared/dates-help";
 import { ResponseJson } from "../../shared/server-connection";
 import HeldClasses from "../interfaces/held-classes";
 import OpenPanelRequest from "../interfaces/open-panel-request";
@@ -144,7 +145,7 @@ export default class Row extends React.Component<RowProps, RowState> {
 
     private openPanelAsync = async () => {
         const params: OpenPanelRequest = {
-            scheduledTimeUtc: this.props.startTime.toISOString()
+            scheduledTimeTk: prepareMilisecondsForServer(this.props.startTime)
         }
 
         const res = await server.getAsync<ResponseJson>("OpenPanel", params);

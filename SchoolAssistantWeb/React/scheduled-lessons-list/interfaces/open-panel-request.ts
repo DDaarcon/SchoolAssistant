@@ -1,3 +1,3 @@
 ﻿export default interface OpenPanelRequest {
-    scheduledTimeUtc: string;
+    scheduledTimeTk: number;
 }
