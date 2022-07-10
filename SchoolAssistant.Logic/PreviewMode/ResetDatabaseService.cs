@@ -1,13 +1,15 @@
-﻿using SchoolAssistant.DAL;
+﻿using Microsoft.Extensions.Configuration;
+using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Rooms;
-using SchoolAssistant.DAL.Models.Shared;
+using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
-using SchoolAssistant.DAL.Seeding;
+using SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport;
 
 namespace SchoolAssistant.Logic.PreviewMode
 {
@@ -19,20 +21,26 @@ namespace SchoolAssistant.Logic.PreviewMode
     [Injectable]
     public class ResetDatabaseService : IResetDatabaseService
     {
-        private readonly IDefaultDataSeeder _defaultDataSeeder;
         private readonly SADbContext _dbContext;
+        private readonly IConfiguration _config;
+        private readonly IRecreateDatabaseService _recreateSvc;
 
         public ResetDatabaseService(
-            IDefaultDataSeeder defaultDataSeeder,
-            SADbContext dbContext)
+            SADbContext dbContext,
+            IConfiguration config,
+            IRecreateDatabaseService recreateSvc)
         {
-            _defaultDataSeeder = defaultDataSeeder;
             _dbContext = dbContext;
+            _config = config;
+            _recreateSvc = recreateSvc;
         }
 
         public async Task ResetAsync()
         {
             await ClearMostOfTablesAsync().ConfigureAwait(false);
+
+            await ClearTeachersAsync().ConfigureAwait(false);
+            await ClearStudentsAsync().ConfigureAwait(false);
 
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -49,22 +57,39 @@ namespace SchoolAssistant.Logic.PreviewMode
 
             await ClearTableAsync<Room>().ConfigureAwait(false);
 
-            // TODO: check if no error
             await ClearTableAsync<SubjectClass>().ConfigureAwait(false);
             await ClearTableAsync<Subject>().ConfigureAwait(false);
-
             await ClearTableAsync<Student>().ConfigureAwait(false);
+
+            await ClearTableAsync<Role>().ConfigureAwait(false);
+            await ClearTableAsync<User>().ConfigureAwait(false);
+            await ClearTableAsync(_dbContext.Config).ConfigureAwait(false);
+        }
+
+        private async Task ClearTeachersAsync()
+        {
+            var set = _dbContext.Set<Teacher>();
+            var sampleTeacherEntityId = long.TryParse(_config["PreviewMode:Logins:Teacher:RelatedEntityId"], out var id)
+                ? id
+                : 0;
+
+            set.RemoveRange(set.Where(x => x.Id == sampleTeacherEntityId));
         }
 
         private async Task ClearStudentsAsync()
         {
             var set = _dbContext.Set<StudentRegisterRecord>();
+            var sampleStudentEntityId = long.TryParse(_config["PreviewMode:Logins:Student:RelatedEntityId"], out var id)
+                ? id
+                : 0;
+
+            set.RemoveRange(set.Where(x => x.Id == sampleStudentEntityId));
         }
 
-        private async Task ClearTableAsync<TDbEntity>()
-            where TDbEntity : DbEntity
+        private async Task ClearTableAsync<TDbEntity>(Microsoft.EntityFrameworkCore.DbSet<TDbEntity>? set = null)
+            where TDbEntity : class
         {
-            var set = _dbContext.Set<TDbEntity>();
+            set ??= _dbContext.Set<TDbEntity>();
 
             set?.RemoveRange(set);
         }
