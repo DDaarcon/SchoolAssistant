@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolAssistant.DAL.Models.Shared;
+using SchoolAssistant.DAL.Repositories.RepositorySupport;
 using System.Linq.Expressions;
 
 namespace SchoolAssistant.DAL.Repositories
@@ -16,6 +17,8 @@ namespace SchoolAssistant.DAL.Repositories
         IList<TDbEntity> AsList();
         Task<List<TDbEntity>> AsListAsync();
         IQueryable<TDbEntity> AsQueryable();
+        Task DisableIdentityInsertAsync();
+        Task EnableIdentityInsertAsync();
         bool Exists(long id);
         bool Exists(Expression<Func<TDbEntity, bool>> predicate);
         Task<bool> ExistsAsync(long id);
@@ -28,6 +31,10 @@ namespace SchoolAssistant.DAL.Repositories
         void RemoveRange(IEnumerable<TDbEntity> entities);
         void Save();
         Task SaveAsync();
+        /// <summary>
+        /// Disables <c>IDENTITY_INSERT</c> for every entity
+        /// </summary>
+        Task SaveWithIdenityInsertAsync();
         void Update(TDbEntity entity);
         void UpdateRange(IEnumerable<TDbEntity> entities);
         void UseIndependentDbContext();
@@ -39,14 +46,18 @@ namespace SchoolAssistant.DAL.Repositories
     {
         private readonly IServiceScopeFactory? _scopeFactory;
         protected SADbContext _context;
+        private readonly IIdentityInsertManager? _identityInsertManagerSvc;
+
         protected DbSet<TDbEntity> _Repo => _context.Set<TDbEntity>();
 
         public Repository(
             SADbContext context,
-            IServiceScopeFactory? scopeFactory)
+            IServiceScopeFactory? scopeFactory = null,
+            IIdentityInsertManager? identityInsertManagerSvc = null)
         {
             _context = context;
             _scopeFactory = scopeFactory;
+            _identityInsertManagerSvc = identityInsertManagerSvc;
         }
 
         #region Inserting Methods
@@ -166,6 +177,22 @@ namespace SchoolAssistant.DAL.Repositories
         public void UseIndependentDbContext()
         {
             _context = _scopeFactory?.CreateScope().ServiceProvider.GetRequiredService<SADbContext>() ?? _context;
+        }
+
+        public Task EnableIdentityInsertAsync() =>
+            _identityInsertManagerSvc?.EnableIdentityInsertAsync<TDbEntity>() ?? Task.CompletedTask;
+
+        public Task DisableIdentityInsertAsync() =>
+            _identityInsertManagerSvc?.DisableIdentityInsertAsync<TDbEntity>() ?? Task.CompletedTask;
+
+
+        public async Task SaveWithIdenityInsertAsync()
+        {
+            await (_identityInsertManagerSvc?.EnableIdentityInsertAsync<TDbEntity>() ?? Task.CompletedTask).ConfigureAwait(false);
+
+            await SaveAsync().ConfigureAwait(false);
+
+            await (_identityInsertManagerSvc?.DisableEveryIdentityInsertAsync() ?? Task.CompletedTask).ConfigureAwait(false);
         }
 
         #endregion
