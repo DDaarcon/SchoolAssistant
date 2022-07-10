@@ -13,7 +13,7 @@ namespace SchoolAssistant.DAL
         public SADbContext(DbContextOptions<SADbContext> options)
             : base(options) { }
 
-        protected DbSet<AppConfigurationEFCore.Entities.AppConfig> _Config { get; set; } = null!;
+        public DbSet<AppConfigurationEFCore.Entities.AppConfig> Config { get; set; } = null!;
         public DbSet<SchoolYear> Semesters { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Student> Students { get; set; } = null!;
