@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,18 +19,25 @@ namespace SchoolAssistant.Web.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+        public Task<IActionResult> OnGetAsync(string? returnUrl = null)
+        {
+            return LogOutAndRedirectAsync(returnUrl);
+        }
+
+        public Task<IActionResult> OnPostAsync(string? returnUrl = null)
+        {
+            return LogOutAndRedirectAsync(returnUrl);
+        }
+
+        private async Task<IActionResult> LogOutAndRedirectAsync(string? returnUrl)
         {
             await _signInManager.SignOutAsync().ConfigureAwait(false);
-            _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
             }
             else
             {
-                // This needs to be a redirect so that the browser performs a new
-                // request and the identity for the user gets updated.
                 return RedirectToPage("/Index");
             }
         }

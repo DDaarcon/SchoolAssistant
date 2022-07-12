@@ -30,7 +30,7 @@ namespace SchoolAssistant.Web.Pages
                 UserType.Administration => throw new NotImplementedException(),
                 UserType.Headmaster => throw new NotImplementedException(),
                 UserType.SystemAdmin => Page(),
-                _ => throw new NotImplementedException(),
+                _ => RedirectToPage("/Account/Logout", new { area = "Identity" }),
             };
         }
     }
