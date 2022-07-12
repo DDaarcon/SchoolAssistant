@@ -17,7 +17,9 @@ namespace SchoolAssistant.DAL.Repositories
         IList<TDbEntity> AsList();
         Task<List<TDbEntity>> AsListAsync();
         IQueryable<TDbEntity> AsQueryable();
+        void DisableIdentityInsert();
         Task DisableIdentityInsertAsync();
+        void EnableIdentityInsert();
         Task EnableIdentityInsertAsync();
         bool Exists(long id);
         bool Exists(Expression<Func<TDbEntity, bool>> predicate);
@@ -34,7 +36,8 @@ namespace SchoolAssistant.DAL.Repositories
         /// <summary>
         /// Disables <c>IDENTITY_INSERT</c> for every entity
         /// </summary>
-        Task SaveWithIdenityInsertAsync();
+        Task SaveWithIdentityInsertAsync();
+        void SaveWithIdentityInsert();
         void Update(TDbEntity entity);
         void UpdateRange(IEnumerable<TDbEntity> entities);
         void UseIndependentDbContext();
@@ -186,13 +189,29 @@ namespace SchoolAssistant.DAL.Repositories
             _identityInsertManagerSvc?.DisableIdentityInsertAsync<TDbEntity>() ?? Task.CompletedTask;
 
 
-        public async Task SaveWithIdenityInsertAsync()
+        public async Task SaveWithIdentityInsertAsync()
         {
+            await _context.Database.OpenConnectionAsync().ConfigureAwait(false);
             await (_identityInsertManagerSvc?.EnableIdentityInsertAsync<TDbEntity>() ?? Task.CompletedTask).ConfigureAwait(false);
 
             await SaveAsync().ConfigureAwait(false);
 
             await (_identityInsertManagerSvc?.DisableEveryIdentityInsertAsync() ?? Task.CompletedTask).ConfigureAwait(false);
+        }
+
+        public void EnableIdentityInsert() =>
+            _identityInsertManagerSvc?.EnableIdentityInsert<TDbEntity>();
+        public void DisableIdentityInsert() =>
+            _identityInsertManagerSvc?.DisableIdentityInsert<TDbEntity>();
+
+        public void SaveWithIdentityInsert()
+        {
+            _context.Database.OpenConnection();
+            _identityInsertManagerSvc?.EnableIdentityInsert<TDbEntity>();
+
+            Save();
+
+            _identityInsertManagerSvc?.DisableEveryIdentityInsert();
         }
 
         #endregion
