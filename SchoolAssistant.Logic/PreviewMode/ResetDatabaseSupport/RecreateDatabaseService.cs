@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
@@ -21,6 +22,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepository<Subject> _subjectRepo;
+        private readonly IRepository<Room> _roomRepo;
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
@@ -34,7 +36,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             IRepository<Teacher> teacherRepo,
             IRepository<Subject> subjectRepo,
             ISubjectsDataSupplier subjectDataSupplier,
-            IRoomsDataSupplier roomsDataSupplier)
+            IRoomsDataSupplier roomsDataSupplier,
+            IRepository<Room> roomRepo)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -44,11 +47,13 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _subjectRepo = subjectRepo;
             _subjectDataSupplier = subjectDataSupplier;
             _roomsDataSupplier = roomsDataSupplier;
+            _roomRepo = roomRepo;
         }
 
         public async Task RecreateAsync()
         {
             RecreateSubjects();
+            RecreateRooms();
 
             await RecreateTeachersAndSaveAsync().ConfigureAwait(false);
 
@@ -61,6 +66,11 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private void RecreateSubjects()
         {
             _subjectRepo.AddRange(_subjectDataSupplier.All);
+        }
+
+        private void RecreateRooms()
+        {
+            _roomRepo.AddRange(_roomsDataSupplier.All);
         }
 
         private async Task RecreateTeachersAndSaveAsync()
