@@ -24,6 +24,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
+        private readonly IRoomsDataSupplier _roomsDataSupplier;
 
         public RecreateDatabaseService(
             IDefaultDataSeeder seeder,
@@ -32,7 +33,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             ITeachersDataSupplier teacherDataSupplier,
             IRepository<Teacher> teacherRepo,
             IRepository<Subject> subjectRepo,
-            ISubjectsDataSupplier subjectDataSupplier)
+            ISubjectsDataSupplier subjectDataSupplier,
+            IRoomsDataSupplier roomsDataSupplier)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -41,6 +43,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _teacherRepo = teacherRepo;
             _subjectRepo = subjectRepo;
             _subjectDataSupplier = subjectDataSupplier;
+            _roomsDataSupplier = roomsDataSupplier;
         }
 
         public async Task RecreateAsync()
