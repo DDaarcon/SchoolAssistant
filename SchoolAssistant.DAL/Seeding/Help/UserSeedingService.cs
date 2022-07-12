@@ -177,7 +177,7 @@ namespace SchoolAssistant.DAL.Seeding.Help
                 return;
             }
 
-            if (await _userRepo.Manager.CheckPasswordAsync(userInDb, _password).ConfigureAwait(false))
+            if (!await _userRepo.Manager.CheckPasswordAsync(userInDb, _password).ConfigureAwait(false))
             {
                 await _userRepo.Manager.RemovePasswordAsync(userInDb).ConfigureAwait(false);
                 await _userRepo.Manager.AddPasswordAsync(userInDb, _password).ConfigureAwait(false);

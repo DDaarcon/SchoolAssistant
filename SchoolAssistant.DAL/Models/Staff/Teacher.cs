@@ -3,7 +3,6 @@ using SchoolAssistant.DAL.Interfaces;
 using SchoolAssistant.DAL.Models.AppStructure;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.LinkingTables;
-using SchoolAssistant.DAL.Models.StudentsOrganization;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolAssistant.DAL.Models.Staff
@@ -21,7 +20,7 @@ namespace SchoolAssistant.DAL.Models.Staff
 
 
         [NotMapped]
-        public SubjectsOperationsHelper SubjectOperations { get; init; }
+        public SubjectsOperationsHelper SubjectOperations { get; }
 
         public Teacher()
         {
