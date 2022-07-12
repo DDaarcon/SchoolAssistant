@@ -5,6 +5,7 @@ using SchoolAssistant.DAL.Models.Attendance;
 using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Marks;
 using SchoolAssistant.DAL.Models.Rooms;
+using SchoolAssistant.DAL.Models.SchoolYears;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.StudentsParents;
@@ -60,6 +61,7 @@ namespace SchoolAssistant.Logic.PreviewMode
             ClearTable<Parent>();
             ClearTable<Role>();
             ClearTable<User>();
+            ClearTable<SchoolYear>();
             ClearTable(_dbContext.Config);
         }
 

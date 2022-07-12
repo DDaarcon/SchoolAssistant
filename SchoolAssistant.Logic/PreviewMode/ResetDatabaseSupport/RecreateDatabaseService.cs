@@ -23,10 +23,12 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly IRepository<Teacher> _teacherRepo;
         private readonly IRepository<Subject> _subjectRepo;
         private readonly IRepository<Room> _roomRepo;
+        private readonly ISchoolYearRepository _schoolYearRepo;
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
         private readonly IRoomsDataSupplier _roomsDataSupplier;
+        private readonly ISchoolYearDataSupplier _schoolYearDataSupplier;
 
         public RecreateDatabaseService(
             IDefaultDataSeeder seeder,
@@ -37,7 +39,9 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             IRepository<Subject> subjectRepo,
             ISubjectsDataSupplier subjectDataSupplier,
             IRoomsDataSupplier roomsDataSupplier,
-            IRepository<Room> roomRepo)
+            IRepository<Room> roomRepo,
+            ISchoolYearDataSupplier schoolYearDataSupplier,
+            ISchoolYearRepository schoolYearRepo)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -48,10 +52,14 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _subjectDataSupplier = subjectDataSupplier;
             _roomsDataSupplier = roomsDataSupplier;
             _roomRepo = roomRepo;
+            _schoolYearDataSupplier = schoolYearDataSupplier;
+            _schoolYearRepo = schoolYearRepo;
         }
 
         public async Task RecreateAsync()
         {
+            await RecreateSchoolYearAndSaveAsync().ConfigureAwait(false);
+
             RecreateSubjects();
             RecreateRooms();
 
@@ -61,6 +69,13 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             await _seeder.SeedRolesAndUsersAsync().ConfigureAwait(false);
 
 
+        }
+
+        private Task RecreateSchoolYearAndSaveAsync()
+        {
+            _schoolYearRepo.Add(_schoolYearDataSupplier.Current);
+
+            return _schoolYearRepo.SaveAsync();
         }
 
         private void RecreateSubjects()
