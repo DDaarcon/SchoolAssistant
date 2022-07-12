@@ -2,6 +2,7 @@
 using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.Staff;
+using SchoolAssistant.DAL.Models.StudentsOrganization;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.DAL.Seeding;
@@ -24,11 +25,13 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly IRepository<Subject> _subjectRepo;
         private readonly IRepository<Room> _roomRepo;
         private readonly ISchoolYearRepository _schoolYearRepo;
+        private readonly IRepository<OrganizationalClass> _orgClassRepo;
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
         private readonly IRoomsDataSupplier _roomsDataSupplier;
         private readonly ISchoolYearDataSupplier _schoolYearDataSupplier;
+        private readonly IOrganizationalClassDataSupplier _orgClassDataSupplier;
 
         public RecreateDatabaseService(
             IDefaultDataSeeder seeder,
@@ -41,7 +44,9 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             IRoomsDataSupplier roomsDataSupplier,
             IRepository<Room> roomRepo,
             ISchoolYearDataSupplier schoolYearDataSupplier,
-            ISchoolYearRepository schoolYearRepo)
+            ISchoolYearRepository schoolYearRepo,
+            IOrganizationalClassDataSupplier orgClassDataSupplier,
+            IRepository<OrganizationalClass> orgClassRepo)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -54,6 +59,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _roomRepo = roomRepo;
             _schoolYearDataSupplier = schoolYearDataSupplier;
             _schoolYearRepo = schoolYearRepo;
+            _orgClassDataSupplier = orgClassDataSupplier;
+            _orgClassRepo = orgClassRepo;
         }
 
         public async Task RecreateAsync()
@@ -64,6 +71,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             RecreateRooms();
 
             await RecreateTeachersAndSaveAsync().ConfigureAwait(false);
+
+            await RecreateOrgClassesAndSaveAsync().ConfigureAwait(false);
 
             await _seeder.SeedAppConfigAsync().ConfigureAwait(false);
             await _seeder.SeedRolesAndUsersAsync().ConfigureAwait(false);
@@ -104,6 +113,13 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
             _teacherRepo.AddRange(_teacherDataSupplier.AllExceptSample);
             await _teacherRepo.SaveAsync().ConfigureAwait(false);
+        }
+
+        private Task RecreateOrgClassesAndSaveAsync()
+        {
+            _orgClassRepo.AddRange(_orgClassDataSupplier.All);
+
+            return _orgClassRepo.SaveAsync();
         }
     }
 }

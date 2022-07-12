@@ -55,6 +55,7 @@ namespace SchoolAssistant.Logic.PreviewMode
             ClearTable<Room>();
             ClearTable<SubjectClass>();
             ClearTable<Subject>();
+            ClearTable<OrganizationalClass>();
             ClearTable<Teacher>();
             ClearTable<Student>();
             ClearTable<StudentRegisterRecord>();
