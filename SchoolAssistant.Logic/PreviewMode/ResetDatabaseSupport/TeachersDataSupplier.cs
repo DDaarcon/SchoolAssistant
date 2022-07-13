@@ -7,6 +7,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
     {
         Teacher SampleTeacher { get; }
         IList<Teacher> AllExceptSample { get; }
+
+        void InitializeData();
     }
 
     [Injectable]
@@ -19,31 +21,23 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         {
             _subjectsDataSupplier = subjectsDataSupplier;
 
-            foreach (var subject in _subjectsDataSupplier.SampleTeacherMain)
-                SampleTeacher.SubjectOperations.AddNewlyCreatedMain(subject);
-
-            foreach (var subject in _subjectsDataSupplier.SampleTeacherAdditional)
-                SampleTeacher.SubjectOperations.AddNewlyCreatedAdditional(subject);
-
-            CreateAll();
+            InitializeData();
         }
 
 
-        public Teacher SampleTeacher { get; } = new Teacher
+        public Teacher SampleTeacher { get; private set; } = null!;
+
+        public IList<Teacher> AllExceptSample { get; private set; } = null!;
+
+
+        private bool _areInitialized = false;
+        public void InitializeData()
         {
-            FirstName = "Jan",
-            SecondName = "Krzysztof",
-            LastName = "Kowalski",
-            PhoneNumber = "+48111111111",
-            Email = "sample.teacher@mail.com",
-        };
+            if (_areInitialized)
+                return;
 
+            AllExceptSample = new List<Teacher>();
 
-
-        public IList<Teacher> AllExceptSample { get; } = new List<Teacher>();
-
-        private void CreateAll()
-        {
             CreateOneWithOnlyMain(
                 "Mariusz",
                 "Radosław",
@@ -80,6 +74,23 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
                 "Krawczyk",
                 "+48309485930",
                 _subjectsDataSupplier.English);
+
+            SampleTeacher = new Teacher
+            {
+                FirstName = "Jan",
+                SecondName = "Krzysztof",
+                LastName = "Kowalski",
+                PhoneNumber = "+48111111111",
+                Email = "sample.teacher@mail.com",
+            };
+
+            foreach (var subject in _subjectsDataSupplier.SampleTeacherMain)
+                SampleTeacher.SubjectOperations.AddNewlyCreatedMain(subject);
+
+            foreach (var subject in _subjectsDataSupplier.SampleTeacherAdditional)
+                SampleTeacher.SubjectOperations.AddNewlyCreatedAdditional(subject);
+
+            _areInitialized = true;
         }
 
         private void CreateOneWithOnlyMain(

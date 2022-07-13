@@ -1,10 +1,4 @@
 ﻿using SchoolAssistant.DAL.Models.StudentsOrganization;
-using SchoolAssistant.DAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 {
@@ -17,6 +11,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         OrganizationalClass Class3a { get; }
         OrganizationalClass Class3b { get; }
         OrganizationalClass Class3c { get; }
+
+        void InitializeData();
     }
 
     [Injectable]
@@ -25,13 +21,30 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly ITeachersDataSupplier _teachersDataSupplier;
         private readonly ISchoolYearDataSupplier _schoolYearDataSupplier;
 
+
         public OrganizationalClassDataSupplier(
             ITeachersDataSupplier teachersDataSupplier,
             ISchoolYearDataSupplier schoolYearDataSupplier)
         {
             _teachersDataSupplier = teachersDataSupplier;
             _schoolYearDataSupplier = schoolYearDataSupplier;
+        }
 
+
+        public OrganizationalClass[] All { get; private set; } = null!;
+
+        public OrganizationalClass Class1a { get; private set; } = null!;
+        public OrganizationalClass Class1b { get; private set; } = null!;
+        public OrganizationalClass Class2 { get; private set; } = null!;
+        public OrganizationalClass Class3a { get; private set; } = null!;
+        public OrganizationalClass Class3b { get; private set; } = null!;
+        public OrganizationalClass Class3c { get; private set; } = null!;
+
+
+        private bool _areInitialized = false;
+        public void InitializeData()
+        {
+            if (_areInitialized) return;
 
             Class1a = new()
             {
@@ -91,16 +104,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
                 Class3b,
                 Class3c,
             };
+
+            _areInitialized = true;
         }
-
-
-        public OrganizationalClass[] All { get; }
-
-        public OrganizationalClass Class1a { get; }
-        public OrganizationalClass Class1b { get; }
-        public OrganizationalClass Class2 { get; }
-        public OrganizationalClass Class3a { get; }
-        public OrganizationalClass Class3b { get; }
-        public OrganizationalClass Class3c { get; }
     }
 }

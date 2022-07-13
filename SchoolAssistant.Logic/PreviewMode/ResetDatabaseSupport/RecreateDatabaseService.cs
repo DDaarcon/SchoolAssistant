@@ -109,6 +109,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
         private async Task RecreateTeachersAndSaveAsync()
         {
+            _teacherDataSupplier.InitializeData();
+
             var sampleTeacherEntityId = long.TryParse(_config["PreviewMode:Logins:Teacher:RelatedEntityId"], out var id)
                 ? id
                 : 0;
@@ -127,6 +129,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
         private Task RecreateOrgClassesAndSaveAsync()
         {
+            _orgClassDataSupplier.InitializeData();
             _orgClassRepo.AddRange(_orgClassDataSupplier.All);
 
             return _orgClassRepo.SaveAsync();
@@ -134,6 +137,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
         private async Task RecreateStudentsAndSaveAsync()
         {
+            _studentDataSupplier.InitializeData();
+
             var sampleStudentEntityId = long.TryParse(_config["PreviewMode:Logins:Student:RelatedEntityId"], out var id)
                 ? id
                 : 0;
@@ -142,12 +147,19 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
                 var studentInfo = _studentDataSupplier.SampleStudent;
                 studentInfo.Record.Id = sampleStudentEntityId;
 
+                _studentRegRecRepo.Add(studentInfo.Record);
+                await _studentRegRecRepo.SaveWithIdentityInsertAsync().ConfigureAwait(false);
+
+                studentInfo.Yearly.Info = studentInfo.Record;
+
                 _studentRepo.Add(studentInfo.Yearly);
-                await _studentRepo.SaveWithIdentityInsertAsync().ConfigureAwait(false);
+                await _studentRepo.SaveAsync().ConfigureAwait(false);
             }
 
             _studentRepo.AddRange(_studentDataSupplier.AllExceptSample.Select(x => x.Yearly));
             await _studentRepo.SaveAsync().ConfigureAwait(false);
         }
+
+
     }
 }
