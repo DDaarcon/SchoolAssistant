@@ -47,6 +47,64 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
             this.fetchRegisterRecords();
     }
 
+
+    render() {
+        if (this.state.awaitingData)
+            return (
+                <Loader
+                    enable={true}
+                    size={LoaderSize.Medium}
+                    type={LoaderType.DivWholeSpace}
+                />
+            )
+
+        return (
+            <div>
+                <form onSubmit={this.onSubmitAsync}>
+                    <Input
+                        name="number-in-journal-input"
+                        label="Numer w dzienniku"
+                        value={this.state.data.numberInJournal}
+                        onChange={this.changeNumberInJournal}
+                        errorMessages={this._validator.getErrorMsgsFor('numberInJournal')}
+                        type="number"
+                    />
+
+                    <Select
+                        name="register-record-input"
+                        label="Dane ucznia"
+                        value={this.state.data.registerRecordId}
+                        onChangeId={this.onRegisterRecordChangeHandler}
+                        options={this.state.registerRecords.map(x => ({
+                            label: x.name,
+                            value: x.id
+                        }))}
+                        errorMessages={this._validator.getErrorMsgsFor('registerRecordId')}
+                    />
+
+                    {this.state.data.registerRecordId != undefined
+                        ? (
+                            <ActionButton
+                                label="Edytuj dane ucznia"
+                                onClick={this.openStudentRegisterRecordMCForModification}
+                            />
+                        ) : undefined}
+
+                    <ActionButton
+                        label="Dodaj nowego ucznia"
+                        onClick={this.openStudentRegisterRecordMCForCreation}
+                    />
+
+                    <SubmitButton
+                        value="Zapisz"
+                        containerClassName="dm-register-record-submit-btn"
+                    />
+                </form>
+            </div>
+        )
+    }
+
+
     private async fetchAsync() {
         let response = await server.getAsync<StudentModificationData>("StudentModificationData", {
             id: this.props.recordId
@@ -70,7 +128,7 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
         await this.fetchRegisterRecords();
     }
 
-    changeNumberInJournal: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    private changeNumberInJournal: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         const value = event.target.value;
 
         this.setStateFnData(data => data.numberInJournal = (value as unknown) as number);
@@ -78,12 +136,12 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
         this.props.onMadeAnyChange();
     }
 
-    onRegisterRecordChangeHandler: OnChangeIdHandler<number> = (id) => {
+    private onRegisterRecordChangeHandler: OnChangeIdHandler<number> = (id) => {
         const setRecord = () => this.setStateFnData(data => data.registerRecordId = id as number);
 
         const selected = this.state.registerRecords.find(x => x.id == id);
 
-        if (selected?.className != undefined) {
+        if (!selected?.className) {
             modalController.addConfirmation({
                 header: "Ten uczeń jest już przypisany do klasy",
                 text: `Ten uczeń jest przypisany do klasy ${selected.className}. Czy chcesz przepisać go do tej?`,
@@ -98,7 +156,7 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
         this.props.onMadeAnyChange();
     }
 
-    openStudentRegisterRecordMCForCreation = () => {
+    private openStudentRegisterRecordMCForCreation = () => {
         modalController.addCustomComponent<StudentRegisterRecordModCompProps>({
             modificationComponent: StudentRegisterRecordModComp,
             modificationComponentProps: {
@@ -141,60 +199,5 @@ export default class StudentModComp extends ModCompBase<StudentDetails, StudentM
             await this.props.reloadAsync();
         else
             console.debug(response);
-    }
-
-    render() {
-        if (this.state.awaitingData)
-            return (
-                <Loader
-                    enable={true}
-                    size={LoaderSize.Medium}
-                    type={LoaderType.DivWholeSpace}
-                />
-            )
-
-        return (
-            <div>
-                <form onSubmit={this.onSubmitAsync}>
-                    <Input
-                        name="number-in-journal-input"
-                        label="Numer w dzienniku"
-                        value={this.state.data.numberInJournal}
-                        onChange={this.changeNumberInJournal}
-                        errorMessages={this._validator.getErrorMsgsFor('numberInJournal')}
-                        type="number"
-                    />
-
-                    <Select
-                        name="register-record-input"
-                        label="Dane ucznia"
-                        value={this.state.data.registerRecordId}
-                        onChangeId={this.onRegisterRecordChangeHandler}
-                        options={this.state.registerRecords.map(x => ({
-                            label: x.name,
-                            value: x.id
-                        })) }
-                        errorMessages={this._validator.getErrorMsgsFor('registerRecordId')}
-                    />
-
-                    {this.state.data.registerRecordId != undefined
-                        ? (
-                            <ActionButton
-                                label="Edytuj dane ucznia"
-                                onClick={this.openStudentRegisterRecordMCForModification}
-                            />
-                        ) : undefined}
-
-                    <ActionButton
-                        label="Dodaj nowego ucznia"
-                        onClick={this.openStudentRegisterRecordMCForCreation}
-                    />
-
-                    <SubmitButton
-                        value="Zapisz"
-                    />
-                </form>
-            </div>
-        )
     }
 }
