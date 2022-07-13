@@ -4,7 +4,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 {
     public interface IStudentsDataSupplier
     {
-
+        IEnumerable<IStudentDataSupplier> AllExceptSample { get; }
+        IStudentDataSupplier SampleStudent { get; }
     }
 
     [Injectable]

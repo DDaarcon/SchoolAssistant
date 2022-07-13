@@ -3,6 +3,7 @@ using SchoolAssistant.DAL;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
+using SchoolAssistant.DAL.Models.StudentsParents;
 using SchoolAssistant.DAL.Models.Subjects;
 using SchoolAssistant.DAL.Repositories;
 using SchoolAssistant.DAL.Seeding;
@@ -26,12 +27,15 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly IRepository<Room> _roomRepo;
         private readonly ISchoolYearRepository _schoolYearRepo;
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
+        private readonly IRepository<Student> _studentRepo;
+        private readonly IRepository<StudentRegisterRecord> _studentRegRecRepo;
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
         private readonly IRoomsDataSupplier _roomsDataSupplier;
         private readonly ISchoolYearDataSupplier _schoolYearDataSupplier;
         private readonly IOrganizationalClassDataSupplier _orgClassDataSupplier;
+        private readonly IStudentsDataSupplier _studentDataSupplier;
 
         public RecreateDatabaseService(
             IDefaultDataSeeder seeder,
@@ -46,7 +50,10 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             ISchoolYearDataSupplier schoolYearDataSupplier,
             ISchoolYearRepository schoolYearRepo,
             IOrganizationalClassDataSupplier orgClassDataSupplier,
-            IRepository<OrganizationalClass> orgClassRepo)
+            IRepository<OrganizationalClass> orgClassRepo,
+            IStudentsDataSupplier studentDataSupplier,
+            IRepository<Student> studentRepo,
+            IRepository<StudentRegisterRecord> studentRegRecRepo)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -61,6 +68,9 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _schoolYearRepo = schoolYearRepo;
             _orgClassDataSupplier = orgClassDataSupplier;
             _orgClassRepo = orgClassRepo;
+            _studentDataSupplier = studentDataSupplier;
+            _studentRepo = studentRepo;
+            _studentRegRecRepo = studentRegRecRepo;
         }
 
         public async Task RecreateAsync()
@@ -74,10 +84,10 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
 
             await RecreateOrgClassesAndSaveAsync().ConfigureAwait(false);
 
+            await RecreateStudentsAndSaveAsync().ConfigureAwait(false);
+
             await _seeder.SeedAppConfigAsync().ConfigureAwait(false);
             await _seeder.SeedRolesAndUsersAsync().ConfigureAwait(false);
-
-
         }
 
         private Task RecreateSchoolYearAndSaveAsync()
@@ -120,6 +130,24 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _orgClassRepo.AddRange(_orgClassDataSupplier.All);
 
             return _orgClassRepo.SaveAsync();
+        }
+
+        private async Task RecreateStudentsAndSaveAsync()
+        {
+            var sampleStudentEntityId = long.TryParse(_config["PreviewMode:Logins:Student:RelatedEntityId"], out var id)
+                ? id
+                : 0;
+            if (!await _studentRegRecRepo.ExistsAsync(x => x.Id == sampleStudentEntityId).ConfigureAwait(false))
+            {
+                var studentInfo = _studentDataSupplier.SampleStudent;
+                studentInfo.Record.Id = sampleStudentEntityId;
+
+                _studentRepo.Add(studentInfo.Yearly);
+                await _studentRepo.SaveWithIdentityInsertAsync().ConfigureAwait(false);
+            }
+
+            _studentRepo.AddRange(_studentDataSupplier.AllExceptSample.Select(x => x.Yearly));
+            await _studentRepo.SaveAsync().ConfigureAwait(false);
         }
     }
 }
