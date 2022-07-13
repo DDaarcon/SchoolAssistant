@@ -18,7 +18,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         public SchoolYear Current { get; } = new()
         {
             Current = true,
-            Year = DateTime.Today.Year
+            Year = (short)DateTime.Today.Year
         };
     }
 }
