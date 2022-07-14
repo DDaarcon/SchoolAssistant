@@ -114,7 +114,7 @@ namespace SchoolAssistant.DAL.Seeding.Help
                     PhoneNumberConfirmed = true,
                     Type = type,
                     SecurityStamp = Guid.NewGuid().ToString("D"),
-                    TeacherId = long.TryParse(_config[$"{CONFIG_PREFIX}Student:RelatedEntityId"], out var studentId) ? studentId : null
+                    StudentId = long.TryParse(_config[$"{CONFIG_PREFIX}Student:RelatedEntityId"], out var studentId) ? studentId : null
                 },
                 _ => null,
             };
