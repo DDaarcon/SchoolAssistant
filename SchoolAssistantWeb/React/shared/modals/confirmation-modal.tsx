@@ -22,10 +22,12 @@ export default class ConfirmationModal extends React.Component<ConfirmationModal
     onCloseDecline = () => this.onCloseWithAsync(this.props.onDecline);
 
     onCloseWithAsync = async (action?: () => (void | Promise<void>)) => {
+        this.props.assignedAtPresenter?.close();
+
         const res = action?.();
+
         if (res)
             await res;
-        this.props.assignedAtPresenter?.close();
     }
 
     render() {

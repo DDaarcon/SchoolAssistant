@@ -20,6 +20,8 @@ const DefaultMenu = (props: {}) => {
                 loaderRef.current.show();
                 var res = await resetAppDataServer.getAsync<void>(null);
                 loaderRef.current.hide();
+
+                window.location.reload();
             }
         });
 
