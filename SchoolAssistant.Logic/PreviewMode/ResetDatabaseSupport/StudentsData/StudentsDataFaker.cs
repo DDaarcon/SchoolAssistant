@@ -30,11 +30,13 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport.StudentsData
                 Add(null);
         }
 
-        public IEnumerable<StudentDataSupplier> GetGeneratedStudents()
+        public IEnumerable<IStudentDataSupplier> GetGeneratedStudents()
         {
             PrepareFakers();
 
-            foreach (var (info, index) in this.Select((x, index) => (x, index)))
+            var generatedAll = new List<IStudentDataSupplier>();
+            foreach (var (info, index)
+                in this.Select((x, index) => (x, index)))
             {
                 _current = info;
                 _index = index;
@@ -44,12 +46,21 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport.StudentsData
                 FakeFirstParentRegisterSubrecord();
                 FakeSecondParentRegisterSubrecord();
 
-                yield return new StudentDataSupplier(
+                generatedAll.Add(new StudentDataSupplier(
                     _fakedStudent,
-                    _fakedStudentRegRec);
+                    _fakedStudentRegRec));
             }
 
+            var generatedAllOrdered = generatedAll.OrderBy(x => x.Record.LastName)
+                .ThenBy(x => x.Record.FirstName)
+                .ThenBy(x => x.Record.DateOfBirth);
+
+            foreach (var (generated, number) in generatedAllOrdered.Select((x, index) => (x, index + 1)))
+                generated.Yearly.NumberInJournal = number;
+
             Clear();
+
+            return generatedAll;
         }
 
         private void PrepareFakers()
