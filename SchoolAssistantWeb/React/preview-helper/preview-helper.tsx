@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { enumAssignSwitch } from "../shared/enum-help";
+import { ModalSpace } from "../shared/modals";
 import DefaultMenu from "./components/default-menu";
 import FloatingPin from "./components/floating-pin";
 import LoginMenu from "./components/login-menu";
@@ -35,6 +36,8 @@ export default class PreviewHelper extends React.Component<PreviewHelperProps, P
                 />
 
                 {this.renderMenu()}
+
+                <ModalSpace />
             </div>
         )
     }

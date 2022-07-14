@@ -2,6 +2,7 @@
 import { ActionButton } from "../../shared/components"
 import { Loader } from "../../shared/loader";
 import PageBlockingLoader from "../../shared/loader/page-blocking-loader";
+import { modalController } from "../../shared/modals";
 import ServerConnection from "../../shared/server-connection";
 import './default-menu.css';
 
@@ -10,12 +11,17 @@ const DefaultMenu = (props: {}) => {
 
     const loaderRef = React.createRef<Loader>();
 
-    const resetAppDataAsync = async () => {
+    const resetAppDataAsync = () => {
 
-        loaderRef.current.show();
-        var res = await resetAppDataServer.getAsync<void>(null);
-        loaderRef.current.hide();
-
+        modalController.addConfirmation({
+            header: "Resetowanie wszystkich danych",
+            text: "Potwierdzenie wiąże się z nieodwracalnym napisaniem wszystkich danych aplikacji",
+            onConfirm: async () => {
+                loaderRef.current.show();
+                var res = await resetAppDataServer.getAsync<void>(null);
+                loaderRef.current.hide();
+            }
+        });
 
     }
 
