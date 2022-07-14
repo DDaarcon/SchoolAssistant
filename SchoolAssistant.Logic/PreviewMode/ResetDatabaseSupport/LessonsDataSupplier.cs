@@ -58,7 +58,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
                 foreach (var periodicLesson in classAndScheduledLesson)
                 {
 
-                    var occurrences = periodicLesson.GetOccurrences(yearStart, DateTime.UtcNow);
+                    var occurrences = periodicLesson.GetPreviousOccurrences(DateTime.UtcNow, 5).Where(x => x >= yearStart);
 
                     var lessons = occurrences.Select(x => new Lesson
                     {
