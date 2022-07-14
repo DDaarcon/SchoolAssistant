@@ -40,35 +40,35 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             var all = new List<PeriodicLesson>();
 
             #region Class 1a
-            var class1a = _orgClassDataSupplier.Class1a;
+            var orgClass = _orgClassDataSupplier.Class1a;
 
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.SampleTeacher,
                 _subjectsDataSupplier.Math.Id,
                 _roomsDataSupplier.Room1.Id,
                 new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 0)),
                 new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 50)),
                 new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 0))));
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.PolishHistory1,
                 _subjectsDataSupplier.Polish.Id,
                 _roomsDataSupplier.Room2.Id,
                 new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 50)),
                 new LessonTime(DayOfWeek.Monday, new TimeOnly(8, 40)),
                 new LessonTime(DayOfWeek.Friday, new TimeOnly(7, 50))));
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.BiologyChemistry1,
                 _subjectsDataSupplier.Biology.Id,
                 _roomsDataSupplier.Room3.Id,
                 new LessonTime(DayOfWeek.Monday, new TimeOnly(9, 35)),
                 new LessonTime(DayOfWeek.Wednesday, new TimeOnly(7, 50))));
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.English1,
                 _subjectsDataSupplier.English.Id,
                 _roomsDataSupplier.Room1.Id,
                 new LessonTime(DayOfWeek.Thursday, new TimeOnly(8, 40)),
                 new LessonTime(DayOfWeek.Tuesday, new TimeOnly(8, 40))));
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.PolishHistory1,
                 _subjectsDataSupplier.History.Id,
                 _roomsDataSupplier.Room2.Id,
@@ -77,7 +77,9 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             #endregion
 
             #region Class 1b
-            all.AddRange(Create(class1a,
+            orgClass = _orgClassDataSupplier.Class1b;
+
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.Math2,
                 _subjectsDataSupplier.Math.Id,
                 _roomsDataSupplier.Room1.Id,
@@ -85,14 +87,14 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
                 new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 50)),
                 new LessonTime(DayOfWeek.Wednesday, new TimeOnly(8, 40)),
                 new LessonTime(DayOfWeek.Thursday, new TimeOnly(9, 30))));
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.Physics2,
                 _subjectsDataSupplier.Physics.Id,
                 _roomsDataSupplier.Room2.Id,
                 new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 50)),
                 new LessonTime(DayOfWeek.Wednesday, new TimeOnly(7, 0)),
                 new LessonTime(DayOfWeek.Thursday, new TimeOnly(10, 20))));
-            all.AddRange(Create(class1a,
+            all.AddRange(Create(orgClass,
                 _teachersDataSupplier.English1,
                 _subjectsDataSupplier.English.Id,
                 _roomsDataSupplier.Room4.Id,
@@ -100,6 +102,66 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
                 new LessonTime(DayOfWeek.Thursday, new TimeOnly(7, 50)),
                 new LessonTime(DayOfWeek.Friday, new TimeOnly(8, 40))));
             #endregion
+
+            #region Class 2
+            orgClass = _orgClassDataSupplier.Class2;
+
+            all.AddRange(Create(orgClass,
+                _teachersDataSupplier.Biology1,
+                _subjectsDataSupplier.Biology.Id,
+                _roomsDataSupplier.Room6.Id,
+                new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 0)),
+                new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Wednesday, new TimeOnly(7, 0)),
+                new LessonTime(DayOfWeek.Thursday, new TimeOnly(7, 50))));
+            all.AddRange(Create(orgClass,
+                _teachersDataSupplier.PolishHistory1,
+                _subjectsDataSupplier.History.Id,
+                _roomsDataSupplier.Room5.Id,
+                new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 0)),
+                new LessonTime(DayOfWeek.Wednesday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Friday, new TimeOnly(7, 0))));
+            all.AddRange(Create(orgClass,
+                _teachersDataSupplier.German1,
+                _subjectsDataSupplier.German.Id,
+                _roomsDataSupplier.Room2.Id,
+                new LessonTime(DayOfWeek.Tuesday, new TimeOnly(8, 40)),
+                new LessonTime(DayOfWeek.Thursday, new TimeOnly(8, 40)),
+                new LessonTime(DayOfWeek.Friday, new TimeOnly(8, 40))));
+            #endregion
+
+            #region Class 3a
+            orgClass = _orgClassDataSupplier.Class3a;
+
+            all.AddRange(Create(orgClass,
+                _teachersDataSupplier.Physics2,
+                _subjectsDataSupplier.Physics.Id,
+                _roomsDataSupplier.Room2.Id,
+                new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 0)),
+                new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 0)),
+                new LessonTime(DayOfWeek.Wednesday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Thursday, new TimeOnly(7, 0)),
+                new LessonTime(DayOfWeek.Friday, new TimeOnly(7, 0))));
+            all.AddRange(Create(orgClass,
+                _teachersDataSupplier.PolishEnglish1,
+                _subjectsDataSupplier.Polish.Id,
+                _roomsDataSupplier.Room3.Id,
+                new LessonTime(DayOfWeek.Monday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Tuesday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Thursday, new TimeOnly(7, 50))));
+            all.AddRange(Create(orgClass,
+                _teachersDataSupplier.German1,
+                _subjectsDataSupplier.German.Id,
+                _roomsDataSupplier.Room3.Id,
+                new LessonTime(DayOfWeek.Monday, new TimeOnly(8, 40)),
+                new LessonTime(DayOfWeek.Wednesday, new TimeOnly(8, 40)),
+                new LessonTime(DayOfWeek.Friday, new TimeOnly(7, 50)),
+                new LessonTime(DayOfWeek.Friday, new TimeOnly(9, 30))));
+            #endregion
+
+
+
             All = all;
         }
 
