@@ -31,6 +31,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly IRepository<Student> _studentRepo;
         private readonly IRepository<StudentRegisterRecord> _studentRegRecRepo;
         private readonly IRepository<PeriodicLesson> _perioLessRepo;
+        private readonly IRepository<Lesson> _lessonRepo;
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
@@ -39,6 +40,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly IOrganizationalClassDataSupplier _orgClassDataSupplier;
         private readonly IStudentsDataSupplier _studentDataSupplier;
         private readonly IPeriodicLessonsDataSupplier _perioLessDataSupplier;
+        private readonly ILessonsDataSupplier _lessonsDataSupplier;
 
         public RecreateDatabaseService(
             IDefaultDataSeeder seeder,
@@ -58,7 +60,9 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             IRepository<Student> studentRepo,
             IRepository<StudentRegisterRecord> studentRegRecRepo,
             IPeriodicLessonsDataSupplier perioLessDataSupplier,
-            IRepository<PeriodicLesson> perioLessRepo)
+            IRepository<PeriodicLesson> perioLessRepo, 
+            ILessonsDataSupplier lessonsDataSupplier, 
+            IRepository<Lesson> lessonRepo)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -78,6 +82,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _studentRegRecRepo = studentRegRecRepo;
             _perioLessDataSupplier = perioLessDataSupplier;
             _perioLessRepo = perioLessRepo;
+            _lessonsDataSupplier = lessonsDataSupplier;
+            _lessonRepo = lessonRepo;
         }
 
         public async Task RecreateAsync()
@@ -94,6 +100,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             await RecreateStudentsAndSaveAsync().ConfigureAwait(false);
 
             await RecreatePeriodicLessonsAndSaveAsync().ConfigureAwait(false);
+
+            await RecreateLessonsAndSaveAsync().ConfigureAwait(false);
 
             await _seeder.SeedAppConfigAsync().ConfigureAwait(false);
             await _seeder.SeedRolesAndUsersAsync().ConfigureAwait(false);
@@ -175,6 +183,14 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _perioLessRepo.AddRange(_perioLessDataSupplier.All);
 
             return _perioLessRepo.SaveAsync();
+        }
+
+        private async Task RecreateLessonsAndSaveAsync()
+        {
+            await _lessonsDataSupplier.InitializeDataAsync().ConfigureAwait(false);
+            _lessonRepo.AddRange(_lessonsDataSupplier.All);
+
+            await _lessonRepo.SaveAsync().ConfigureAwait(false);
         }
     }
 }

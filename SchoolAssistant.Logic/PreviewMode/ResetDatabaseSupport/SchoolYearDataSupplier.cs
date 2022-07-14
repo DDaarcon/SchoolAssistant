@@ -15,10 +15,25 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
     [Injectable]
     public class SchoolYearDataSupplier : ISchoolYearDataSupplier
     {
-        public SchoolYear Current { get; } = new()
+        public SchoolYearDataSupplier()
         {
-            Current = true,
-            Year = (short)DateTime.Today.Year
-        };
+            Current = new()
+            {
+                Current = true,
+                Year = GetYear()
+            };
+        }
+
+        public SchoolYear Current { get; }
+
+        private short GetYear()
+        {
+            var today = DateTime.Today;
+            short year = (short)today.Year;
+
+            if (today.Month <= 8)
+                return (short)(year - 1);
+            return year;
+        }
     }
 }
