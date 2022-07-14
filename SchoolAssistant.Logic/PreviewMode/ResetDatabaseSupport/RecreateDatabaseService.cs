@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SchoolAssistant.DAL;
+using SchoolAssistant.DAL.Models.Lessons;
 using SchoolAssistant.DAL.Models.Rooms;
 using SchoolAssistant.DAL.Models.Staff;
 using SchoolAssistant.DAL.Models.StudentsOrganization;
@@ -29,6 +30,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly IRepository<OrganizationalClass> _orgClassRepo;
         private readonly IRepository<Student> _studentRepo;
         private readonly IRepository<StudentRegisterRecord> _studentRegRecRepo;
+        private readonly IRepository<PeriodicLesson> _perioLessRepo;
 
         private readonly ITeachersDataSupplier _teacherDataSupplier;
         private readonly ISubjectsDataSupplier _subjectDataSupplier;
@@ -36,6 +38,7 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
         private readonly ISchoolYearDataSupplier _schoolYearDataSupplier;
         private readonly IOrganizationalClassDataSupplier _orgClassDataSupplier;
         private readonly IStudentsDataSupplier _studentDataSupplier;
+        private readonly IPeriodicLessonsDataSupplier _perioLessDataSupplier;
 
         public RecreateDatabaseService(
             IDefaultDataSeeder seeder,
@@ -53,7 +56,9 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             IRepository<OrganizationalClass> orgClassRepo,
             IStudentsDataSupplier studentDataSupplier,
             IRepository<Student> studentRepo,
-            IRepository<StudentRegisterRecord> studentRegRecRepo)
+            IRepository<StudentRegisterRecord> studentRegRecRepo,
+            IPeriodicLessonsDataSupplier perioLessDataSupplier,
+            IRepository<PeriodicLesson> perioLessRepo)
         {
             _seeder = seeder;
             _dbContext = dbContext;
@@ -71,6 +76,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             _studentDataSupplier = studentDataSupplier;
             _studentRepo = studentRepo;
             _studentRegRecRepo = studentRegRecRepo;
+            _perioLessDataSupplier = perioLessDataSupplier;
+            _perioLessRepo = perioLessRepo;
         }
 
         public async Task RecreateAsync()
@@ -85,6 +92,8 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             await RecreateOrgClassesAndSaveAsync().ConfigureAwait(false);
 
             await RecreateStudentsAndSaveAsync().ConfigureAwait(false);
+
+            await RecreatePeriodicLessonsAndSaveAsync().ConfigureAwait(false);
 
             await _seeder.SeedAppConfigAsync().ConfigureAwait(false);
             await _seeder.SeedRolesAndUsersAsync().ConfigureAwait(false);
@@ -160,6 +169,12 @@ namespace SchoolAssistant.Logic.PreviewMode.ResetDatabaseSupport
             await _studentRepo.SaveAsync().ConfigureAwait(false);
         }
 
+        private Task RecreatePeriodicLessonsAndSaveAsync()
+        {
+            _perioLessDataSupplier.InitializeData();
+            _perioLessRepo.AddRange(_perioLessDataSupplier.All);
 
+            return _perioLessRepo.SaveAsync();
+        }
     }
 }
