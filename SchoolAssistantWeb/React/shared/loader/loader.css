@@ -1,31 +1,10 @@
-﻿.loader-dots #dot1 {
-    animation: load 1s infinite;
+﻿.loader-plane {
+    transition-duration: 0.3s;
 }
 
-.loader-dots #dot2 {
-    animation: load 1s infinite;
-    animation-delay: 0.2s;
+.loader-plane-hidden {
+    opacity: 0;
 }
-
-.loader-dots #dot3 {
-    animation: load 1s infinite;
-    animation-delay: 0.4s;
-}
-
-@keyframes load {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
 
 .loader-div-whole-space,
 .loader-plane-absolute {
@@ -57,3 +36,37 @@
     align-items: center;
     justify-content: center;
 }
+
+
+
+
+
+
+.loader-dots #dot1 {
+    animation: load 1s infinite;
+}
+
+.loader-dots #dot2 {
+    animation: load 1s infinite;
+    animation-delay: 0.2s;
+}
+
+.loader-dots #dot3 {
+    animation: load 1s infinite;
+    animation-delay: 0.4s;
+}
+
+@keyframes load {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+

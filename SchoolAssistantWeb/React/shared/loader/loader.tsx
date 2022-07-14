@@ -22,7 +22,7 @@ export default class Loader extends React.Component<LoaderProps, LoaderState> {
 
     render() {
         if (!this.state.renderAnythig)
-            <></>
+            return <></>
 
         return (
             <div className={this._className}
@@ -81,7 +81,8 @@ export default class Loader extends React.Component<LoaderProps, LoaderState> {
                 DivWholeSpace: "loader-div-whole-space",
                 Absolute: "loader-plane-absolute",
                 _: "loader-plane-inline"
-            });
+            }) + " " +
+            (this.props.className?.length ? this.props.className : "");
     }
 
 
@@ -102,8 +103,8 @@ export default class Loader extends React.Component<LoaderProps, LoaderState> {
             <title>dots</title>
             <desc>Created with Sketch.</desc>
             <defs></defs>
-            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                <g id="dots" fill="#A3A3A3">
+            <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                <g className="dots" fill="#A3A3A3">
                     <circle id="dot1" cx="25" cy="30" r="13"></circle>
                     <circle id="dot2" cx="65" cy="30" r="13"></circle>
                     <circle id="dot3" cx="105" cy="30" r="13"></circle>

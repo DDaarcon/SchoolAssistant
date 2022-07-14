@@ -1,13 +1,22 @@
 ﻿import React from "react"
 import { ActionButton } from "../../shared/components"
+import { Loader } from "../../shared/loader";
+import PageBlockingLoader from "../../shared/loader/page-blocking-loader";
 import ServerConnection from "../../shared/server-connection";
 import './default-menu.css';
 
 
 const DefaultMenu = (props: {}) => {
 
-    const resetAppData = () => {
-        resetAppDataServer.getAsync<void>(null);
+    const loaderRef = React.createRef<Loader>();
+
+    const resetAppDataAsync = async () => {
+
+        loaderRef.current.show();
+        var res = await resetAppDataServer.getAsync<void>(null);
+        loaderRef.current.hide();
+
+
     }
 
     const createLessonNow = () => {
@@ -20,7 +29,7 @@ const DefaultMenu = (props: {}) => {
             <ActionButton
                 label="Zresetuj dane aplikacji"
                 className="ph-default-menu-button"
-                onClick={resetAppData}
+                onClick={resetAppDataAsync}
             />
             <p>
                 Zresetuj przedmioty, nauczycieli, pomieszczenia, klasy, uczniów, oceny oraz zajęcia do stanu
@@ -37,6 +46,10 @@ const DefaultMenu = (props: {}) => {
                 'Poprowadź zajęcia' z listy zajęć.
             </p>
 
+
+            <PageBlockingLoader
+                ref={loaderRef}
+            />
         </div>
     )
 }

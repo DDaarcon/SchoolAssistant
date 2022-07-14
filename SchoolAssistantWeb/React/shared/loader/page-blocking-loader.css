@@ -1,0 +1,7 @@
+﻿.page-blocking-loader {
+    background-image: radial-gradient(circle at bottom, #dadada87 20%, #00000056 70%);
+}
+
+.page-blocking-loader g.dots {
+    fill: #272727;
+}

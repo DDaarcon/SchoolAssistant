@@ -40,7 +40,12 @@
     }
 
     private async parseResponseAsync<TResponse>(result: Response) {
-        return (await result.json()) as TResponse;
+        try {
+            return (await result.json()) as TResponse;
+        }
+        catch {
+            return undefined;
+        }
     }
 }
 
