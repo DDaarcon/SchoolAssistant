@@ -63,18 +63,18 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
                 administratorPassword = _config[$"{prefix}Administrator:Password"]
             };
 
-            var teacherUserName = _config[$"{prefix}Teacher.UserName"];
+            var teacherUserName = _config[$"{prefix}Teacher:UserName"];
             if (await _userRepo.ExistsAsync(x => x.UserName == teacherUserName).ConfigureAwait(false))
             {
                 logins.teacherUserName = teacherUserName;
-                logins.teacherPassword = _config[$"{prefix}Teacher.Password"];
+                logins.teacherPassword = _config[$"{prefix}Teacher:Password"];
             }
 
-            var studentUserName = _config[$"{prefix}Student.UserName"];
+            var studentUserName = _config[$"{prefix}Student:UserName"];
             if (await _userRepo.ExistsAsync(x => x.UserName == studentUserName).ConfigureAwait(false))
             {
                 logins.studentUserName = studentUserName;
-                logins.studentPassword = _config[$"{prefix}Student.Password"];
+                logins.studentPassword = _config[$"{prefix}Student:Password"];
             }
 
             _viewData[ViewDataHelper.PreviewMenuLogins.Label] = logins;
