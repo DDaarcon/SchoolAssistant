@@ -6,33 +6,36 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-SchoolAssistantWeb-52F90A5F-B66A-4D10-859B-A2D25A2D9E50</UserSecretsId>
     <OutputType>Exe</OutputType>
-	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
 
-	<AssemblyVersion>1.0.6</AssemblyVersion>
+    <AssemblyVersion>1.0.6</AssemblyVersion>
   </PropertyGroup>
 
     <!-- React.NET files -->
 
     <ItemGroup>
-	    <None Remove="React\**\*" />
+        <None Remove="React\**\*" />
     </ItemGroup>
 
     <ItemGroup>
-	    <TypeScriptCompile Include="React\**\*.tsx" />
-	    <TypeScriptCompile Include="React\**\*.ts" />
-	    <TypeScriptCompile Include="React\**\*.css" />
+        <TypeScriptCompile Include="React\**\*.tsx" />
+        <TypeScriptCompile Include="React\**\*.ts" />
+        <TypeScriptCompile Include="React\**\*.css" />
     </ItemGroup>
 
     <ItemGroup>
-	    <Folder Include="wwwroot\dist\" />
+        <Folder Include="wwwroot\dist\" />
     </ItemGroup>
-	
-	
-	
-	
-	
-	<!-- Referenced projects -->
-	
+
+	<ItemGroup>
+		<None Include="..\.editorconfig" />
+	</ItemGroup>
+    
+    
+    
+    
+    <!-- Referenced projects -->
+    
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.6.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />

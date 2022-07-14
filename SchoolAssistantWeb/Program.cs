@@ -70,6 +70,7 @@ builder.Services.AddRazorPages()
         options.Filters.Add<EnableLessonConductionPanelAsyncPageFilter>();
         options.Filters.Add<NavbarLinksAsyncPageFilter>();
         options.Filters.Add<ControlPreviewModeAsyncPageFilter>();
+        options.Filters.Add<ValidateUserAsyncPageFilter>();
     });
 
 builder.Services.ConfigureApplicationCookie(options =>
