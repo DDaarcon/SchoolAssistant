@@ -2,10 +2,15 @@
     constructor(
         private _baseUrl: string) { }
 
-    async getAsync<TResponse>(handler?: string, params?: {}) {
-        let response = await fetch(this.prepareUrl(handler, params), {
+    getResponseAsync(handler?: string, params?: {}): Promise<Response> {
+        return fetch(this.prepareUrl(handler, params), {
             method: 'GET'
         });
+    }
+
+    async getAsync<TResponse>(handler?: string, params?: {}) {
+        let response = await this.getResponseAsync(handler, params);
+
         return this.parseResponseAsync<TResponse>(response);
     }
 

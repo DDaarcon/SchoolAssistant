@@ -8,6 +8,8 @@
     background-color: var(--theme-color-1);
     border-radius: 15px;
     box-shadow: 4px 4px 10px #0000002b;
+
+    min-width: 250px;
 }
 
 .modal-dismiss-listener {

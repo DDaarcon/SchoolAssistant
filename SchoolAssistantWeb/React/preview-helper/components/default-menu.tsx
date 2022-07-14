@@ -18,10 +18,11 @@ const DefaultMenu = (props: {}) => {
             text: "Potwierdzenie wiąże się z nieodwracalnym napisaniem wszystkich danych aplikacji",
             onConfirm: async () => {
                 loaderRef.current.show();
-                var res = await resetAppDataServer.getAsync<void>(null);
+                var res = await resetAppDataServer.getResponseAsync(null);
                 loaderRef.current.hide();
 
-                window.location.reload();
+                if (res.ok)
+                    window.location.reload();
             }
         });
 
