@@ -99,21 +99,62 @@
 }
 .confirmation-modal-buttons button {
     flex: 1;
-    border: 1px solid black;
 }
 
 .confirmation-modal-confirm-btn {
-    background-color: #e4fbe2;
-    border-color: #01740c !important;
+    --press-color: #fb3434;
 }
 
 .confirmation-modal-decline-btn {
-    background-color: #fbe2e2;
-    border-color: #6a0101 !important;
+    --press-color: #ecee48;
 }
-/*!*******************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/loader.css ***!
-  \*******************************************************************************************************/
+/*!**************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/loader/loader.css ***!
+  \**************************************************************************************************************/
+.loader-plane {
+    transition-duration: 0.3s;
+}
+
+.loader-plane-hidden {
+    opacity: 0;
+}
+
+.loader-div-whole-space,
+.loader-plane-absolute {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-plane-absolute
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.loader-plane-inline {
+    display: inline;
+}
+
+.loader-plane-block-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+
 .loader-dots #dot1 {
     animation: load 1s infinite;
 }
@@ -142,25 +183,6 @@
     }
 }
 
-
-.loader-div-whole-space,
-.loader-absolute {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.loader-absolute {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
-.loader-inline {
-    display: inline;
-}
 
 /*!************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/shared/lists/lists.css ***!
@@ -337,7 +359,8 @@
     padding-right: 10px;
     border: 0;
     border-radius: 4px;
-    box-shadow: 1px 1px 6px -2px #00000076;
+    box-shadow: 1px 1px 6px -2px #00000076,
+        inset 0 0 5px -1px var(--press-color, #ffffff);
 
     transition: all 0.4s;
 }
@@ -348,7 +371,7 @@
 
 .my-button:active {
     box-shadow: 1px 1px 6px -2px #00000076,
-        inset 0px -50px 40px 0px #1fd4d474;
+        inset 0px -50px 40px 0px var(--press-color, #ffffff);
 }
 
 

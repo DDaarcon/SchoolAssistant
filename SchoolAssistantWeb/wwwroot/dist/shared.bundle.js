@@ -2035,10 +2035,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./React/shared/loader.css":
-/*!*********************************!*\
-  !*** ./React/shared/loader.css ***!
-  \*********************************/
+/***/ "./React/shared/loader/loader.css":
+/*!****************************************!*\
+  !*** ./React/shared/loader/loader.css ***!
+  \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8480,7 +8480,7 @@ const validator_1 = __importDefault(__webpack_require__(/*! ./shared/validator *
 exports.II = validator_1.default;
 const III = __importStar(__webpack_require__(/*! ./shared/modals */ "./React/shared/modals.ts"));
 exports.III = III;
-const IV = __importStar(__webpack_require__(/*! ./shared/loader */ "./React/shared/loader.tsx"));
+const IV = __importStar(__webpack_require__(/*! ./shared/loader */ "./React/shared/loader.ts"));
 exports.IV = IV;
 const V = __importStar(__webpack_require__(/*! ./shared/server-connection */ "./React/shared/server-connection.tsx"));
 exports.V = V;
@@ -9219,29 +9219,6 @@ exports["default"] = ListEntryInnerComponent;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -9256,7 +9233,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const loader_1 = __importStar(__webpack_require__(/*! ../../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../../../shared/loader */ "./React/shared/loader.ts");
 const list_entry_coponent_1 = __importDefault(__webpack_require__(/*! ./list-entry-coponent */ "./React/shared/lists/components/list-entry-coponent.tsx"));
 const list_entry_inner_component_1 = __importDefault(__webpack_require__(/*! ./list-entry-inner-component */ "./React/shared/lists/components/list-entry-inner-component.tsx"));
 __webpack_require__(/*! ../lists.css */ "./React/shared/lists/lists.css");
@@ -9277,7 +9254,7 @@ class SharedListComponent extends react_1.default.Component {
                 loading: false
             });
         });
-        this.LoaderComponent = (react_1.default.createElement(loader_1.default, { enable: (_a = this.state) === null || _a === void 0 ? void 0 : _a.loading, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.Absolute, className: "list-loader" }));
+        this.LoaderComponent = (react_1.default.createElement(loader_1.Loader, { enable: (_a = this.state) === null || _a === void 0 ? void 0 : _a.loading, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.Absolute, className: "list-loader" }));
         this.renderColumnSetting = (index, style) => {
             if (style)
                 return (react_1.default.createElement("col", { key: index, style: style }));
@@ -9541,10 +9518,74 @@ exports["default"] = ReadonlyList;
 
 /***/ }),
 
-/***/ "./React/shared/loader.tsx":
-/*!*********************************!*\
-  !*** ./React/shared/loader.tsx ***!
-  \*********************************/
+/***/ "./React/shared/loader.ts":
+/*!********************************!*\
+  !*** ./React/shared/loader.ts ***!
+  \********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LoaderType = exports.LoaderSize = exports.Loader = void 0;
+const loader_size_1 = __importDefault(__webpack_require__(/*! ./loader/enums/loader-size */ "./React/shared/loader/enums/loader-size.ts"));
+exports.LoaderSize = loader_size_1.default;
+const loader_type_1 = __importDefault(__webpack_require__(/*! ./loader/enums/loader-type */ "./React/shared/loader/enums/loader-type.ts"));
+exports.LoaderType = loader_type_1.default;
+const loader_1 = __importDefault(__webpack_require__(/*! ./loader/loader */ "./React/shared/loader/loader.tsx"));
+exports.Loader = loader_1.default;
+
+
+/***/ }),
+
+/***/ "./React/shared/loader/enums/loader-size.ts":
+/*!**************************************************!*\
+  !*** ./React/shared/loader/enums/loader-size.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var LoaderSize;
+(function (LoaderSize) {
+    LoaderSize[LoaderSize["Large"] = 0] = "Large";
+    LoaderSize[LoaderSize["Medium"] = 1] = "Medium";
+    LoaderSize[LoaderSize["Small"] = 2] = "Small";
+})(LoaderSize || (LoaderSize = {}));
+exports["default"] = LoaderSize;
+
+
+/***/ }),
+
+/***/ "./React/shared/loader/enums/loader-type.ts":
+/*!**************************************************!*\
+  !*** ./React/shared/loader/enums/loader-type.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var LoaderType;
+(function (LoaderType) {
+    LoaderType[LoaderType["DivWholeSpace"] = 0] = "DivWholeSpace";
+    LoaderType[LoaderType["Absolute"] = 1] = "Absolute";
+    LoaderType[LoaderType["Inline"] = 2] = "Inline";
+    LoaderType[LoaderType["BlockPage"] = 3] = "BlockPage";
+})(LoaderType || (LoaderType = {}));
+exports["default"] = LoaderType;
+
+
+/***/ }),
+
+/***/ "./React/shared/loader/loader.tsx":
+/*!****************************************!*\
+  !*** ./React/shared/loader/loader.tsx ***!
+  \****************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9572,55 +9613,86 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Loader = exports.LoaderSize = exports.LoaderType = void 0;
 const React = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const enum_switch_1 = __webpack_require__(/*! ./enum-help/enum-switch */ "./React/shared/enum-help/enum-switch.ts");
-__webpack_require__(/*! ./loader.css */ "./React/shared/loader.css");
-var LoaderType;
-(function (LoaderType) {
-    LoaderType[LoaderType["DivWholeSpace"] = 0] = "DivWholeSpace";
-    LoaderType[LoaderType["Absolute"] = 1] = "Absolute";
-    LoaderType[LoaderType["Inline"] = 2] = "Inline";
-})(LoaderType = exports.LoaderType || (exports.LoaderType = {}));
-var LoaderSize;
-(function (LoaderSize) {
-    LoaderSize[LoaderSize["Large"] = 0] = "Large";
-    LoaderSize[LoaderSize["Medium"] = 1] = "Medium";
-    LoaderSize[LoaderSize["Small"] = 2] = "Small";
-})(LoaderSize = exports.LoaderSize || (exports.LoaderSize = {}));
-exports.Loader = React.forwardRef((props, ref) => {
-    let sizeStyle;
-    (0, enum_switch_1.enumSwitch)(LoaderSize, props.size, {
-        Large: () => sizeStyle = {},
-        Medium: () => sizeStyle = {
-            transform: 'scale(0.5)'
-        },
-        _: () => sizeStyle = {
-            transform: 'scale(0.3)'
+const enum_help_1 = __webpack_require__(/*! ../enum-help */ "./React/shared/enum-help.ts");
+const loader_size_1 = __importDefault(__webpack_require__(/*! ./enums/loader-size */ "./React/shared/loader/enums/loader-size.ts"));
+const loader_type_1 = __importDefault(__webpack_require__(/*! ./enums/loader-type */ "./React/shared/loader/enums/loader-type.ts"));
+__webpack_require__(/*! ./loader.css */ "./React/shared/loader/loader.css");
+class Loader extends React.Component {
+    constructor(props) {
+        super(props);
+        this.HIDE_TIMEOUT_MS = 300;
+        this.DEFAULT_CLASS = "loader-plane";
+        this.HIDDEN_CLASS = "loader-plane-hidden";
+        this.dots = (React.createElement("svg", { style: this._sizeStyle, className: "loader-dots", width: "132px", height: "58px", viewBox: "0 0 132 58", version: "1.1", xmlns: "http://www.w3.org/2000/svg", xmlnsXlink: "http://www.w3.org/1999/xlink" },
+            React.createElement("title", null, "dots"),
+            React.createElement("desc", null, "Created with Sketch."),
+            React.createElement("defs", null),
+            React.createElement("g", { stroke: "none", strokeWidth: "1", fill: "none", fillRule: "evenodd" },
+                React.createElement("g", { className: "dots", fill: "#A3A3A3" },
+                    React.createElement("circle", { id: "dot1", cx: "25", cy: "30", r: "13" }),
+                    React.createElement("circle", { id: "dot2", cx: "65", cy: "30", r: "13" }),
+                    React.createElement("circle", { id: "dot3", cx: "105", cy: "30", r: "13" })))));
+        this.state = {
+            renderAnythig: this.props.enable
+        };
+    }
+    render() {
+        if (!this.state.renderAnythig)
+            return React.createElement(React.Fragment, null);
+        return (React.createElement("div", { className: this._className, ref: ref => this._containerRefBF = ref }, this.dots));
+    }
+    shouldComponentUpdate(nextProps) {
+        if (this.props.enable == nextProps.enable)
+            return true;
+        if (nextProps.enable) {
+            this.show();
         }
-    });
-    const dots = (React.createElement("svg", { style: sizeStyle, className: "loader-dots", width: "132px", height: "58px", viewBox: "0 0 132 58", version: "1.1", xmlns: "http://www.w3.org/2000/svg", xmlnsXlink: "http://www.w3.org/1999/xlink" },
-        React.createElement("title", null, "dots"),
-        React.createElement("desc", null, "Created with Sketch."),
-        React.createElement("defs", null),
-        React.createElement("g", { id: "Page-1", stroke: "none", strokeWidth: "1", fill: "none", fillRule: "evenodd" },
-            React.createElement("g", { id: "dots", fill: "#A3A3A3" },
-                React.createElement("circle", { id: "dot1", cx: "25", cy: "30", r: "13" }),
-                React.createElement("circle", { id: "dot2", cx: "65", cy: "30", r: "13" }),
-                React.createElement("circle", { id: "dot3", cx: "105", cy: "30", r: "13" })))));
-    if (!props.enable)
-        return (React.createElement(React.Fragment, null));
-    let className = (0, enum_switch_1.enumAssignSwitch)(LoaderType, props.type, {
-        DivWholeSpace: "loader-div-whole-space",
-        Absolute: "loader-absolute",
-        _: "loader-inline"
-    });
-    if (props.className)
-        className += " " + props.className;
-    return (React.createElement("div", { className: className, ref: ref }, dots));
-});
-exports["default"] = exports.Loader;
+        else {
+            this.hide();
+        }
+        return false;
+    }
+    get containerRef() { return this._containerRefBF; }
+    show() {
+        clearTimeout(this._timeout);
+        setTimeout(() => this.setState({ renderAnythig: true }));
+        setTimeout(() => this._containerRefBF.classList.remove(this.HIDDEN_CLASS));
+    }
+    hide() {
+        this._containerRefBF.classList.add(this.HIDDEN_CLASS);
+        clearInterval(this._timeout);
+        this._timeout = setTimeout(() => this.setState({ renderAnythig: false }), this.HIDE_TIMEOUT_MS);
+    }
+    get _className() {
+        var _a;
+        return this.DEFAULT_CLASS + " " +
+            (!this.props.enable ? this.HIDDEN_CLASS + " " : "") +
+            (0, enum_help_1.enumAssignSwitch)(loader_type_1.default, this.props.type, {
+                BlockPage: "loader-plane-block-page",
+                DivWholeSpace: "loader-div-whole-space",
+                Absolute: "loader-plane-absolute",
+                _: "loader-plane-inline"
+            }) + " " +
+            (((_a = this.props.className) === null || _a === void 0 ? void 0 : _a.length) ? this.props.className : "");
+    }
+    get _sizeStyle() {
+        return (0, enum_help_1.enumAssignSwitch)(loader_size_1.default, this.props.size, {
+            Large: {},
+            Medium: {
+                transform: 'scale(0.5)'
+            },
+            _: {
+                transform: 'scale(0.3)'
+            }
+        });
+    }
+}
+exports["default"] = Loader;
 
 
 /***/ }),
@@ -9706,19 +9778,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const React = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const action_button_1 = __importDefault(__webpack_require__(/*! ../components/buttons/action-button */ "./React/shared/components/buttons/action-button.tsx"));
 const shared_modal_body_1 = __webpack_require__(/*! ./shared-modal-body */ "./React/shared/modals/shared-modal-body.tsx");
 class ConfirmationModal extends React.Component {
     constructor(props) {
         super(props);
-        this.onCloseConfirm = () => this.onCloseWith(this.props.onConfirm);
-        this.onCloseDecline = () => this.onCloseWith(this.props.onDecline);
-        this.onCloseWith = (action) => {
+        this.onCloseConfirm = () => this.onCloseWithAsync(this.props.onConfirm);
+        this.onCloseDecline = () => this.onCloseWithAsync(this.props.onDecline);
+        this.onCloseWithAsync = (action) => __awaiter(this, void 0, void 0, function* () {
             var _a;
-            action === null || action === void 0 ? void 0 : action();
             (_a = this.props.assignedAtPresenter) === null || _a === void 0 ? void 0 : _a.close();
-        };
+            const res = action === null || action === void 0 ? void 0 : action();
+            if (res)
+                yield res;
+        });
         this.props.assignedAtPresenter.onClose = this.onCloseDecline;
     }
     render() {
@@ -9726,8 +9813,8 @@ class ConfirmationModal extends React.Component {
             React.createElement("h3", null, this.props.header),
             React.createElement("p", null, this.props.text),
             React.createElement("div", { className: "confirmation-modal-buttons" },
-                React.createElement("button", { className: "confirmation-modal-confirm-btn", type: "button", onClick: this.onCloseConfirm }, "Ok"),
-                React.createElement("button", { className: "confirmation-modal-decline-btn", type: "button", onClick: this.onCloseDecline }, "Anuluj"))));
+                React.createElement(action_button_1.default, { label: "Zresetuj", className: "confirmation-modal-confirm-btn", onClick: this.onCloseConfirm }),
+                React.createElement(action_button_1.default, { label: "Anuluj", className: "confirmation-modal-decline-btn", onClick: this.onCloseDecline }))));
     }
 }
 exports["default"] = ConfirmationModal;
@@ -10102,7 +10189,12 @@ class ServerConnection {
     }
     parseResponseAsync(result) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield result.json());
+            try {
+                return (yield result.json());
+            }
+            catch (_a) {
+                return undefined;
+            }
         });
     }
 }

@@ -122,29 +122,6 @@ exports["default"] = ClassesList;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -161,7 +138,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
 const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
-const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.ts");
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
 class ClassModComp extends mod_comp_base_1.default {
     constructor(props) {
@@ -223,7 +200,7 @@ class ClassModComp extends mod_comp_base_1.default {
     }
     render() {
         if (this.state.awaitingData)
-            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
+            return (react_1.default.createElement(loader_1.Loader, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
         return (react_1.default.createElement("div", null,
             react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
                 react_1.default.createElement(form_controls_1.Input, { name: "grade-input", label: "Numer klasy", value: this.state.data.grade, onChange: this.createOnTextChangeHandler('grade'), errorMessages: this._validator.getErrorMsgsFor('grade'), type: "number" }),
@@ -460,29 +437,6 @@ exports["default"] = RoomsList;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -498,7 +452,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
-const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.ts");
 const validator_1 = __importDefault(__webpack_require__(/*! ../../shared/validator */ "./React/shared/validator.ts"));
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
 class RoomModComp extends react_1.default.Component {
@@ -570,7 +524,7 @@ class RoomModComp extends react_1.default.Component {
     }
     render() {
         if (this.state.awaitingData)
-            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
+            return (react_1.default.createElement(loader_1.Loader, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
         return (react_1.default.createElement("div", null,
             react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
                 react_1.default.createElement(form_controls_1.Input, { name: "name-input", label: "Nazwa", value: this.state.data.name, placeholder: this.state.defaultName, onChange: this.createOnChangeHandler('name'), errorMessages: this._validator.getErrorMsgsFor('name'), type: "text" }),
@@ -723,7 +677,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
 const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
-const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.ts"));
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
 class StaffPersonModComp extends mod_comp_base_1.default {
     constructor(props) {
@@ -865,29 +819,6 @@ exports["default"] = ClassInfoPanel;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -904,7 +835,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../../shared/form-controls */ "./React/shared/form-controls.ts");
 const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
-const loader_1 = __importStar(__webpack_require__(/*! ../../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../../../shared/loader */ "./React/shared/loader.ts");
 const validator_1 = __importDefault(__webpack_require__(/*! ../../../shared/validator */ "./React/shared/validator.ts"));
 const main_1 = __webpack_require__(/*! ../../main */ "./React/data-management/main.tsx");
 class StudentRegisterRecordModComp extends mod_comp_base_1.default {
@@ -1088,7 +1019,7 @@ class StudentRegisterRecordModComp extends mod_comp_base_1.default {
     }
     render() {
         if (this.state.awaitingData)
-            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
+            return (react_1.default.createElement(loader_1.Loader, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
         return (react_1.default.createElement("div", null,
             react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
                 react_1.default.createElement(form_controls_1.Input, { name: "first-name-input", label: "Imi\u0119", value: this.state.data.firstName, onChange: this.createOnTextChangeHandler('firstName'), errorMessages: this._validator.getErrorMsgsFor('firstName'), type: "text" }),
@@ -1203,29 +1134,6 @@ exports["default"] = StudentsList;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1243,7 +1151,7 @@ const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules
 const components_1 = __webpack_require__(/*! ../../shared/components */ "./React/shared/components.ts");
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
 const mod_comp_base_1 = __importDefault(__webpack_require__(/*! ../../shared/form-controls/mod-comp-base */ "./React/shared/form-controls/mod-comp-base.tsx"));
-const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.ts");
 const modals_1 = __webpack_require__(/*! ../../shared/modals */ "./React/shared/modals.ts");
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
 const student_reg_rec_mod_comp_1 = __importDefault(__webpack_require__(/*! ./components/student-reg-rec-mod-comp */ "./React/data-management/students/components/student-reg-rec-mod-comp.tsx"));
@@ -1262,7 +1170,7 @@ class StudentModComp extends mod_comp_base_1.default {
         this.onRegisterRecordChangeHandler = (id) => {
             const setRecord = () => this.setStateFnData(data => data.registerRecordId = id);
             const selected = this.state.registerRecords.find(x => x.id == id);
-            if ((selected === null || selected === void 0 ? void 0 : selected.className) != undefined) {
+            if (!(selected === null || selected === void 0 ? void 0 : selected.className)) {
                 modals_1.modalController.addConfirmation({
                     header: "Ten uczeń jest już przypisany do klasy",
                     text: `Ten uczeń jest przypisany do klasy ${selected.className}. Czy chcesz przepisać go do tej?`,
@@ -1332,6 +1240,21 @@ class StudentModComp extends mod_comp_base_1.default {
         else
             this.fetchRegisterRecords();
     }
+    render() {
+        if (this.state.awaitingData)
+            return (react_1.default.createElement(loader_1.Loader, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
+        return (react_1.default.createElement("div", null,
+            react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
+                react_1.default.createElement(form_controls_1.Input, { name: "number-in-journal-input", label: "Numer w dzienniku", value: this.state.data.numberInJournal, onChange: this.changeNumberInJournal, errorMessages: this._validator.getErrorMsgsFor('numberInJournal'), type: "number" }),
+                react_1.default.createElement(form_controls_1.Select, { name: "register-record-input", label: "Dane ucznia", value: this.state.data.registerRecordId, onChangeId: this.onRegisterRecordChangeHandler, options: this.state.registerRecords.map(x => ({
+                        label: x.name,
+                        value: x.id
+                    })), errorMessages: this._validator.getErrorMsgsFor('registerRecordId') }),
+                this.state.data.registerRecordId != undefined
+                    ? (react_1.default.createElement(components_1.ActionButton, { label: "Edytuj dane ucznia", onClick: this.openStudentRegisterRecordMCForModification })) : undefined,
+                react_1.default.createElement(components_1.ActionButton, { label: "Dodaj nowego ucznia", onClick: this.openStudentRegisterRecordMCForCreation }),
+                react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz", containerClassName: "dm-register-record-submit-btn" }))));
+    }
     fetchAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             let response = yield main_1.server.getAsync("StudentModificationData", {
@@ -1349,21 +1272,6 @@ class StudentModComp extends mod_comp_base_1.default {
             let response = yield main_1.server.getAsync("StudentRegisterRecordEntries");
             this.setState({ registerRecords: response, awaitingData: false });
         });
-    }
-    render() {
-        if (this.state.awaitingData)
-            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
-        return (react_1.default.createElement("div", null,
-            react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
-                react_1.default.createElement(form_controls_1.Input, { name: "number-in-journal-input", label: "Numer w dzienniku", value: this.state.data.numberInJournal, onChange: this.changeNumberInJournal, errorMessages: this._validator.getErrorMsgsFor('numberInJournal'), type: "number" }),
-                react_1.default.createElement(form_controls_1.Select, { name: "register-record-input", label: "Dane ucznia", value: this.state.data.registerRecordId, onChangeId: this.onRegisterRecordChangeHandler, options: this.state.registerRecords.map(x => ({
-                        label: x.name,
-                        value: x.id
-                    })), errorMessages: this._validator.getErrorMsgsFor('registerRecordId') }),
-                this.state.data.registerRecordId != undefined
-                    ? (react_1.default.createElement(components_1.ActionButton, { label: "Edytuj dane ucznia", onClick: this.openStudentRegisterRecordMCForModification })) : undefined,
-                react_1.default.createElement(components_1.ActionButton, { label: "Dodaj nowego ucznia", onClick: this.openStudentRegisterRecordMCForCreation }),
-                react_1.default.createElement(form_controls_1.SubmitButton, { value: "Zapisz" }))));
     }
 }
 exports["default"] = StudentModComp;
@@ -1451,29 +1359,6 @@ exports["default"] = SubjectList;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1489,7 +1374,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
-const loader_1 = __importStar(__webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../../shared/loader */ "./React/shared/loader.ts");
 const validator_1 = __importDefault(__webpack_require__(/*! ../../shared/validator */ "./React/shared/validator.ts"));
 const main_1 = __webpack_require__(/*! ../main */ "./React/data-management/main.tsx");
 class SubjectModComp extends react_1.default.Component {
@@ -1540,7 +1425,7 @@ class SubjectModComp extends react_1.default.Component {
     }
     render() {
         if (this.state.awaitingData)
-            return (react_1.default.createElement(loader_1.default, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
+            return (react_1.default.createElement(loader_1.Loader, { enable: true, size: loader_1.LoaderSize.Medium, type: loader_1.LoaderType.DivWholeSpace }));
         return (react_1.default.createElement("div", null,
             react_1.default.createElement("form", { onSubmit: this.onSubmitAsync },
                 react_1.default.createElement(form_controls_1.Input, { name: "name-input", label: "Nazwa", value: this.state.data.name, onChange: this.onNameChange, errorMessages: this._validator.getErrorMsgsFor('name'), type: "text" }),

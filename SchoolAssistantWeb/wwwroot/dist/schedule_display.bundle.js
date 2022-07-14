@@ -390,35 +390,12 @@ exports["default"] = ScheduleViewerType;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-const loader_1 = __importStar(__webpack_require__(/*! ../shared/loader */ "./React/shared/loader.tsx"));
+const loader_1 = __webpack_require__(/*! ../shared/loader */ "./React/shared/loader.ts");
 const schedule_display_timeline_1 = __importDefault(__webpack_require__(/*! ./components/schedule-display-timeline */ "./React/schedule-display/components/schedule-display-timeline.tsx"));
 __webpack_require__(/*! ./schedule.css */ "./React/schedule-display/schedule.css");
 class Schedule extends react_1.default.Component {
@@ -435,11 +412,11 @@ class Schedule extends react_1.default.Component {
     }
     get _loader() {
         return this.state.showLoader ?
-            react_1.default.createElement(loader_1.default, { enable: true, type: loader_1.LoaderType.Absolute, size: loader_1.LoaderSize.Medium, className: "schedule-display-loader", ref: ref => this._loaderRef = ref })
+            react_1.default.createElement(loader_1.Loader, { enable: true, type: loader_1.LoaderType.Absolute, size: loader_1.LoaderSize.Medium, className: "schedule-display-loader", ref: ref => this._loaderRef = ref })
             : react_1.default.createElement(react_1.default.Fragment, null);
     }
     componentDidMount() {
-        this._loaderRef.classList.add('schedule-display-loader-hide');
+        this._loaderRef.containerRef.classList.add('schedule-display-loader-hide');
         setTimeout(() => {
             this.setState({ showLoader: false });
         }, 1500);

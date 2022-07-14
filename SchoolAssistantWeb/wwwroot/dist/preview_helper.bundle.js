@@ -49,6 +49,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./React/shared/loader/page-blocking-loader.css":
+/*!******************************************************!*\
+  !*** ./React/shared/loader/page-blocking-loader.css ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./React/preview-helper.ts":
 /*!*********************************!*\
   !*** ./React/preview-helper.ts ***!
@@ -73,25 +85,47 @@ globalThis.Components.PreviewHelper = preview_helper_1.default;
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const components_1 = __webpack_require__(/*! ../../shared/components */ "./React/shared/components.ts");
+const page_blocking_loader_1 = __importDefault(__webpack_require__(/*! ../../shared/loader/page-blocking-loader */ "./React/shared/loader/page-blocking-loader.tsx"));
+const modals_1 = __webpack_require__(/*! ../../shared/modals */ "./React/shared/modals.ts");
 const server_connection_1 = __importDefault(__webpack_require__(/*! ../../shared/server-connection */ "./React/shared/server-connection.tsx"));
 __webpack_require__(/*! ./default-menu.css */ "./React/preview-helper/components/default-menu.css");
 const DefaultMenu = (props) => {
-    const resetAppData = () => {
-        resetAppDataServer.getAsync(null);
+    const loaderRef = react_1.default.createRef();
+    const resetAppDataAsync = () => {
+        modals_1.modalController.addConfirmation({
+            header: "Resetowanie wszystkich danych",
+            text: "Potwierdzenie wiąże się z nieodwracalnym napisaniem wszystkich danych aplikacji",
+            onConfirm: () => __awaiter(void 0, void 0, void 0, function* () {
+                loaderRef.current.show();
+                var res = yield resetAppDataServer.getAsync(null);
+                loaderRef.current.hide();
+                window.location.reload();
+            })
+        });
     };
     const createLessonNow = () => {
     };
     return (react_1.default.createElement("div", { className: "ph-default-menu" },
-        react_1.default.createElement(components_1.ActionButton, { label: "Zresetuj dane aplikacji", className: "ph-default-menu-button", onClick: resetAppData }),
+        react_1.default.createElement(components_1.ActionButton, { label: "Zresetuj dane aplikacji", className: "ph-default-menu-button", onClick: resetAppDataAsync }),
         react_1.default.createElement("p", null, "Zresetuj przedmioty, nauczycieli, pomieszczenia, klasy, uczni\u00F3w, oceny oraz zaj\u0119cia do stanu stanu pocz\u0105tkowego."),
         react_1.default.createElement(components_1.ActionButton, { label: "Utw\u00F3rz zaj\u0119cia na teraz", className: "ph-default-menu-button", onClick: createLessonNow }),
-        react_1.default.createElement("p", null, "Utw\u00F3rz zaj\u0119cia dla przyk\u0142adowego nauczyciela. Aby je poprowadzi\u0107 zaloguj si\u0119 na to konto i wybierz 'Poprowad\u017A zaj\u0119cia' z listy zaj\u0119\u0107.")));
+        react_1.default.createElement("p", null, "Utw\u00F3rz zaj\u0119cia dla przyk\u0142adowego nauczyciela. Aby je poprowadzi\u0107 zaloguj si\u0119 na to konto i wybierz 'Poprowad\u017A zaj\u0119cia' z listy zaj\u0119\u0107."),
+        react_1.default.createElement(page_blocking_loader_1.default, { ref: loaderRef })));
 };
 exports["default"] = DefaultMenu;
 const resetAppDataServer = new server_connection_1.default("/ResetDatabsePreview");
@@ -188,6 +222,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 const enum_help_1 = __webpack_require__(/*! ../shared/enum-help */ "./React/shared/enum-help.ts");
+const modals_1 = __webpack_require__(/*! ../shared/modals */ "./React/shared/modals.ts");
 const default_menu_1 = __importDefault(__webpack_require__(/*! ./components/default-menu */ "./React/preview-helper/components/default-menu.tsx"));
 const floating_pin_1 = __importDefault(__webpack_require__(/*! ./components/floating-pin */ "./React/preview-helper/components/floating-pin.tsx"));
 const login_menu_1 = __importDefault(__webpack_require__(/*! ./components/login-menu */ "./React/preview-helper/components/login-menu.tsx"));
@@ -206,7 +241,8 @@ class PreviewHelper extends react_1.default.Component {
     render() {
         return (react_1.default.createElement("div", { className: `preview-helper ${this.state.hidden ? 'ph-hidden' : ''}` },
             react_1.default.createElement(floating_pin_1.default, { textOnHover: this.getTextOnHoverForPin(), onClick: this.toggleVisibility, attentionGrabbing: this.state.hidden }),
-            this.renderMenu()));
+            this.renderMenu(),
+            react_1.default.createElement(modals_1.ModalSpace, null)));
     }
     renderMenu() {
         var _a;
@@ -226,6 +262,32 @@ class PreviewHelper extends react_1.default.Component {
     }
 }
 exports["default"] = PreviewHelper;
+
+
+/***/ }),
+
+/***/ "./React/shared/loader/page-blocking-loader.tsx":
+/*!******************************************************!*\
+  !*** ./React/shared/loader/page-blocking-loader.tsx ***!
+  \******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const loader_size_1 = __importDefault(__webpack_require__(/*! ./enums/loader-size */ "./React/shared/loader/enums/loader-size.ts"));
+const loader_type_1 = __importDefault(__webpack_require__(/*! ./enums/loader-type */ "./React/shared/loader/enums/loader-type.ts"));
+const loader_1 = __importDefault(__webpack_require__(/*! ./loader */ "./React/shared/loader/loader.tsx"));
+__webpack_require__(/*! ./page-blocking-loader.css */ "./React/shared/loader/page-blocking-loader.css");
+const PageBlockingLoader = react_1.default.forwardRef((props, ref) => {
+    var _a;
+    const className = "page-blocking-loader " + ((_a = props.className) !== null && _a !== void 0 ? _a : "");
+    return (react_1.default.createElement(loader_1.default, { size: loader_size_1.default.Large, type: loader_type_1.default.BlockPage, className: className, enable: props.enable, ref: ref }));
+});
+exports["default"] = PageBlockingLoader;
 
 
 /***/ })
