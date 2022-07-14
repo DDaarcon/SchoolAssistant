@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Input, SubmitButton } from "../../../shared/form-controls";
 import ModCompBase from "../../../shared/form-controls/mod-comp-base";
-import Loader, { LoaderSize, LoaderType } from "../../../shared/loader";
+import { Loader, LoaderSize, LoaderType } from "../../../shared/loader";
 import { CommonModalProps } from "../../../shared/modals/shared-modal-body";
 import { SaveResponseJson } from "../../../shared/server-connection";
 import Validator from "../../../shared/validator";

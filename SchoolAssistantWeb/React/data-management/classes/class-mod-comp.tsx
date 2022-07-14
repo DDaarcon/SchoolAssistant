@@ -2,7 +2,7 @@
 import { Input, SubmitButton } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import ModCompProps from "../../shared/lists/interfaces/shared-mod-comp-props";
-import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
+import { Loader, LoaderSize, LoaderType } from "../../shared/loader";
 import { ResponseJson } from "../../shared/server-connection";
 import { server } from "../main";
 import ClassDetails from "./interfaces/class-details";

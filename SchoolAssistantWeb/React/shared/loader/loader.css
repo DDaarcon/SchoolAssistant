@@ -28,7 +28,7 @@
 
 
 .loader-div-whole-space,
-.loader-absolute {
+.loader-plane-absolute {
     width: 100%;
     height: 100%;
     display: flex;
@@ -36,12 +36,24 @@
     align-items: center;
 }
 
-.loader-absolute {
+.loader-plane-absolute
+{
     position: absolute;
     top: 0px;
     left: 0px;
 }
 
-.loader-inline {
+.loader-plane-inline {
     display: inline;
+}
+
+.loader-plane-block-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

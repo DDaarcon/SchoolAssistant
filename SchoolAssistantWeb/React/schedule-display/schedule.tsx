@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import DayLessons from '../schedule-shared/interfaces/day-lessons';
-import Loader, { LoaderSize, LoaderType } from "../shared/loader";
+import { Loader, LoaderSize, LoaderType } from "../shared/loader";
 import ScheduleDisplayTimeline from "./components/schedule-display-timeline";
 import ScheduleConfig from "./interfaces/schedule-config";
 import './schedule.css';
@@ -34,7 +34,7 @@ export default class Schedule extends React.Component<ScheduleProps, ScheduleSta
         )
     }
 
-    private _loaderRef: HTMLDivElement;
+    private _loaderRef: Loader;
 
     private get _loader() {
         return this.state.showLoader ?
@@ -50,7 +50,7 @@ export default class Schedule extends React.Component<ScheduleProps, ScheduleSta
 
 
     componentDidMount() {
-        this._loaderRef.classList.add('schedule-display-loader-hide');
+        this._loaderRef.containerRef.classList.add('schedule-display-loader-hide');
 
         setTimeout(() => {
             this.setState({ showLoader: false });

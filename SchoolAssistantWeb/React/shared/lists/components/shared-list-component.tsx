@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import Loader, { LoaderSize, LoaderType } from "../../../shared/loader";
+import { Loader, LoaderSize, LoaderType } from "../../../shared/loader";
 import ColumnSetting from "../interfaces/column-setting";
 import CustomRowButton from "../interfaces/custom-row-button";
 import GroupListEntry from "../interfaces/group-list-entry";

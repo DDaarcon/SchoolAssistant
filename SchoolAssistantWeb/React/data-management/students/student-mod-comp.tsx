@@ -3,7 +3,7 @@ import { ActionButton } from "../../shared/components";
 import { Input, Select, OnChangeIdHandler, SubmitButton } from "../../shared/form-controls";
 import ModCompBase from "../../shared/form-controls/mod-comp-base";
 import { SharedGroupModCompProps } from "../../shared/lists/interfaces/shared-group-mod-comp-props";
-import Loader, { LoaderSize, LoaderType } from "../../shared/loader";
+import { Loader, LoaderSize, LoaderType } from "../../shared/loader";
 import { modalController } from "../../shared/modals";
 import { ResponseJson } from "../../shared/server-connection";
 import { server } from "../main";
