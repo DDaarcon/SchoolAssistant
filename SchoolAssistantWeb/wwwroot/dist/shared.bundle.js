@@ -10154,11 +10154,14 @@ class ServerConnection {
     constructor(_baseUrl) {
         this._baseUrl = _baseUrl;
     }
+    getResponseAsync(handler, params) {
+        return fetch(this.prepareUrl(handler, params), {
+            method: 'GET'
+        });
+    }
     getAsync(handler, params) {
         return __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(this.prepareUrl(handler, params), {
-                method: 'GET'
-            });
+            let response = yield this.getResponseAsync(handler, params);
             return this.parseResponseAsync(response);
         });
     }

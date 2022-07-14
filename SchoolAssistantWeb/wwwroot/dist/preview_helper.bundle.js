@@ -112,9 +112,10 @@ const DefaultMenu = (props) => {
             text: "Potwierdzenie wiąże się z nieodwracalnym napisaniem wszystkich danych aplikacji",
             onConfirm: () => __awaiter(void 0, void 0, void 0, function* () {
                 loaderRef.current.show();
-                var res = yield resetAppDataServer.getAsync(null);
+                var res = yield resetAppDataServer.getResponseAsync(null);
                 loaderRef.current.hide();
-                window.location.reload();
+                if (res.ok)
+                    window.location.reload();
             })
         });
     };
