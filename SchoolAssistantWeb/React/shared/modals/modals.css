@@ -50,15 +50,12 @@
 }
 .confirmation-modal-buttons button {
     flex: 1;
-    border: 1px solid black;
 }
 
 .confirmation-modal-confirm-btn {
-    background-color: #e4fbe2;
-    border-color: #01740c !important;
+    --press-color: #fb3434;
 }
 
 .confirmation-modal-decline-btn {
-    background-color: #fbe2e2;
-    border-color: #6a0101 !important;
+    --press-color: #ecee48;
 }

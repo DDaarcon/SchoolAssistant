@@ -1,4 +1,5 @@
 ﻿import * as React from "react";
+import ActionButton from "../components/buttons/action-button";
 import { CommonModalProps, ModalBody } from "./shared-modal-body";
 
 export type ConfirmationModalProps = CommonModalProps & {
@@ -36,20 +37,16 @@ export default class ConfirmationModal extends React.Component<ConfirmationModal
                 <h3>{this.props.header}</h3>
                 <p>{this.props.text}</p>
                 <div className="confirmation-modal-buttons">
-                    <button
+                    <ActionButton
+                        label="Zresetuj"
                         className="confirmation-modal-confirm-btn"
-                        type="button"
                         onClick={this.onCloseConfirm}
-                    >
-                        Ok
-                    </button>
-                    <button
+                    />
+                    <ActionButton
+                        label="Anuluj"
                         className="confirmation-modal-decline-btn"
-                        type="button"
                         onClick={this.onCloseDecline}
-                    >
-                        Anuluj
-                    </button>
+                    />
                 </div>
             </ModalBody>
         )
