@@ -104,13 +104,13 @@ and exists(select 1 from sys.columns where object_id=o.object_id and is_identity
 
             await _dbContext.Database.OpenConnectionAsync().ConfigureAwait(false);
 
-            using var result = await command.ExecuteReaderAsync().ConfigureAwait(false);
+            using var result = await command.ExecuteReaderAsync();
 
-            while (await result.ReadAsync().ConfigureAwait(false))
+            while (await result.ReadAsync())
             {
                 var disableCommand = result.GetString(0);
 
-                await _dbContext.Database.ExecuteSqlRawAsync(disableCommand).ConfigureAwait(false);
+                await _dbContext.Database.ExecuteSqlRawAsync(disableCommand);
             }
         }
         public void DisableEveryIdentityInsert()
