@@ -549,16 +549,7 @@ class Row extends react_1.default.Component {
                 react_1.default.createElement("span", null, this.props.className)),
             react_1.default.createElement("td", null,
                 react_1.default.createElement("span", null, this.props.subjectName)),
-            this.props.heldClasses == undefined ? (react_1.default.createElement(react_1.default.Fragment, null,
-                react_1.default.createElement("td", null),
-                react_1.default.createElement("td", null))) : (react_1.default.createElement(react_1.default.Fragment, null,
-                react_1.default.createElement("td", null,
-                    react_1.default.createElement("span", null, this.props.heldClasses.topic)),
-                react_1.default.createElement("td", null,
-                    react_1.default.createElement("span", null,
-                        this.props.heldClasses.amountOfPresentStudents,
-                        " / ",
-                        this.props.heldClasses.amountOfAllStudents)))),
+            this.renderHeldClassesInfo(),
             react_1.default.createElement("td", { className: "sll-entry-button-cell" }, this.renderButton())));
     }
     isSoon() {
@@ -572,6 +563,24 @@ class Row extends react_1.default.Component {
         endTime.setMinutes(endTime.getMinutes() + this.props.duration);
         const now = new Date();
         return endTime >= now;
+    }
+    renderHeldClassesInfo() {
+        var _a;
+        if (!this.props.heldClasses)
+            return (react_1.default.createElement(react_1.default.Fragment, null,
+                react_1.default.createElement("td", null),
+                react_1.default.createElement("td", null)));
+        const shortenedTopic = ((_a = this.props.heldClasses.topic) === null || _a === void 0 ? void 0 : _a.length) > scheduled_lessons_list_state_1.default.topicLengthLimit
+            ? this.props.heldClasses.topic.substring(0, scheduled_lessons_list_state_1.default.topicLengthLimit - 3) + "..."
+            : this.props.heldClasses.topic;
+        return (react_1.default.createElement(react_1.default.Fragment, null,
+            react_1.default.createElement("td", null,
+                react_1.default.createElement("span", null, shortenedTopic)),
+            react_1.default.createElement("td", null,
+                react_1.default.createElement("span", null,
+                    this.props.heldClasses.amountOfPresentStudents,
+                    " / ",
+                    this.props.heldClasses.amountOfAllStudents))));
     }
     renderButton() {
         const buttonProps = {

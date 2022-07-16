@@ -101,6 +101,11 @@
 /*!*****************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./React/scheduled-lessons-list/components-controls/load-lessons-buttons/load-lessons-button.css ***!
   \*****************************************************************************************************************************************************************************/
+:root {
+    --load-lessons-btn-border-color: #64ed25;
+    --load-lessons-btn-color: #8bff56;
+}
+
 .sll-load-lessons-whole-btn {
     height: 70px;
     width: 100%;
@@ -111,7 +116,7 @@
     flex-direction: row;
     height: 100%;
     border-width: 0px;
-    border-color: #ffd0a5;
+    border-color: var(--load-lessons-btn-border-color);
     border-style: solid;
     transition: all 0.5s;
     background: transparent;
@@ -127,23 +132,23 @@
 
 .sll-load-lessons-btn-upright {
     border-top-width: 3px;
-    box-shadow: inset 0px 35px 40px -40px #ffa81e;
+    box-shadow: inset 0px 35px 40px -40px var(--load-lessons-btn-color);
     border-top-left-radius: 5px;
     border-top-right-radius: 7px;
 }
 .sll-load-lessons-btn-upright.hover {
-    box-shadow: inset 0px 20px 30px -40px #ffa81e;
+    box-shadow: inset 0px 20px 30px -40px var(--load-lessons-btn-color);
 }
 
 
 .sll-load-lessons-btn-upside-down {
     border-bottom-width: 3px;
-    box-shadow: inset 0px -35px 40px -40px #ffa81e;
+    box-shadow: inset 0px -35px 40px -40px var(--load-lessons-btn-color);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 7px;
 }
 .sll-load-lessons-btn-upside-down.hover {
-    box-shadow: inset 0px -20px 30px -40px #ffa81e;
+    box-shadow: inset 0px -20px 30px -40px var(--load-lessons-btn-color);
 }
 
 
