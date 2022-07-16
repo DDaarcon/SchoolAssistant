@@ -96,7 +96,7 @@ namespace SchoolAssistant.Logic.ScheduleDisplay
                         customDuration = periodic.CustomDuration,
                         time = new TimeJson { hour = time.Hours, minutes = time.Minutes },
                         subject = new IdNameJson { id = periodic.Subject.Id, name = periodic.Subject.Name },
-                        room = new IdNameJson { id = periodic.Room.Id, name = periodic.Room.Name },
+                        room = new IdNameJson { id = periodic.Room.Id, name = periodic.Room.DisplayName },
                         lecturer = new IdNameJson { id = periodic.Lecturer.Id, name = periodic.Lecturer.GetShortenedName() }
                     };
 
