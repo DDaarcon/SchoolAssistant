@@ -46,6 +46,8 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
             {
                 await PrepareForLoginPageAsync().ConfigureAwait(false);
             }
+            else
+                SetUpPreviewMenuTypeOtherThanLogin(model);
 
             _viewData[ViewDataHelper.IsPreviewModeOn.Label] = _controlSvc.IsEnabled;
 
@@ -78,6 +80,22 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
             }
 
             _viewData[ViewDataHelper.PreviewMenuLogins.Label] = logins;
+        }
+
+        private void SetUpPreviewMenuTypeOtherThanLogin(PageModel model)
+        {
+            _viewData[ViewDataHelper.PreviewMenuType.Label] = model switch
+            {
+                Pages.IndexModel => PreviewMenuType.IndexPage,
+                Pages.Dashboard.TeacherModel => PreviewMenuType.TeacherDashboard,
+                Pages.Dashboard.StudentModel => PreviewMenuType.StudentDashboard,
+                Pages.ConductingClasses.ScheduledLessonsModel => PreviewMenuType.ScheduledLessonsPage,
+                Pages.DataManagement.DataManagementModel => PreviewMenuType.DataManagementPage,
+                Pages.ScheduleArranger.ScheduleArrangerModel => PreviewMenuType.ScheduleArrangerPage,
+                Pages.UsersManagement.UsersManagementModel => PreviewMenuType.UserManagementPage,
+                Pages.UsersManagement.CreateUserModel => PreviewMenuType.CreateUserPage,
+                _ => null
+            };
         }
     }
 }

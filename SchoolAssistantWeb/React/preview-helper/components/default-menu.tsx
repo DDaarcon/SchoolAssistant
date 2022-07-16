@@ -1,4 +1,4 @@
-﻿import React from "react"
+﻿import React, { Children } from "react"
 import { ActionButton } from "../../shared/components"
 import { Loader } from "../../shared/loader";
 import PageBlockingLoader from "../../shared/loader/page-blocking-loader";
@@ -7,7 +7,9 @@ import ServerConnection from "../../shared/server-connection";
 import './default-menu.css';
 
 
-const DefaultMenu = (props: {}) => {
+const DefaultMenu = (props: {
+    children?: React.ReactNode;
+}) => {
 
     const loaderRef = React.createRef<Loader>();
 
@@ -41,6 +43,7 @@ const DefaultMenu = (props: {}) => {
                 stanu początkowego.
             </p>
 
+            {props.children}
 
             <PageBlockingLoader
                 ref={loaderRef}
