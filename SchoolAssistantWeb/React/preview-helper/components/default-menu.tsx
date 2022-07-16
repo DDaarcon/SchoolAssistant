@@ -28,10 +28,6 @@ const DefaultMenu = (props: {}) => {
 
     }
 
-    const createLessonNow = () => {
-
-    }
-
     return (
         <div className="ph-default-menu">
 
@@ -45,16 +41,6 @@ const DefaultMenu = (props: {}) => {
                 stanu początkowego.
             </p>
 
-            <ActionButton
-                label="Utwórz zajęcia na teraz"
-                className="ph-default-menu-button"
-                onClick={createLessonNow}
-            />
-            <p>
-                Utwórz zajęcia dla przykładowego nauczyciela. Aby je poprowadzić zaloguj się na to konto i wybierz
-                'Poprowadź zajęcia' z listy zajęć.
-            </p>
-
 
             <PageBlockingLoader
                 ref={loaderRef}
@@ -65,4 +51,3 @@ const DefaultMenu = (props: {}) => {
 export default DefaultMenu;
 
 const resetAppDataServer = new ServerConnection("/ResetDatabsePreview");
-const createLessonNow = new ServerConnection("/CreateLessonNowPreview");

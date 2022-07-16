@@ -165,11 +165,6 @@ if (bool.TryParse(app.Configuration["PreviewMode:Enabled"], out bool enabled) ? 
     {
         await resetSvc.ResetAsync().ConfigureAwait(false);
     });
-
-    app.MapGet("/CreateLessonNowPreview", async (SchoolAssistant.Logic.PreviewMode.ICreateLessonNowService createLessonSvc) =>
-    {
-
-    });
 }
 
 #endregion
