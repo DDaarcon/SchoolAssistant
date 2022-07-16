@@ -82,7 +82,8 @@ namespace SchoolAssistant.DAL.Seeding
                 await _configRepo.Records.ScheduleEndhour.SetIfEmptyAsync(18).ConfigureAwait(false),
                 await _configRepo.Records.DefaultRoomName.SetIfEmptyAsync("Sala").ConfigureAwait(false),
                 await _configRepo.Records.MinutesBeforeLessonConsideredClose.SetIfEmptyAsync(5).ConfigureAwait(false),
-                await _configRepo.Records.HiddenDays.SetIfEmptyAsync(new DayOfWeek[] { DayOfWeek.Sunday, DayOfWeek.Saturday }).ConfigureAwait(false)
+                await _configRepo.Records.HiddenDays.SetIfEmptyAsync(new DayOfWeek[] { DayOfWeek.Sunday, DayOfWeek.Saturday }).ConfigureAwait(false),
+                await _configRepo.Records.LessonsListTopicLengthLimit.SetIfEmptyAsync(70).ConfigureAwait(false)
             };
 
             if (results.Any(x => x))

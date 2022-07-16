@@ -58,21 +58,9 @@ export default class Row extends React.Component<RowProps, RowState> {
                 <td>
                     <span>{this.props.subjectName}</span>
                 </td>
-                {this.props.heldClasses == undefined ? (
-                    <>
-                        <td></td>
-                        <td></td>
-                    </>
-                ) : (
-                        <>
-                            <td>
-                                <span>{this.props.heldClasses.topic}</span>
-                            </td>
-                            <td>
-                                <span>{this.props.heldClasses.amountOfPresentStudents} / {this.props.heldClasses.amountOfAllStudents}</span>
-                            </td>
-                        </>
-                )}
+
+                {this.renderHeldClassesInfo()}
+
                 <td className="sll-entry-button-cell">
                     {this.renderButton()}
                 </td>
@@ -104,6 +92,31 @@ export default class Row extends React.Component<RowProps, RowState> {
         return endTime >= now; 
     }
 
+
+    private renderHeldClassesInfo(): JSX.Element {
+        if (!this.props.heldClasses)
+            return (
+                <>
+                    <td></td>
+                    <td></td>
+                </>
+            )
+
+        const shortenedTopic = this.props.heldClasses.topic?.length > ScheduledLessonsListState.topicLengthLimit
+            ? this.props.heldClasses.topic.substring(0, ScheduledLessonsListState.topicLengthLimit - 3) + "..."
+            : this.props.heldClasses.topic;
+
+        return (
+            <>
+                <td>
+                    <span>{shortenedTopic}</span>
+                </td>
+                <td>
+                    <span>{this.props.heldClasses.amountOfPresentStudents} / {this.props.heldClasses.amountOfAllStudents}</span>
+                </td>
+            </>
+        )
+    }
 
     private renderButton(): JSX.Element {
         const buttonProps: RowButtonProps = {

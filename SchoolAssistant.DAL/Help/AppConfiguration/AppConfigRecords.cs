@@ -22,5 +22,8 @@ namespace SchoolAssistant.DAL.Help.AppConfiguration
 
         [RecordKey("hiddenDays")]
         public RecordHandler<IEnumerable<DayOfWeek>> HiddenDays { get; set; } = null!;
+
+        [RecordKey("lessonsListTopicLengthLimit")]
+        public VTRecordHandler<int> LessonsListTopicLengthLimit { get; set; } = null!;
     }
 }

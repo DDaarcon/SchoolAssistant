@@ -29,7 +29,8 @@ namespace SchoolAssistant.Logic.ConductingClasses.ScheduledLessonsList
         {
             return new ScheduledLessonListConfigJson
             {
-                minutesBeforeLessonIsSoon = await _appConfig.Records.MinutesBeforeLessonConsideredClose.GetAsync() ?? 5
+                minutesBeforeLessonIsSoon = await _appConfig.Records.MinutesBeforeLessonConsideredClose.GetAsync().ConfigureAwait(false) ?? 5,
+                topicLengthLimit = await _appConfig.Records.LessonsListTopicLengthLimit.GetAsync().ConfigureAwait(false) ?? 70
             };
         }
     }

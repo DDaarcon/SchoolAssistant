@@ -10,6 +10,7 @@ namespace SchoolAssistant.Infrastructure.Models.ConductingClasses.ScheduledLesso
     {
         public int minutesBeforeLessonIsSoon { get; set; }
         public int entryHeight { get; set; }
+        public int topicLengthLimit { get; set; }
 
         public string? tableClassName { get; set; }
         public string? theadClassName { get; set; }
