@@ -60,8 +60,7 @@ namespace SchoolAssistant.Web.PagesRelated.Filters
             toEnable = toEnable.Concat(_user.Type switch
             {
                 UserType.Teacher => Take(
-                    ViewDataHelper.EnableScheduleArranger.Label,
-                    ViewDataHelper.EnableUsersList.Label),
+                    ViewDataHelper.EnableScheduleArranger.Label),
                 UserType.Administration => Take(
                     ViewDataHelper.EnableDataManagement.Label,
                     ViewDataHelper.EnableScheduleArranger.Label,
