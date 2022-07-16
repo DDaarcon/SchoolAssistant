@@ -172,23 +172,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+const components_1 = __webpack_require__(/*! ../../shared/components */ "./React/shared/components.ts");
 const form_controls_1 = __webpack_require__(/*! ../../shared/form-controls */ "./React/shared/form-controls.ts");
 __webpack_require__(/*! ./login-menu.css */ "./React/preview-helper/components/login-menu.css");
 const LoginMenu = (props) => {
-    const DisplayCredentials = ({ header, userName, password }) => {
-        if (!userName || !password)
-            return react_1.default.createElement(react_1.default.Fragment, null);
-        return (react_1.default.createElement(react_1.default.Fragment, null,
-            react_1.default.createElement("p", { className: "ph-login-menu-header" }, header),
-            react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: userName, width: 260 }),
-            react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: password, width: 260 })));
-    };
     return (react_1.default.createElement("div", { className: "ph-login-menu" },
         react_1.default.createElement(DisplayCredentials, { header: "Dane logowania administratora", userName: props.logins.administratorUserName, password: props.logins.administratorPassword }),
         react_1.default.createElement(DisplayCredentials, { header: "Dane logowania przyk\u0142adowego nauczyciela", userName: props.logins.teacherUserName, password: props.logins.teacherPassword }),
         react_1.default.createElement(DisplayCredentials, { header: "Dane logowania przyk\u0142adowego ucznia", userName: props.logins.studentUserName, password: props.logins.studentPassword })));
 };
 exports["default"] = LoginMenu;
+const DisplayCredentials = ({ header, userName, password }) => {
+    if (!userName || !password)
+        return react_1.default.createElement(react_1.default.Fragment, null);
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement("p", { className: "ph-login-menu-header" }, header),
+        react_1.default.createElement(form_controls_1.LabelValue, { label: "Nazwa u\u017Cytkownika", value: react_1.default.createElement(CopyableValue, { value: userName }), width: 300 }),
+        react_1.default.createElement(form_controls_1.LabelValue, { label: "Has\u0142o", value: react_1.default.createElement(CopyableValue, { value: password }), width: 300 })));
+};
+const CopyableValue = ({ value }) => {
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(value);
+    };
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement("span", null, value),
+        react_1.default.createElement(components_1.IconButton, { onClick: copyToClipboard, faIcon: "fa-solid fa-copy", label: "Kopiuj do schowka", className: "ph-copy-to-clipboard-btn" })));
+};
 
 
 /***/ }),
