@@ -42,7 +42,10 @@ namespace SchoolAssistans.Tests.DbEntities
         public async Task SetupOne()
         {
             TestDatabase.RequestContextFromServices(TestServices.Collection);
-            TestServices.Collection.AddAppConfiguration<SADbContext, AppConfigRecords>();
+            TestServices.Collection.AddAppConfiguration<SADbContext, AppConfigRecords>(options =>
+            {
+                options.Add(new DaysOfWeekRecordHandlerRule());
+            });
 
             _schoolYearRepo = new SchoolYearRepository(_Context, null);
             _configRepo = TestServices.GetService<IAppConfiguration<AppConfigRecords>>();
