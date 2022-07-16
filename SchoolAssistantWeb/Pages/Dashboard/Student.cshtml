@@ -14,8 +14,6 @@
 }
 
 
-Student dashboard
-
 <div class="dashboard">
     <div class="dashboard-item dashboard-item-white-glow dashboard-schedule">
         @Html.React("Components.Schedule", new {
@@ -23,7 +21,7 @@ Student dashboard
             lessons = Model.ScheduleLessons
         }, containerClass: "schedule-view")
     </div>
-    <div class="dashboard-item dashboard-item-cyan dashboard-marks-overview">
+    @*<div class="dashboard-item dashboard-item-cyan dashboard-marks-overview">
         <partial name="Components/_MarksOverview" for="MarksOverview" />
     </div>
     <div class="dashboard-item dashboard-item-cyan">
@@ -31,7 +29,7 @@ Student dashboard
     </div>
     <div class="dashboard-item dashboard-item-cyan">
         <partial name="Components/_MarksOverview" for="MarksOverview" />
-    </div>
+    </div>*@
 </div>
 
 @section Scripts{
